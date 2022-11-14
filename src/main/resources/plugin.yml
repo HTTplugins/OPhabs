@@ -1,0 +1,6 @@
+name: OPhabs
+version: '${project.version}'
+main: htt.ophabs.OPhabs
+api-version: 1.19
+authors: [ RedRiotTank ]
+website: https://github.com/RedRiotTank/OPhabs
