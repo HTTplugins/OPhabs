@@ -3,6 +3,7 @@ package htt.ophabs;
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.java.JavaPlugin;
 import commands.oph;
+import habilities.*;
 
 import java.io.File;
 
@@ -14,6 +15,8 @@ public final class OPhabs extends JavaPlugin {
     public void onEnable() {
         // Plugin startup logic
         registerCommands();
+
+        getServer().getPluginManager().registerEvents(new yami_yami(), this);
         //registerConfig();
         Bukkit.getConsoleSender().sendMessage("OPhabs started correctly");
     }
