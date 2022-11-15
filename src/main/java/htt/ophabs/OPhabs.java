@@ -16,7 +16,7 @@ public final class OPhabs extends JavaPlugin {
         // Plugin startup logic
         registerCommands();
 
-        getServer().getPluginManager().registerEvents(new yami_yami(), this);
+        getServer().getPluginManager().registerEvents(new yami_yami(this), this);
         //registerConfig();
         Bukkit.getConsoleSender().sendMessage("OPhabs started correctly");
     }
