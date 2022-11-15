@@ -1,6 +1,9 @@
 name: OPhabs
 version: '1.0-SNAPSHOT'
 main: htt.ophabs.OPhabs
+commands:
+  oph:
+    description: Main command
 api-version: 1.19
 authors: [ RedRiotTank ]
 website: https://github.com/RedRiotTank/OPhabs
