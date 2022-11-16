@@ -4,6 +4,7 @@ import htt.ophabs.OPhabs;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
+import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerDropItemEvent;
@@ -21,39 +22,22 @@ public class yami_yami implements Listener {
 
         new BukkitRunnable() {
             int capa = 0;
-            int maxCapa = 3;
+            int maxCapa = 20;
+
+            int profundidad = 5;
             Location blackBlock;
+
+            float probabilidad = 100;
+
+            Location playerLoc = event.getPlayer().getLocation();
             public void run() {
 
+                createVoidFloor(playerLoc,profundidad,capa);
 
-                   for(int x = playerLoc.getBlockX()-capa; x <= playerLoc.getBlockX()+capa; x++) {
-                       blackBlock = new Location(playerLoc.getWorld(), x, playerLoc.getBlockY() - 1, playerLoc.getBlockZ()+capa);
-                       if (blackBlock.getBlock().getType() != Material.AIR)
-                           blackBlock.getBlock().setType(Material.BLACK_CONCRETE);
-
-                       blackBlock = new Location(playerLoc.getWorld(), x, playerLoc.getBlockY() - 1, playerLoc.getBlockZ()-capa);
-                       if (blackBlock.getBlock().getType() != Material.AIR)
-                           blackBlock.getBlock().setType(Material.BLACK_CONCRETE);
-                   }
-
-                   for(int z = playerLoc.getBlockZ()-capa+1; z <= playerLoc.getBlockZ()+capa-1; z++){
-                       blackBlock = new Location(playerLoc.getWorld(), playerLoc.getBlockX()+capa, playerLoc.getBlockY() - 1, z);
-                       if (blackBlock.getBlock().getType() != Material.AIR)
-                           blackBlock.getBlock().setType(Material.BLACK_CONCRETE);
-
-                       blackBlock = new Location(playerLoc.getWorld(), playerLoc.getBlockX()-capa, playerLoc.getBlockY() - 1, z);
-                       if (blackBlock.getBlock().getType() != Material.AIR)
-                           blackBlock.getBlock().setType(Material.BLACK_CONCRETE);
-
-
-                   }
-
-
-                    capa++;
+                capa++;
 
                 if(capa == maxCapa)
                     cancelTask(this.getTaskId());
-
 
             }
 
@@ -63,7 +47,7 @@ public class yami_yami implements Listener {
 
 
 
-        }.runTaskTimer(plugin, 0,50);
+        }.runTaskTimer(plugin, 0,5);
 
 
 
@@ -72,7 +56,42 @@ public class yami_yami implements Listener {
 
     }
 
+    public void putVoidblock(Location playerLoc, int x, int y, int z){
 
 
+        Location blackBlock;
+
+
+        //blackBlock = new Location(playerLoc.getWorld(), x, playerLoc.getBlockY() - 1 - prof, playerLoc.getBlockZ() + capa);
+        blackBlock = new Location(playerLoc.getWorld(), x, y, z);
+        if(blackBlock.getBlock().getType() == Material.GRASS)
+            blackBlock.getBlock().setType(Material.AIR);
+        else if (blackBlock.getBlock().getType() != Material.AIR){
+            blackBlock.getBlock().setType(Material.BLACK_CONCRETE);
+        }
+
+    }
+
+    public void createVoidFloor(Location playerLoc, int profundidad, int capa){
+
+        Location blackBlock;
+
+        for(int prof=-profundidad; prof<profundidad; prof++) {
+
+            //Upper and down line
+            for (int x = playerLoc.getBlockX() - capa; x <= playerLoc.getBlockX() + capa; x++){
+                putVoidblock(playerLoc,x,playerLoc.getBlockY()-1-prof, playerLoc.getBlockZ() + capa);
+                putVoidblock(playerLoc,x,playerLoc.getBlockY()-1-prof, playerLoc.getBlockZ() - capa);
+            }
+
+            //laterals line
+            for (int z = playerLoc.getBlockZ() - capa + 1; z <= playerLoc.getBlockZ() + capa - 1; z++) {
+                putVoidblock(playerLoc, playerLoc.getBlockX() + capa, playerLoc.getBlockY() - 1 - prof, z);
+                putVoidblock(playerLoc, playerLoc.getBlockX() - capa, playerLoc.getBlockY() - 1 - prof, z);
+            }
+
+
+        }
+    }
 
 }
