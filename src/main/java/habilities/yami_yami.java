@@ -4,7 +4,6 @@ import htt.ophabs.OPhabs;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
-import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerDropItemEvent;
@@ -18,18 +17,18 @@ public class yami_yami implements Listener {
         Bukkit.getConsoleSender().sendMessage("event");
 
 
-        Location playerLoc = event.getPlayer().getLocation();
+
 
         new BukkitRunnable() {
             int capa = 0;
-            int maxCapa = 20;
+            final int maxCapa = 20;
 
-            int profundidad = 5;
-            Location blackBlock;
+            final int profundidad = 5;
+
 
             int randomQuoteMax = 100;
 
-            Location playerLoc = event.getPlayer().getLocation();
+            final Location playerLoc = event.getPlayer().getLocation();
             public void run() {
 
                 createVoidFloor(playerLoc,profundidad,capa,randomQuoteMax);
@@ -63,6 +62,7 @@ public class yami_yami implements Listener {
                 blackBlock.getBlock().setType(Material.AIR);
             else if (blackBlock.getBlock().getType() != Material.AIR) {
                 blackBlock.getBlock().setType(Material.BLACK_CONCRETE);
+
             }
         }
 
@@ -70,7 +70,6 @@ public class yami_yami implements Listener {
 
     public void createVoidFloor(Location playerLoc, int profundidad, int capa, int randomQuoteMax){
 
-        Location blackBlock;
 
         for(int prof=-profundidad; prof<profundidad; prof++) {
 
