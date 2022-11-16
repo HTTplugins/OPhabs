@@ -27,14 +27,15 @@ public class yami_yami implements Listener {
             int profundidad = 5;
             Location blackBlock;
 
-            float probabilidad = 100;
+            int randomQuoteMax = 100;
 
             Location playerLoc = event.getPlayer().getLocation();
             public void run() {
 
-                createVoidFloor(playerLoc,profundidad,capa);
+                createVoidFloor(playerLoc,profundidad,capa,randomQuoteMax);
 
                 capa++;
+                randomQuoteMax -= 1;
 
                 if(capa == maxCapa)
                     cancelTask(this.getTaskId());
@@ -49,30 +50,25 @@ public class yami_yami implements Listener {
 
         }.runTaskTimer(plugin, 0,5);
 
-
-
-
-
-
     }
 
-    public void putVoidblock(Location playerLoc, int x, int y, int z){
-
-
+    public void putVoidblock(Location playerLoc, int x, int y, int z, int randomQuoteMax){
         Location blackBlock;
+        int probability = (int) (Math.random() * 100);
 
 
-        //blackBlock = new Location(playerLoc.getWorld(), x, playerLoc.getBlockY() - 1 - prof, playerLoc.getBlockZ() + capa);
-        blackBlock = new Location(playerLoc.getWorld(), x, y, z);
-        if(blackBlock.getBlock().getType() == Material.GRASS)
-            blackBlock.getBlock().setType(Material.AIR);
-        else if (blackBlock.getBlock().getType() != Material.AIR){
-            blackBlock.getBlock().setType(Material.BLACK_CONCRETE);
+        if(probability < randomQuoteMax) {
+            blackBlock = new Location(playerLoc.getWorld(), x, y, z);
+            if (blackBlock.getBlock().getType() == Material.GRASS)
+                blackBlock.getBlock().setType(Material.AIR);
+            else if (blackBlock.getBlock().getType() != Material.AIR) {
+                blackBlock.getBlock().setType(Material.BLACK_CONCRETE);
+            }
         }
 
     }
 
-    public void createVoidFloor(Location playerLoc, int profundidad, int capa){
+    public void createVoidFloor(Location playerLoc, int profundidad, int capa, int randomQuoteMax){
 
         Location blackBlock;
 
@@ -80,14 +76,14 @@ public class yami_yami implements Listener {
 
             //Upper and down line
             for (int x = playerLoc.getBlockX() - capa; x <= playerLoc.getBlockX() + capa; x++){
-                putVoidblock(playerLoc,x,playerLoc.getBlockY()-1-prof, playerLoc.getBlockZ() + capa);
-                putVoidblock(playerLoc,x,playerLoc.getBlockY()-1-prof, playerLoc.getBlockZ() - capa);
+                putVoidblock(playerLoc,x,playerLoc.getBlockY()-1-prof, playerLoc.getBlockZ() + capa,randomQuoteMax);
+                putVoidblock(playerLoc,x,playerLoc.getBlockY()-1-prof, playerLoc.getBlockZ() - capa,randomQuoteMax);
             }
 
             //laterals line
             for (int z = playerLoc.getBlockZ() - capa + 1; z <= playerLoc.getBlockZ() + capa - 1; z++) {
-                putVoidblock(playerLoc, playerLoc.getBlockX() + capa, playerLoc.getBlockY() - 1 - prof, z);
-                putVoidblock(playerLoc, playerLoc.getBlockX() - capa, playerLoc.getBlockY() - 1 - prof, z);
+                putVoidblock(playerLoc, playerLoc.getBlockX() + capa, playerLoc.getBlockY() - 1 - prof, z,randomQuoteMax);
+                putVoidblock(playerLoc, playerLoc.getBlockX() - capa, playerLoc.getBlockY() - 1 - prof, z,randomQuoteMax);
             }
 
 
