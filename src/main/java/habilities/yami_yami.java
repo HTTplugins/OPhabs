@@ -4,89 +4,122 @@ import htt.ophabs.OPhabs;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
+import org.bukkit.block.Block;
+import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
+import org.bukkit.event.entity.EntityChangeBlockEvent;
 import org.bukkit.event.player.PlayerDropItemEvent;
 import org.bukkit.scheduler.BukkitRunnable;
+
+import static org.bukkit.Registry.MATERIAL;
 
 public class yami_yami implements Listener {
     OPhabs plugin;
     public yami_yami(OPhabs plugin){this.plugin = plugin;}
     @EventHandler(ignoreCancelled = true)
     public void onPlayerDropItem(PlayerDropItemEvent event) {
-        Bukkit.getConsoleSender().sendMessage("event");
-
-
-
-
-        new BukkitRunnable() {
-            int capa = 0;
-            final int maxCapa = 20;
-
-            final int profundidad = 5;
-
-
-            int randomQuoteMax = 100;
-
-            final Location playerLoc = event.getPlayer().getLocation();
-            public void run() {
-
-                createVoidFloor(playerLoc,profundidad,capa,randomQuoteMax);
-
-                capa++;
-                randomQuoteMax -= 1;
-
-                if(capa == maxCapa)
-                    cancelTask(this.getTaskId());
-
-            }
-
-            public void cancelTask(int id){
-                Bukkit.getScheduler().cancelTask(id);
-            }
-
-
-
-        }.runTaskTimer(plugin, 0,5);
+        bresenham(7,event.getPlayer(), true);
 
     }
 
-    public void putVoidblock(Location playerLoc, int x, int y, int z, int randomQuoteMax){
-        Location blackBlock;
-        int probability = (int) (Math.random() * 100);
+    @EventHandler(ignoreCancelled = true)
+    public void onEntityChangeBlock(EntityChangeBlockEvent event) {
+        Location downBlockLocation = new Location(event.getBlock().getWorld(), event.getBlock().getX(), event.getBlock().getY() - 1, event.getBlock().getZ());
 
-
-        if(probability < randomQuoteMax) {
-            blackBlock = new Location(playerLoc.getWorld(), x, y, z);
-            if (blackBlock.getBlock().getType() == Material.GRASS)
-                blackBlock.getBlock().setType(Material.AIR);
-            else if (blackBlock.getBlock().getType() != Material.AIR) {
-                blackBlock.getBlock().setType(Material.BLACK_CONCRETE);
-
-            }
+        if(downBlockLocation.getBlock().getType().equals(Material.BLACK_CONCRETE) ){
+            event.setCancelled(true);
         }
+
+
 
     }
 
-    public void createVoidFloor(Location playerLoc, int profundidad, int capa, int randomQuoteMax){
+    public void bresenham(int radius, Player player, boolean fill){
+        /*
+        Bresenham algorithm modification.
+        radius must be 2n+1 with 1<=n.
+        */
 
+        int x,z,d;
 
-        for(int prof=-profundidad; prof<profundidad; prof++) {
+        x=0;
+        z=radius;
+        d = 3-2*radius;
 
-            //Upper and down line
-            for (int x = playerLoc.getBlockX() - capa; x <= playerLoc.getBlockX() + capa; x++){
-                putVoidblock(playerLoc,x,playerLoc.getBlockY()-1-prof, playerLoc.getBlockZ() + capa,randomQuoteMax);
-                putVoidblock(playerLoc,x,playerLoc.getBlockY()-1-prof, playerLoc.getBlockZ() - capa,randomQuoteMax);
+        setBlockAndFill(player.getLocation(),x,z,fill);
+        setBlockAndFill(player.getLocation(),z,x,fill);
+
+        while(x < z){
+
+            if(d < 0)
+                d=d+4*x+6;
+            else {
+                d=d+4*(x-z) + 10;
+                z--;
             }
+            x++;
+            setBlockAndFill(player.getLocation(),x,z,fill);
+            setBlockAndFill(player.getLocation(),z,x,fill);
+        }
+    }
 
-            //laterals line
-            for (int z = playerLoc.getBlockZ() - capa + 1; z <= playerLoc.getBlockZ() + capa - 1; z++) {
-                putVoidblock(playerLoc, playerLoc.getBlockX() + capa, playerLoc.getBlockY() - 1 - prof, z,randomQuoteMax);
-                putVoidblock(playerLoc, playerLoc.getBlockX() - capa, playerLoc.getBlockY() - 1 - prof, z,randomQuoteMax);
+    public void setBlockAndFill(Location playerLocation, int x, int z,boolean fill){
+        Location perimeterPixel = new Location(playerLocation.getWorld(),0,0,0);
+
+        perimeterPixel.setY( playerLocation.getBlockY() - 1);
+        perimeterPixel.setX( playerLocation.getBlockX() + x);
+        perimeterPixel.setZ(playerLocation.getBlockZ() + z);
+        if(!fill)
+            setBlockandLineUP(perimeterPixel);
+        else
+            for(Location fillBlock = perimeterPixel.clone(); fillBlock.getBlockZ() >= playerLocation.getBlockZ(); fillBlock.setZ(fillBlock.getBlockZ()-1))
+                setBlockandLineUP(fillBlock);
+
+
+        perimeterPixel.setX( playerLocation.getBlockX() - x);
+        perimeterPixel.setZ(playerLocation.getBlockZ() + z);
+        if(!fill)
+            setBlockandLineUP(perimeterPixel);
+        else
+            for(Location fillBlock = perimeterPixel.clone(); fillBlock.getBlockZ() >= playerLocation.getBlockZ(); fillBlock.setZ(fillBlock.getBlockZ()-1))
+                setBlockandLineUP(fillBlock);
+
+
+        perimeterPixel.setX( playerLocation.getBlockX() + x);
+        perimeterPixel.setZ(playerLocation.getBlockZ() - z);
+        if(!fill)
+            setBlockandLineUP(perimeterPixel);
+        else
+            for(Location fillBlock = perimeterPixel.clone(); fillBlock.getBlockZ() <= playerLocation.getBlockZ(); fillBlock.setZ(fillBlock.getBlockZ()+1))
+                setBlockandLineUP(fillBlock);
+
+
+        perimeterPixel.setX( playerLocation.getBlockX() - x);
+        perimeterPixel.setZ(playerLocation.getBlockZ() - z);
+        if(!fill)
+            setBlockandLineUP(perimeterPixel);
+        else
+            for(Location fillBlock = perimeterPixel.clone(); fillBlock.getBlockZ() <= playerLocation.getBlockZ(); fillBlock.setZ(fillBlock.getBlockZ()+1))
+                setBlockandLineUP(fillBlock);
+
+    }
+
+    public void setBlockandLineUP(Location perimeterPixel){
+        perimeterPixel.getBlock().setType(Material.BLACK_CONCRETE);
+
+        Location upBlockLocation = new Location(perimeterPixel.getWorld(), perimeterPixel.getBlockX(),perimeterPixel.getBlockY(),perimeterPixel.getBlockZ());
+        for(int i=1; i<30; i++){
+            upBlockLocation.setY(perimeterPixel.getBlockY() + i );
+
+            if(!upBlockLocation.getBlock().getType().equals(Material.AIR)){
+                Material matFallingBlock = upBlockLocation.getBlock().getType();
+                upBlockLocation.getBlock().setType(Material.AIR);
+                upBlockLocation.getWorld().spawnFallingBlock(upBlockLocation,matFallingBlock,(byte) 9);
             }
-
 
         }
+
     }
 
 }
