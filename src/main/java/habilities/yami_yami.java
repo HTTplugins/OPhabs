@@ -24,6 +24,12 @@ public class yami_yami implements Listener {
      final int maxRadiusAmplification = 5;
      final int voidExpansionDelay = 8;
      final int voidExpansionSpeed = 5;     //less is faster
+
+    final int damageAmount = 1;
+    final int damageDelay = 0;
+    final int damageSpeed = 15;
+
+    final Material voidMaterial= Material.BLACK_CONCRETE;
     public yami_yami(OPhabs plugin){this.plugin = plugin;}
     @EventHandler(ignoreCancelled = true)
     public void onPlayerDropItem(PlayerDropItemEvent event) {
@@ -48,23 +54,27 @@ public class yami_yami implements Listener {
         }.runTaskTimer(plugin,voidExpansionDelay,voidExpansionSpeed);
 
         new BukkitRunnable(){
+            Player player;
 
             public void run(){
                 List<Player> players = event.getPlayer().getWorld().getPlayers();
-
                 for(int i=0; i < players.size(); i++){
-                    if(!event.getPlayer().equals(players.get(i))) {
-                        Location downBlock = players.get(i).getLocation();
+                    player = players.get(i);
+                    if(!event.getPlayer().equals(player)) {
+                        Location downBlock = player.getLocation();
                         downBlock.setY(downBlock.getBlockY() - 1);
 
-                        if (downBlock.getBlock().getType().equals(Material.BLACK_CONCRETE))
-                            //players.get(i).addPotionEffect(new PotionEffect(PotionEffectType.HARM, 20, 1));
-                            players.get(i).damage(1);
+                        if (downBlock.getBlock().getType().equals(voidMaterial))
+                            player.damage(damageAmount);
                     }
-
                 }
             }
-        }.runTaskTimer(plugin,0,15);
+
+            public void cancelTask(){
+                Bukkit.getScheduler().cancelTask(this.getTaskId());
+            }
+
+        }.runTaskTimer(plugin,damageDelay,damageSpeed);
 
     }
 
@@ -72,9 +82,9 @@ public class yami_yami implements Listener {
     public void onEntityChangeBlock(EntityChangeBlockEvent event) {
         Location downBlockLocation = new Location(event.getBlock().getWorld(), event.getBlock().getX(), event.getBlock().getY() - 1, event.getBlock().getZ());
 
-        if(downBlockLocation.getBlock().getType().equals(Material.BLACK_CONCRETE) ){
+        if(downBlockLocation.getBlock().getType().equals(voidMaterial) )
             event.setCancelled(true);
-        }
+
 
 
 
@@ -151,7 +161,7 @@ public class yami_yami implements Listener {
     }
 
     public void setBlockAndLineUP(Location perimeterPixel){
-        perimeterPixel.getBlock().setType(Material.BLACK_CONCRETE);
+        perimeterPixel.getBlock().setType(voidMaterial);
 
         Location upBlockLocation = new Location(perimeterPixel.getWorld(), perimeterPixel.getBlockX(),perimeterPixel.getBlockY(),perimeterPixel.getBlockZ());
         for(int i=1; i<30; i++){
