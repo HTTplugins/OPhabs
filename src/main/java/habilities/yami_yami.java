@@ -10,7 +10,11 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityChangeBlockEvent;
 import org.bukkit.event.player.PlayerDropItemEvent;
+import org.bukkit.potion.PotionEffect;
+import org.bukkit.potion.PotionEffectType;
 import org.bukkit.scheduler.BukkitRunnable;
+
+import java.util.List;
 
 import static org.bukkit.Registry.MATERIAL;
 
@@ -42,6 +46,25 @@ public class yami_yami implements Listener {
                 Bukkit.getScheduler().cancelTask(this.getTaskId());
             }
         }.runTaskTimer(plugin,voidExpansionDelay,voidExpansionSpeed);
+
+        new BukkitRunnable(){
+
+            public void run(){
+                List<Player> players = event.getPlayer().getWorld().getPlayers();
+
+                for(int i=0; i < players.size(); i++){
+                    if(!event.getPlayer().equals(players.get(i))) {
+                        Location downBlock = players.get(i).getLocation();
+                        downBlock.setY(downBlock.getBlockY() - 1);
+
+                        if (downBlock.getBlock().getType().equals(Material.BLACK_CONCRETE))
+                            //players.get(i).addPotionEffect(new PotionEffect(PotionEffectType.HARM, 20, 1));
+                            players.get(i).damage(1);
+                    }
+
+                }
+            }
+        }.runTaskTimer(plugin,0,15);
 
     }
 
