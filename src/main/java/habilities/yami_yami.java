@@ -16,10 +16,32 @@ import static org.bukkit.Registry.MATERIAL;
 
 public class yami_yami implements Listener {
     OPhabs plugin;
+     final int radius = 3;
+     final int maxRadiusAmplification = 5;
+     final int voidExpansionDelay = 8;
+     final int voidExpansionSpeed = 5;     //less is faster
     public yami_yami(OPhabs plugin){this.plugin = plugin;}
     @EventHandler(ignoreCancelled = true)
     public void onPlayerDropItem(PlayerDropItemEvent event) {
-        bresenham(7,event.getPlayer(), true);
+        Location playerLocation = event.getPlayer().getLocation();
+
+        bresenham(radius,playerLocation, true);
+
+        new BukkitRunnable(){
+            int radiusCounter = radius;
+
+            public void run(){
+                radiusCounter++;
+
+                bresenham(radiusCounter, playerLocation, true);
+                if(radiusCounter == radius + maxRadiusAmplification)
+                    cancelTask();
+            }
+
+            public void cancelTask(){
+                Bukkit.getScheduler().cancelTask(this.getTaskId());
+            }
+        }.runTaskTimer(plugin,voidExpansionDelay,voidExpansionSpeed);
 
     }
 
@@ -35,7 +57,7 @@ public class yami_yami implements Listener {
 
     }
 
-    public void bresenham(int radius, Player player, boolean fill){
+    public void bresenham(int radius, Location playerLocation, boolean fill){
         /*
         Bresenham algorithm modification.
         radius must be 2n+1 with 1<=n.
@@ -47,8 +69,8 @@ public class yami_yami implements Listener {
         z=radius;
         d = 3-2*radius;
 
-        setBlockAndFill(player.getLocation(),x,z,fill);
-        setBlockAndFill(player.getLocation(),z,x,fill);
+        setBlockAndFill(playerLocation,x,z,fill);
+        setBlockAndFill(playerLocation,z,x,fill);
 
         while(x < z){
 
@@ -59,8 +81,8 @@ public class yami_yami implements Listener {
                 z--;
             }
             x++;
-            setBlockAndFill(player.getLocation(),x,z,fill);
-            setBlockAndFill(player.getLocation(),z,x,fill);
+            setBlockAndFill(playerLocation,x,z,fill);
+            setBlockAndFill(playerLocation,z,x,fill);
         }
     }
 
@@ -71,41 +93,41 @@ public class yami_yami implements Listener {
         perimeterPixel.setX( playerLocation.getBlockX() + x);
         perimeterPixel.setZ(playerLocation.getBlockZ() + z);
         if(!fill)
-            setBlockandLineUP(perimeterPixel);
+            setBlockAndLineUP(perimeterPixel);
         else
             for(Location fillBlock = perimeterPixel.clone(); fillBlock.getBlockZ() >= playerLocation.getBlockZ(); fillBlock.setZ(fillBlock.getBlockZ()-1))
-                setBlockandLineUP(fillBlock);
+                setBlockAndLineUP(fillBlock);
 
 
         perimeterPixel.setX( playerLocation.getBlockX() - x);
         perimeterPixel.setZ(playerLocation.getBlockZ() + z);
         if(!fill)
-            setBlockandLineUP(perimeterPixel);
+            setBlockAndLineUP(perimeterPixel);
         else
             for(Location fillBlock = perimeterPixel.clone(); fillBlock.getBlockZ() >= playerLocation.getBlockZ(); fillBlock.setZ(fillBlock.getBlockZ()-1))
-                setBlockandLineUP(fillBlock);
+                setBlockAndLineUP(fillBlock);
 
 
         perimeterPixel.setX( playerLocation.getBlockX() + x);
         perimeterPixel.setZ(playerLocation.getBlockZ() - z);
         if(!fill)
-            setBlockandLineUP(perimeterPixel);
+            setBlockAndLineUP(perimeterPixel);
         else
             for(Location fillBlock = perimeterPixel.clone(); fillBlock.getBlockZ() <= playerLocation.getBlockZ(); fillBlock.setZ(fillBlock.getBlockZ()+1))
-                setBlockandLineUP(fillBlock);
+                setBlockAndLineUP(fillBlock);
 
 
         perimeterPixel.setX( playerLocation.getBlockX() - x);
         perimeterPixel.setZ(playerLocation.getBlockZ() - z);
         if(!fill)
-            setBlockandLineUP(perimeterPixel);
+            setBlockAndLineUP(perimeterPixel);
         else
             for(Location fillBlock = perimeterPixel.clone(); fillBlock.getBlockZ() <= playerLocation.getBlockZ(); fillBlock.setZ(fillBlock.getBlockZ()+1))
-                setBlockandLineUP(fillBlock);
+                setBlockAndLineUP(fillBlock);
 
     }
 
-    public void setBlockandLineUP(Location perimeterPixel){
+    public void setBlockAndLineUP(Location perimeterPixel){
         perimeterPixel.getBlock().setType(Material.BLACK_CONCRETE);
 
         Location upBlockLocation = new Location(perimeterPixel.getWorld(), perimeterPixel.getBlockX(),perimeterPixel.getBlockY(),perimeterPixel.getBlockZ());
