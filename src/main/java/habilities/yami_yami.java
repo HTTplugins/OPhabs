@@ -15,6 +15,7 @@ import org.bukkit.potion.PotionEffectType;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.scheduler.BukkitScheduler;
 import org.bukkit.scheduler.BukkitTask;
+import org.graalvm.compiler.lir.dfa.LocationMarkerPhase;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -177,8 +178,21 @@ public class yami_yami implements Listener {
     }
 
     public void setBlockAndLineUP(Location perimeterPixel){
-        perimeterPixel.getBlock().setType(voidMaterial);
-        convertedToVoidBlocks.add(perimeterPixel.getBlock());
+
+            Location downBlockLocation;
+            boolean found = false;
+            for(int i=0; i < 3 && !found; i++){
+                downBlockLocation = new Location(perimeterPixel.getWorld(), perimeterPixel.getBlockX(),perimeterPixel.getBlockY() - i,perimeterPixel.getBlockZ());
+                if( !downBlockLocation.getBlock().getType().equals(Material.AIR)){
+                    found = true;
+                    downBlockLocation.getBlock().setType(voidMaterial);
+                    convertedToVoidBlocks.add(downBlockLocation.getBlock());
+
+                }
+            }
+
+
+
 
         Location upBlockLocation = new Location(perimeterPixel.getWorld(), perimeterPixel.getBlockX(),perimeterPixel.getBlockY(),perimeterPixel.getBlockZ());
         for(int i=1; i<30; i++){
