@@ -6,6 +6,8 @@ import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Cow;
+import org.bukkit.entity.LivingEntity;
+import org.bukkit.entity.Mob;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -66,19 +68,23 @@ public class yami_yami implements Listener {
 
         new BukkitRunnable(){
             Player player;
+            LivingEntity livEnt;
 
             public void run(){
-                List<Player> players = event.getPlayer().getWorld().getPlayers();
-                for(int i=0; i < players.size(); i++){
-                    player = players.get(i);
-                    if(!event.getPlayer().equals(player)) {
-                        Location downBlock = player.getLocation();
+
+                List<LivingEntity> livingEntities = event.getPlayer().getWorld().getLivingEntities();
+
+                for(int i=0; i < livingEntities.size(); i++){
+                    livEnt = livingEntities.get(i);
+                    if( !event.getPlayer().equals(livEnt)){
+                        Location downBlock = livEnt.getLocation();
                         downBlock.setY(downBlock.getBlockY() - 1);
 
                         if (downBlock.getBlock().getType().equals(voidMaterial))
-                            player.damage(damageAmount);
+                            livEnt.damage(damageAmount);
                     }
                 }
+
             }
 
             public void cancelTask(){
