@@ -2,6 +2,7 @@ package habilities;
 
 import org.bukkit.Location;
 import org.bukkit.Material;
+import org.bukkit.entity.Entity;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.ProjectileHitEvent;
@@ -10,15 +11,13 @@ public class test implements Listener {
 
     @EventHandler(ignoreCancelled = true)
     public void onProjectileHit(ProjectileHitEvent event) {
-        Location loc = (event.getHitEntity()).getLocation();
+        Entity entidad = event.getHitEntity();
+        Location loc = entidad.getLocation();
 
-
-        Location delante = event.getHitEntity().getLocation();
-        delante.setX(delante.getBlockX() + 1);
-
+        Location delante = loc;
+        delante.setX(delante.getBlockX() + 2);
+        delante.setY(delante.getBlockY() - 1);
 
         delante.getBlock().setType(Material.FIRE);
-
     }
-
 }
