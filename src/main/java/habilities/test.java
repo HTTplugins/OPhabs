@@ -12,6 +12,33 @@ import org.checkerframework.checker.units.qual.Time;
 public class test implements Listener {
 
     final float ExplosionRadius = 4;
+
+    final Material NETHERRACK = Material.NETHERRACK;
+    final Material FIRE = Material.FIRE;
+    final Material DIRT = Material.DIRT;
+
+
+    public void createNetherrackEffect(Block bloque){
+        Location delante1 = bloque.getLocation(), delante2 = bloque.getLocation(),
+                 delante3 = bloque.getLocation(), delante4 = bloque.getLocation();
+
+        delante1.setX(delante1.getBlockX() + 1);
+        delante2.setX(delante2.getBlockX() - 1);
+        delante3.setZ(delante3.getBlockZ() + 1);
+        delante4.setZ(delante4.getBlockZ() - 1);
+
+        if(delante1.getBlock().getType() == DIRT)
+            delante1.getBlock().setType(NETHERRACK);
+
+        if(delante2.getBlock().getType() == DIRT)
+            delante2.getBlock().setType(NETHERRACK);
+
+        if(delante3.getBlock().getType() == DIRT)
+            delante3.getBlock().setType(NETHERRACK);
+
+        if(delante4.getBlock().getType() == DIRT)
+            delante4.getBlock().setType(NETHERRACK);
+    }
     @EventHandler(ignoreCancelled = true)
     public void onProjectileHit(ProjectileHitEvent event) {
         Entity entidad;
@@ -25,28 +52,16 @@ public class test implements Listener {
             delante.setX(delante.getBlockX() + 1);
 
             if(entidad.getWorld().isClearWeather())
-                delante.getBlock().setType(Material.FIRE);
-
-            entidad.getWorld().createExplosion(delante, ExplosionRadius);
+                delante.getBlock().setType(FIRE);
         }
         else if ((bloque = event.getHitBlock()) != null){
-            Location delante1 = bloque.getLocation(), delante2 = bloque.getLocation(),
-                     delante3 = bloque.getLocation(), delante4 = bloque.getLocation();
-
-            delante1.setX(delante1.getBlockX() + 1);
-            delante2.setX(delante2.getBlockX() - 1);
-            delante3.setZ(delante3.getBlockZ() + 1);
-            delante4.setZ(delante4.getBlockZ() - 1);
-
-            delante1.getBlock().setType(Material.NETHERRACK);
-            delante2.getBlock().setType(Material.NETHERRACK);
-            delante3.getBlock().setType(Material.NETHERRACK);
-            delante4.getBlock().setType(Material.NETHERRACK);
-
-            bloque.setType(Material.NETHERRACK);
-
-            if(bloque.getWorld().isClearWeather())
-                bloque.setType(Material.FIRE);
+            if(bloque.getType() != NETHERRACK){
+                createNetherrackEffect(bloque);
+                if (bloque.getWorld().isClearWeather())
+                    bloque.setType(FIRE);
+            }
+            else
+                bloque.getWorld().createExplosion(bloque.getLocation(), ExplosionRadius);
         }
     }
 }
