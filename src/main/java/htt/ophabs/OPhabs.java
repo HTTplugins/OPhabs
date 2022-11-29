@@ -40,6 +40,5 @@ public final class OPhabs extends JavaPlugin {
             this.getConfig().options().copyDefaults(true);
             saveConfig();
         }
-
     }
 }

@@ -33,11 +33,6 @@ public class yami_yami implements Listener {
 
     final int damageAmount = 1;
 
-
-
-
-
-
     final int damageDelay = 0;
     final int damageSpeed = 15;
 
