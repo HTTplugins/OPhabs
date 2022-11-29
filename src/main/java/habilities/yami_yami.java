@@ -4,6 +4,7 @@ import htt.ophabs.OPhabs;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
+import org.bukkit.Sound;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Cow;
 import org.bukkit.entity.LivingEntity;
@@ -25,6 +26,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static org.bukkit.Registry.MATERIAL;
+import static org.bukkit.Registry.SOUNDS;
 
 public class yami_yami implements Listener {
     OPhabs plugin;
@@ -46,6 +48,7 @@ public class yami_yami implements Listener {
 
     @EventHandler(ignoreCancelled = true)
     public void onPlayerDropItem(PlayerDropItemEvent event) {
+        event.getPlayer().getWorld().playSound(event.getPlayer(),Sound.AMBIENT_CRIMSON_FOREST_MOOD,10,2);
         Location playerLocation = event.getPlayer().getLocation();
 
         bresenham(radius,playerLocation, true);
@@ -94,10 +97,10 @@ public class yami_yami implements Listener {
         }.runTaskTimer(plugin,damageDelay,damageSpeed);
 
         new BukkitRunnable(){
-
             @Override
             public void run() {
                 dissappearVoidBlocks();
+                event.getPlayer().getWorld().playSound(event.getPlayer(),Sound.ENTITY_ENDERMAN_TELEPORT,10,2);
             }
         }.runTaskLater(plugin,dissappearVoidBlocksDelay);
 
