@@ -4,6 +4,7 @@ import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Entity;
+import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.ProjectileHitEvent;
@@ -16,7 +17,7 @@ public class test implements Listener {
     final Material NETHERRACK = Material.NETHERRACK;
     final Material FIRE = Material.FIRE;
     final Material DIRT = Material.DIRT;
-
+    final Material GREEN_DIRT = Material.GRASS_BLOCK;
 
     public void createNetherrackEffect(Block bloque){
         Location delante1 = bloque.getLocation(), delante2 = bloque.getLocation(),
@@ -27,20 +28,20 @@ public class test implements Listener {
         delante3.setZ(delante3.getBlockZ() + 1);
         delante4.setZ(delante4.getBlockZ() - 1);
 
-        if(delante1.getBlock().getType() == DIRT)
+        if((delante1.getBlock().getType() == DIRT) || (delante1.getBlock().getType() == GREEN_DIRT))
             delante1.getBlock().setType(NETHERRACK);
 
-        if(delante2.getBlock().getType() == DIRT)
+        if((delante2.getBlock().getType() == DIRT) || (delante2.getBlock().getType() == GREEN_DIRT))
             delante2.getBlock().setType(NETHERRACK);
 
-        if(delante3.getBlock().getType() == DIRT)
+        if((delante3.getBlock().getType() == DIRT) || (delante3.getBlock().getType() == GREEN_DIRT))
             delante3.getBlock().setType(NETHERRACK);
 
-        if(delante4.getBlock().getType() == DIRT)
+        if((delante4.getBlock().getType() == DIRT) || (delante4.getBlock().getType() == GREEN_DIRT))
             delante4.getBlock().setType(NETHERRACK);
     }
     @EventHandler(ignoreCancelled = true)
-    public void onProjectileHit(ProjectileHitEvent event) {
+    public void onProjectileHit(ProjectileHitEvent event){
         Entity entidad;
         Block bloque;
         Location loc;
@@ -63,5 +64,7 @@ public class test implements Listener {
             else
                 bloque.getWorld().createExplosion(bloque.getLocation(), ExplosionRadius);
         }
+
+        event.getEntity().remove();
     }
 }

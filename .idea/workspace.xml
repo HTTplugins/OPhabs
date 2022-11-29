@@ -4,9 +4,10 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="4c4a02f3-60ad-417a-851f-33d53731d8e9" name="Changes" comment="BREAKING CHANGE: Diferenciado el hit de una entidad y el hit de un bloque.">
+    <list default="true" id="4c4a02f3-60ad-417a-851f-33d53731d8e9" name="Changes" comment="BREAKING CHANGE: Actualizado el efecto de hit a un bloque (TIERRA)">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/habilities/test.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/habilities/test.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/habilities/test.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/habilities/test.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/target/maven-archiver/pom.properties" beforeDir="false" afterPath="$PROJECT_DIR$/target/maven-archiver/pom.properties" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/target/original-OPhabs-1.0-SNAPSHOT.jar" beforeDir="false" afterPath="$PROJECT_DIR$/target/original-OPhabs-1.0-SNAPSHOT.jar" afterDir="false" />
     </list>
@@ -128,7 +129,7 @@
       <workItem from="1669728800046" duration="765000" />
       <workItem from="1669736097479" duration="656000" />
       <workItem from="1669736764696" duration="2328000" />
-      <workItem from="1669748386449" duration="2886000" />
+      <workItem from="1669748386449" duration="5569000" />
     </task>
     <task id="LOCAL-00001" summary="Inicio fruta mera mera">
       <created>1669729553440</created>
@@ -144,7 +145,14 @@
       <option name="project" value="LOCAL" />
       <updated>1669739086144</updated>
     </task>
-    <option name="localTasksCounter" value="3" />
+    <task id="LOCAL-00003" summary="BREAKING CHANGE: Actualizado el efecto de hit a un bloque (TIERRA)">
+      <created>1669753253313</created>
+      <option name="number" value="00003" />
+      <option name="presentableId" value="LOCAL-00003" />
+      <option name="project" value="LOCAL" />
+      <updated>1669753253313</updated>
+    </task>
+    <option name="localTasksCounter" value="4" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -164,6 +172,7 @@
   <component name="VcsManagerConfiguration">
     <MESSAGE value="Inicio fruta mera mera" />
     <MESSAGE value="BREAKING CHANGE: Diferenciado el hit de una entidad y el hit de un bloque." />
-    <option name="LAST_COMMIT_MESSAGE" value="BREAKING CHANGE: Diferenciado el hit de una entidad y el hit de un bloque." />
+    <MESSAGE value="BREAKING CHANGE: Actualizado el efecto de hit a un bloque (TIERRA)" />
+    <option name="LAST_COMMIT_MESSAGE" value="BREAKING CHANGE: Actualizado el efecto de hit a un bloque (TIERRA)" />
   </component>
 </project>
