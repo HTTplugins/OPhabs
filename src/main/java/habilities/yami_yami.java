@@ -5,10 +5,12 @@ import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
+import org.bukkit.entity.Cow;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityChangeBlockEvent;
+import org.bukkit.event.entity.ProjectileHitEvent;
 import org.bukkit.event.player.PlayerDropItemEvent;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
@@ -30,6 +32,12 @@ public class yami_yami implements Listener {
      final int voidExpansionSpeed = 5;     //less is faster
 
     final int damageAmount = 1;
+
+
+
+
+
+
     final int damageDelay = 0;
     final int damageSpeed = 15;
 
@@ -38,6 +46,7 @@ public class yami_yami implements Listener {
     List<Block> convertedToVoidBlocks = new ArrayList<>();
     final int dissappearVoidBlocksDelay = 160;
     public yami_yami(OPhabs plugin){this.plugin = plugin;}
+
     @EventHandler(ignoreCancelled = true)
     public void onPlayerDropItem(PlayerDropItemEvent event) {
         Location playerLocation = event.getPlayer().getLocation();
