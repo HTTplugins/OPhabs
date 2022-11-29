@@ -13,7 +13,10 @@ import org.bukkit.event.player.PlayerDropItemEvent;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import org.bukkit.scheduler.BukkitRunnable;
+import org.bukkit.scheduler.BukkitScheduler;
+import org.bukkit.scheduler.BukkitTask;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import static org.bukkit.Registry.MATERIAL;
@@ -21,8 +24,8 @@ import static org.bukkit.Registry.MATERIAL;
 public class yami_yami implements Listener {
     OPhabs plugin;
      final int radius = 3;
-     final int maxRadiusAmplification = 5;
-     final int voidExpansionDelay = 8;
+     final int maxRadiusAmplification = 9;
+     final int voidExpansionDelay = 6;
      final int voidExpansionSpeed = 5;     //less is faster
 
     final int damageAmount = 1;
@@ -30,6 +33,9 @@ public class yami_yami implements Listener {
     final int damageSpeed = 15;
 
     final Material voidMaterial= Material.BLACK_CONCRETE;
+
+    List<Block> convertedToVoidBlocks = new ArrayList<>();
+    final int dissappearVoidBlocksDelay = 160;
     public yami_yami(OPhabs plugin){this.plugin = plugin;}
     @EventHandler(ignoreCancelled = true)
     public void onPlayerDropItem(PlayerDropItemEvent event) {
@@ -75,6 +81,16 @@ public class yami_yami implements Listener {
             }
 
         }.runTaskTimer(plugin,damageDelay,damageSpeed);
+
+        new BukkitRunnable(){
+
+            @Override
+            public void run() {
+                dissappearVoidBlocks();
+            }
+        }.runTaskLater(plugin,dissappearVoidBlocksDelay);
+
+
 
     }
 
@@ -162,6 +178,7 @@ public class yami_yami implements Listener {
 
     public void setBlockAndLineUP(Location perimeterPixel){
         perimeterPixel.getBlock().setType(voidMaterial);
+        convertedToVoidBlocks.add(perimeterPixel.getBlock());
 
         Location upBlockLocation = new Location(perimeterPixel.getWorld(), perimeterPixel.getBlockX(),perimeterPixel.getBlockY(),perimeterPixel.getBlockZ());
         for(int i=1; i<30; i++){
@@ -175,6 +192,12 @@ public class yami_yami implements Listener {
 
         }
 
+    }
+
+    public void dissappearVoidBlocks(){
+        for(int i=0; i<convertedToVoidBlocks.size(); i++){
+            convertedToVoidBlocks.get(i).setType(Material.AIR);
+        }
     }
 
 }
