@@ -13,32 +13,58 @@ import org.checkerframework.checker.units.qual.Time;
 public class test implements Listener {
 
     final float ExplosionRadius = 4;
-
     final Material NETHERRACK = Material.NETHERRACK;
     final Material FIRE = Material.FIRE;
     final Material DIRT = Material.DIRT;
     final Material GREEN_DIRT = Material.GRASS_BLOCK;
 
+    public boolean isDirt(Block bloque){
+        boolean esTierra = false;
+
+        if((bloque.getType() == DIRT) || (bloque.getType() == GREEN_DIRT))
+            esTierra = true;
+
+        return esTierra;
+    }
     public void createNetherrackEffect(Block bloque){
         Location delante1 = bloque.getLocation(), delante2 = bloque.getLocation(),
-                 delante3 = bloque.getLocation(), delante4 = bloque.getLocation();
+                 delante3 = bloque.getLocation(), delante4 = bloque.getLocation(),
+                 delante5 = bloque.getLocation(), delante6 = bloque.getLocation(),
+                 delante7 = bloque.getLocation(), delante8 = bloque.getLocation();
 
         delante1.setX(delante1.getBlockX() + 1);
         delante2.setX(delante2.getBlockX() - 1);
         delante3.setZ(delante3.getBlockZ() + 1);
         delante4.setZ(delante4.getBlockZ() - 1);
 
-        if((delante1.getBlock().getType() == DIRT) || (delante1.getBlock().getType() == GREEN_DIRT))
+        delante5.setX(delante5.getBlockX() + 1);    delante5.setZ(delante5.getBlockZ() + 1);
+        delante6.setX(delante6.getBlockX() + 1);    delante6.setZ(delante6.getBlockZ() - 1);
+        delante7.setX(delante7.getBlockX() - 1);    delante7.setZ(delante7.getBlockZ() + 1);
+        delante8.setX(delante8.getBlockX() - 1);    delante8.setZ(delante8.getBlockZ() - 1);
+
+        if(isDirt(delante1.getBlock()))
             delante1.getBlock().setType(NETHERRACK);
 
-        if((delante2.getBlock().getType() == DIRT) || (delante2.getBlock().getType() == GREEN_DIRT))
+        if(isDirt(delante2.getBlock()))
             delante2.getBlock().setType(NETHERRACK);
 
-        if((delante3.getBlock().getType() == DIRT) || (delante3.getBlock().getType() == GREEN_DIRT))
+        if(isDirt(delante3.getBlock()))
             delante3.getBlock().setType(NETHERRACK);
 
-        if((delante4.getBlock().getType() == DIRT) || (delante4.getBlock().getType() == GREEN_DIRT))
+        if(isDirt(delante4.getBlock()))
             delante4.getBlock().setType(NETHERRACK);
+
+        if(isDirt(delante5.getBlock()))
+            delante5.getBlock().setType(NETHERRACK);
+
+        if(isDirt(delante6.getBlock()))
+            delante6.getBlock().setType(NETHERRACK);
+
+        if(isDirt(delante7.getBlock()))
+            delante7.getBlock().setType(NETHERRACK);
+
+        if(isDirt(delante8.getBlock()))
+            delante8.getBlock().setType(NETHERRACK);
     }
     @EventHandler(ignoreCancelled = true)
     public void onProjectileHit(ProjectileHitEvent event){
