@@ -4,13 +4,11 @@ import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Entity;
-import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.ProjectileHitEvent;
-import org.checkerframework.checker.units.qual.Time;
 
-public class test implements Listener {
+public class mera_mera implements Listener {
 
     final float ExplosionRadius = 4;
     final Material NETHERRACK = Material.NETHERRACK;
