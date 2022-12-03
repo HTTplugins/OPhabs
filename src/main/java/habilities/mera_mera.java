@@ -8,7 +8,9 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.event.entity.ProjectileHitEvent;
+import org.bukkit.event.player.PlayerDropItemEvent;
 import org.bukkit.event.player.PlayerItemConsumeEvent;
+import org.bukkit.event.player.PlayerRespawnEvent;
 import org.checkerframework.checker.units.qual.Time;
 
 public class mera_mera implements Listener{
@@ -20,7 +22,9 @@ public class mera_mera implements Listener{
     final Material OBSIDIANA = Material.OBSIDIAN;
     final Material BEDROCK = Material.BEDROCK;
     final Particle PARTICULA_FUEGO = Particle.FLAME;
-    final int N_PARTICULAS = 20, RADIO_PARTICULAS = 5;
+    final Sound RESPAWN_SOUND = Sound.ENTITY_DRAGON_FIREBALL_EXPLODE;
+    final int N_PARTICULAS = 20, RADIO_PARTICULAS = 5, RESPAWN_HEALTH = 5, RESPAWN_FOOD = 5;
+    private Location RESPAWN;
     boolean PUEDO_REVIVIR = true;
 
     public boolean isDirt(Block bloque){
@@ -122,12 +126,27 @@ public class mera_mera implements Listener{
             event.setKeepInventory(true);
 
             mundo.createExplosion(loc, ExplosionRadius*ExplosionRadius);
-            jugador.teleport(jugador.getLastDeathLocation());
-            jugador.setHealth(jugador.getHealth() / 2);
-            jugador.setFoodLevel(jugador.getFoodLevel() / 2);
+            mundo.playSound(jugador, RESPAWN_SOUND, SoundCategory.HOSTILE, ExplosionRadius*ExplosionRadius*ExplosionRadius,
+                            10);
         }
-        else{
+        else
             event.setKeepInventory(false);
+    }
+    @EventHandler(ignoreCancelled = true)
+    public void onPlayerRespawn(PlayerRespawnEvent event) {
+        Player jugador = event.getPlayer();
+
+        if(PUEDO_REVIVIR){
+            jugador.damage(RESPAWN_HEALTH);
+
+            RESPAWN = event.getRespawnLocation();
+            event.setRespawnLocation(jugador.getLastDeathLocation());
+
+            PUEDO_REVIVIR = false;
+        }
+        else {
+            PUEDO_REVIVIR = true;
+            event.setRespawnLocation(RESPAWN);
         }
     }
 }
