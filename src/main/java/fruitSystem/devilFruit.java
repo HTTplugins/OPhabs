@@ -6,7 +6,6 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
 public class devilFruit {
-
     final String fruitNameyami_yami = "yami_yami",
             fruitNamemera_mera = "mera_mera";
 
