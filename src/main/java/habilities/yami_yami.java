@@ -116,8 +116,6 @@ public class yami_yami implements Listener {
             event.setCancelled(true);
 
 
-
-
     }
 
     public void bresenham(int radius, Location playerLocation, boolean fill){

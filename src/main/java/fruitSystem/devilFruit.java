@@ -2,12 +2,21 @@ package fruitSystem;
 
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
+import org.bukkit.event.EventHandler;
+import org.bukkit.event.Listener;
+import org.bukkit.event.player.PlayerItemConsumeEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
-public class devilFruit {
+import java.util.List;
+
+public class devilFruit{
     final String fruitNameyami_yami = "yami_yami",
             fruitNamemera_mera = "mera_mera";
+
+    final String fruitItemNameyami_yami = "yami yami no mi";
+    final String fruitItemNamemera_mera = "mera mera no mi";
+
 
     ItemStack devilFruit;
     Material devilFruitForm;
@@ -20,12 +29,12 @@ public class devilFruit {
         switch (fruitName){
             case fruitNameyami_yami:
                 devilFruitForm = Material.APPLE;
-                displayDevilFruitName = "Yami Yami no mi";
+                displayDevilFruitName = fruitItemNameyami_yami;
 
                 break;
             case fruitNamemera_mera:
                 devilFruitForm = Material.CARROT;
-                displayDevilFruitName = "Mera Mera no mi";
+                displayDevilFruitName = fruitItemNamemera_mera;
                 break;
         }
 
@@ -39,5 +48,6 @@ public class devilFruit {
         player.getInventory().addItem(devilFruit);
 
     }
+
 
 }
