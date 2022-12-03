@@ -4,9 +4,11 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="4c4a02f3-60ad-417a-851f-33d53731d8e9" name="Changes" comment="BREAKING CHANGE: Actualizado el efecto de hit a un bloque (TIERRA)">
+    <list default="true" id="4c4a02f3-60ad-417a-851f-33d53731d8e9" name="Changes" comment="MERA MERA&#10;&#10;ADD:">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/fruitSystem/devilFruit.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/fruitSystem/devilFruit.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/habilities/mera_mera.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/habilities/mera_mera.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/original-OPhabs-1.0-SNAPSHOT.jar" beforeDir="false" afterPath="$PROJECT_DIR$/target/original-OPhabs-1.0-SNAPSHOT.jar" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -21,11 +23,6 @@
     </option>
   </component>
   <component name="Git.Settings">
-    <option name="RECENT_BRANCH_BY_REPOSITORY">
-      <map>
-        <entry key="$PROJECT_DIR$" value="main" />
-      </map>
-    </option>
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
   <component name="InvalidFacetManager">
@@ -139,8 +136,6 @@
       <workItem from="1669748386449" duration="5569000" />
       <workItem from="1670083035874" duration="565000" />
       <workItem from="1670083752876" duration="3107000" />
-      <workItem from="1670088554118" duration="301000" />
-      <workItem from="1670090699682" duration="4385000" />
     </task>
     <task id="LOCAL-00001" summary="Inicio fruta mera mera">
       <created>1669729553440</created>
@@ -170,21 +165,7 @@
       <option name="project" value="LOCAL" />
       <updated>1669934265543</updated>
     </task>
-    <task id="LOCAL-00005" summary="MERA MERA&#10;&#10;ADD: Efecto consumir objeto (decorativo).&#10;&#10;CHANGE: Atributos importantes para la habilidad.">
-      <created>1670088666908</created>
-      <option name="number" value="00005" />
-      <option name="presentableId" value="LOCAL-00005" />
-      <option name="project" value="LOCAL" />
-      <updated>1670088666908</updated>
-    </task>
-    <task id="LOCAL-00006" summary="BREAKING CHANGE: Actualizado el efecto de hit a un bloque (TIERRA)">
-      <created>1670090947295</created>
-      <option name="number" value="00006" />
-      <option name="presentableId" value="LOCAL-00006" />
-      <option name="project" value="LOCAL" />
-      <updated>1670090947295</updated>
-    </task>
-    <option name="localTasksCounter" value="7" />
+    <option name="localTasksCounter" value="5" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -195,19 +176,7 @@
       <map>
         <entry key="MAIN">
           <value>
-            <State>
-              <option name="FILTERS">
-                <map>
-                  <entry key="branch">
-                    <value>
-                      <list>
-                        <option value="origin/mera_mera" />
-                      </list>
-                    </value>
-                  </entry>
-                </map>
-              </option>
-            </State>
+            <State />
           </value>
         </entry>
       </map>
@@ -216,10 +185,8 @@
   <component name="VcsManagerConfiguration">
     <MESSAGE value="Inicio fruta mera mera" />
     <MESSAGE value="BREAKING CHANGE: Diferenciado el hit de una entidad y el hit de un bloque." />
-    <MESSAGE value="MERA MERA&#10;&#10;BREAKING CHANGE: Actualizado el efecto de hit a un bloque (TIERRA y CÉSPED)" />
-    <MESSAGE value="MERA MERA&#10;&#10;ADD: Efecto consumir objeto (decorativo).&#10;&#10;CHANGE: Atributos importantes par la habilidad." />
-    <MESSAGE value="MERA MERA&#10;&#10;ADD: Efecto consumir objeto (decorativo).&#10;&#10;CHANGE: Atributos importantes para la habilidad." />
     <MESSAGE value="BREAKING CHANGE: Actualizado el efecto de hit a un bloque (TIERRA)" />
-    <option name="LAST_COMMIT_MESSAGE" value="BREAKING CHANGE: Actualizado el efecto de hit a un bloque (TIERRA)" />
+    <MESSAGE value="MERA MERA&#10;&#10;BREAKING CHANGE: Actualizado el efecto de hit a un bloque (TIERRA y CÉSPED)" />
+    <option name="LAST_COMMIT_MESSAGE" value="MERA MERA&#10;&#10;BREAKING CHANGE: Actualizado el efecto de hit a un bloque (TIERRA y CÉSPED)" />
   </component>
 </project>
