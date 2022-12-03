@@ -10,7 +10,8 @@ import org.bukkit.entity.Player;
 
 public class oph implements CommandExecutor {
     final String fruitNameyami_yami = "yami_yami",
-            fruitNamemera_mera = "mera_mera";
+            fruitNamemera_mera = "mera_mera",
+            fruitNamegura_gura = "gura_gura";
     private  final OPhabs plugin;
     public oph(OPhabs plugin){this.plugin = plugin;}
     @Override
@@ -24,7 +25,7 @@ public class oph implements CommandExecutor {
             if (args[0].equalsIgnoreCase("giveFruit")){
 
 
-                if(fruitName.equalsIgnoreCase(fruitNameyami_yami) || fruitName.equalsIgnoreCase(fruitNamemera_mera)){
+                if(fruitName.equalsIgnoreCase(fruitNameyami_yami) || fruitName.equalsIgnoreCase(fruitNamemera_mera) || fruitName.equalsIgnoreCase(fruitNamegura_gura)){
                     if( targetPlayer != null){
 
                         devilFruit devFruit = new devilFruit(fruitName);
