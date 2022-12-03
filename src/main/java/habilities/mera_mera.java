@@ -1,25 +1,27 @@
 package habilities;
 
-import org.bukkit.Location;
-import org.bukkit.Material;
-import org.bukkit.Particle;
+import org.bukkit.*;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
+import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.event.entity.ProjectileHitEvent;
 import org.bukkit.event.player.PlayerItemConsumeEvent;
 import org.checkerframework.checker.units.qual.Time;
 
-public class mera_mera implements Listener {
+public class mera_mera implements Listener{
     final float ExplosionRadius = 4;
     final Material NETHERRACK = Material.NETHERRACK;
     final Material FIRE = Material.FIRE;
     final Material DIRT = Material.DIRT;
     final Material GREEN_DIRT = Material.GRASS_BLOCK;
+    final Material OBSIDIANA = Material.OBSIDIAN;
+    final Material BEDROCK = Material.BEDROCK;
     final Particle PARTICULA_FUEGO = Particle.FLAME;
     final int N_PARTICULAS = 20, RADIO_PARTICULAS = 5;
+    boolean PUEDO_REVIVIR = true;
 
     public boolean isDirt(Block bloque){
         boolean esTierra = false;
@@ -28,6 +30,14 @@ public class mera_mera implements Listener {
             esTierra = true;
 
         return esTierra;
+    }
+    public boolean isIndestructible(Block bloque){
+        boolean esIndestructible = false;
+
+        if((bloque.getType() == OBSIDIANA) || (bloque.getType() == BEDROCK))
+            esIndestructible = true;
+
+        return esIndestructible;
     }
     public void createNetherrackEffect(Block bloque){
         Location delante1 = bloque.getLocation(), delante2 = bloque.getLocation(),
@@ -81,13 +91,13 @@ public class mera_mera implements Listener {
 
             delante.setX(delante.getBlockX() + 1);
 
-            if(entidad.getWorld().isClearWeather())
+            if(entidad.getWorld().isClearWeather() && !isIndestructible(delante.getBlock()))
                 delante.getBlock().setType(FIRE);
         }
         else if ((bloque = event.getHitBlock()) != null){
             if(bloque.getType() != NETHERRACK){
                 createNetherrackEffect(bloque);
-                if (bloque.getWorld().isClearWeather())
+                if (bloque.getWorld().isClearWeather() && !isIndestructible(bloque))
                     bloque.setType(FIRE);
             }
             else
@@ -101,6 +111,23 @@ public class mera_mera implements Listener {
         event.getPlayer().getWorld().spawnParticle(PARTICULA_FUEGO, event.getPlayer().getLocation(), N_PARTICULAS,
                 RADIO_PARTICULAS,RADIO_PARTICULAS,RADIO_PARTICULAS);
     }
+    @EventHandler(ignoreCancelled = true)
+    public void onPlayerDeath(PlayerDeathEvent event) {
+        Player jugador = event.getEntity();
+        World mundo = jugador.getWorld();
+        Location loc = jugador.getLocation();
 
+        if(PUEDO_REVIVIR) {
+            event.setDeathMessage("\nPOR EL PODER DEL INFRAMUNDO... ¡¡DESTRÚYELOS!!\n");
+            event.setKeepInventory(true);
 
+            mundo.createExplosion(loc, ExplosionRadius*ExplosionRadius);
+            jugador.teleport(jugador.getLastDeathLocation());
+            jugador.setHealth(jugador.getHealth() / 2);
+            jugador.setFoodLevel(jugador.getFoodLevel() / 2);
+        }
+        else{
+            event.setKeepInventory(false);
+        }
+    }
 }
