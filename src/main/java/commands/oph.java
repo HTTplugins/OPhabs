@@ -2,6 +2,7 @@ package commands;
 
 import fruitSystem.devilFruit;
 import org.bukkit.Bukkit;
+import org.bukkit.Material;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -16,37 +17,19 @@ public class oph implements CommandExecutor {
     public oph(OPhabs plugin){this.plugin = plugin;}
     @Override
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args){
-        Player player = (Player) sender;
-        String fruitName = args[1];
-        Player targetPlayer = getPlayerifexists(args[2]);
+        if (args.length < 2) return false;
 
-
-        if(args.length == 3) {
-            if (args[0].equalsIgnoreCase("giveFruit")){
-
-
-                if(fruitName.equalsIgnoreCase(fruitNameyami_yami) || fruitName.equalsIgnoreCase(fruitNamemera_mera) || fruitName.equalsIgnoreCase(fruitNamegura_gura)){
-                    if( targetPlayer != null){
-
-                        devilFruit devFruit = new devilFruit(fruitName);
-
-                        devFruit.playerObtainFruit(targetPlayer);
-
-                    }
-                    else
-                        printUnkownPlayer(player);
-
-                }
-
-                else {
-                    player.sendMessage("The fruit doesnt exist or isn't avaiable");
-                }
-            }
-
-        } else {
-            printHelp(player);
+        String playerName = args[0];
+        Player target = sender.getServer().getPlayerExact(playerName);
+        if (target == null) { //check whether the player is online
+            sender.sendMessage("Player " + playerName + " is not online.");
+            return true;
         }
-
+        Material itemType = Material.matchMaterial(args[1]);
+        if (itemType == null) { //check whether the material exists
+            sender.sendMessage("Unknown material: " + args[1] + ".");
+            return true;
+        }
         return false;
     }
 

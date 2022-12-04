@@ -14,7 +14,6 @@ import org.bukkit.util.Vector;
 import java.util.ArrayList;
 
 public class gura_gura implements Listener {
-
     final int waveDistance = 8, radiusFloor = 4, radiusWall = 3;
     final Material AIR = Material.AIR;
 
@@ -23,13 +22,10 @@ public class gura_gura implements Listener {
         Vector direction = player.getEyeLocation().getDirection();
         currentPL.setY(currentPL.getY() + 1);
         ArrayList<Location> blocks = new ArrayList<Location>();
-
-
         for (int i = 0; i < waveDistance; i++) {
             blocks.add(currentPL.add(direction));
             blocks.addAll(positions(currentPL, direction));
         }
-
         for (Location b : blocks) {
             ArrayList<LivingEntity> entities = new ArrayList<LivingEntity>();
             for (Entity entity : b.getWorld().getNearbyEntities(b, 1, 1, 1)) {
@@ -39,7 +35,7 @@ public class gura_gura implements Listener {
                     entity.setVelocity(new Vector(0,0,0));
                 }
             }
-            if (b.getBlock().getType() != AIR) {
+            if (b.getBlock().getType() != AIR && b.getBlock().getType() != Material.WATER) {
                 if (b.getBlock().getType().getHardness() < Material.DIRT.getHardness())
                     b.getBlock().breakNaturally();
                 else
@@ -52,7 +48,6 @@ public class gura_gura implements Listener {
                             b.getBlock().breakNaturally();
                     }
             }
-
             if (b.getBlock().getType() == AIR) {
                 Random rand = new Random(); //instance of random class
                 int int_random = rand.nextInt(15);
@@ -61,7 +56,6 @@ public class gura_gura implements Listener {
             }
             else
                 b.getWorld().spawnParticle(Particle.BLOCK_DUST, b.clone().add(0,1,0), 4, b.getBlock().getType().createBlockData());
-
             //Damage all entities in the area of the wave
             for (LivingEntity entity : entities) {
                 if (entity != player)
@@ -69,16 +63,16 @@ public class gura_gura implements Listener {
             }
             setFaliingBlock(b);
         }
-
     }
 
     public void setFaliingBlock(Location block){
-        if(block.getBlock().getType() != AIR){
+        if(block.getBlock().getType() != AIR && block.getBlock().getType() != Material.WATER){
             Material matFallingBlock = block.getBlock().getType();
             block.getBlock().setType(Material.AIR);
             block.getWorld().spawnFallingBlock(block,matFallingBlock,(byte) 9);
         }
     }
+
     @EventHandler(ignoreCancelled = true)
     public void onPlayerInteract(PlayerAnimationEvent event) {
         Player player = event.getPlayer();
@@ -90,7 +84,6 @@ public class gura_gura implements Listener {
         }
     }
 
-    //Create a wall radius x radius of blocks in the direction of the player
     public ArrayList<Location> positions(Location loc, Vector direction) {
         //if faces north
         ArrayList<Location> blocks = new ArrayList<Location>();
@@ -116,16 +109,13 @@ public class gura_gura implements Listener {
             blocks.add(loc.clone().add(0, -1, 0));
             blocks.add(loc.clone().add(0, -1, -1));
         }
-
         return blocks;
     }
-
 
     public void earthquake(Player player) {
         Location currentPL = player.getLocation(), loc = currentPL.clone().add(-radiusFloor, -radiusFloor, -radiusFloor);
         ArrayList<Location> blocks = new ArrayList<>();
         Location pos1 = currentPL.clone().add(-radiusFloor, -radiusFloor, -radiusFloor), pos2=currentPL.clone().add(radiusFloor, radiusFloor, radiusFloor);
-
 
         int x1 = Math.min(pos1.getBlockX(), pos2.getBlockX());
         int y1 = Math.min(pos1.getBlockY(), pos2.getBlockY());
@@ -133,7 +123,6 @@ public class gura_gura implements Listener {
         int x2 = Math.max(pos1.getBlockX(), pos2.getBlockX());
         int y2 = Math.max(pos1.getBlockY(), pos2.getBlockY());
         int z2 = Math.max(pos1.getBlockZ(), pos2.getBlockZ());
-
 
         System.out.println(x1+","+y1+","+z1+" : "+x2+","+y2+","+z2);
         for (int x = x1; x <= x2; x++) {
@@ -153,7 +142,7 @@ public class gura_gura implements Listener {
                     entity.setVelocity(new Vector(0,0,0));
                 }
             }
-            if (block.getBlock().getType() != AIR) {
+            if (block.getBlock().getType() != AIR && block.getBlock().getType() != Material.WATER) {
                 if (block.getBlock().getType().getHardness() < Material.DIRT.getHardness())
                     block.getBlock().breakNaturally();
                 else {
@@ -175,6 +164,5 @@ public class gura_gura implements Listener {
             setFaliingBlock(block);
         }
         player.teleport(player.getLocation());
-
     }
 }
