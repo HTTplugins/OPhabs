@@ -9,6 +9,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageEvent;
+import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.event.player.PlayerAnimationEvent;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
@@ -33,13 +34,6 @@ public class moku_moku implements Listener{
                 smokeBody(player);
             else
                 smokeLegs(player);
-            if (smokeLegsON.contains(player.getName()) || smokeBodyON.contains(player.getName()) ){
-                event.getPlayer().setAllowFlight(true);
-                event.getPlayer().setFlying(true);
-            } else {
-                event.getPlayer().setAllowFlight(false);
-                event.getPlayer().setFlying(false);
-            }
         }
         new BukkitRunnable(){
             @Override
@@ -55,6 +49,17 @@ public class moku_moku implements Listener{
         }.runTaskTimer(plugin, 0, 10);
     }
 
+    public void toggleFly(Player player){
+        if (smokeLegsON.contains(player.getName()) || smokeBodyON.contains(player.getName()) ){
+            player.setAllowFlight(true);
+            player.setFlying(true);
+        } else {
+            player.setAllowFlight(false);
+            player.setFlying(false);
+        }
+    }
+
+
     @EventHandler(ignoreCancelled = true)
     public void onEntityDamage(EntityDamageEvent event){
         Player player;
@@ -64,8 +69,16 @@ public class moku_moku implements Listener{
                 event.setCancelled(true);
         }
     }
+    @EventHandler(ignoreCancelled = true)
+    public void onPlayerDeath(PlayerDeathEvent event) {
+        Player player = event.getEntity();
+        if(smokeLegsON.contains(player.getName()))
+            smokeLegs(player);
+        if (smokeBodyON.contains(player.getName()))
+            smokeBody(player);
+    }
 
-    public void smokeBody(Player player){
+        public void smokeBody(Player player){
         if (!smokeBodyON.contains(player.getName())) {
             if(smokeLegsON.contains(player.getName()))
                 smokeLegs(player);
@@ -79,7 +92,8 @@ public class moku_moku implements Listener{
             player.removePotionEffect(PotionEffectType.REGENERATION);
             player.removePotionEffect(PotionEffectType.INCREASE_DAMAGE);
         }
-    }
+        toggleFly(player);
+        }
 
     public void smokeLegs(Player player){
         if(!smokeBodyON.contains(player.getName())) {
@@ -91,5 +105,6 @@ public class moku_moku implements Listener{
                 player.removePotionEffect(PotionEffectType.SPEED);
             }
         }
+        toggleFly(player);
     }
 }
