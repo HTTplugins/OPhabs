@@ -1,20 +1,21 @@
 package habilities;
 
+
+import java.util.Random;
 import org.bukkit.*;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
+import org.bukkit.entity.Projectile;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
-import org.bukkit.event.block.Action;
 import org.bukkit.event.player.PlayerAnimationEvent;
-import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.util.Vector;
 import java.util.ArrayList;
 
 public class gura_gura implements Listener {
 
-    final int waveDistance=8, radiusFloor = 6, radiusWall=3;
+    final int waveDistance = 8, radiusFloor = 4, radiusWall = 3;
     final Material AIR = Material.AIR;
 
     public void createWaveEffect(Player player) {
@@ -29,38 +30,55 @@ public class gura_gura implements Listener {
             blocks.addAll(positions(currentPL, direction));
         }
 
-            for (Location b : blocks) {
-                ArrayList<LivingEntity> entities = new ArrayList<LivingEntity>();
-                for (Entity entity : b.getWorld().getNearbyEntities(b, 1, 1, 1)) {
-                    if (entity instanceof LivingEntity) {
-                        entities.add((LivingEntity) entity);
-                    }
-                }
-                if (b.getBlock().getType() != AIR)
-                    if(b.getBlock().getType().getHardness() < Material.STONE.getHardness())
-                        b.getBlock().breakNaturally();
-
-                if(b.getBlock().getType() == AIR)
-                    b.getWorld().spawnParticle(Particle.BLOCK_CRACK, b, 3, Material.GLASS_PANE.createBlockData());
-                else
-                    b.getWorld().spawnParticle(Particle.BLOCK_CRACK, b, 4, b.getBlock().getType().createBlockData());
-
-                //Damage all entities in the area of the wave
-                for (LivingEntity entity : entities) {
-                    if(entity != player)
-                        entity.damage(9);
+        for (Location b : blocks) {
+            ArrayList<LivingEntity> entities = new ArrayList<LivingEntity>();
+            for (Entity entity : b.getWorld().getNearbyEntities(b, 1, 1, 1)) {
+                if (entity instanceof LivingEntity) {
+                    entities.add((LivingEntity) entity);
+                } else if (entity instanceof Projectile) {
+                    entity.setVelocity(new Vector(0,0,0));
                 }
             }
+            if (b.getBlock().getType() != AIR) {
+                if (b.getBlock().getType().getHardness() < Material.DIRT.getHardness())
+                    b.getBlock().breakNaturally();
+                else
+                    if (b.getBlock().getType().getHardness() <= Material.GRASS_BLOCK.getHardness()) {
+                        if (b.getBlock().getType() == Material.GRASS_BLOCK)
+                            b.getBlock().setType(Material.DIRT);
+                        Random rand = new Random(); //instance of random class
+                        int int_random = rand.nextInt(15);
+                        if (int_random == 1)
+                            b.getBlock().breakNaturally();
+                    }
+            }
 
+            if (b.getBlock().getType() == AIR) {
+                Random rand = new Random(); //instance of random class
+                int int_random = rand.nextInt(15);
+                if (int_random == 1)
+                    b.getWorld().spawnParticle(Particle.SONIC_BOOM, b, 1); //, Material.GLASS_PANE.createBlockData());
+            }
+            else
+                b.getWorld().spawnParticle(Particle.BLOCK_DUST, b.clone().add(0,1,0), 4, b.getBlock().getType().createBlockData());
+
+            //Damage all entities in the area of the wave
+            for (LivingEntity entity : entities) {
+                if (entity != player)
+                    entity.damage(9);
+            }
         }
+
+    }
 
     @EventHandler(ignoreCancelled = true)
     public void onPlayerInteract(PlayerAnimationEvent event) {
         Player player = event.getPlayer();
-        if(player.getItemInHand().getType() == Material.STICK){
-            createWaveEffect(player);
-            Bukkit.getConsoleSender().sendMessage("Hability lunch");
-
+        if (player.getItemInHand().getType() == Material.STICK) {
+            if(player.isSneaking())
+                earthquake(player);
+            else
+                createWaveEffect(player);
         }
     }
 
@@ -93,32 +111,59 @@ public class gura_gura implements Listener {
 
         return blocks;
     }
-    public ArrayList<Location> bresenham(int radius, Location center){
-        /*
-        Bresenham algorithm modification.
-        radius must be 2n+1 with 1<=n.
-        */
-        ArrayList<Location> blocks = new ArrayList<Location>();
-        int x,z,d;
 
-        x=0;
-        z=radius;
-        d = 3-2*radius;
 
-        while(x < z){
+    public void earthquake(Player player) {
+        Location currentPL = player.getLocation(), loc = currentPL.clone().add(-radiusFloor, -radiusFloor, -radiusFloor);
+        ArrayList<Location> blocks = new ArrayList<>();
+        Location pos1 = currentPL.clone().add(-radiusFloor, -radiusFloor, -radiusFloor), pos2=currentPL.clone().add(radiusFloor, radiusFloor, radiusFloor);
 
-            if(d < 0)
-                d=d+4*x+6;
-            else {
-                d=d+4*(x-z) + 10;
-                z--;
+
+        int x1 = Math.min(pos1.getBlockX(), pos2.getBlockX());
+        int y1 = Math.min(pos1.getBlockY(), pos2.getBlockY());
+        int z1 = Math.min(pos1.getBlockZ(), pos2.getBlockZ());
+        int x2 = Math.max(pos1.getBlockX(), pos2.getBlockX());
+        int y2 = Math.max(pos1.getBlockY(), pos2.getBlockY());
+        int z2 = Math.max(pos1.getBlockZ(), pos2.getBlockZ());
+
+
+        System.out.println(x1+","+y1+","+z1+" : "+x2+","+y2+","+z2);
+        for (int x = x1; x <= x2; x++) {
+            for (int y = y1; y <= y2; y++) {
+                for (int z = z1; z <= z2; z++) {
+                    blocks.add(new Location(player.getWorld(),x,y,z));
+                }
             }
-            x++;
-
-        blocks.add(center.clone().add(x,0,z));
         }
-        return blocks;
+
+        for(Location block : blocks){
+            ArrayList<LivingEntity> entities = new ArrayList<LivingEntity>();
+            for (Entity entity : block.getWorld().getNearbyEntities(block, 1, 1, 1)) {
+                if (entity instanceof LivingEntity) {
+                    entities.add((LivingEntity) entity);
+                }else if (entity instanceof Projectile) {
+                    entity.setVelocity(new Vector(0,0,0));
+                }
+            }
+            if (block.getBlock().getType() != AIR) {
+                if (block.getBlock().getType().getHardness() < Material.GRASS_BLOCK.getHardness())
+                    block.getBlock().breakNaturally();
+                else {
+                    if (block.getBlock().getType().getHardness() <= Material.STONE.getHardness()) {
+                        Random rand = new Random(); //instance of random class
+                        int int_random = rand.nextInt(15);
+                        if (int_random == 1)
+                            block.getBlock().breakNaturally();
+                    }
+                }
+                block.getWorld().spawnParticle(Particle.BLOCK_DUST, block.clone().add(0,1,0), 30, block.getBlock().getType().createBlockData());
+            }
+
+            //Damage all entities in the area of the wave
+            for (LivingEntity entity : entities) {
+                if (entity != player)
+                    entity.damage(2);
+            }
+        }
     }
-
 }
-
