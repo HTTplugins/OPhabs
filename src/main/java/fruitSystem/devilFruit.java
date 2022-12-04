@@ -7,7 +7,8 @@ import org.bukkit.inventory.meta.ItemMeta;
 
 public class devilFruit {
     final String fruitNameyami_yami = "yami_yami",
-            fruitNamemera_mera = "mera_mera";
+            fruitNamemera_mera = "mera_mera",
+            fruitNamegura_gura = "gura_gura";
 
     ItemStack devilFruit;
     Material devilFruitForm;
@@ -21,11 +22,14 @@ public class devilFruit {
             case fruitNameyami_yami:
                 devilFruitForm = Material.APPLE;
                 displayDevilFruitName = "Yami Yami no mi";
-
                 break;
             case fruitNamemera_mera:
                 devilFruitForm = Material.CARROT;
                 displayDevilFruitName = "Mera Mera no mi";
+                break;
+            case fruitNamegura_gura:
+                devilFruitForm = Material.CHORUS_FRUIT;
+                displayDevilFruitName = "Gura Gura no mi";
                 break;
         }
 
