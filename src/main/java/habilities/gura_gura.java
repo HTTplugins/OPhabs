@@ -67,10 +67,18 @@ public class gura_gura implements Listener {
                 if (entity != player)
                     entity.damage(9);
             }
+            setFaliingBlock(b);
         }
 
     }
 
+    public void setFaliingBlock(Location block){
+        if(block.getBlock().getType() != AIR){
+            Material matFallingBlock = block.getBlock().getType();
+            block.getBlock().setType(Material.AIR);
+            block.getWorld().spawnFallingBlock(block,matFallingBlock,(byte) 9);
+        }
+    }
     @EventHandler(ignoreCancelled = true)
     public void onPlayerInteract(PlayerAnimationEvent event) {
         Player player = event.getPlayer();
@@ -146,7 +154,7 @@ public class gura_gura implements Listener {
                 }
             }
             if (block.getBlock().getType() != AIR) {
-                if (block.getBlock().getType().getHardness() < Material.GRASS_BLOCK.getHardness())
+                if (block.getBlock().getType().getHardness() < Material.DIRT.getHardness())
                     block.getBlock().breakNaturally();
                 else {
                     if (block.getBlock().getType().getHardness() <= Material.STONE.getHardness()) {
@@ -164,6 +172,9 @@ public class gura_gura implements Listener {
                 if (entity != player)
                     entity.damage(2);
             }
+            setFaliingBlock(block);
         }
+        player.teleport(player.getLocation());
+
     }
 }
