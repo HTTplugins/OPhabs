@@ -5,9 +5,13 @@ import jdk.tools.jlink.plugin.Plugin;
 import org.bukkit.*;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Entity;
+import org.bukkit.entity.EntityType;
+import org.bukkit.entity.Item;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
+import org.bukkit.event.entity.EntityPickupItemEvent;
+import org.bukkit.event.entity.EntityShootBowEvent;
 import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.event.entity.ProjectileHitEvent;
 import org.bukkit.event.player.PlayerItemConsumeEvent;
@@ -29,13 +33,18 @@ public class mera_mera implements Listener {
     final Material AIR = Material.AIR;
     final Particle PARTICULA_FUEGO = Particle.FLAME;
     final Sound RESPAWN_SOUND = Sound.ENTITY_DRAGON_FIREBALL_EXPLODE;
-    final int N_PARTICULAS = 20, RADIO_PARTICULAS = 5, RESPAWN_HEALTH = 10, RESPAWN_FOOD = 10, BERSERK_DURATION = 3600,
+    final int N_PARTICULAS = 20, RADIO_PARTICULAS = 0, RESPAWN_HEALTH = 10, RESPAWN_FOOD = 10, BERSERK_DURATION = 3600,
     BERSERK_AMPLIFIER = 2;
     boolean BERSERK = true;
 
     public mera_mera(OPhabs plugin){
         this.plugin = plugin;
     }
+
+    public void CocinaComida(Item objeto){
+
+    }
+
     public boolean isDirt(Block bloque) {
         boolean esTierra = false;
 
@@ -176,7 +185,8 @@ public class mera_mera implements Listener {
                     if(BERSERK)
                         cancelTask();
 
-                    mundo.spawnParticle(PARTICULA_FUEGO, jugador.getLocation(), N_PARTICULAS);
+                    mundo.spawnParticle(PARTICULA_FUEGO, jugador.getLocation(), N_PARTICULAS, RADIO_PARTICULAS,
+                                        RADIO_PARTICULAS, RADIO_PARTICULAS, 0.5);
                 }
                 public void cancelTask(){
                     Bukkit.getScheduler().cancelTask(this.getTaskId());
@@ -191,4 +201,10 @@ public class mera_mera implements Listener {
             BERSERK = true;
         }
     }
+    @EventHandler(ignoreCancelled = true)
+    public void onEntityShootBow(EntityShootBowEvent event) {
+        event.getEntity().getWorld().spawnParticle(PARTICULA_FUEGO, event.getEntity().getLocation(), N_PARTICULAS,
+                RADIO_PARTICULAS, RADIO_PARTICULAS, RADIO_PARTICULAS);
+    }
+
 }
