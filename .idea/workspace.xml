@@ -4,12 +4,8 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="4c4a02f3-60ad-417a-851f-33d53731d8e9" name="Changes" comment="BREAKING CHANGE: Actualizado el efecto de hit a un bloque.&#10;&#10;ADD: Modo berserk al morir.">
+    <list default="true" id="4c4a02f3-60ad-417a-851f-33d53731d8e9" name="Changes" comment="CHANGE: Modo berserk al morir.&#10;&#10;TO DO: Establecer la vida y dar los bufos. Hacer que no dropee items al morir.">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/habilities/mera_mera.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/habilities/mera_mera.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/habilities/mera_mera.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/habilities/mera_mera.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/maven-archiver/pom.properties" beforeDir="false" afterPath="$PROJECT_DIR$/target/maven-archiver/pom.properties" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/original-OPhabs-1.0-SNAPSHOT.jar" beforeDir="false" afterPath="$PROJECT_DIR$/target/original-OPhabs-1.0-SNAPSHOT.jar" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -183,7 +179,14 @@
       <option name="project" value="LOCAL" />
       <updated>1670097189350</updated>
     </task>
-    <option name="localTasksCounter" value="7" />
+    <task id="LOCAL-00007" summary="CHANGE: Modo berserk al morir.&#10;&#10;TO DO: Establecer la vida y dar los bufos. Hacer que no dropee items al morir.">
+      <created>1670099532689</created>
+      <option name="number" value="00007" />
+      <option name="presentableId" value="LOCAL-00007" />
+      <option name="project" value="LOCAL" />
+      <updated>1670099532689</updated>
+    </task>
+    <option name="localTasksCounter" value="8" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -206,6 +209,7 @@
     <MESSAGE value="BREAKING CHANGE: Actualizado el efecto de hit a un bloque (TIERRA)" />
     <MESSAGE value="MERA MERA&#10;&#10;BREAKING CHANGE: Actualizado el efecto de hit a un bloque (TIERRA y CÉSPED)" />
     <MESSAGE value="BREAKING CHANGE: Actualizado el efecto de hit a un bloque.&#10;&#10;ADD: Modo berserk al morir." />
-    <option name="LAST_COMMIT_MESSAGE" value="BREAKING CHANGE: Actualizado el efecto de hit a un bloque.&#10;&#10;ADD: Modo berserk al morir." />
+    <MESSAGE value="CHANGE: Modo berserk al morir.&#10;&#10;TO DO: Establecer la vida y dar los bufos. Hacer que no dropee items al morir." />
+    <option name="LAST_COMMIT_MESSAGE" value="CHANGE: Modo berserk al morir.&#10;&#10;TO DO: Establecer la vida y dar los bufos. Hacer que no dropee items al morir." />
   </component>
 </project>

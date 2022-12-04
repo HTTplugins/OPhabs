@@ -127,7 +127,7 @@ public class mera_mera implements Listener{
 
             mundo.createExplosion(loc, ExplosionRadius*ExplosionRadius);
             mundo.playSound(jugador, RESPAWN_SOUND, SoundCategory.HOSTILE, ExplosionRadius*ExplosionRadius*ExplosionRadius,
-                            10);
+                            100);
         }
         else
             event.setKeepInventory(false);
@@ -137,11 +137,12 @@ public class mera_mera implements Listener{
         Player jugador = event.getPlayer();
 
         if(PUEDO_REVIVIR){
-            jugador.damage(RESPAWN_HEALTH);
 
             RESPAWN = event.getRespawnLocation();
             event.setRespawnLocation(jugador.getLastDeathLocation());
 
+            jugador.setHealth(RESPAWN_HEALTH);
+            jugador.setFoodLevel(RESPAWN_FOOD);
             PUEDO_REVIVIR = false;
         }
         else {
