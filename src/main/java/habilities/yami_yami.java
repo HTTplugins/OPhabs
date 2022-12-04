@@ -14,6 +14,7 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityChangeBlockEvent;
 import org.bukkit.event.entity.ProjectileHitEvent;
+import org.bukkit.event.player.PlayerAnimationEvent;
 import org.bukkit.event.player.PlayerDropItemEvent;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
@@ -39,6 +40,7 @@ public class yami_yami implements Listener {
 
     final int damageDelay = 0;
     final int damageSpeed = 15;
+    Player usuario = null;
 
     final Material voidMaterial= Material.BLACK_CONCRETE;
 
@@ -47,63 +49,67 @@ public class yami_yami implements Listener {
     public yami_yami(OPhabs plugin){this.plugin = plugin;}
 
     @EventHandler(ignoreCancelled = true)
-    public void onPlayerDropItem(PlayerDropItemEvent event) {
-        event.getPlayer().getWorld().playSound(event.getPlayer(),Sound.AMBIENT_CRIMSON_FOREST_MOOD,10,2);
-        Location playerLocation = event.getPlayer().getLocation();
+    public void onPlayerInteract(PlayerAnimationEvent event) {
+        Player player = event.getPlayer();
+        if (player.getItemInHand().getType() == Material.COAL_BLOCK) {
+            event.getPlayer().getWorld().playSound(event.getPlayer(), Sound.AMBIENT_CRIMSON_FOREST_MOOD, 10, 2);
+            Location playerLocation = event.getPlayer().getLocation();
 
-        bresenham(radius,playerLocation, true);
+            bresenham(radius, playerLocation, true);
 
-        new BukkitRunnable(){
-            int radiusCounter = radius;
+            new BukkitRunnable() {
+                int radiusCounter = radius;
 
-            public void run(){
-                radiusCounter++;
+                public void run() {
+                    radiusCounter++;
 
-                bresenham(radiusCounter, playerLocation, true);
-                if(radiusCounter == radius + maxRadiusAmplification)
-                    cancelTask();
-            }
-
-            public void cancelTask(){
-                Bukkit.getScheduler().cancelTask(this.getTaskId());
-            }
-        }.runTaskTimer(plugin,voidExpansionDelay,voidExpansionSpeed);
-
-        new BukkitRunnable(){
-            Player player;
-            LivingEntity livEnt;
-
-            public void run(){
-
-                List<LivingEntity> livingEntities = event.getPlayer().getWorld().getLivingEntities();
-
-                for(int i=0; i < livingEntities.size(); i++){
-                    livEnt = livingEntities.get(i);
-                    if( !event.getPlayer().equals(livEnt)){
-                        Location downBlock = livEnt.getLocation();
-                        downBlock.setY(downBlock.getBlockY() - 1);
-
-                        if (downBlock.getBlock().getType().equals(voidMaterial))
-                            livEnt.damage(damageAmount);
-                    }
+                    bresenham(radiusCounter, playerLocation, true);
+                    if (radiusCounter == radius + maxRadiusAmplification)
+                        cancelTask();
                 }
 
-            }
+                public void cancelTask() {
+                    Bukkit.getScheduler().cancelTask(this.getTaskId());
+                }
+            }.runTaskTimer(plugin, voidExpansionDelay, voidExpansionSpeed);
 
-            public void cancelTask(){
-                Bukkit.getScheduler().cancelTask(this.getTaskId());
-            }
+            new BukkitRunnable() {
+                Player player;
+                LivingEntity livEnt;
 
-        }.runTaskTimer(plugin,damageDelay,damageSpeed);
+                public void run() {
 
-        new BukkitRunnable(){
-            @Override
-            public void run() {
-                dissappearVoidBlocks();
-                event.getPlayer().getWorld().playSound(event.getPlayer(),Sound.ENTITY_ENDERMAN_TELEPORT,10,2);
-            }
-        }.runTaskLater(plugin,dissappearVoidBlocksDelay);
+                    List<LivingEntity> livingEntities = event.getPlayer().getWorld().getLivingEntities();
 
+                    for (int i = 0; i < livingEntities.size(); i++) {
+                        livEnt = livingEntities.get(i);
+                        if (!event.getPlayer().equals(livEnt)) {
+                            Location downBlock = livEnt.getLocation();
+                            downBlock.setY(downBlock.getBlockY() - 1);
+
+                            if (downBlock.getBlock().getType().equals(voidMaterial))
+                                if (livEnt != usuario)
+                                    livEnt.damage(damageAmount);
+                        }
+                    }
+
+                }
+
+                public void cancelTask() {
+                    Bukkit.getScheduler().cancelTask(this.getTaskId());
+                }
+
+            }.runTaskTimer(plugin, damageDelay, damageSpeed);
+
+            new BukkitRunnable() {
+                @Override
+                public void run() {
+                    dissappearVoidBlocks();
+                    event.getPlayer().getWorld().playSound(event.getPlayer(), Sound.ENTITY_ENDERMAN_TELEPORT, 10, 2);
+                }
+            }.runTaskLater(plugin, dissappearVoidBlocksDelay);
+
+        }
 
 
     }
