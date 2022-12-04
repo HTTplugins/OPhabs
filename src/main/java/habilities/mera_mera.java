@@ -4,16 +4,10 @@ import htt.ophabs.OPhabs;
 import jdk.tools.jlink.plugin.Plugin;
 import org.bukkit.*;
 import org.bukkit.block.Block;
-import org.bukkit.entity.Entity;
-import org.bukkit.entity.EntityType;
-import org.bukkit.entity.Item;
-import org.bukkit.entity.Player;
+import org.bukkit.entity.*;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
-import org.bukkit.event.entity.EntityPickupItemEvent;
-import org.bukkit.event.entity.EntityShootBowEvent;
-import org.bukkit.event.entity.PlayerDeathEvent;
-import org.bukkit.event.entity.ProjectileHitEvent;
+import org.bukkit.event.entity.*;
 import org.bukkit.event.player.PlayerItemConsumeEvent;
 import org.bukkit.event.player.PlayerRespawnEvent;
 import org.bukkit.potion.PotionEffect;
@@ -39,10 +33,6 @@ public class mera_mera implements Listener {
 
     public mera_mera(OPhabs plugin){
         this.plugin = plugin;
-    }
-
-    public void CocinaComida(Item objeto){
-
     }
 
     public boolean isDirt(Block bloque) {
@@ -201,6 +191,7 @@ public class mera_mera implements Listener {
             BERSERK = true;
         }
     }
+
     @EventHandler(ignoreCancelled = true)
     public void onEntityShootBow(EntityShootBowEvent event) {
         event.getEntity().getWorld().spawnParticle(PARTICULA_FUEGO, event.getEntity().getLocation(), N_PARTICULAS,
