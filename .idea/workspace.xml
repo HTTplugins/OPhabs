@@ -6,6 +6,10 @@
   <component name="ChangeListManager">
     <list default="true" id="4c4a02f3-60ad-417a-851f-33d53731d8e9" name="Changes" comment="CHANGE: Modo berserk al morir.&#10;&#10;TO DO: Establecer la vida y dar los bufos. Hacer que no dropee items al morir.">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/habilities/mera_mera.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/habilities/mera_mera.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/habilities/mera_mera.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/habilities/mera_mera.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/maven-archiver/pom.properties" beforeDir="false" afterPath="$PROJECT_DIR$/target/maven-archiver/pom.properties" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/original-OPhabs-1.0-SNAPSHOT.jar" beforeDir="false" afterPath="$PROJECT_DIR$/target/original-OPhabs-1.0-SNAPSHOT.jar" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -136,6 +140,7 @@
       <workItem from="1669748386449" duration="5569000" />
       <workItem from="1670083035874" duration="565000" />
       <workItem from="1670083752876" duration="3107000" />
+      <workItem from="1670151895217" duration="1746000" />
     </task>
     <task id="LOCAL-00001" summary="Inicio fruta mera mera">
       <created>1669729553440</created>
@@ -186,7 +191,14 @@
       <option name="project" value="LOCAL" />
       <updated>1670099532689</updated>
     </task>
-    <option name="localTasksCounter" value="8" />
+    <task id="LOCAL-00008" summary="CHANGE: Modo berserk al morir.&#10;&#10;TO DO: Establecer la vida y dar los bufos. Hacer que no dropee items al morir.">
+      <created>1670152181170</created>
+      <option name="number" value="00008" />
+      <option name="presentableId" value="LOCAL-00008" />
+      <option name="project" value="LOCAL" />
+      <updated>1670152181170</updated>
+    </task>
+    <option name="localTasksCounter" value="9" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
