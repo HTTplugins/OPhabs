@@ -1,5 +1,7 @@
 package htt.ophabs;
 
+import fruitSystem.dropCaster;
+import fruitSystem.fruitAssociation;
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.java.JavaPlugin;
 import commands.oph;
@@ -20,7 +22,8 @@ public final class OPhabs extends JavaPlugin {
         getServer().getPluginManager().registerEvents(new mera_mera(this), this);
         getServer().getPluginManager().registerEvents(new gura_gura(),this);
         getServer().getPluginManager().registerEvents(new moku_moku(this),this);
-
+        getServer().getPluginManager().registerEvents(new fruitAssociation(), this);
+        getServer().getPluginManager().registerEvents(new dropCaster(), this);
         //registerConfig();
         Bukkit.getConsoleSender().sendMessage("OPhabs started correctly");
     }

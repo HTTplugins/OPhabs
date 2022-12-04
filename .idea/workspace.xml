@@ -4,13 +4,14 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="4c4a02f3-60ad-417a-851f-33d53731d8e9" name="Changes" comment="BREAKING CHANGE: Actualizado el efecto de hit a un bloque (TIERRA)">
+    <list default="true" id="4c4a02f3-60ad-417a-851f-33d53731d8e9" name="Changes" comment="MERA MERA&#10;&#10;ADD:">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/commands/oph.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/commands/oph.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/habilities/test.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/maven-archiver/pom.properties" beforeDir="false" afterPath="$PROJECT_DIR$/target/maven-archiver/pom.properties" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/fruitSystem/devilFruit.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/fruitSystem/devilFruit.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/habilities/yami_yami.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/habilities/yami_yami.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/htt/ophabs/OPhabs.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/htt/ophabs/OPhabs.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/target/original-OPhabs-1.0-SNAPSHOT.jar" beforeDir="false" afterPath="$PROJECT_DIR$/target/original-OPhabs-1.0-SNAPSHOT.jar" afterDir="false" />
     </list>
+    <list default="true" id="4c4a02f3-60ad-417a-851f-33d53731d8e9" name="Changes" comment="CHANGE: Modo berserk al morir. Ya están todos los bufos dados." />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -22,6 +23,9 @@
         <option value="Class" />
       </list>
     </option>
+  </component>
+  <component name="Git.Merge.Settings">
+    <option name="BRANCH" value="main" />
   </component>
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
@@ -52,7 +56,12 @@
     &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
     &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
     &quot;WebServerToolWindowFactoryState&quot;: &quot;false&quot;,
-    &quot;last_opened_file_path&quot;: &quot;/home/alberto-ubuntu/Minecraft-Plugins/OPhabs&quot;
+    &quot;last_opened_file_path&quot;: &quot;/home/alberto-ubuntu/Minecraft-Plugins/OPhabs&quot;,
+    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
+    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
+    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
+    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
+    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
   }
 }</component>
   <component name="RunManager">
@@ -130,6 +139,9 @@
       <workItem from="1669736097479" duration="656000" />
       <workItem from="1669736764696" duration="2328000" />
       <workItem from="1669748386449" duration="5569000" />
+      <workItem from="1670083035874" duration="565000" />
+      <workItem from="1670083752876" duration="3107000" />
+      <workItem from="1670151895217" duration="12133000" />
     </task>
     <task id="LOCAL-00001" summary="Inicio fruta mera mera">
       <created>1669729553440</created>
@@ -152,7 +164,70 @@
       <option name="project" value="LOCAL" />
       <updated>1669753253313</updated>
     </task>
-    <option name="localTasksCounter" value="4" />
+    <task id="LOCAL-00004" summary="MERA MERA&#10;&#10;BREAKING CHANGE: Actualizado el efecto de hit a un bloque (TIERRA y CÉSPED)">
+      <created>1669934265543</created>
+      <option name="number" value="00004" />
+      <option name="presentableId" value="LOCAL-00004" />
+      <option name="project" value="LOCAL" />
+      <updated>1669934265543</updated>
+    </task>
+    <task id="LOCAL-00005" summary="BREAKING CHANGE: Actualizado el efecto de hit a un bloque.&#10;&#10;ADD: Modo berserk al morir.">
+      <created>1670097144655</created>
+      <option name="number" value="00005" />
+      <option name="presentableId" value="LOCAL-00005" />
+      <option name="project" value="LOCAL" />
+      <updated>1670097144655</updated>
+    </task>
+    <task id="LOCAL-00006" summary="BREAKING CHANGE: Actualizado el efecto de hit a un bloque.&#10;&#10;ADD: Modo berserk al morir.">
+      <created>1670097189350</created>
+      <option name="number" value="00006" />
+      <option name="presentableId" value="LOCAL-00006" />
+      <option name="project" value="LOCAL" />
+      <updated>1670097189350</updated>
+    </task>
+    <task id="LOCAL-00007" summary="CHANGE: Modo berserk al morir.&#10;&#10;TO DO: Establecer la vida y dar los bufos. Hacer que no dropee items al morir.">
+      <created>1670099532689</created>
+      <option name="number" value="00007" />
+      <option name="presentableId" value="LOCAL-00007" />
+      <option name="project" value="LOCAL" />
+      <updated>1670099532689</updated>
+    </task>
+    <task id="LOCAL-00008" summary="CHANGE: Modo berserk al morir.&#10;&#10;TO DO: Establecer la vida y dar los bufos. Hacer que no dropee items al morir.">
+      <created>1670152181170</created>
+      <option name="number" value="00008" />
+      <option name="presentableId" value="LOCAL-00008" />
+      <option name="project" value="LOCAL" />
+      <updated>1670152181170</updated>
+    </task>
+    <task id="LOCAL-00009" summary="CHANGE: Modo berserk al morir. Ahora spawnea con una vida y comida establecidos para el modo berserk.&#10;&#10;TO DO: Dar los bufos.">
+      <created>1670153882081</created>
+      <option name="number" value="00009" />
+      <option name="presentableId" value="LOCAL-00009" />
+      <option name="project" value="LOCAL" />
+      <updated>1670153882081</updated>
+    </task>
+    <task id="LOCAL-00010" summary="CHANGE: Modo berserk al morir. Ahora spawnea con una vida y comida establecidos para el modo berserk.&#10;&#10;TO DO: Dar los bufos.">
+      <created>1670153968053</created>
+      <option name="number" value="00010" />
+      <option name="presentableId" value="LOCAL-00010" />
+      <option name="project" value="LOCAL" />
+      <updated>1670153968053</updated>
+    </task>
+    <task id="LOCAL-00011" summary="CHANGE: Modo berserk al morir. Ya están todos los bufos dados.">
+      <created>1670161153428</created>
+      <option name="number" value="00011" />
+      <option name="presentableId" value="LOCAL-00011" />
+      <option name="project" value="LOCAL" />
+      <updated>1670161153428</updated>
+    </task>
+    <task id="LOCAL-00012" summary="CHANGE: Modo berserk al morir. Ya están todos los bufos dados.">
+      <created>1670187643711</created>
+      <option name="number" value="00012" />
+      <option name="presentableId" value="LOCAL-00012" />
+      <option name="project" value="LOCAL" />
+      <updated>1670187643711</updated>
+    </task>
+    <option name="localTasksCounter" value="13" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -173,6 +248,11 @@
     <MESSAGE value="Inicio fruta mera mera" />
     <MESSAGE value="BREAKING CHANGE: Diferenciado el hit de una entidad y el hit de un bloque." />
     <MESSAGE value="BREAKING CHANGE: Actualizado el efecto de hit a un bloque (TIERRA)" />
-    <option name="LAST_COMMIT_MESSAGE" value="BREAKING CHANGE: Actualizado el efecto de hit a un bloque (TIERRA)" />
+    <MESSAGE value="MERA MERA&#10;&#10;BREAKING CHANGE: Actualizado el efecto de hit a un bloque (TIERRA y CÉSPED)" />
+    <MESSAGE value="BREAKING CHANGE: Actualizado el efecto de hit a un bloque.&#10;&#10;ADD: Modo berserk al morir." />
+    <MESSAGE value="CHANGE: Modo berserk al morir.&#10;&#10;TO DO: Establecer la vida y dar los bufos. Hacer que no dropee items al morir." />
+    <MESSAGE value="CHANGE: Modo berserk al morir. Ahora spawnea con una vida y comida establecidos para el modo berserk.&#10;&#10;TO DO: Dar los bufos." />
+    <MESSAGE value="CHANGE: Modo berserk al morir. Ya están todos los bufos dados." />
+    <option name="LAST_COMMIT_MESSAGE" value="CHANGE: Modo berserk al morir. Ya están todos los bufos dados." />
   </component>
 </project>
