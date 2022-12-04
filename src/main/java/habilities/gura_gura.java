@@ -1,50 +1,104 @@
 package habilities;
 
-import org.bukkit.Location;
-import org.bukkit.Material;
-import org.bukkit.block.Block;
+import org.bukkit.*;
 import org.bukkit.entity.Entity;
+import org.bukkit.entity.LivingEntity;
+import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
-import org.bukkit.event.Player;
-import org.bukkit.event.entity.PlayerInteractEvent;
-import org.bukkit.event.World;
+import org.bukkit.event.block.Action;
+import org.bukkit.event.player.PlayerAnimationEvent;
+import org.bukkit.event.player.PlayerInteractEvent;
+import org.bukkit.util.Vector;
+import java.util.ArrayList;
 
 public class gura_gura implements Listener {
 
-    final float waveDistance=8, radiusFloor = 6, radiusWall=2;
-    final Material NETHERRACK = Material.NETHERRACK;
+    final int waveDistance=8, radiusFloor = 6, radiusWall=3;
     final Material AIR = Material.AIR;
-    final Material GREEN_DIRT = Material.GRASS_BLOCK;
 
-    public void createWaveEffect(Player player){
+    public void createWaveEffect(Player player) {
         Location currentPL = player.getLocation();
-        direction = player.getEyeLocation().getDirection();
-        currentPL=currentPL.setY(currentPL.getY+1);
-        List<Location> blocks = new ArrayList<Location>();
+        Vector direction = player.getEyeLocation().getDirection();
+        currentPL.setY(currentPL.getY() + 1);
+        ArrayList<Location> blocks = new ArrayList<Location>();
 
-        for(int i=0;i<waveDistance;i++){
+
+        for (int i = 0; i < waveDistance; i++) {
             blocks.add(currentPL.add(direction));
-            blocks.addAll(bresenham(radiusWall,blocks.end(),currentPL.add(direction)));
+            blocks.addAll(positions(currentPL, direction));
         }
 
-    for(Location block : blocks){
-            if(block.getBlock().getType() == AIR){
-                block.getWorld().spawnParticle(Particle.CLOUD, block, 100);
-            }else{
-                block.getWorld().spawnParticle(Particle.BLOCK_CRACK, block, 100, new MaterialData(block.getBlock().getType()));
+            for (Location b : blocks) {
+                ArrayList<LivingEntity> entities = new ArrayList<LivingEntity>();
+                for (Entity entity : b.getWorld().getNearbyEntities(b, 1, 1, 1)) {
+                    if (entity instanceof LivingEntity) {
+                        entities.add((LivingEntity) entity);
+                    }
+                }
+                if (b.getBlock().getType() != AIR)
+                    if(b.getBlock().getType().getHardness() < Material.STONE.getHardness())
+                        b.getBlock().breakNaturally();
+
+                if(b.getBlock().getType() == AIR)
+                    b.getWorld().spawnParticle(Particle.BLOCK_CRACK, b, 3, Material.GLASS_PANE.createBlockData());
+                else
+                    b.getWorld().spawnParticle(Particle.BLOCK_CRACK, b, 4, b.getBlock().getType().createBlockData());
+
+                //Damage all entities in the area of the wave
+                for (LivingEntity entity : entities) {
+                    if(entity != player)
+                        entity.damage(9);
+                }
             }
+
         }
 
-    }
-    
+    @EventHandler(ignoreCancelled = true)
+    public void onPlayerInteract(PlayerAnimationEvent event) {
+        Player player = event.getPlayer();
+        if(player.getItemInHand().getType() == Material.STICK){
+            createWaveEffect(player);
+            Bukkit.getConsoleSender().sendMessage("Hability lunch");
 
-    public List bresenham(int radius, Location center){
+        }
+    }
+
+    //Create a wall radius x radius of blocks in the direction of the player
+    public ArrayList<Location> positions(Location loc, Vector direction) {
+        //if faces north
+        ArrayList<Location> blocks = new ArrayList<Location>();
+
+        if (direction.getX() != 1) {
+            blocks.add(loc.clone().add(1, 1, 0));
+            blocks.add(loc.clone().add(0, 1, 0));
+            blocks.add(loc.clone().add(-1, 1, 0));
+            blocks.add(loc.clone().add(1, 0, 0));
+            blocks.add(loc.clone().add(-1, 0, 0));
+            blocks.add(loc.clone().add(1, -1, 0));
+            blocks.add(loc.clone().add(0, -1, 0));
+            blocks.add(loc.clone().add(-1, -1, 0));
+        }
+        //if faces east
+        if (direction.getX() != 0) {
+            blocks.add(loc.clone().add(0, 1, 1));
+            blocks.add(loc.clone().add(0, 1, 0));
+            blocks.add(loc.clone().add(0, 1, -1));
+            blocks.add(loc.clone().add(0, 0, 1));
+            blocks.add(loc.clone().add(0, 0, -1));
+            blocks.add(loc.clone().add(0, -1, 1));
+            blocks.add(loc.clone().add(0, -1, 0));
+            blocks.add(loc.clone().add(0, -1, -1));
+        }
+
+        return blocks;
+    }
+    public ArrayList<Location> bresenham(int radius, Location center){
         /*
         Bresenham algorithm modification.
         radius must be 2n+1 with 1<=n.
         */
-        List<Block> blocks = new ArrayList<Block>();
+        ArrayList<Location> blocks = new ArrayList<Location>();
         int x,z,d;
 
         x=0;
@@ -60,7 +114,8 @@ public class gura_gura implements Listener {
                 z--;
             }
             x++;
-        blocks.add(center.getBlock().getRelative(x,0,z));
+
+        blocks.add(center.clone().add(x,0,z));
         }
         return blocks;
     }
