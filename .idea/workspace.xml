@@ -6,7 +6,14 @@
   <component name="ChangeListManager">
     <list default="true" id="4c4a02f3-60ad-417a-851f-33d53731d8e9" name="Changes" comment="MERA MERA&#10;&#10;ADD:">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/habilities/gura_gura.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/habilities/gura_gura.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/habilities/moku_moku.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/habilities/moku_moku.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/OPhabs-1.0-SNAPSHOT.jar" beforeDir="false" afterPath="$PROJECT_DIR$/target/OPhabs-1.0-SNAPSHOT.jar" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/habilities/gura_gura.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/habilities/gura_gura.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/habilities/moku_moku$1.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/habilities/moku_moku$1.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/habilities/moku_moku.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/habilities/moku_moku.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/maven-archiver/pom.properties" beforeDir="false" afterPath="$PROJECT_DIR$/target/maven-archiver/pom.properties" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/original-OPhabs-1.0-SNAPSHOT.jar" beforeDir="false" afterPath="$PROJECT_DIR$/target/original-OPhabs-1.0-SNAPSHOT.jar" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
