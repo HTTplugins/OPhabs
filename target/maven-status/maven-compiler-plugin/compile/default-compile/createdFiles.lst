@@ -6,7 +6,10 @@ habilities\yami_yami.class
 habilities\yami_yami$1.class
 htt\ophabs\OPhabs.class
 habilities\moku_moku.class
+fruitSystem\fruitAssociation.class
 commands\oph.class
 habilities\moku_moku$1.class
 habilities\mera_mera$1.class
 habilities\gura_gura.class
+fruitSystem\dropCaster.class
+fruitSystem\fruit_player.class
