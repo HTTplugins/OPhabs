@@ -8,11 +8,19 @@
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/habilities/gura_gura.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/habilities/gura_gura.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/habilities/moku_moku.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/habilities/moku_moku.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/habilities/yami_yami.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/habilities/yami_yami.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/htt/ophabs/OPhabs.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/htt/ophabs/OPhabs.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/target/OPhabs-1.0-SNAPSHOT.jar" beforeDir="false" afterPath="$PROJECT_DIR$/target/OPhabs-1.0-SNAPSHOT.jar" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/target/classes/habilities/gura_gura.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/habilities/gura_gura.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/target/classes/habilities/moku_moku$1.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/habilities/moku_moku$1.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/target/classes/habilities/moku_moku.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/habilities/moku_moku.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/habilities/yami_yami$1.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/habilities/yami_yami$1.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/habilities/yami_yami$2.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/habilities/yami_yami$2.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/habilities/yami_yami$3.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/habilities/yami_yami$3.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/habilities/yami_yami.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/habilities/yami_yami.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/htt/ophabs/OPhabs.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/htt/ophabs/OPhabs.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/target/maven-archiver/pom.properties" beforeDir="false" afterPath="$PROJECT_DIR$/target/maven-archiver/pom.properties" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/maven-status/maven-compiler-plugin/compile/default-compile/createdFiles.lst" beforeDir="false" afterPath="$PROJECT_DIR$/target/maven-status/maven-compiler-plugin/compile/default-compile/createdFiles.lst" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/target/original-OPhabs-1.0-SNAPSHOT.jar" beforeDir="false" afterPath="$PROJECT_DIR$/target/original-OPhabs-1.0-SNAPSHOT.jar" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -54,19 +62,20 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent">{
-  &quot;keyToString&quot;: {
-    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
-    &quot;WebServerToolWindowFactoryState&quot;: &quot;false&quot;,
-    &quot;last_opened_file_path&quot;: &quot;/home/alberto-ubuntu/Minecraft-Plugins/OPhabs&quot;,
-    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
-    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
-    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
-    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
-    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "ASKED_ADD_EXTERNAL_FILES": "true",
+    "RunOnceActivity.OpenProjectViewOnStart": "true",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "WebServerToolWindowFactoryState": "false",
+    "last_opened_file_path": "/home/alberto-ubuntu/Minecraft-Plugins/OPhabs",
+    "node.js.detected.package.eslint": "true",
+    "node.js.detected.package.tslint": "true",
+    "node.js.selected.package.eslint": "(autodetect)",
+    "node.js.selected.package.tslint": "(autodetect)",
+    "vue.rearranger.settings.migration": "true"
   }
-}</component>
+}]]></component>
   <component name="RunManager">
     <configuration name="OPhabs build" type="MavenRunConfiguration" factoryName="Maven">
       <MavenSettings>

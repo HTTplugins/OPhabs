@@ -20,7 +20,7 @@ public final class OPhabs extends JavaPlugin {
 
         getServer().getPluginManager().registerEvents(new yami_yami(this), this);
         getServer().getPluginManager().registerEvents(new mera_mera(this), this);
-        getServer().getPluginManager().registerEvents(new gura_gura(),this);
+        getServer().getPluginManager().registerEvents(new gura_gura(this),this);
         getServer().getPluginManager().registerEvents(new moku_moku(this),this);
         getServer().getPluginManager().registerEvents(new fruitAssociation(), this);
         getServer().getPluginManager().registerEvents(new dropCaster(), this);

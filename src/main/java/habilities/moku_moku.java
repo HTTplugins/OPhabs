@@ -18,7 +18,7 @@ import java.util.ArrayList;
 
 public class moku_moku implements Listener{
     final Material AIR = Material.AIR;
-    final Particle SMOKE = Particle.CLOUD;
+    final Particle SMOKE = Particle.CAMPFIRE_COSY_SMOKE;
     boolean particlesON;
     private OPhabs plugin;
     ArrayList<String> smokeBodyON = new ArrayList<>(), smokeLegsON = new ArrayList<>();
@@ -44,13 +44,13 @@ public class moku_moku implements Listener{
 
     public boolean isInRain(Player player) {
         Boolean in = false;
-        if (player.getWorld().isThundering() || player.getWorld().hasStorm()) {
+        if (player.getWorld().hasStorm()) {
             int blockLocation = player.getLocation().getWorld().getHighestBlockYAt(player.getLocation());
             if (blockLocation <= player.getLocation().getY()) {
                 in = true;
+                player.sendMessage("RAIN");
             }
         }
-        player.sendMessage("RAIN");
         return in;
     }
     public boolean isInWaterBlock(Player player) {
@@ -80,13 +80,13 @@ public class moku_moku implements Listener{
                     if (!particlesON || (oldP == particlesON))
                         cancelTask();
 
-                    player.getWorld().spawnParticle(SMOKE, player.getLocation(), 30);
+                    player.getWorld().spawnParticle(SMOKE, player.getLocation(), 10, 0.5, 0.5, 0.5, 0);
                 }
 
                 public void cancelTask() {
                     Bukkit.getScheduler().cancelTask(this.getTaskId());
                 }
-            }.runTaskTimer(plugin, 0, 10);
+            }.runTaskTimer(plugin, 0, 3);
         }
     }
 
@@ -102,12 +102,13 @@ public class moku_moku implements Listener{
 
 
     @EventHandler(ignoreCancelled = true)
-    public void onEntityDamage(EntityDamageEvent event){
+    public void onEntityDamage(EntityDamageEvent event) {
         Player player;
-        if(event.getEntity() instanceof  Player){
+        if (event.getEntity() instanceof Player) {
             player = (Player) event.getEntity();
-            if(smokeBodyON.contains(player.getName()) && !isInWater(player))
+            if (smokeBodyON.contains(player.getName()) && !isInWater(player)) {
                 event.setCancelled(true);
+            }
         }
     }
     @EventHandler(ignoreCancelled = true)
