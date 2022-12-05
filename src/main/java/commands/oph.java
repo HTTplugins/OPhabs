@@ -1,6 +1,7 @@
 package commands;
 
 import fruitSystem.devilFruit;
+import fruitSystem.fruitIdentification;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.command.Command;
@@ -17,20 +18,33 @@ public class oph implements CommandExecutor {
     public oph(OPhabs plugin){this.plugin = plugin;}
     @Override
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args){
-        if (args.length < 2) return false;
 
-        String playerName = args[0];
-        Player target = sender.getServer().getPlayerExact(playerName);
-        if (target == null) { //check whether the player is online
-            sender.sendMessage("Player " + playerName + " is not online.");
-            return true;
-        }
-        Material itemType = Material.matchMaterial(args[1]);
-        if (itemType == null) { //check whether the material exists
-            sender.sendMessage("Unknown material: " + args[1] + ".");
-            return true;
-        }
+
+        Player player = (Player) sender;
+        String order = args[0];
+        String fruitCommandName = args[1];
+        Player targetPlayer = getPlayerifexists(args[2]);
+
+
+        if(args.length == 3)
+            if (order.equalsIgnoreCase("giveFruit"))
+                if(fruitCommandName.equalsIgnoreCase(fruitIdentification.fruitCommandNameYami)
+                        || fruitCommandName.equalsIgnoreCase(fruitIdentification.fruitCommandNameMera)
+                        ||fruitCommandName.equalsIgnoreCase(fruitIdentification.fruitCommandNameGura)
+                        || fruitCommandName.equalsIgnoreCase(fruitIdentification.fruitCommandNameMoku))
+                    if( targetPlayer != null) {
+                        //if(!usedFruit(fruitCommandName)) {
+                        devilFruit devFruit = new devilFruit(fruitCommandName);
+                        devFruit.playerObtainFruit(targetPlayer);
+                        //} else player.sendMessage("The fruit has been alredy consumed");
+                    }else printUnkownPlayer(player);
+                else player.sendMessage("The fruit doesn't exist");
+            else player.sendMessage("Parameters to giveFruit are <fruitCommandName> <PlayerName>");
+        else printHelp(player);
+
+
         return false;
+
     }
 
     public void printHelp(Player player){

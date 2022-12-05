@@ -4,38 +4,52 @@ import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
+import org.graalvm.compiler.nodes.NodeView;
 
-public class devilFruit {
-    final String fruitNameyami_yami = "yami_yami",
-            fruitNamemera_mera = "mera_mera",
-            fruitNamegura_gura = "gura_gura";
+public class devilFruit{
+
 
     ItemStack devilFruit;
-    Material devilFruitForm;
-    String displayDevilFruitName;
-    ItemMeta metaDataDevilFruit;
+    boolean inUse;
+    public static int numFruits = 4;
 
-    public devilFruit(String fruitName){
-        metaDataDevilFruit = (new ItemStack(Material.APPLE)).getItemMeta().clone();
 
-        switch (fruitName){
-            case fruitNameyami_yami:
+
+    public devilFruit(String fruitCommandName){
+        Material devilFruitForm = null;
+        String fruitItemName = null;
+        ItemMeta metaDataDevilFruit = (new ItemStack(Material.APPLE)).getItemMeta().clone();
+
+        switch (fruitCommandName){
+            case fruitIdentification.fruitCommandNameYami:
                 devilFruitForm = Material.APPLE;
-                displayDevilFruitName = "Yami Yami no mi";
+                fruitItemName = fruitIdentification.fruitItemNameYami;
                 break;
-            case fruitNamemera_mera:
+
+            case fruitIdentification.fruitCommandNameMera:
                 devilFruitForm = Material.CARROT;
-                displayDevilFruitName = "Mera Mera no mi";
+                fruitItemName  = fruitIdentification.fruitItemNameMera;
                 break;
-            case fruitNamegura_gura:
-                devilFruitForm = Material.CHORUS_FRUIT;
-                displayDevilFruitName = "Gura Gura no mi";
+            case fruitIdentification.fruitCommandNameGura:
+                devilFruitForm = Material.CARROT;
+                fruitItemName  = fruitIdentification.fruitItemNameGura;
                 break;
+            case fruitIdentification.fruitCommandNameMoku:
+                devilFruitForm = Material.CARROT;
+                fruitItemName  = fruitIdentification.fruitItemNameMoku;
+                break;
+            default:
+                devilFruitForm = Material.ACACIA_BOAT;
+                fruitItemName  = "ERROR";
+                break;
+
         }
 
         devilFruit = new ItemStack(devilFruitForm);
-        metaDataDevilFruit.setDisplayName(displayDevilFruitName);
+        metaDataDevilFruit.setDisplayName(fruitItemName);
         devilFruit.setItemMeta(metaDataDevilFruit);
+        inUse = false;
+
     }
 
     public void playerObtainFruit(Player player){
@@ -43,5 +57,6 @@ public class devilFruit {
         player.getInventory().addItem(devilFruit);
 
     }
+
 
 }
