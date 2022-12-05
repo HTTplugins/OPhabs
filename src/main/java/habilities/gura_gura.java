@@ -61,11 +61,11 @@ public class gura_gura implements Listener {
                 if (entity != player)
                     entity.damage(9);
             }
-            setFaliingBlock(b);
+            setFallingBlock(b);
         }
     }
 
-    public void setFaliingBlock(Location block){
+    public void setFallingBlock(Location block){
         if(block.getBlock().getType() != AIR && block.getBlock().getType() != Material.WATER){
             Material matFallingBlock = block.getBlock().getType();
             block.getBlock().setType(Material.AIR);
@@ -161,7 +161,7 @@ public class gura_gura implements Listener {
                 if (entity != player)
                     entity.damage(2);
             }
-            setFaliingBlock(block);
+            setFallingBlock(block);
         }
         player.teleport(player.getLocation());
     }
