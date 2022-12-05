@@ -33,10 +33,10 @@ public class oph implements CommandExecutor {
                         ||fruitCommandName.equalsIgnoreCase(fruitIdentification.fruitCommandNameGura)
                         || fruitCommandName.equalsIgnoreCase(fruitIdentification.fruitCommandNameMoku))
                     if( targetPlayer != null) {
-                        //if(!usedFruit(fruitCommandName)) {
-                        devilFruit devFruit = new devilFruit(fruitCommandName);
-                        devFruit.playerObtainFruit(targetPlayer);
-                        //} else player.sendMessage("The fruit has been alredy consumed");
+                        if(plugin.getConfig().getString("FruitAssociations."+fruitCommandName).equals("none")){
+                            devilFruit devFruit = new devilFruit(fruitCommandName);
+                            devFruit.playerObtainFruit(targetPlayer);
+                        } else {player.sendMessage("The fruits has alredy been consumed");}
                     }else printUnkownPlayer(player);
                 else player.sendMessage("The fruit doesn't exist");
             else player.sendMessage("Parameters to giveFruit are <fruitCommandName> <PlayerName>");
