@@ -4,16 +4,10 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="4c4a02f3-60ad-417a-851f-33d53731d8e9" name="Changes" comment="CHANGE: Control de versiones.">
+    <list default="true" id="4c4a02f3-60ad-417a-851f-33d53731d8e9" name="Changes" comment="ADD: Habilidad 1 para la mera mera.&#10;&#10;TO DO: Generar una Throwable fireball.">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/habilities/mera_mera.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/habilities/mera_mera.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/habilities/moku_moku.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/habilities/moku_moku.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/target/OPhabs-1.0-SNAPSHOT.jar" beforeDir="false" afterPath="$PROJECT_DIR$/target/OPhabs-1.0-SNAPSHOT.jar" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/habilities/mera_mera$1.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/habilities/mera_mera$1.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/habilities/mera_mera.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/habilities/mera_mera.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/maven-archiver/pom.properties" beforeDir="false" afterPath="$PROJECT_DIR$/target/maven-archiver/pom.properties" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/maven-status/maven-compiler-plugin/compile/default-compile/createdFiles.lst" beforeDir="false" afterPath="$PROJECT_DIR$/target/maven-status/maven-compiler-plugin/compile/default-compile/createdFiles.lst" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/maven-status/maven-compiler-plugin/compile/default-compile/inputFiles.lst" beforeDir="false" afterPath="$PROJECT_DIR$/target/maven-status/maven-compiler-plugin/compile/default-compile/inputFiles.lst" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/target/original-OPhabs-1.0-SNAPSHOT.jar" beforeDir="false" afterPath="$PROJECT_DIR$/target/original-OPhabs-1.0-SNAPSHOT.jar" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -149,7 +143,8 @@
       <workItem from="1670243467163" duration="97000" />
       <workItem from="1670253112615" duration="347000" />
       <workItem from="1670323569167" duration="6597000" />
-      <workItem from="1670334030242" duration="264000" />
+      <workItem from="1670334030242" duration="580000" />
+      <workItem from="1670356942494" duration="498000" />
     </task>
     <task id="LOCAL-00001" summary="Inicio fruta mera mera">
       <created>1669729553440</created>
@@ -242,7 +237,14 @@
       <option name="project" value="LOCAL" />
       <updated>1670241009458</updated>
     </task>
-    <option name="localTasksCounter" value="14" />
+    <task id="LOCAL-00014" summary="ADD: Habilidad 1 para la mera mera.&#10;&#10;TO DO: Generar una Throwable fireball.">
+      <created>1670334643114</created>
+      <option name="number" value="00014" />
+      <option name="presentableId" value="LOCAL-00014" />
+      <option name="project" value="LOCAL" />
+      <updated>1670334643114</updated>
+    </task>
+    <option name="localTasksCounter" value="15" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -269,6 +271,7 @@
     <MESSAGE value="CHANGE: Modo berserk al morir. Ahora spawnea con una vida y comida establecidos para el modo berserk.&#10;&#10;TO DO: Dar los bufos." />
     <MESSAGE value="CHANGE: Modo berserk al morir. Ya están todos los bufos dados." />
     <MESSAGE value="CHANGE: Control de versiones." />
-    <option name="LAST_COMMIT_MESSAGE" value="CHANGE: Control de versiones." />
+    <MESSAGE value="ADD: Habilidad 1 para la mera mera.&#10;&#10;TO DO: Generar una Throwable fireball." />
+    <option name="LAST_COMMIT_MESSAGE" value="ADD: Habilidad 1 para la mera mera.&#10;&#10;TO DO: Generar una Throwable fireball." />
   </component>
 </project>

@@ -216,7 +216,7 @@ public class mera_mera implements Listener {
                         cancelTask();
 
                     mundo.spawnParticle(PARTICULA_FUEGO, jugador.getLocation(), N_PARTICULAS, RADIO_PARTICULAS,
-                                        RADIO_PARTICULAS, RADIO_PARTICULAS, 0.5);
+                                        RADIO_PARTICULAS, RADIO_PARTICULAS, 0.05);
                 }
                 public void cancelTask(){
                     Bukkit.getScheduler().cancelTask(this.getTaskId());
@@ -238,12 +238,12 @@ public class mera_mera implements Listener {
                 RADIO_PARTICULAS, RADIO_PARTICULAS, RADIO_PARTICULAS);
     }
 
-    @EventHandler(ignoreCancelled = true)
+    /*@EventHandler(ignoreCancelled = true)
     public void onEntityPickupItem(EntityPickupItemEvent event) {           // Arreglar.
         Item objeto = event.getItem();
 
         CookFood((Block) objeto);
-    }
+    }*/
 
     @EventHandler(ignoreCancelled = true)
     public void onPlayerInteract(PlayerInteractEvent event){
@@ -259,10 +259,9 @@ public class mera_mera implements Listener {
         }
         else if(arma == Material.GOLDEN_SWORD && accion == Action.LEFT_CLICK_BLOCK)
             Hability1ColdDown--;
-        else if(arma == Material.GOLDEN_SWORD && accion == Action.RIGHT_CLICK_BLOCK){
+        /*else if(arma == Material.GOLDEN_SWORD && accion == Action.RIGHT_CLICK_BLOCK){
             mundo.spawnEntity(event.getPlayer().getLocation(), EntityType.FIREBALL);
             System.out.println("Deberia spawnear");
-        }
-
+        }*/
     }
 }
