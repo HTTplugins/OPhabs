@@ -7,7 +7,10 @@ import org.bukkit.block.Block;
 import org.bukkit.entity.*;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
+import org.bukkit.event.block.Action;
 import org.bukkit.event.entity.*;
+import org.bukkit.event.inventory.InventoryPickupItemEvent;
+import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerItemConsumeEvent;
 import org.bukkit.event.player.PlayerRespawnEvent;
 import org.bukkit.potion.PotionEffect;
@@ -17,7 +20,7 @@ import org.bukkit.scheduler.BukkitRunnable;
 public class mera_mera implements Listener {
     private OPhabs plugin;
     final float ExplosionRadius = 4;
-    final int BerserkFireRadius = 5;
+    final int BerserkFireRadius = 5, Hability1Radius = 10;
     final Material NETHERRACK = Material.NETHERRACK;
     final Material FIRE = Material.FIRE;
     final Material DIRT = Material.DIRT;
@@ -31,6 +34,8 @@ public class mera_mera implements Listener {
     BERSERK_AMPLIFIER = 2;
     boolean BERSERK = true;
 
+    private int Hability1ColdDown = 0;
+
     public mera_mera(OPhabs plugin){
         this.plugin = plugin;
     }
@@ -42,6 +47,28 @@ public class mera_mera implements Listener {
             esTierra = true;
 
         return esTierra;
+    }
+
+    private void CookFood(Block comida){
+        final Material material = comida.getType();
+
+        if(material == Material.BEEF)
+            comida.setType(Material.COOKED_BEEF);
+
+        if(material == Material.PORKCHOP)
+            comida.setType(Material.COOKED_PORKCHOP);
+
+        if(material == Material.SALMON)
+            comida.setType(Material.COOKED_SALMON);
+
+        if(material == Material.RABBIT)
+            comida.setType(Material.COOKED_RABBIT);
+
+        if(material == Material.MUTTON)
+            comida.setType(Material.COOKED_MUTTON);
+
+        if(material == Material.COD)
+            comida.setType(Material.COOKED_COD);
     }
 
     public boolean isIndestructible(Block bloque) {
@@ -116,6 +143,19 @@ public class mera_mera implements Listener {
 
         if (isDirt(delante8.getBlock()))
             delante8.getBlock().setType(NETHERRACK);
+    }
+
+    public void createHability1Effect(Location loc, Action accion, Material arma){
+        Location loc_aux = loc.clone();
+
+        for(int i = -Hability1Radius; i <= Hability1Radius; i++) {
+            loc_aux.setX(loc.getX() + i);
+            for(int j = -Hability1Radius; j <= Hability1Radius; j++) {
+                loc_aux.setZ(loc.getZ() + j);
+                if(loc_aux.getBlock().getType() == AIR)
+                    loc_aux.getBlock().setType(FIRE);
+            }
+        }
     }
 
     @EventHandler(ignoreCancelled = true)
@@ -198,4 +238,31 @@ public class mera_mera implements Listener {
                 RADIO_PARTICULAS, RADIO_PARTICULAS, RADIO_PARTICULAS);
     }
 
+    @EventHandler(ignoreCancelled = true)
+    public void onEntityPickupItem(EntityPickupItemEvent event) {           // Arreglar.
+        Item objeto = event.getItem();
+
+        CookFood((Block) objeto);
+    }
+
+    @EventHandler(ignoreCancelled = true)
+    public void onPlayerInteract(PlayerInteractEvent event){
+        Action accion = event.getAction();
+        Material arma = event.getMaterial();
+        World mundo = event.getPlayer().getWorld();
+
+        event.getPlayer().addPotionEffect(new PotionEffect(PotionEffectType.FIRE_RESISTANCE, BERSERK_DURATION, BERSERK_AMPLIFIER));
+
+        if(arma == Material.GOLDEN_SWORD && accion == Action.LEFT_CLICK_BLOCK && Hability1ColdDown == 0){
+            createHability1Effect(event.getPlayer().getLocation(), accion, arma);
+            Hability1ColdDown += 10;
+        }
+        else if(arma == Material.GOLDEN_SWORD && accion == Action.LEFT_CLICK_BLOCK)
+            Hability1ColdDown--;
+        else if(arma == Material.GOLDEN_SWORD && accion == Action.RIGHT_CLICK_BLOCK){
+            mundo.spawnEntity(event.getPlayer().getLocation(), EntityType.FIREBALL);
+            System.out.println("Deberia spawnear");
+        }
+
+    }
 }

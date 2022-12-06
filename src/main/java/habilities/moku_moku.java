@@ -120,7 +120,7 @@ public class moku_moku implements Listener{
         particlesON=false;
     }
 
-        public boolean smokeBody(Player player) {
+    public boolean smokeBody(Player player) {
             if (!smokeBodyON.contains(player.getName())) {
                 if (smokeLegsON.contains(player.getName()))
                     smokeLegs(player);

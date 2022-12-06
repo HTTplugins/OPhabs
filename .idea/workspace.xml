@@ -4,7 +4,18 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="4c4a02f3-60ad-417a-851f-33d53731d8e9" name="Changes" comment="CHANGE: Control de versiones." />
+    <list default="true" id="4c4a02f3-60ad-417a-851f-33d53731d8e9" name="Changes" comment="CHANGE: Control de versiones.">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/habilities/mera_mera.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/habilities/mera_mera.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/habilities/moku_moku.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/habilities/moku_moku.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/OPhabs-1.0-SNAPSHOT.jar" beforeDir="false" afterPath="$PROJECT_DIR$/target/OPhabs-1.0-SNAPSHOT.jar" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/habilities/mera_mera$1.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/habilities/mera_mera$1.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/habilities/mera_mera.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/habilities/mera_mera.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/maven-archiver/pom.properties" beforeDir="false" afterPath="$PROJECT_DIR$/target/maven-archiver/pom.properties" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/maven-status/maven-compiler-plugin/compile/default-compile/createdFiles.lst" beforeDir="false" afterPath="$PROJECT_DIR$/target/maven-status/maven-compiler-plugin/compile/default-compile/createdFiles.lst" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/maven-status/maven-compiler-plugin/compile/default-compile/inputFiles.lst" beforeDir="false" afterPath="$PROJECT_DIR$/target/maven-status/maven-compiler-plugin/compile/default-compile/inputFiles.lst" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/original-OPhabs-1.0-SNAPSHOT.jar" beforeDir="false" afterPath="$PROJECT_DIR$/target/original-OPhabs-1.0-SNAPSHOT.jar" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -135,6 +146,10 @@
       <workItem from="1670083035874" duration="565000" />
       <workItem from="1670083752876" duration="3107000" />
       <workItem from="1670151895217" duration="12133000" />
+      <workItem from="1670243467163" duration="97000" />
+      <workItem from="1670253112615" duration="347000" />
+      <workItem from="1670323569167" duration="6597000" />
+      <workItem from="1670334030242" duration="264000" />
     </task>
     <task id="LOCAL-00001" summary="Inicio fruta mera mera">
       <created>1669729553440</created>
@@ -220,7 +235,14 @@
       <option name="project" value="LOCAL" />
       <updated>1670187643711</updated>
     </task>
-    <option name="localTasksCounter" value="13" />
+    <task id="LOCAL-00013" summary="CHANGE: Control de versiones.">
+      <created>1670241009458</created>
+      <option name="number" value="00013" />
+      <option name="presentableId" value="LOCAL-00013" />
+      <option name="project" value="LOCAL" />
+      <updated>1670241009458</updated>
+    </task>
+    <option name="localTasksCounter" value="14" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
