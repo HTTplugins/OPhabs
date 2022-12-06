@@ -1,48 +1,111 @@
 package fruitSystem;
 
+import htt.ophabs.OPhabs;
 import org.bukkit.Material;
+import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerItemConsumeEvent;
 import org.bukkit.inventory.ItemStack;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class fruitAssociation implements Listener {
+    OPhabs plugin;
 
-    final String fruitItemNameyami_yami = "yami yami no mi";
-    final String fruitItemNamemera_mera = "mera mera no mi";
+    public static List<Player> dfPlayers = new ArrayList<>();
 
-    public fruitAssociation(){
-
+    public fruitAssociation(OPhabs plugin){
+        this.plugin = plugin;
     }
 
     @EventHandler(ignoreCancelled = true)
     public void onPlayerItemConsume(PlayerItemConsumeEvent event) {
+
         ItemStack fruit = event.getItem();
-        String fruititemName = null;
+
+
+        String
+                yamiValue = plugin.getConfig().getString("FruitAssociations.yami_yami"),
+                meraValue = plugin.getConfig().getString("FruitAssociations.mera_mera"),
+                guraValue = plugin.getConfig().getString("FruitAssociations.gura_gura"),
+                mokuValue = plugin.getConfig().getString("FruitAssociations.moku_moku");
+
+
+
         Material castItem = null;
+
+        Boolean consumedFruit = false;
+
 
 
         switch (fruit.getItemMeta().getDisplayName()){
 
-            case fruitItemNameyami_yami:
-
-                fruititemName = fruitItemNameyami_yami;
+            case fruitIdentification.fruitItemNameYami:
+                consumedFruit = consumedFruit(yamiValue,event);
+                yamiValue = event.getPlayer().getName();
                 castItem = Material.STICK;
 
                 break;
-            case fruitItemNamemera_mera:
-                fruititemName = fruitItemNamemera_mera;
+
+            case fruitIdentification.fruitItemNameMera:
+                consumedFruit = consumedFruit(meraValue,event);
+                meraValue = event.getPlayer().getName();
                 castItem = Material.CHARCOAL;
 
+                break;
+            case fruitIdentification.fruitItemNameGura:
+                consumedFruit= consumedFruit(guraValue,event);
+                guraValue = event.getPlayer().getName();
+                castItem = Material.GOLD_INGOT;
+
+                break;
+            case fruitIdentification.fruitItemNameMoku:
+                consumedFruit = consumedFruit(mokuValue,event);
+                mokuValue = event.getPlayer().getName();
+                castItem = Material.IRON_INGOT;
                 break;
 
             default:
                 break;
         }
 
-        fruit_player.associateFruit(new fruit_player(fruititemName,event.getPlayer()));
-        event.getPlayer().getInventory().addItem(new ItemStack(castItem));
 
 
+        if(!consumedFruit){
+            plugin.getConfig().set("FruitAssociations.yami_yami",yamiValue);
+            plugin.getConfig().set("FruitAssociations.mera_mera",meraValue);
+            plugin.getConfig().set("FruitAssociations.gura_gura",guraValue);
+            plugin.getConfig().set("FruitAssociations.moku_moku",mokuValue);
+            plugin.saveConfig();
+
+            if(dfPlayers.contains(event.getPlayer())){
+                event.getPlayer().getWorld().strikeLightningEffect(event.getPlayer().getLocation());
+                event.getPlayer().setHealth(0);
+            } else {
+                dfPlayers.add(event.getPlayer());
+            }
+
+        }
+
+
+
+
+        //event.getPlayer().getInventory().addItem(new ItemStack(castItem));
+
+
+    }
+
+    public Boolean consumedFruit(String value, PlayerItemConsumeEvent event){
+
+        if(!value.equals("none")){
+            event.getPlayer().sendMessage("This is an error, this fruit has alredy been consumed.");
+            event.getPlayer().getInventory().removeItem(event.getItem());
+
+            return true;
+
+        } else
+            return false;
     }
 }

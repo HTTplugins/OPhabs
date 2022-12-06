@@ -14,11 +14,12 @@ import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import org.bukkit.scheduler.BukkitRunnable;
+import org.bukkit.block.Biome;
 import java.util.ArrayList;
 
 public class moku_moku implements Listener{
     final Material AIR = Material.AIR;
-    final Particle SMOKE = Particle.CLOUD;
+    final Particle SMOKE = Particle.CAMPFIRE_COSY_SMOKE;
     boolean particlesON;
     private OPhabs plugin;
     ArrayList<String> smokeBodyON = new ArrayList<>(), smokeLegsON = new ArrayList<>();
@@ -27,42 +28,42 @@ public class moku_moku implements Listener{
         this.plugin = plugin;
     }
 
-    @EventHandler(ignoreCancelled = true)
-    public void onEntityToggleSwim(EntityToggleSwimEvent event) {
-        if(event.getEntity() instanceof Player)
-            ((Player) event.getEntity()).damage(2);
-    }
-
     @EventHandler
     public void playerOnWater(PlayerMoveEvent event) {
-        if ((isInWaterBlock(event.getPlayer()))) {
-            event.getPlayer().damage(1);
-        }
-        /*if(particlesON && isInRain(event.getPlayer()))
-            event.getPlayer().damage(3);*/
-    }
-
-    public boolean isInRain(Player player) {
-        Boolean in = false;
-        if (player.getWorld().isThundering() || player.getWorld().hasStorm()) {
-            int blockLocation = player.getLocation().getWorld().getHighestBlockYAt(player.getLocation());
-            if (blockLocation <= player.getLocation().getY()) {
-                in = true;
+        if (event.getPlayer().getLocation().getBlock().isLiquid() && event.getPlayer().getLocation().getBlock().getType() != Material.LAVA) {
+            Player player = event.getPlayer();
+            if(particlesON) {
+                player.damage(2);
+            }
+            if(isInSeaWater(event.getPlayer())){
+                    player.addPotionEffect(new PotionEffect(PotionEffectType.SLOW, 100, 1));
+                    player.addPotionEffect(new PotionEffect(PotionEffectType.CONFUSION, 100, 1));
+                    player.addPotionEffect(new PotionEffect(PotionEffectType.BLINDNESS, 100, 1));
+                    player.addPotionEffect(new PotionEffect(PotionEffectType.WEAKNESS, 100, 1));
+                    player.addPotionEffect(new PotionEffect(PotionEffectType.SLOW_DIGGING, 100, 1));
+                    player.addPotionEffect(new PotionEffect(PotionEffectType.HUNGER, 100, 1));
+                    if(particlesON){
+                        if(smokeBodyON.contains(player.getName())){
+                            smokeBody(player);
+                        }
+                        if(smokeLegsON.contains(player.getName())){
+                            smokeLegs(player);
+                        }
+                        particlesON = false;
+                    }
             }
         }
-        player.sendMessage("RAIN");
-        return in;
     }
-    public boolean isInWaterBlock(Player player) {
+
+    public boolean isInSeaWater(Player player) {
         Boolean in = false;
-        if (player.getLocation().getBlock().getType() == Material.WATER)
-            in = true;
-
+        Biome biome = player.getLocation().getBlock().getBiome();
+        if(biome.name().contains("OCEAN") || biome.name().contains("BEACH")) {
+              if(player.getLocation().getBlock().getType() == Material.WATER) {
+                  in = true;
+              }
+          }
         return in;
-    }
-
-    public boolean isInWater(Player player) {
-        return (isInWaterBlock(player));// || isInRain(player));
     }
 
     @EventHandler(ignoreCancelled = true)
@@ -80,13 +81,13 @@ public class moku_moku implements Listener{
                     if (!particlesON || (oldP == particlesON))
                         cancelTask();
 
-                    player.getWorld().spawnParticle(SMOKE, player.getLocation(), 30);
+                    player.getWorld().spawnParticle(SMOKE, player.getLocation(), 10, 0.5, 0.5, 0.5, 0);
                 }
 
                 public void cancelTask() {
                     Bukkit.getScheduler().cancelTask(this.getTaskId());
                 }
-            }.runTaskTimer(plugin, 0, 10);
+            }.runTaskTimer(plugin, 0, 3);
         }
     }
 
@@ -102,12 +103,13 @@ public class moku_moku implements Listener{
 
 
     @EventHandler(ignoreCancelled = true)
-    public void onEntityDamage(EntityDamageEvent event){
+    public void onEntityDamage(EntityDamageEvent event) {
         Player player;
-        if(event.getEntity() instanceof  Player){
+        if (event.getEntity() instanceof Player) {
             player = (Player) event.getEntity();
-            if(smokeBodyON.contains(player.getName()) && !isInWater(player))
+            if (smokeBodyON.contains(player.getName()) && !(player.getLocation().getBlock().isLiquid() && player.getLocation().getBlock().getType() != Material.LAVA)) {
                 event.setCancelled(true);
+            }
         }
     }
     @EventHandler(ignoreCancelled = true)
