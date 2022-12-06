@@ -1,4 +1,4 @@
-package fruitSystem;
+package castSystem;
 
 import org.bukkit.Material;
 import org.bukkit.event.EventHandler;
