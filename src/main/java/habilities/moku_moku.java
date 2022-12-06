@@ -36,21 +36,21 @@ public class moku_moku implements Listener{
                 player.damage(2);
             }
             if(isInSeaWater(event.getPlayer())){
-                    player.addPotionEffect(new PotionEffect(PotionEffectType.SLOW, 100, 1));
-                    player.addPotionEffect(new PotionEffect(PotionEffectType.CONFUSION, 100, 1));
-                    player.addPotionEffect(new PotionEffect(PotionEffectType.BLINDNESS, 100, 1));
-                    player.addPotionEffect(new PotionEffect(PotionEffectType.WEAKNESS, 100, 1));
-                    player.addPotionEffect(new PotionEffect(PotionEffectType.SLOW_DIGGING, 100, 1));
-                    player.addPotionEffect(new PotionEffect(PotionEffectType.HUNGER, 100, 1));
-                    if(particlesON){
-                        if(smokeBodyON.contains(player.getName())){
-                            smokeBody(player);
-                        }
-                        if(smokeLegsON.contains(player.getName())){
-                            smokeLegs(player);
-                        }
-                        particlesON = false;
+                player.addPotionEffect(new PotionEffect(PotionEffectType.SLOW, 100, 1));
+                player.addPotionEffect(new PotionEffect(PotionEffectType.CONFUSION, 100, 1));
+                player.addPotionEffect(new PotionEffect(PotionEffectType.BLINDNESS, 100, 1));
+                player.addPotionEffect(new PotionEffect(PotionEffectType.WEAKNESS, 100, 1));
+                player.addPotionEffect(new PotionEffect(PotionEffectType.SLOW_DIGGING, 100, 1));
+                player.addPotionEffect(new PotionEffect(PotionEffectType.HUNGER, 100, 1));
+                if(particlesON){
+                    if(smokeBodyON.contains(player.getName())){
+                        smokeBody(player);
                     }
+                    if(smokeLegsON.contains(player.getName())){
+                        smokeLegs(player);
+                    }
+                    particlesON = false;
+                }
             }
         }
     }
