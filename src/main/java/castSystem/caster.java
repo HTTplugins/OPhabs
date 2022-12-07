@@ -70,19 +70,34 @@ public class caster implements Listener {
                         }
 
                         if(casterItemName.equals(castIdentification.castItemNameGura) && casterMaterial.equals(castIdentification.castMaterialGura)){
+                            gura_gura guraClass = new gura_gura(plugin);
                             switch (guraIndex){
+                                case 0:
+                                    guraClass.earthquake(e.getPlayer());
+                                    break;
+                                case 1:
+                                    guraClass.createWave(e.getPlayer());
+                                    break;
                                 default:
                                     System.out.println("GURA GURA");
+                                    e.getPlayer().sendMessage("GURA GURA");
                                     break;
                             }
 
                         }
 
                         if(casterItemName.equals(castIdentification.castItemNameMoku) && casterMaterial.equals(castIdentification.castMaterialMoku)){
+                            moku_moku mokuClass = new moku_moku(plugin);
                             switch (mokuIndex){
                                 default:
                                     System.out.println("MOKU MOKU");
+                                    break;/*
+                                case 0:
+                                    mokuClass.smokeBody(e.getPlayer());
                                     break;
+                                case 1:
+                                    mokuClass.smokeLegs(e.getPlayer());
+                                    break;*/
                             }
                         }
                     } else {
