@@ -28,7 +28,7 @@ public class moku_moku implements Listener{
         this.plugin = plugin;
     }
 
-    @EventHandler
+/*    @EventHandler
     public void playerOnWater(PlayerMoveEvent event) {
         if (event.getPlayer().getLocation().getBlock().isLiquid() && event.getPlayer().getLocation().getBlock().getType() != Material.LAVA) {
             Player player = event.getPlayer();
@@ -46,7 +46,7 @@ public class moku_moku implements Listener{
             }
         }
     }
-
+*/
     public boolean isInSeaWater(Player player) {
         Boolean in = false;
         Biome biome = player.getLocation().getBlock().getBiome();
@@ -69,12 +69,11 @@ public class moku_moku implements Listener{
         }
     }
     
-    public void runParticles(Player player){
-        boolean oldP = particlesON;
+    public void runParticles(Player player, boolean oldP){
         new BukkitRunnable() {
             @Override
             public void run() {
-                if (!particlesON || (oldP == particlesON))
+                if (!(smokeBodyON.contains(player.getName()) || smokeLegsON.contains(player.getName())))
                     cancelTask();
 
                 player.getWorld().spawnParticle(SMOKE, player.getLocation(), 10, 0.5, 0.5, 0.5, 0);
@@ -106,7 +105,7 @@ public class moku_moku implements Listener{
         particlesON=false;
     }
 
-    public void smokeBody(Player player) {
+    public boolean smokeBody(Player player) {
             if (!smokeBodyON.contains(player.getName())) {
                 if (smokeLegsON.contains(player.getName()))
                     smokeLegs(player);
@@ -121,11 +120,10 @@ public class moku_moku implements Listener{
                 player.removePotionEffect(PotionEffectType.INCREASE_DAMAGE);
             }
             toggleFly(player);
-            particlesON = (smokeBodyON.contains(player.getName()) || smokeLegsON.contains(player.getName()));
-            runParticles(player);
+            return (smokeBodyON.contains(player.getName()) || smokeLegsON.contains(player.getName()));
         }
 
-    public void smokeLegs(Player player){
+    public boolean smokeLegs(Player player){
         if (!smokeBodyON.contains(player.getName())){
             if (!smokeLegsON.contains(player.getName())) {
                 smokeLegsON.add(player.getName());
@@ -137,7 +135,7 @@ public class moku_moku implements Listener{
             toggleFly(player);
         }
 
-        particlesON = (smokeBodyON.contains(player.getName()) || smokeLegsON.contains(player.getName())) ;
-        runParticles(player);
+        return (smokeBodyON.contains(player.getName()) || smokeLegsON.contains(player.getName())) ;
+
     }
 }

@@ -19,7 +19,9 @@ public class castIdentification {
 
 
     public static boolean itemIsCaster(ItemStack item) {
-
+        if (item == null) {
+            return false;
+        }
         String itemName = item.getItemMeta().getDisplayName();
         Material itemMaterial = item.getType();
 

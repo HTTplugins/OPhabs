@@ -39,7 +39,6 @@ public class yami_yami implements Listener {
 
     final int damageDelay = 0;
     final int damageSpeed = 15;
-    Player usuario = null;
 
     final Material voidMaterial= Material.BLACK_CONCRETE;
 
@@ -77,7 +76,9 @@ public class yami_yami implements Listener {
                 LivingEntity livEnt;
 
                 public void run() {
-
+                    if(player.isDead()){
+                        cancelTask();
+                    }
                     List<LivingEntity> livingEntities = player.getWorld().getLivingEntities();
 
                     for (int i = 0; i < livingEntities.size(); i++) {
@@ -87,7 +88,7 @@ public class yami_yami implements Listener {
                             downBlock.setY(downBlock.getBlockY() - 1);
 
                             if (downBlock.getBlock().getType().equals(voidMaterial))
-                                if (livEnt != usuario)
+                                if (livEnt != player)
                                     livEnt.damage(damageAmount);
                         }
                     }

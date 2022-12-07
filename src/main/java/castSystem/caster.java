@@ -24,11 +24,19 @@ import static org.bukkit.event.block.Action.RIGHT_CLICK_AIR;
 
 public class caster implements Listener {
     OPhabs plugin;
+    moku_moku mokuClass;
+    yami_yami yamiClass;
+    mera_mera meraClass;
+    gura_gura guraClass;
 
     int yamiIndex = 0, meraIndex = 0, guraIndex = 0, mokuIndex = 0;
 
-    public caster(OPhabs plugin){
+    public caster(OPhabs plugin, moku_moku mokuClass, yami_yami yamiClass, mera_mera meraClass, gura_gura guraClass) {
         this.plugin = plugin;
+        this.mokuClass = mokuClass;
+        this.yamiClass = yamiClass;
+        this.meraClass = meraClass;
+        this.guraClass = guraClass;
     }
 
 
@@ -44,7 +52,6 @@ public class caster implements Listener {
 
                     if((e.getAction() == Action.RIGHT_CLICK_AIR || e.getAction() == Action.RIGHT_CLICK_BLOCK)){
                         if(casterItemName.equals(castIdentification.castItemNameYami) && casterMaterial.equals(castIdentification.castMaterialYami)){
-                            yami_yami yamiClass = new yami_yami(plugin);
                             switch (yamiIndex){
                                 case 0:
 
@@ -70,7 +77,6 @@ public class caster implements Listener {
                         }
 
                         if(casterItemName.equals(castIdentification.castItemNameGura) && casterMaterial.equals(castIdentification.castMaterialGura)){
-                            gura_gura guraClass = new gura_gura(plugin);
                             switch (guraIndex){
                                 case 0:
                                     guraClass.earthquake(e.getPlayer());
@@ -87,17 +93,16 @@ public class caster implements Listener {
                         }
 
                         if(casterItemName.equals(castIdentification.castItemNameMoku) && casterMaterial.equals(castIdentification.castMaterialMoku)){
-                            moku_moku mokuClass = new moku_moku(plugin);
                             switch (mokuIndex){
                                 default:
                                     System.out.println("MOKU MOKU");
-                                    break;/*
+                                    break;
                                 case 0:
-                                    mokuClass.smokeBody(e.getPlayer());
+                                    mokuClass.runParticles(e.getPlayer(), mokuClass.smokeBody(e.getPlayer()));
                                     break;
                                 case 1:
-                                    mokuClass.smokeLegs(e.getPlayer());
-                                    break;*/
+                                    mokuClass.runParticles(e.getPlayer(), mokuClass.smokeLegs(e.getPlayer()));
+                                    break;
                             }
                         }
                     } else {
