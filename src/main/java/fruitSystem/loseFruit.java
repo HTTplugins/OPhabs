@@ -4,7 +4,6 @@ import htt.ophabs.OPhabs;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.PlayerDeathEvent;
-import org.graalvm.compiler.serviceprovider.IsolateUtil;
 
 public class loseFruit implements Listener {
     OPhabs plugin;

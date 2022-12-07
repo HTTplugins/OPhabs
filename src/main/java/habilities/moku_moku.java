@@ -36,21 +36,13 @@ public class moku_moku implements Listener{
                 player.damage(2);
             }
             if(isInSeaWater(event.getPlayer())){
-                    player.addPotionEffect(new PotionEffect(PotionEffectType.SLOW, 100, 1));
-                    player.addPotionEffect(new PotionEffect(PotionEffectType.CONFUSION, 100, 1));
-                    player.addPotionEffect(new PotionEffect(PotionEffectType.BLINDNESS, 100, 1));
-                    player.addPotionEffect(new PotionEffect(PotionEffectType.WEAKNESS, 100, 1));
-                    player.addPotionEffect(new PotionEffect(PotionEffectType.SLOW_DIGGING, 100, 1));
-                    player.addPotionEffect(new PotionEffect(PotionEffectType.HUNGER, 100, 1));
-                    if(particlesON){
-                        if(smokeBodyON.contains(player.getName())){
-                            smokeBody(player);
-                        }
-                        if(smokeLegsON.contains(player.getName())){
-                            smokeLegs(player);
-                        }
-                        particlesON = false;
+                    if(smokeBodyON.contains(player.getName())){
+                        smokeBody(player);
                     }
+                    if(smokeLegsON.contains(player.getName())){
+                        smokeLegs(player);
+                    }
+                particlesON = false;                    
             }
         }
     }
@@ -66,30 +58,6 @@ public class moku_moku implements Listener{
         return in;
     }
 
-    @EventHandler(ignoreCancelled = true)
-    public void onPlayerInteract(PlayerAnimationEvent event) {
-        Player player = event.getPlayer();
-        boolean oldP=particlesON;
-        if (player.getItemInHand().getType() == Material.STONE_SWORD) {
-            if (player.isSneaking())
-                particlesON = smokeBody(player);
-            else
-                particlesON = smokeLegs(player);
-            new BukkitRunnable() {
-                @Override
-                public void run() {
-                    if (!particlesON || (oldP == particlesON))
-                        cancelTask();
-
-                    player.getWorld().spawnParticle(SMOKE, player.getLocation(), 10, 0.5, 0.5, 0.5, 0);
-                }
-
-                public void cancelTask() {
-                    Bukkit.getScheduler().cancelTask(this.getTaskId());
-                }
-            }.runTaskTimer(plugin, 0, 3);
-        }
-    }
 
     public void toggleFly(Player player){
         if (smokeLegsON.contains(player.getName()) || smokeBodyON.contains(player.getName()) ){
@@ -100,7 +68,23 @@ public class moku_moku implements Listener{
             player.setFlying(false);
         }
     }
+    
+    public void runParticles(Player player){
+        boolean oldP = particlesON;
+        new BukkitRunnable() {
+            @Override
+            public void run() {
+                if (!particlesON || (oldP == particlesON))
+                    cancelTask();
 
+                player.getWorld().spawnParticle(SMOKE, player.getLocation(), 10, 0.5, 0.5, 0.5, 0);
+            }
+
+            public void cancelTask() {
+                Bukkit.getScheduler().cancelTask(this.getTaskId());
+            }
+        }.runTaskTimer(plugin, 0, 3);
+    }
 
     @EventHandler(ignoreCancelled = true)
     public void onEntityDamage(EntityDamageEvent event) {
@@ -122,7 +106,7 @@ public class moku_moku implements Listener{
         particlesON=false;
     }
 
-    public boolean smokeBody(Player player) {
+    public void smokeBody(Player player) {
             if (!smokeBodyON.contains(player.getName())) {
                 if (smokeLegsON.contains(player.getName()))
                     smokeLegs(player);
@@ -137,10 +121,11 @@ public class moku_moku implements Listener{
                 player.removePotionEffect(PotionEffectType.INCREASE_DAMAGE);
             }
             toggleFly(player);
-            return (smokeBodyON.contains(player.getName()) || smokeLegsON.contains(player.getName()));
+            particlesON = (smokeBodyON.contains(player.getName()) || smokeLegsON.contains(player.getName()));
+            runParticles(player);
         }
 
-    public boolean smokeLegs(Player player){
+    public void smokeLegs(Player player){
         if (!smokeBodyON.contains(player.getName())){
             if (!smokeLegsON.contains(player.getName())) {
                 smokeLegsON.add(player.getName());
@@ -152,6 +137,7 @@ public class moku_moku implements Listener{
             toggleFly(player);
         }
 
-        return (smokeBodyON.contains(player.getName()) || smokeLegsON.contains(player.getName())) ;
+        particlesON = (smokeBodyON.contains(player.getName()) || smokeLegsON.contains(player.getName())) ;
+        runParticles(player);
     }
 }

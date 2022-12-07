@@ -2,6 +2,7 @@ package htt.ophabs;
 
 import castSystem.caster;
 import castSystem.dropCaster;
+import castSystem.noDropCaster;
 import fruitSystem.fruitAssociation;
 import fruitSystem.loseFruit;
 import org.bukkit.Bukkit;
@@ -31,14 +32,15 @@ public final class OPhabs extends JavaPlugin {
 
 
 
-        getServer().getPluginManager().registerEvents(new yami_yami(this), this);
-        getServer().getPluginManager().registerEvents(new mera_mera(this), this);
-        getServer().getPluginManager().registerEvents(new gura_gura(this),this);
-        getServer().getPluginManager().registerEvents(new moku_moku(this),this);
+        //getServer().getPluginManager().registerEvents(new yami_yami(this), this);
+        //getServer().getPluginManager().registerEvents(new mera_mera(this), this);
+        //getServer().getPluginManager().registerEvents(new gura_gura(this),this);
+        //getServer().getPluginManager().registerEvents(new moku_moku(this),this);
         getServer().getPluginManager().registerEvents(new fruitAssociation(this), this);
         getServer().getPluginManager().registerEvents(new dropCaster(), this);
         getServer().getPluginManager().registerEvents(new loseFruit(this), this);
         getServer().getPluginManager().registerEvents(new caster(this), this);
+        getServer().getPluginManager().registerEvents(new noDropCaster(), this);
 
 
 

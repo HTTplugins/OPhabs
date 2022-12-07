@@ -27,7 +27,7 @@ public class gura_gura implements Listener {
     this.plugin = plugin;
   }
 
-  public void createWaveEffect(Player player) {
+  public void createWave(Player player) {
     Location currentPL = player.getLocation();
     Vector direction = player.getEyeLocation().getDirection();
     currentPL.setY(currentPL.getY() + 1);
@@ -85,14 +85,6 @@ public class gura_gura implements Listener {
     }
   }
 
-  @EventHandler(ignoreCancelled = true)
-  public void onPlayerInteract(PlayerAnimationEvent event) {
-    Player player = event.getPlayer();
-    if (player.getItemInHand().getType() == Material.STICK) {
-      if (player.isSneaking()) earthquake(player);
-      else createWaveEffect(player);
-    }
-  }
 
   public ArrayList<Location> positions(Location loc, Vector direction) {
     // if faces north
