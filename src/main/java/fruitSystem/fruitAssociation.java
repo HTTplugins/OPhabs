@@ -7,6 +7,8 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerItemConsumeEvent;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.ItemMeta;
+import castSystem.castIdentification;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -33,10 +35,12 @@ public class fruitAssociation implements Listener {
                 mokuValue = plugin.getConfig().getString("FruitAssociations.moku_moku");
 
 
-
-        Material castItem = null;
+        String casterItemName = null;
+        Material castMaterial = null;
 
         Boolean consumedFruit = false;
+
+
 
 
 
@@ -45,26 +49,30 @@ public class fruitAssociation implements Listener {
             case fruitIdentification.fruitItemNameYami:
                 consumedFruit = consumedFruit(yamiValue,event);
                 yamiValue = event.getPlayer().getName();
-                castItem = Material.STICK;
+                casterItemName = castIdentification.castItemNameYami;
+                castMaterial = castIdentification.castMaterialYami;
 
                 break;
 
             case fruitIdentification.fruitItemNameMera:
                 consumedFruit = consumedFruit(meraValue,event);
                 meraValue = event.getPlayer().getName();
-                castItem = Material.CHARCOAL;
+                casterItemName = castIdentification.castItemNameMera;
+                castMaterial = castIdentification.castMaterialMera;
 
                 break;
             case fruitIdentification.fruitItemNameGura:
                 consumedFruit= consumedFruit(guraValue,event);
                 guraValue = event.getPlayer().getName();
-                castItem = Material.GOLD_INGOT;
+                casterItemName = castIdentification.castItemNameGura;
+                castMaterial = castIdentification.castMaterialGura;
 
                 break;
             case fruitIdentification.fruitItemNameMoku:
                 consumedFruit = consumedFruit(mokuValue,event);
                 mokuValue = event.getPlayer().getName();
-                castItem = Material.IRON_INGOT;
+                casterItemName = castIdentification.castItemNameMoku;
+                castMaterial = castIdentification.castMaterialMoku;
                 break;
 
             default:
@@ -80,19 +88,20 @@ public class fruitAssociation implements Listener {
             plugin.getConfig().set("FruitAssociations.moku_moku",mokuValue);
             plugin.saveConfig();
 
-            if(dfPlayers.contains(event.getPlayer())){
-                event.getPlayer().getWorld().strikeLightningEffect(event.getPlayer().getLocation());
-                event.getPlayer().setHealth(0);
-            } else {
-                dfPlayers.add(event.getPlayer());
-            }
-
         }
+        ItemStack caster = new ItemStack(castMaterial);
+        ItemMeta casterItemMeta = caster.getItemMeta();
+        casterItemMeta.setDisplayName(casterItemName);
+        caster.setItemMeta(casterItemMeta);
 
+        event.getPlayer().getInventory().addItem(caster);
 
-
-
-        //event.getPlayer().getInventory().addItem(new ItemStack(castItem));
+        if(dfPlayers.contains(event.getPlayer())){
+            event.getPlayer().getWorld().strikeLightningEffect(event.getPlayer().getLocation());
+            event.getPlayer().setHealth(0);
+        } else {
+            dfPlayers.add(event.getPlayer());
+        }
 
 
     }

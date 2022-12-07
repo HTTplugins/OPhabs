@@ -47,12 +47,12 @@ public class yami_yami implements Listener {
     final int dissappearVoidBlocksDelay = 160;
     public yami_yami(OPhabs plugin){this.plugin = plugin;}
 
-    @EventHandler(ignoreCancelled = true)
-    public void onPlayerInteract(PlayerAnimationEvent event) {
-        Player player = event.getPlayer();
-        if (player.getItemInHand().getType() == Material.COAL_BLOCK) {
-            event.getPlayer().getWorld().playSound(event.getPlayer(), Sound.AMBIENT_CRIMSON_FOREST_MOOD, 10, 2);
-            Location playerLocation = event.getPlayer().getLocation();
+
+    public void blackVoid(Player player) {
+        System.out.println("AA");
+
+            player.getWorld().playSound(player, Sound.AMBIENT_CRIMSON_FOREST_MOOD, 10, 2);
+            Location playerLocation = player.getLocation();
 
             bresenham(radius, playerLocation, true);
 
@@ -78,11 +78,11 @@ public class yami_yami implements Listener {
 
                 public void run() {
 
-                    List<LivingEntity> livingEntities = event.getPlayer().getWorld().getLivingEntities();
+                    List<LivingEntity> livingEntities = player.getWorld().getLivingEntities();
 
                     for (int i = 0; i < livingEntities.size(); i++) {
                         livEnt = livingEntities.get(i);
-                        if (!event.getPlayer().equals(livEnt)) {
+                        if (!player.equals(livEnt)) {
                             Location downBlock = livEnt.getLocation();
                             downBlock.setY(downBlock.getBlockY() - 1);
 
@@ -104,11 +104,11 @@ public class yami_yami implements Listener {
                 @Override
                 public void run() {
                     dissappearVoidBlocks();
-                    event.getPlayer().getWorld().playSound(event.getPlayer(), Sound.ENTITY_ENDERMAN_TELEPORT, 10, 2);
+                    player.getWorld().playSound(player, Sound.ENTITY_ENDERMAN_TELEPORT, 10, 2);
                 }
             }.runTaskLater(plugin, dissappearVoidBlocksDelay);
 
-        }
+
 
 
     }
