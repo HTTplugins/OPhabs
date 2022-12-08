@@ -48,7 +48,7 @@ public class yami_yami implements Listener {
 
 
     public void blackVoid(Player player) {
-        System.out.println("AA");
+
 
             player.getWorld().playSound(player, Sound.AMBIENT_CRIMSON_FOREST_MOOD, 10, 2);
             Location playerLocation = player.getLocation();
@@ -71,14 +71,12 @@ public class yami_yami implements Listener {
                 }
             }.runTaskTimer(plugin, voidExpansionDelay, voidExpansionSpeed);
 
-            new BukkitRunnable() {
-                Player player;
+            BukkitTask damage = new BukkitRunnable() {
+
                 LivingEntity livEnt;
 
                 public void run() {
-                    if(player.isDead()){
-                        cancelTask();
-                    }
+
                     List<LivingEntity> livingEntities = player.getWorld().getLivingEntities();
 
                     for (int i = 0; i < livingEntities.size(); i++) {
@@ -88,7 +86,7 @@ public class yami_yami implements Listener {
                             downBlock.setY(downBlock.getBlockY() - 1);
 
                             if (downBlock.getBlock().getType().equals(voidMaterial))
-                                if (livEnt != player)
+                                if (livEnt != player){}
                                     livEnt.damage(damageAmount);
                         }
                     }
@@ -101,10 +99,14 @@ public class yami_yami implements Listener {
 
             }.runTaskTimer(plugin, damageDelay, damageSpeed);
 
+
+
             new BukkitRunnable() {
                 @Override
                 public void run() {
+                    System.out.println("working");
                     dissappearVoidBlocks();
+                    damage.cancel();
                     player.getWorld().playSound(player, Sound.ENTITY_ENDERMAN_TELEPORT, 10, 2);
                 }
             }.runTaskLater(plugin, dissappearVoidBlocksDelay);
@@ -120,7 +122,6 @@ public class yami_yami implements Listener {
 
         if(downBlockLocation.getBlock().getType().equals(voidMaterial) )
             event.setCancelled(true);
-
 
     }
 
