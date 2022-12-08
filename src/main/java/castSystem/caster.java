@@ -27,14 +27,15 @@ public class caster implements Listener {
 
     @EventHandler
     public void onInteract(PlayerInteractEvent event){
-        if(event.getHand().equals(EquipmentSlot.HAND)) {
+        if(event.getHand().equals(EquipmentSlot.HAND))
+            if (castIdentification.itemIsCaster(event.getItem())){
 
-            String casterItemName = event.getItem().getItemMeta().getDisplayName();
-            Material casterMaterial = event.getMaterial();
-            Action action = event.getAction();
+                String casterItemName = event.getItem().getItemMeta().getDisplayName();
+                Material casterMaterial = event.getMaterial();
+                Action action = event.getAction();
 
-            if (castIdentification.itemIsCaster(event.getItem()))
                 if ((action == Action.RIGHT_CLICK_AIR || action == Action.RIGHT_CLICK_BLOCK)) {
+
                     if (casterItemName.equals(castIdentification.castItemNameYami) && casterMaterial.equals(castIdentification.castMaterialYami))
                         switch (yamiIndex) {
                             case 0:
@@ -104,6 +105,8 @@ public class caster implements Listener {
                         mokuIndex = mokuIndex % abilitiesIdentification.anumberMoku;
                     }
                 }
-        }
+
+            }
+
     }
 }
