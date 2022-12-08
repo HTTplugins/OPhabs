@@ -8,8 +8,10 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.entity.*;
+import org.bukkit.event.inventory.InventoryPickupItemEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerItemConsumeEvent;
+import org.bukkit.inventory.ItemStack;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import org.bukkit.scheduler.BukkitRunnable;
@@ -46,7 +48,7 @@ public class mera_mera implements Listener {
         return esTierra;
     }
 
-    private void CookFood(Block comida){
+    private void CookFood(ItemStack comida){
         final Material material = comida.getType();
 
         if(material == Material.BEEF)
@@ -194,7 +196,8 @@ public class mera_mera implements Listener {
         Location loc = jugador.getLocation();
 
         if (BERSERK) {
-            event.setDeathMessage("\n\n" + "BY THE POWER OF THE UNDERWORLD... DESTROY THEM!!\n");
+            event.setDeathMessage("\n\n" + "BY THE POWER OF THE UNDERWORLD... DESTROY THEM!! FROM NOW ON, YOU SHOULDN'T" +
+                    " LOVE FOOD SO MUCH... HAHAHA!! \n");
             event.setKeepInventory(true);
             event.setKeepLevel(true);
 
@@ -235,12 +238,12 @@ public class mera_mera implements Listener {
                 RADIO_PARTICULAS, RADIO_PARTICULAS, RADIO_PARTICULAS);
     }
 
-    /*@EventHandler(ignoreCancelled = true)
+    @EventHandler(ignoreCancelled = true)
     public void onEntityPickupItem(EntityPickupItemEvent event) {           // Arreglar.
         Item objeto = event.getItem();
 
-        CookFood((Block) objeto);
-    }*/
+        CookFood(objeto.getItemStack());
+    }
 
     @EventHandler(ignoreCancelled = true)
     public void onPlayerInteract(PlayerInteractEvent event){
