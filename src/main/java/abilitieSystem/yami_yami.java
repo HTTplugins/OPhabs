@@ -1,4 +1,4 @@
-package habilities;
+package abilitieSystem;
 
 import htt.ophabs.OPhabs;
 import org.bukkit.Bukkit;
@@ -6,56 +6,41 @@ import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.Sound;
 import org.bukkit.block.Block;
-import org.bukkit.entity.Cow;
 import org.bukkit.entity.LivingEntity;
-import org.bukkit.entity.Mob;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityChangeBlockEvent;
-import org.bukkit.event.entity.ProjectileHitEvent;
-import org.bukkit.event.player.PlayerAnimationEvent;
-import org.bukkit.event.player.PlayerDropItemEvent;
-import org.bukkit.potion.PotionEffect;
-import org.bukkit.potion.PotionEffectType;
 import org.bukkit.scheduler.BukkitRunnable;
-import org.bukkit.scheduler.BukkitScheduler;
 import org.bukkit.scheduler.BukkitTask;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import static org.bukkit.Registry.MATERIAL;
-import static org.bukkit.Registry.SOUNDS;
-
 public class yami_yami implements Listener {
-    OPhabs plugin;
-     final int radius = 3;
-     final int maxRadiusAmplification = 9;
-     final int voidExpansionDelay = 6;
-     final int voidExpansionSpeed = 5;     //less is faster
+    private OPhabs plugin;
+     private final int
+             radius = 3,
+             maxRadiusAmplification = 9,
+             voidExpansionDelay = 6,
+             voidExpansionSpeed = 5, //less is faster
+             damageAmount = 1,
+             damageDelay = 0,
+             damageSpeed = 15,
+             dissappearVoidBlocksDelay = 160;
 
-    final int damageAmount = 1;
+    private final Material voidMaterial= Material.BLACK_CONCRETE;
 
-    final int damageDelay = 0;
-    final int damageSpeed = 15;
-
-    final Material voidMaterial= Material.BLACK_CONCRETE;
-
-    List<Block> convertedToVoidBlocks = new ArrayList<>();
-    final int dissappearVoidBlocksDelay = 160;
+    private List<Block> convertedToVoidBlocks = new ArrayList<>();
     public yami_yami(OPhabs plugin){this.plugin = plugin;}
 
-
     public void blackVoid(Player player) {
+        player.getWorld().playSound(player, Sound.AMBIENT_CRIMSON_FOREST_MOOD, 10, 2);
+        Location playerLocation = player.getLocation();
 
+        bresenham(radius, playerLocation, true);
 
-            player.getWorld().playSound(player, Sound.AMBIENT_CRIMSON_FOREST_MOOD, 10, 2);
-            Location playerLocation = player.getLocation();
-
-            bresenham(radius, playerLocation, true);
-
-            new BukkitRunnable() {
+        BukkitTask circle = new BukkitRunnable() {
                 int radiusCounter = radius;
 
                 public void run() {
@@ -72,48 +57,31 @@ public class yami_yami implements Listener {
             }.runTaskTimer(plugin, voidExpansionDelay, voidExpansionSpeed);
 
             BukkitTask damage = new BukkitRunnable() {
-
                 LivingEntity livEnt;
 
                 public void run() {
-
                     List<LivingEntity> livingEntities = player.getWorld().getLivingEntities();
 
-                    for (int i = 0; i < livingEntities.size(); i++) {
-                        livEnt = livingEntities.get(i);
-                        if (!player.equals(livEnt)) {
+                    for(LivingEntity livEnt : player.getWorld().getLivingEntities()){
+                        if (livEnt != player) {
                             Location downBlock = livEnt.getLocation();
                             downBlock.setY(downBlock.getBlockY() - 1);
 
                             if (downBlock.getBlock().getType().equals(voidMaterial))
-                                if (livEnt != player){}
                                     livEnt.damage(damageAmount);
                         }
                     }
-
                 }
-
-                public void cancelTask() {
-                    Bukkit.getScheduler().cancelTask(this.getTaskId());
-                }
-
             }.runTaskTimer(plugin, damageDelay, damageSpeed);
-
-
 
             new BukkitRunnable() {
                 @Override
                 public void run() {
-                    System.out.println("working");
                     dissappearVoidBlocks();
                     damage.cancel();
                     player.getWorld().playSound(player, Sound.ENTITY_ENDERMAN_TELEPORT, 10, 2);
                 }
             }.runTaskLater(plugin, dissappearVoidBlocksDelay);
-
-
-
-
     }
 
     @EventHandler(ignoreCancelled = true)
@@ -122,7 +90,6 @@ public class yami_yami implements Listener {
 
         if(downBlockLocation.getBlock().getType().equals(voidMaterial) )
             event.setCancelled(true);
-
     }
 
     public void bresenham(int radius, Location playerLocation, boolean fill){

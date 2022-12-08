@@ -17,8 +17,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class fruitAssociation implements Listener {
-    OPhabs plugin;
-
+    private final OPhabs plugin;
     public static List<Player> dfPlayers = new ArrayList<>();
 
     public fruitAssociation(OPhabs plugin){
@@ -26,10 +25,9 @@ public class fruitAssociation implements Listener {
     }
 
     @EventHandler(ignoreCancelled = true)
-    public void onPlayerItemConsume(PlayerItemConsumeEvent event) {
+    public void onPlayerItemConsume(PlayerItemConsumeEvent event){
 
         ItemStack fruit = event.getItem();
-
 
         String
                 yamiValue = plugin.getConfig().getString("FruitAssociations.yami_yami"),
@@ -37,15 +35,9 @@ public class fruitAssociation implements Listener {
                 guraValue = plugin.getConfig().getString("FruitAssociations.gura_gura"),
                 mokuValue = plugin.getConfig().getString("FruitAssociations.moku_moku");
 
-
         String casterItemName = null;
         Material castMaterial = null;
-
         Boolean consumedFruit = false;
-
-
-
-
 
         switch (fruit.getItemMeta().getDisplayName()){
 
@@ -54,7 +46,6 @@ public class fruitAssociation implements Listener {
                 yamiValue = event.getPlayer().getName();
                 casterItemName = castIdentification.castItemNameYami;
                 castMaterial = castIdentification.castMaterialYami;
-
                 break;
 
             case fruitIdentification.fruitItemNameMera:
@@ -62,15 +53,15 @@ public class fruitAssociation implements Listener {
                 meraValue = event.getPlayer().getName();
                 casterItemName = castIdentification.castItemNameMera;
                 castMaterial = castIdentification.castMaterialMera;
-
                 break;
+
             case fruitIdentification.fruitItemNameGura:
                 consumedFruit= consumedFruit(guraValue,event);
                 guraValue = event.getPlayer().getName();
                 casterItemName = castIdentification.castItemNameGura;
                 castMaterial = castIdentification.castMaterialGura;
-
                 break;
+
             case fruitIdentification.fruitItemNameMoku:
                 consumedFruit = consumedFruit(mokuValue,event);
                 mokuValue = event.getPlayer().getName();
@@ -82,8 +73,6 @@ public class fruitAssociation implements Listener {
                 break;
         }
 
-
-
         if(!consumedFruit){
             plugin.getConfig().set("FruitAssociations.yami_yami",yamiValue);
             plugin.getConfig().set("FruitAssociations.mera_mera",meraValue);
@@ -92,20 +81,18 @@ public class fruitAssociation implements Listener {
             plugin.saveConfig();
 
         }
+
         ItemStack caster = new ItemStack(castMaterial);
         ItemMeta casterItemMeta = caster.getItemMeta();
         casterItemMeta.setDisplayName(casterItemName);
         caster.setItemMeta(casterItemMeta);
-
         event.getPlayer().getInventory().addItem(caster);
 
         if(dfPlayers.contains(event.getPlayer())){
             event.getPlayer().getWorld().strikeLightningEffect(event.getPlayer().getLocation());
             event.getPlayer().setHealth(0);
-        } else {
+        } else
             dfPlayers.add(event.getPlayer());
-        }
-
 
     }
 
@@ -114,26 +101,20 @@ public class fruitAssociation implements Listener {
         if(!value.equals("none")){
             event.getPlayer().sendMessage("This is an error, this fruit has alredy been consumed.");
             event.getPlayer().getInventory().removeItem(event.getItem());
-
             return true;
 
         } else
             return false;
     }
 
-
-
-
-    // ALL Devil fruits player must have
-    
     public boolean isInSeaWater(Player player) {
-        Boolean in = false;
+        boolean in = false;
         Biome biome = player.getLocation().getBlock().getBiome();
-        if(biome.name().contains("OCEAN") || biome.name().contains("BEACH")) {
-              if(player.getLocation().getBlock().getType() == Material.WATER) {
+        //if(biome.name().contains("OCEAN") || biome.name().contains("BEACH"))
+              if(player.getLocation().getBlock().getType() == Material.WATER)
                   in = true;
-              }
-          }
+
+
         return in;
     }
     @EventHandler
