@@ -103,6 +103,8 @@ public class caster implements Listener {
                                 case 1:
                                     mokuClass.runParticles(e.getPlayer(), mokuClass.smokeLegs(e.getPlayer()));
                                     break;
+                                case 2:
+                                    mokuClass.summonSmoker(e.getPlayer());
                             }
                         }
                     } else {

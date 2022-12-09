@@ -14,7 +14,7 @@ import org.bukkit.event.player.PlayerAnimationEvent;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.util.Vector;
 
-public class gura_gura implements Listener {
+public class gura_gura {
   final int waveDistance = 8, radiusFloor = 4, radiusWall = 3;
   final Material AIR = Material.AIR;
   final int earthquakeDelay = 5;
