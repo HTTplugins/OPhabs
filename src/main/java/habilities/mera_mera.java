@@ -5,10 +5,12 @@ import org.bukkit.*;
 import org.bukkit.block.Block;
 import org.bukkit.entity.*;
 import org.bukkit.event.EventHandler;
+import org.bukkit.event.HandlerList;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.entity.*;
 import org.bukkit.event.inventory.InventoryPickupItemEvent;
+import org.bukkit.event.player.PlayerEggThrowEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerItemConsumeEvent;
 import org.bukkit.inventory.ItemStack;
@@ -253,15 +255,29 @@ public class mera_mera implements Listener {
 
         event.getPlayer().addPotionEffect(new PotionEffect(PotionEffectType.FIRE_RESISTANCE, BERSERK_DURATION, BERSERK_AMPLIFIER));
 
-        if(arma == Material.GOLDEN_SWORD && accion == Action.LEFT_CLICK_BLOCK && Hability1ColdDown == 0){
+        if(arma == Material.BLAZE_ROD && accion == Action.RIGHT_CLICK_BLOCK && Hability1ColdDown == 0){
             createHability1Effect(event.getPlayer().getLocation(), accion, arma);
             Hability1ColdDown += 10;
         }
-        else if(arma == Material.GOLDEN_SWORD && accion == Action.LEFT_CLICK_BLOCK)
+        else if(arma == Material.BLAZE_ROD && accion == Action.RIGHT_CLICK_BLOCK)
             Hability1ColdDown--;
-        /*else if(arma == Material.GOLDEN_SWORD && accion == Action.RIGHT_CLICK_BLOCK){
+
+        if(arma == Material.BLAZE_ROD && accion == Action.RIGHT_CLICK_AIR){
             mundo.spawnEntity(event.getPlayer().getLocation(), EntityType.FIREBALL);
             System.out.println("Deberia spawnear");
-        }*/
+        }
+    }
+
+    @EventHandler(ignoreCancelled = true)
+    public void onPlayerEggThrow(PlayerEggThrowEvent event) {                   // HABILIDAD 2
+        Location loc = event.getEgg().getLocation();
+        World mundo = event.getEgg().getWorld();
+
+        mundo.createExplosion(loc, ExplosionRadius);
+
+        if(event.isHatching())
+            event.setHatchingType(EntityType.BLAZE);
+
+        event.getPlayer().addPotionEffect(new PotionEffect(PotionEffectType.FIRE_RESISTANCE, BERSERK_DURATION, BERSERK_AMPLIFIER));
     }
 }
