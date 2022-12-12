@@ -120,7 +120,7 @@ public class caster implements Listener {
                                     nekoReoparudoClass.transformation(e.getPlayer());
                                     break;
                                 case 1:
-                                    nekoReoparudoClass.climbWall(e.getPlayer());
+                                    nekoReoparudoClass.frontAttack(e.getPlayer());
                                     break;
                             }
                         }
