@@ -28,15 +28,16 @@ public class caster implements Listener {
     yami_yami yamiClass;
     mera_mera meraClass;
     gura_gura guraClass;
+    neko_neko_reoparudo nekoReoparudoClass;
+    int yamiIndex = 0, meraIndex = 0, guraIndex = 0, mokuIndex = 0, nekoReoparudoIndex = 0;
 
-    int yamiIndex = 0, meraIndex = 0, guraIndex = 0, mokuIndex = 0;
-
-    public caster(OPhabs plugin, moku_moku mokuClass, yami_yami yamiClass, mera_mera meraClass, gura_gura guraClass) {
+    public caster(OPhabs plugin, moku_moku mokuClass, yami_yami yamiClass, mera_mera meraClass, gura_gura guraClass, neko_neko_reoparudo nekoReoparudoClass){
         this.plugin = plugin;
         this.mokuClass = mokuClass;
         this.yamiClass = yamiClass;
         this.meraClass = meraClass;
         this.guraClass = guraClass;
+        this.nekoReoparudoClass = nekoReoparudoClass;
     }
 
 
@@ -110,6 +111,19 @@ public class caster implements Listener {
                                     mokuClass.summonSmoker(e.getPlayer());
                             }
                         }
+                        if(casterItemName.equals(castIdentification.castItemNameNekoReoparudo) && casterMaterial.equals(castIdentification.castMaterialNekoReoparudo)){
+                            switch (nekoReoparudoIndex){
+                                default:
+                                    System.out.println("NEKO NEKO REOPARUDO");
+                                    break;
+                                case 0:
+                                    nekoReoparudoClass.transformation(e.getPlayer());
+                                    break;
+                                case 1:
+                                    nekoReoparudoClass.climbWall(e.getPlayer());
+                                    break;
+                            }
+                        }
                     } else {
 
                         if(casterItemName.equals(castIdentification.castItemNameYami) && casterMaterial.equals(castIdentification.castMaterialYami)){
@@ -133,7 +147,11 @@ public class caster implements Listener {
 
                         if(casterItemName.equals(castIdentification.castItemNameMoku) && casterMaterial.equals(castIdentification.castMaterialMoku)){
                             mokuIndex++;
-                            mokuIndex = mokuIndex % abilitiesIdentification.anumberMoku;
+                            mokuIndex = mokuIndex % abilitiesIdentification.aNumberMoku;
+                        }
+                        if(casterItemName.equals(castIdentification.castItemNameNekoReoparudo) && casterMaterial.equals(castIdentification.castMaterialNekoReoparudo)){
+                            nekoReoparudoIndex++;
+                            nekoReoparudoIndex = nekoReoparudoIndex % abilitiesIdentification.aNumberNekoReoparudo;
                         }
 
 

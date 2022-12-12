@@ -11,7 +11,7 @@ public class devilFruit{
 
     ItemStack devilFruit;
     boolean inUse;
-    public static int numFruits = 4;
+    public static int numFruits = 5;
 
 
 
@@ -37,6 +37,10 @@ public class devilFruit{
             case fruitIdentification.fruitCommandNameMoku:
                 devilFruitForm = Material.CARROT;
                 fruitItemName  = fruitIdentification.fruitItemNameMoku;
+                break;
+            case fruitIdentification.fruitCommandNameNekoReoparudo:
+                devilFruitForm = Material.CARROT;
+                fruitItemName  = fruitIdentification.fruitItemNameNekoReoparudo;
                 break;
             default:
                 devilFruitForm = Material.ACACIA_BOAT;

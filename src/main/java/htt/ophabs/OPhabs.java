@@ -34,16 +34,18 @@ public final class OPhabs extends JavaPlugin {
         yami_yami yamiClass = new yami_yami(this);
         gura_gura guraClass = new gura_gura(this);
         mera_mera meraClass = new mera_mera(this);
+        neko_neko_reoparudo nekoReoparudoClass = new neko_neko_reoparudo(this);
 
 
-        //getServer().getPluginManager().registerEvents(new yami_yami(this), this);
+        getServer().getPluginManager().registerEvents(yamiClass, this);
         //getServer().getPluginManager().registerEvents(new mera_mera(this), this);
         //getServer().getPluginManager().registerEvents(new gura_gura(this),this);
         //getServer().getPluginManager().registerEvents(new moku_moku(this),this);
+        getServer().getPluginManager().registerEvents(nekoReoparudoClass,this);
         getServer().getPluginManager().registerEvents(new fruitAssociation(this), this);
         getServer().getPluginManager().registerEvents(new dropCaster(), this);
         getServer().getPluginManager().registerEvents(new loseFruit(this), this);
-        getServer().getPluginManager().registerEvents(new caster(this, mokuClass, yamiClass, meraClass, guraClass), this);
+        getServer().getPluginManager().registerEvents(new caster(this, mokuClass, yamiClass, meraClass, guraClass, nekoReoparudoClass), this);
         getServer().getPluginManager().registerEvents(new noDropCaster(), this);
 
 
