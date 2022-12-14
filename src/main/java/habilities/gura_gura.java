@@ -23,6 +23,8 @@ public class gura_gura {
   final int earthquakeSpeed = 10;
   final int earthquakeDamage = 2;
   final int earthquakeDuration = 5;
+  int numberOfWaves = 0;
+  final int numberOfWavesMax = 5;
   private OPhabs plugin;
     boolean  enabledVH = true;
   public gura_gura(OPhabs plugin) {
@@ -77,18 +79,131 @@ public class gura_gura {
   }
 
 
-  public void expansionWaveBlocks(Location loc){
-    if(loc.getBlock().getType() != AIR){
+    // Bucle i
+    //     Bucle j
+    //         j-i,-i
+    //         -i,j-i
+    //         j-i,i
+    //         i,j-i
+
+
+  public void expansionWaveBlocks(Player player){
+Location loc = player.getLocation().add(0, -1, 0);
+    if(loc.getBlock().getType() != AIR && numberOfWaves < numberOfWavesMax){
+        numberOfWaves++;
         new BukkitRunnable() {
+            int i = 1;
             @Override
             public void run() {
-                loc.getBlock().setType(AIR);
+                Location l= null;
+                for(int j=0; j<(i*2)+1; j++){
+                    l = loc.clone().add(j-i, 0, -i);
+                    l.getWorld().getNearbyEntities(l, 1, 4, 1).forEach((entity) -> {
+                        if(entity instanceof LivingEntity){
+                            ((LivingEntity) entity).damage(3);
+                        }
+                    });
+
+                    if(l.getBlock().getType() != AIR && l.getBlock().getType() != Material.WATER){
+                        l.getWorld().spawnParticle(Particle.BLOCK_CRACK, l, 10, 0, 1, 0, 0, l.getBlock().getBlockData());
+                        setFallingBlock(loc.clone().add(j-i,0,-i)).setVelocity(new Vector(0, 0.15, 0));
+                    }
+
+                    l = loc.clone().add(-i, 0, j-i);
+                    l.getWorld().getNearbyEntities(l, 1, 4, 1).forEach((entity) -> {
+                        if(entity instanceof LivingEntity){
+                            ((LivingEntity) entity).damage(3);
+                        }
+                    });
+                    if(l.getBlock().getType() != AIR && l.getBlock().getType() != Material.WATER){
+                        l.getWorld().spawnParticle(Particle.BLOCK_CRACK, l, 10, 0, 1, 0, 0, l.getBlock().getBlockData());
+                        setFallingBlock(loc.clone().add(-i,0,j-i)).setVelocity(new Vector(0, 0.15, 0));
+                    }
+
+                    l = loc.clone().add(j-i, 0, i);
+                     l.getWorld().getNearbyEntities(l, 1, 4, 1).forEach((entity) -> {
+                        if(entity instanceof LivingEntity){
+                            ((LivingEntity) entity).damage(3);
+                        }
+                    });                   if(l.getBlock().getType() != AIR && l.getBlock().getType() != Material.WATER){
+                        l.getWorld().spawnParticle(Particle.BLOCK_CRACK, l, 10, 0, 1, 0, 0, l.getBlock().getBlockData());
+                        setFallingBlock(loc.clone().add(j-i,0,i)).setVelocity(new Vector(0, 0.15, 0));
+                    }
+
+                    l = loc.clone().add(i, 0, j-i);
+                     l.getWorld().getNearbyEntities(l, 1, 4, 1).forEach((entity) -> {
+                        if(entity instanceof LivingEntity){
+                            ((LivingEntity) entity).damage(3);
+                        }
+                    });                   if(l.getBlock().getType() != AIR && l.getBlock().getType() != Material.WATER){
+                        l.getWorld().spawnParticle(Particle.BLOCK_CRACK, l, 10, 0, 1, 0, 0, l.getBlock().getBlockData());
+                        setFallingBlock(loc.clone().add(i,0,j-i)).setVelocity(new Vector(0, 0.15, 0));
+                    }
+
+
+                }
+                if(i >= waveDistance){
+                    for(int j=0; j<((i+1)*2)+1; j++){
+                        l = loc.clone().add(j-i, 0, -i);
+                        if(l.getBlock().getType() != AIR && l.getBlock().getType() != Material.WATER){
+                            l.getWorld().spawnParticle(Particle.BLOCK_CRACK, l, 10, 0, 1, 0, 0, l.getBlock().getBlockData());
+                            setFallingBlock(loc.clone().add(j-i,0,-i));
+                            l.getWorld().getNearbyEntities(l, 1, 4, 1).forEach((entity) -> {
+                               entity.setVelocity(new Vector(0, 2, 0));
+                                if(entity instanceof LivingEntity){
+                                    ((LivingEntity) entity).damage(30);
+                                }
+                            });
+                        }
+
+                        l = loc.clone().add(-i, 0, j-i);
+                        if(l.getBlock().getType() != AIR && l.getBlock().getType() != Material.WATER){
+                            l.getWorld().spawnParticle(Particle.BLOCK_CRACK, l, 10, 0, 1, 0, 0, l.getBlock().getBlockData());
+                            setFallingBlock(loc.clone().add(-i,0,j-i));
+                            l.getWorld().getNearbyEntities(l, 1, 4, 1).forEach((entity) -> {
+                               entity.setVelocity(new Vector(0, 2, 0));
+                                if(entity instanceof LivingEntity){
+                                    ((LivingEntity) entity).damage(30);
+                                }
+                            });
+                        }
+
+                        l = loc.clone().add(j-i, 0, i);
+                        if(l.getBlock().getType() != AIR && l.getBlock().getType() != Material.WATER){
+                            l.getWorld().spawnParticle(Particle.BLOCK_CRACK, l, 10, 0, 1, 0, 0, l.getBlock().getBlockData());
+                            setFallingBlock(loc.clone().add(j-i,0,i));
+                            l.getWorld().getNearbyEntities(l, 1, 4, 1).forEach((entity) -> {
+                               entity.setVelocity(new Vector(0, 2, 0));
+                                if(entity instanceof LivingEntity){
+                                    ((LivingEntity) entity).damage(30);
+                                }
+                            });
+                        }
+
+                        l = loc.clone().add(i, 0, j-i);
+                        if(l.getBlock().getType() != AIR && l.getBlock().getType() != Material.WATER){
+                            l.getWorld().spawnParticle(Particle.BLOCK_CRACK, l, 10, 0, 1, 0, 0, l.getBlock().getBlockData());
+                            setFallingBlock(loc.clone().add(i,0,j-i));
+                            l.getWorld().getNearbyEntities(l, 1, 4, 1).forEach((entity) -> {
+                               entity.setVelocity(new Vector(0, 2, 0));
+                                if(entity instanceof LivingEntity){
+                                    ((LivingEntity) entity).damage(30);
+                                }
+                            });
+                        }
+
+
+                    }
+                    numberOfWaves--;
+                    cancelTask();
+                }
+                i++;
             }
             //cancelTask
             public void cancelTask(){
                 Bukkit.getScheduler().cancelTask(this.getTaskId());
             }
-        }.runTaskTimer(plugin, 5, 20);
+        }.runTaskTimer(plugin, 5, 7);
     }
   }
 
@@ -133,12 +248,14 @@ public class gura_gura {
     }
   }
 
-  public void setFallingBlock(Location block) {
+  public Entity setFallingBlock(Location block) {
     if (block.getBlock().getType() != AIR && block.getBlock().getType() != Material.WATER) {
       Material matFallingBlock = block.getBlock().getType();
       block.getBlock().setType(Material.AIR);
-      block.getWorld().spawnFallingBlock(block, matFallingBlock, (byte) 9);
+      return block.getWorld().spawnFallingBlock(block, matFallingBlock, (byte) 9);
     }
+    return null;
+
   }
 
 

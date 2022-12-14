@@ -88,6 +88,9 @@ public class caster implements Listener {
                                 case 2:
                                     guraClass.handVibration(e.getPlayer());
                                     break;
+                                case 3:
+                                    guraClass.expansionWaveBlocks(e.getPlayer());
+                                    break;
                                 default:
                                     System.out.println("GURA GURA");
                                     e.getPlayer().sendMessage("GURA GURA");
