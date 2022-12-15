@@ -22,7 +22,7 @@ import skin.changer.skinsChanger;
 
 
 public class zoan {
-    OPhabs plugin;
+    protected OPhabs plugin;
     public boolean transformed = false;
     skinsChanger skinC = new skinsChanger();
     Player user = null; 

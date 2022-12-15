@@ -105,7 +105,7 @@ public class caster implements Listener {
                                     System.out.println("MOKU MOKU");
                                     break;
                                 case 0:
-                                    mokuClass.runParticles(e.getPlayer(), mokuClass.smokeBody(e.getPlayer()));
+                                    mokuClass.runParticles(e.getPlayer(), mokuClass.logiaBody(e.getPlayer()));
                                     break;
                                 case 1:
                                     mokuClass.runParticles(e.getPlayer(), mokuClass.smokeLegs(e.getPlayer()));
