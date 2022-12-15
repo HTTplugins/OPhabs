@@ -5,11 +5,15 @@ import org.bukkit.*;
 import org.bukkit.block.Block;
 import org.bukkit.entity.*;
 import org.bukkit.event.EventHandler;
+import org.bukkit.event.HandlerList;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.entity.*;
+import org.bukkit.event.inventory.InventoryPickupItemEvent;
+import org.bukkit.event.player.PlayerEggThrowEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerItemConsumeEvent;
+import org.bukkit.inventory.ItemStack;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import org.bukkit.scheduler.BukkitRunnable;
@@ -46,7 +50,7 @@ public class mera_mera implements Listener {
         return esTierra;
     }
 
-    private void CookFood(Block comida){
+    private void CookFood(ItemStack comida){
         final Material material = comida.getType();
 
         if(material == Material.BEEF)
@@ -194,7 +198,8 @@ public class mera_mera implements Listener {
         Location loc = jugador.getLocation();
 
         if (BERSERK) {
-            event.setDeathMessage("\n\n" + "BY THE POWER OF THE UNDERWORLD... DESTROY THEM!!\n");
+            event.setDeathMessage("\n\n" + "BY THE POWER OF THE UNDERWORLD... DESTROY THEM!! FROM NOW ON, YOU SHOULDN'T" +
+                    " LOVE FOOD SO MUCH... HAHAHA!! \n");
             event.setKeepInventory(true);
             event.setKeepLevel(true);
 
@@ -235,12 +240,12 @@ public class mera_mera implements Listener {
                 RADIO_PARTICULAS, RADIO_PARTICULAS, RADIO_PARTICULAS);
     }
 
-    /*@EventHandler(ignoreCancelled = true)
+    @EventHandler(ignoreCancelled = true)
     public void onEntityPickupItem(EntityPickupItemEvent event) {           // Arreglar.
         Item objeto = event.getItem();
 
-        CookFood((Block) objeto);
-    }*/
+        CookFood(objeto.getItemStack());
+    }
 
     @EventHandler(ignoreCancelled = true)
     public void onPlayerInteract(PlayerInteractEvent event){
@@ -250,15 +255,29 @@ public class mera_mera implements Listener {
 
         event.getPlayer().addPotionEffect(new PotionEffect(PotionEffectType.FIRE_RESISTANCE, BERSERK_DURATION, BERSERK_AMPLIFIER));
 
-        if(arma == Material.GOLDEN_SWORD && accion == Action.LEFT_CLICK_BLOCK && Hability1ColdDown == 0){
+        if(arma == Material.BLAZE_ROD && accion == Action.RIGHT_CLICK_BLOCK && Hability1ColdDown == 0){
             createHability1Effect(event.getPlayer().getLocation(), accion, arma);
             Hability1ColdDown += 10;
         }
-        else if(arma == Material.GOLDEN_SWORD && accion == Action.LEFT_CLICK_BLOCK)
+        else if(arma == Material.BLAZE_ROD && accion == Action.RIGHT_CLICK_BLOCK)
             Hability1ColdDown--;
-        /*else if(arma == Material.GOLDEN_SWORD && accion == Action.RIGHT_CLICK_BLOCK){
+
+        if(arma == Material.BLAZE_ROD && accion == Action.RIGHT_CLICK_AIR){
             mundo.spawnEntity(event.getPlayer().getLocation(), EntityType.FIREBALL);
             System.out.println("Deberia spawnear");
-        }*/
+        }
+    }
+
+    @EventHandler(ignoreCancelled = true)
+    public void onPlayerEggThrow(PlayerEggThrowEvent event) {                   // HABILIDAD 2
+        Location loc = event.getEgg().getLocation();
+        World mundo = event.getEgg().getWorld();
+
+        mundo.createExplosion(loc, ExplosionRadius);
+
+        if(event.isHatching())
+            event.setHatchingType(EntityType.BLAZE);
+
+        event.getPlayer().addPotionEffect(new PotionEffect(PotionEffectType.FIRE_RESISTANCE, BERSERK_DURATION, BERSERK_AMPLIFIER));
     }
 }
