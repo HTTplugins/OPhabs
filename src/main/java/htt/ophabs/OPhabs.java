@@ -39,8 +39,8 @@ public final class OPhabs extends JavaPlugin {
 
         getServer().getPluginManager().registerEvents(yamiClass, this);
         getServer().getPluginManager().registerEvents(nekoReoparudoClass,this);
-        getServer().getPluginManager().registerEvents(new fruitAssociation(this), this);;
-        getServer().getPluginManager().registerEvents(new loseFruit(this), this);
+        getServer().getPluginManager().registerEvents(meraClass,this);
+
         getServer().getPluginManager().registerEvents(new caster(mokuClass, yamiClass, meraClass, guraClass, nekoReoparudoClass), this);
         getServer().getPluginManager().registerEvents(new noDropCaster(), this);
 

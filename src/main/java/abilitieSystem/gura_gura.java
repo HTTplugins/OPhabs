@@ -122,7 +122,8 @@ public class gura_gura {
                         l = loc.clone().add(j-i, 0, -i);
                         l.getWorld().getNearbyEntities(l, 1, deep*2, 1).forEach((entity) -> {
                             if(entity instanceof LivingEntity){
-                                ((LivingEntity) entity).damage(3);
+                                if(entity.getName() != player.getName())
+                                    ((LivingEntity) entity).damage(3);
                             }
                         });
                         getSolidRelativeY(l,deep);
@@ -134,7 +135,8 @@ public class gura_gura {
                         l = loc.clone().add(-i, 0, j-i);
                         l.getWorld().getNearbyEntities(l, 1, 4, 1).forEach((entity) -> {
                             if(entity instanceof LivingEntity){
-                                ((LivingEntity) entity).damage(3);
+                                if(entity.getName() != player.getName())
+                                    ((LivingEntity) entity).damage(3);
                             }
                         });
                         getSolidRelativeY(l,deep);
@@ -146,7 +148,8 @@ public class gura_gura {
                         l = loc.clone().add(j-i, 0, i);
                          l.getWorld().getNearbyEntities(l, 1, 4, 1).forEach((entity) -> {
                             if(entity instanceof LivingEntity){
-                                ((LivingEntity) entity).damage(3);
+                                if(entity.getName() != player.getName())
+                                    ((LivingEntity) entity).damage(3);
                             }
                         });
                         getSolidRelativeY(l,deep);
@@ -158,7 +161,8 @@ public class gura_gura {
                         l = loc.clone().add(i, 0, j-i);
                         l.getWorld().getNearbyEntities(l, 1, 4, 1).forEach((entity) -> {
                             if(entity instanceof LivingEntity){
-                                ((LivingEntity) entity).damage(3);
+                                if(entity.getName() != player.getName())
+                                   ((LivingEntity) entity).damage(3);
                             }
                         });
                         getSolidRelativeY(l,deep);

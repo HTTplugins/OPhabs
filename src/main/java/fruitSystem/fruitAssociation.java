@@ -88,7 +88,6 @@ public class fruitAssociation implements Listener {
             plugin.getConfig().set("FruitAssociations.moku_moku",mokuValue);
             plugin.getConfig().set("FruitAssociations.neko_neko_reoparudo",nekoReoparudoValue);
             plugin.saveConfig();
-
         }
 
         ItemStack caster = new ItemStack(castMaterial);
@@ -131,7 +130,7 @@ public class fruitAssociation implements Listener {
         if (dfPlayers.contains(event.getPlayer())) {
             if(isInSeaWater(event.getPlayer())) {
                 Player player = event.getPlayer();
-                player.addPotionEffect(new PotionEffect(PotionEffectType.SLOW, 100, 1));
+                player.addPotionEffect(new PotionEffect(PotionEffectType.SLOW, 100, 100));
                 player.addPotionEffect(new PotionEffect(PotionEffectType.CONFUSION, 100, 1));
                 player.addPotionEffect(new PotionEffect(PotionEffectType.BLINDNESS, 100, 1));
                 player.addPotionEffect(new PotionEffect(PotionEffectType.WEAKNESS, 100, 1));
