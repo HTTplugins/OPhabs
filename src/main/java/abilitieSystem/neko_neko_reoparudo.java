@@ -1,7 +1,5 @@
+package abilitieSystem;
 
-package habilities;
-
-import habilities.zoan;
 import htt.ophabs.OPhabs;
 import org.bukkit.*;
 import org.bukkit.entity.Player;
@@ -85,7 +83,7 @@ public class neko_neko_reoparudo extends zoan implements Listener {
 
     @EventHandler
     public void onFall(EntityDamageEvent e) {
-        if (e.getCause() == EntityDamageEvent.DamageCause.FALL && e.getEntity().getName() == super.user.getName()) {
+        if (super.user != null && e.getCause() == EntityDamageEvent.DamageCause.FALL && e.getEntity().getName() == super.user.getName()) {
             e.setCancelled(true);
         }
     }

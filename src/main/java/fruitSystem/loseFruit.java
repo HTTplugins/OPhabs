@@ -1,22 +1,20 @@
 package fruitSystem;
 
 import htt.ophabs.OPhabs;
+import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.PlayerDeathEvent;
 
 public class loseFruit implements Listener {
-    OPhabs plugin;
-
-
-
+    private final OPhabs plugin;
 
     public loseFruit(OPhabs plugin){
         this.plugin = plugin;
-
     }
     @EventHandler(ignoreCancelled = true)
     public void onPlayerDeath(PlayerDeathEvent event) {
+        Player player = event.getEntity();
 
         String
                 yamiValue = plugin.getConfig().getString("FruitAssociations.yami_yami"),
@@ -24,8 +22,6 @@ public class loseFruit implements Listener {
                 guraValue = plugin.getConfig().getString("FruitAssociations.gura_gura"),
                 mokuValue = plugin.getConfig().getString("FruitAssociations.moku_moku"),
                 nekoReoparudoValue = plugin.getConfig().getString("FruitAssociations.neko_neko_reoparudo");
-
-
 
         if(fruitAssociation.dfPlayers.contains(event.getEntity())){
             fruitAssociation.dfPlayers.remove(event.getEntity());
@@ -42,10 +38,6 @@ public class loseFruit implements Listener {
             plugin.getConfig().set("FruitAssociations.moku_moku",mokuValue);
             plugin.getConfig().set("FruitAssociations.neko_neko_reoparudo",nekoReoparudoValue);
             plugin.saveConfig();
-
-
         }
-
-
     }
 }

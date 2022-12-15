@@ -1,4 +1,4 @@
-package habilities;
+package abilitieSystem;
 
 public class abilitiesIdentification {
 

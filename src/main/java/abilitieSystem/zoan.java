@@ -1,6 +1,4 @@
-
-package habilities;
-
+package abilitieSystem;
 
 import htt.ophabs.OPhabs;
 import org.bukkit.*;

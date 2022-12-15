@@ -5,15 +5,9 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
-
 public class devilFruit{
-
-
-    ItemStack devilFruit;
-    boolean inUse;
-    public static int numFruits = 5;
-
-
+    private ItemStack devilFruit;
+    private boolean inUse;
 
     public devilFruit(String fruitCommandName){
         Material devilFruitForm = null;
@@ -30,10 +24,12 @@ public class devilFruit{
                 devilFruitForm = Material.CARROT;
                 fruitItemName  = fruitIdentification.fruitItemNameMera;
                 break;
+
             case fruitIdentification.fruitCommandNameGura:
                 devilFruitForm = Material.CARROT;
                 fruitItemName  = fruitIdentification.fruitItemNameGura;
                 break;
+
             case fruitIdentification.fruitCommandNameMoku:
                 devilFruitForm = Material.CARROT;
                 fruitItemName  = fruitIdentification.fruitItemNameMoku;
@@ -46,7 +42,6 @@ public class devilFruit{
                 devilFruitForm = Material.ACACIA_BOAT;
                 fruitItemName  = "ERROR";
                 break;
-
         }
 
         devilFruit = new ItemStack(devilFruitForm);
@@ -57,9 +52,7 @@ public class devilFruit{
     }
 
     public void playerObtainFruit(Player player){
-
         player.getInventory().addItem(devilFruit);
-
     }
 
 

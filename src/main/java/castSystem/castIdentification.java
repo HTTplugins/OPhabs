@@ -4,8 +4,6 @@ import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
 
 public class castIdentification {
-
-
     public static Material castMaterialYami = Material.BLACK_DYE,
                             castMaterialMera = Material.MAGMA_CREAM,
                             castMaterialGura = Material.QUARTZ,
@@ -21,9 +19,9 @@ public class castIdentification {
 
 
     public static boolean itemIsCaster(ItemStack item) {
-        if (item == null) {
+        if (item == null)
             return false;
-        }
+
         String itemName = item.getItemMeta().getDisplayName();
         Material itemMaterial = item.getType();
 
