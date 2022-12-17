@@ -2,19 +2,21 @@ package abilitieSystem;
 
 import org.bukkit.ChatColor;
 
+import java.sql.Array;
 import java.util.ArrayList;
 import java.util.List;
 
 public class abilitiesIdentification {
 
-    public static int aNumberYami = 4, aNumberMera = 4, aNumberGura = 4, aNumberMoku = 4, aNumberNekoReoparudo = 4; //number of abilities.
+    public static int aNumberYami = 4, aNumberMera = 4, aNumberGura = 4, aNumberMoku = 4, aNumberNekoReoparudo = 4, aNumberMagu = 4; //number of abilities.
 
     public static
             List<String>  namesYami = new ArrayList<>(),
             namesMera = new ArrayList<>(),
             namesGura=new ArrayList<>(),
             namesMoku=new ArrayList<>(),
-            namesNekoReoparudo=new ArrayList<>();
+            namesNekoReoparudo=new ArrayList<>(),
+            namesMagu = new ArrayList<>();
 
     public static void initialiceNames(){
         namesYami.add(ChatColor.BLACK + "" + ChatColor.BOLD + "Yami Yami");
@@ -24,8 +26,8 @@ public class abilitiesIdentification {
         namesYami.add( "Abilitie4");
 
         namesMera.add(ChatColor.RED + "" + ChatColor.BOLD +"Mera Mera");
-        namesMera.add("Abilitie1");
-        namesMera.add("Abilitie2");
+        namesMera.add("Fire Pool");
+        namesMera.add("Fireball Storm");
         namesMera.add("Abilitie3");
         namesMera.add("Abilitie4");
 
@@ -48,7 +50,11 @@ public class abilitiesIdentification {
         namesNekoReoparudo.add("Abilitie3");
         namesNekoReoparudo.add("Abilitie4");
 
-
+        namesMagu.add(ChatColor.BLUE + "" + ChatColor.BOLD +"MAGU MAGU");
+        namesMagu.add("Abilitie1");
+        namesMagu.add("Abilitie2");
+        namesMagu.add("Abilitie3");
+        namesMagu.add("Abilitie4");
     }
 
 }

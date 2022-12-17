@@ -20,7 +20,7 @@ public class caster implements Listener {
 
     private int yamiIndex, meraIndex, guraIndex, mokuIndex, nekoReoparudoIndex, maguIndex;
 
-    public caster(moku_moku mokuClass, yami_yami yamiClass, mera_mera meraClass, gura_gura guraClass, neko_neko_reoparudo nekoReoparudoClass,
+    public caster(coolDown cooldown, moku_moku mokuClass, yami_yami yamiClass, mera_mera meraClass, gura_gura guraClass, neko_neko_reoparudo nekoReoparudoClass,
                   magu_magu maguClass){
         this.cooldown = cooldown;
         this.mokuClass = mokuClass;

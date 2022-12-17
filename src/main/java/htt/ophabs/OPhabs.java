@@ -18,10 +18,6 @@ public final class OPhabs extends JavaPlugin {
 
         abilitiesIdentification.initialiceNames();
 
-
-
-
-
         //---------------
         //Files
 
@@ -44,7 +40,6 @@ public final class OPhabs extends JavaPlugin {
         neko_neko_reoparudo nekoReoparudoClass = new neko_neko_reoparudo(this);
         magu_magu maguClass = new magu_magu(this);
 
-
         getServer().getPluginManager().registerEvents(yamiClass, this);
         getServer().getPluginManager().registerEvents(nekoReoparudoClass,this);
         getServer().getPluginManager().registerEvents(meraClass,this);
@@ -54,8 +49,8 @@ public final class OPhabs extends JavaPlugin {
         coolDown cooldown = new coolDown(this);
         cooldown.runCoolDownSystem();
 
-        getServer().getPluginManager().registerEvents(new caster(cooldown,mokuClass, yamiClass, meraClass, guraClass, nekoReoparudoClass), this);
-        getServer().getPluginManager().registerEvents(new caster(mokuClass, yamiClass, meraClass, guraClass, nekoReoparudoClass,
+        getServer().getPluginManager().registerEvents(new caster(cooldown, mokuClass, yamiClass, meraClass, guraClass, nekoReoparudoClass, maguClass), this);
+        getServer().getPluginManager().registerEvents(new caster(cooldown, mokuClass, yamiClass, meraClass, guraClass, nekoReoparudoClass,
                                                       maguClass), this);
         getServer().getPluginManager().registerEvents(new noDropCaster(), this);
 
