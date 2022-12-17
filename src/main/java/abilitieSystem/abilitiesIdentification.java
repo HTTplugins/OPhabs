@@ -18,7 +18,7 @@ public class abilitiesIdentification {
 
     public static void initialiceNames(){
         namesYami.add(ChatColor.BLACK + "" + ChatColor.BOLD + "Yami Yami");
-        namesYami.add( "Black Void");
+        namesYami.add( "BlackVoid");
         namesYami.add( "Abilitie2");
         namesYami.add( "Abilitie3");
         namesYami.add( "Abilitie4");
@@ -43,8 +43,8 @@ public class abilitiesIdentification {
 
 
         namesNekoReoparudo.add(ChatColor.YELLOW + "" + ChatColor.BOLD +"Neko Neko");
-        namesNekoReoparudo.add("Abilitie1");
-        namesNekoReoparudo.add("Abilitie2");
+        namesNekoReoparudo.add("Transformation");
+        namesNekoReoparudo.add("FrontAttack");
         namesNekoReoparudo.add("Abilitie3");
         namesNekoReoparudo.add("Abilitie4");
 

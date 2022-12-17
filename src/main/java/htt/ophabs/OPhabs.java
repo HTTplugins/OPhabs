@@ -48,19 +48,19 @@ public final class OPhabs extends JavaPlugin {
         getServer().getPluginManager().registerEvents(nekoReoparudoClass,this);
         //getServer().getPluginManager().registerEvents(meraClass,this);
 
-        getServer().getPluginManager().registerEvents(new caster(mokuClass, yamiClass, meraClass, guraClass, nekoReoparudoClass), this);
+        //--------------
+        //CasterSystem
+        coolDown cooldown = new coolDown(this);
+        cooldown.runCoolDownSystem();
+
+        getServer().getPluginManager().registerEvents(new caster(cooldown,mokuClass, yamiClass, meraClass, guraClass, nekoReoparudoClass), this);
         getServer().getPluginManager().registerEvents(new noDropCaster(), this);
 
+        //--------------
+        //ScoreBoards
 
 
-
-
-
-
-
-
-
-        abilitiesScoreboard scoreboards = new abilitiesScoreboard(this);
+        abilitiesScoreboard scoreboards = new abilitiesScoreboard(this,cooldown);
         scoreboards.ini();
 
 

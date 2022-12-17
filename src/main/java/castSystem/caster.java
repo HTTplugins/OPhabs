@@ -8,7 +8,9 @@ import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.EquipmentSlot;
 import abilitieSystem.*;
 
+
 public class caster implements Listener {
+    private coolDown cooldown;
     private moku_moku mokuClass;
     private yami_yami yamiClass;
     private mera_mera meraClass;
@@ -17,7 +19,8 @@ public class caster implements Listener {
 
     public static int yamiIndex, meraIndex, guraIndex, mokuIndex, nekoReoparudoIndex;
 
-    public caster(moku_moku mokuClass, yami_yami yamiClass, mera_mera meraClass, gura_gura guraClass, neko_neko_reoparudo nekoReoparudoClass){
+    public caster(coolDown cooldown,moku_moku mokuClass, yami_yami yamiClass, mera_mera meraClass, gura_gura guraClass, neko_neko_reoparudo nekoReoparudoClass){
+        this.cooldown = cooldown;
         this.mokuClass = mokuClass;
         this.yamiClass = yamiClass;
         this.meraClass = meraClass;
@@ -41,16 +44,33 @@ public class caster implements Listener {
                     if (casterItemName.equals(castIdentification.castItemNameYami) && casterMaterial.equals(castIdentification.castMaterialYami))
                         switch (yamiIndex) {
                             case 0:
-                                yamiClass.blackVoid(event.getPlayer());
+
+                                if(cooldown.getBlackVoidYamiCD() == 0) {
+                                    cooldown.setBlackVoidYamiCD(20);
+                                    yamiClass.blackVoid(event.getPlayer());
+
+                                }
                                 break;
                             case 1:
-                                System.out.println("HABILIDAD2");
+                                if(cooldown.getAbilitie2YamiCD() == 0){
+                                    cooldown.setAbilitie2YamiCD(20);
+                                    System.out.println("HABILIDAD2");
+                                }
+
                                 break;
                             case 2:
-                                System.out.println("HABILIDAD3");
+                                if(cooldown.getAbilitie3YamiCD() == 0){
+                                    cooldown.setAbilitie3YamiCD(15);
+                                    System.out.println("HABILIDAD3");
+                                }
+
                                 break;
                             case 3:
-                                System.out.println("HABILIDAD4");
+                                if(cooldown.getAbilitie4YamiCD() == 0){
+                                    cooldown.setAbilitie4YamiCD(11);
+                                    System.out.println("HABILIDAD4");
+                                }
+
                                 break;
                             default:
                                 System.out.println("defaultswitch");
@@ -60,16 +80,31 @@ public class caster implements Listener {
                     if (casterItemName.equals(castIdentification.castItemNameMera) && casterMaterial.equals(castIdentification.castMaterialMera))
                         switch (meraIndex) {
                             case 0:
-                                System.out.println("HABILIDAD1");
+                                if(cooldown.getAbilitie1MeraCD() == 0){
+                                    cooldown.setAbilitie1MeraCD(20);
+                                    System.out.println("HABILIDAD1");
+                                }
+
                                 break;
                             case 1:
-                                System.out.println("HABILIDAD2");
+                                if(cooldown.getAbilitie2MeraCD() == 0){
+                                    cooldown.setAbilitie2MeraCD(20);
+                                    System.out.println("HABILIDAD2");
+                                }
+
                                 break;
                             case 2:
-                                System.out.println("HABILIDAD3");
+                                if(cooldown.getAbilitie3MeraCD() == 0){
+                                    cooldown.setAbilitie3MeraCD(20);
+                                    System.out.println("HABILIDAD3");
+                                }
                                 break;
                             case 3:
-                                System.out.println("HABILIDAD4");
+                                if(cooldown.getAbilitie4MeraCD() == 0){
+                                    cooldown.setAbilitie4MeraCD(20);
+                                    System.out.println("HABILIDAD4");
+                                }
+
                                 break;
                             default:
                                 System.out.println("defaultswitch");
@@ -79,16 +114,31 @@ public class caster implements Listener {
                     if(casterItemName.equals(castIdentification.castItemNameGura) && casterMaterial.equals(castIdentification.castMaterialGura)){
                         switch (guraIndex){
                             case 0:
-                                guraClass.earthquake(event.getPlayer());
+                                if(cooldown.getEarthquakeGuraCD() == 0){
+                                    cooldown.setEarthquakeGuraCD(20);
+                                    guraClass.earthquake(event.getPlayer());
+                                }
+
                                 break;
                             case 1:
-                                guraClass.createWave(event.getPlayer());
+                                if(cooldown.getCreateWaveGuraCD() == 0){
+                                    cooldown.setCreateWaveGuraCD(20);
+                                    guraClass.createWave(event.getPlayer());
+                                }
+
                                 break;
                             case 2:
-                                guraClass.handVibration(event.getPlayer());
+                                if(cooldown.getHandVibrationGuraCD() == 0){
+                                    cooldown.setHandVibrationGuraCD(20);
+                                    guraClass.handVibration(event.getPlayer());
+                                }
+
                                 break;
                             case 3:
-                                guraClass.expansionWaveBlocks(event.getPlayer());
+                                if(cooldown.getExpansionWaveGuraCD() == 0){
+                                    cooldown.setExpansionWaveGuraCD(20);
+                                    guraClass.expansionWaveBlocks(event.getPlayer());
+                                }
                                 break;
                            default:
                                System.out.println("GURA GURA");
@@ -100,16 +150,31 @@ public class caster implements Listener {
                     if(casterItemName.equals(castIdentification.castItemNameMoku) && casterMaterial.equals(castIdentification.castMaterialMoku)){
                         switch (mokuIndex){
                             case 0:
-                                mokuClass.runParticles(event.getPlayer(), mokuClass.logiaBody(event.getPlayer()));
+                                if(cooldown.getLogiaBodyMokuCD() == 0){
+                                    cooldown.setLogiaBodyMokuCD(20);
+                                    mokuClass.runParticles(event.getPlayer(), mokuClass.logiaBody(event.getPlayer()));
+                                }
                                 break;
                             case 1:
-                                mokuClass.runParticles(event.getPlayer(), mokuClass.smokeLegs(event.getPlayer()));
+                                if(cooldown.getSmokeLegsMokuCD() == 0){
+                                    cooldown.setSmokeLegsMokuCD(20);
+                                    mokuClass.runParticles(event.getPlayer(), mokuClass.smokeLegs(event.getPlayer()));
+                                }
+
                                 break;
                             case 2:
-                                mokuClass.summonSmoker(event.getPlayer());
+                                if(cooldown.getSummonSmokerMokuCD() == 0){
+                                    cooldown.setSummonSmokerMokuCD(20);
+                                    mokuClass.summonSmoker(event.getPlayer());
+                                }
                                 break;
                             case 3:
-                                System.out.println("HABILIDAD4");
+                                if(cooldown.getAbilitie4MokuCD() == 0){
+                                    cooldown.setAbilitie4MokuCD(20);
+                                    System.out.println("HABILIDAD4");
+                                }
+                                break;
+
                             default:
                                 System.out.println("MOKU MOKU");
                                 break;
@@ -118,16 +183,29 @@ public class caster implements Listener {
                     if(casterItemName.equals(castIdentification.castItemNameNekoReoparudo) && casterMaterial.equals(castIdentification.castMaterialNekoReoparudo)){
                         switch (nekoReoparudoIndex){
                             case 0:
-                                nekoReoparudoClass.transformation(event.getPlayer());
+                                if(cooldown.getTransformationNekoReoparudoCD() == 0){
+                                    cooldown.setTransformationNekoReoparudoCD(20);
+                                    nekoReoparudoClass.transformation(event.getPlayer());
+                                }
                                 break;
                             case 1:
-                                nekoReoparudoClass.frontAttack(event.getPlayer());
+                                if(cooldown.getFrontAttackNekoReoparudoCD() == 0){
+                                    cooldown.setFrontAttack2NekoReoparudoCD(20);
+                                    nekoReoparudoClass.frontAttack(event.getPlayer());
+                                }
+
                                 break;
                             case 2:
-                                System.out.println("HABILIDAD3");
+                                if(cooldown.getAbilitie3NekoReoparudoCD() == 0){
+                                    cooldown.setAbilitie3NekoReoparudoCD(20);
+                                    System.out.println("HABILIDAD3");
+                                }
                                 break;
                             case 3:
-                                System.out.println("HABILIDAD4");
+                                if(cooldown.getAbilitie4NekoReoparudoCD() == 0){
+                                    cooldown.setAbilitie4NekoReoparudoCD(20);
+                                    System.out.println("HABILIDAD4");
+                                }
                                 break;
                             default:
                                 System.out.println("NEKO NEKO REOPARUDO");
