@@ -85,6 +85,12 @@ public class caster implements Listener {
                             case 0: meraClass.FirePool(event.getPlayer()); break;
 
                             case 1: meraClass.FireballStorm(event.getPlayer()); break;
+                            case 2:
+                                System.out.println("HABILIDAD3");
+                                break;
+                            case 3:
+                                System.out.println("HABILIDAD4");
+                                break;
                             default:
                                 System.out.println("defaultswitch");
                                 break;
