@@ -8,12 +8,20 @@ import fruitSystem.*;
 import abilitieSystem.*;
 import castSystem.*;
 import org.bukkit.ChatColor;
+import scoreboardSystem.*;
 
 public final class OPhabs extends JavaPlugin {
 
     @Override
     public void onEnable(){
         registerCommands();
+
+        abilitiesIdentification.initialiceNames();
+
+
+        abilitiesScoreboard scoreboards = new abilitiesScoreboard(this);
+        scoreboards.ini();
+
 
         //---------------
         //Files
@@ -39,7 +47,7 @@ public final class OPhabs extends JavaPlugin {
 
         getServer().getPluginManager().registerEvents(yamiClass, this);
         getServer().getPluginManager().registerEvents(nekoReoparudoClass,this);
-        getServer().getPluginManager().registerEvents(meraClass,this);
+        //getServer().getPluginManager().registerEvents(meraClass,this);
 
         getServer().getPluginManager().registerEvents(new caster(mokuClass, yamiClass, meraClass, guraClass, nekoReoparudoClass), this);
         getServer().getPluginManager().registerEvents(new noDropCaster(), this);
