@@ -14,15 +14,18 @@ public class caster implements Listener {
     private mera_mera meraClass;
     private gura_gura guraClass;
     private neko_neko_reoparudo nekoReoparudoClass;
+    private magu_magu maguClass;
 
-    private int yamiIndex, meraIndex, guraIndex, mokuIndex, nekoReoparudoIndex;
+    private int yamiIndex, meraIndex, guraIndex, mokuIndex, nekoReoparudoIndex, maguIndex;
 
-    public caster(moku_moku mokuClass, yami_yami yamiClass, mera_mera meraClass, gura_gura guraClass, neko_neko_reoparudo nekoReoparudoClass){
+    public caster(moku_moku mokuClass, yami_yami yamiClass, mera_mera meraClass, gura_gura guraClass, neko_neko_reoparudo nekoReoparudoClass,
+                  magu_magu maguClass){
         this.mokuClass = mokuClass;
         this.yamiClass = yamiClass;
         this.meraClass = meraClass;
         this.guraClass = guraClass;
         this.nekoReoparudoClass = nekoReoparudoClass;
+        this.maguClass = maguClass;
 
         yamiIndex = meraIndex = guraIndex = mokuIndex = nekoReoparudoIndex= 0;
     }
@@ -36,7 +39,7 @@ public class caster implements Listener {
                 Material casterMaterial = event.getMaterial();
                 Action action = event.getAction();
 
-                if ((action == Action.RIGHT_CLICK_AIR || action == Action.RIGHT_CLICK_BLOCK)) {
+                if ((action == Action.RIGHT_CLICK_AIR || action == Action.RIGHT_CLICK_BLOCK)){
 
                     if (casterItemName.equals(castIdentification.castItemNameYami) && casterMaterial.equals(castIdentification.castMaterialYami))
                         switch (yamiIndex) {
@@ -53,8 +56,18 @@ public class caster implements Listener {
 
                     if (casterItemName.equals(castIdentification.castItemNameMera) && casterMaterial.equals(castIdentification.castMaterialMera))
                         switch (meraIndex) {
+                            case 0: meraClass.FirePool(event.getPlayer()); break;
+
+                            case 1: meraClass.FireballStorm(event.getPlayer()); break;
                             default:
                                 System.out.println("Mera Mera");
+                                break;
+                        }
+
+                    if (casterItemName.equals(castIdentification.castItemNameMagu) && casterMaterial.equals(castIdentification.castMaterialMagu))
+                        switch (maguIndex) {
+                            default:
+                                System.out.println("Magu Magu");
                                 break;
                         }
 
@@ -77,7 +90,6 @@ public class caster implements Listener {
                                     event.getPlayer().sendMessage("GURA GURA");
                                     break;
                             }
-
                         }
 
                         if(casterItemName.equals(castIdentification.castItemNameMoku) && casterMaterial.equals(castIdentification.castMaterialMoku)){
@@ -113,14 +125,11 @@ public class caster implements Listener {
                         if(casterItemName.equals(castIdentification.castItemNameYami) && casterMaterial.equals(castIdentification.castMaterialYami)){
                             yamiIndex++;
                             yamiIndex = yamiIndex % abilitiesIdentification.aNumberYami;
-
-
                         }
 
                         if(casterItemName.equals(castIdentification.castItemNameMera) && casterMaterial.equals(castIdentification.castMaterialMera)){
                             meraIndex++;
                             meraIndex = meraIndex % abilitiesIdentification.aNumberMera;
-
                         }
 
                         if(casterItemName.equals(castIdentification.castItemNameGura) && casterMaterial.equals(castIdentification.castMaterialGura)){
@@ -137,8 +146,7 @@ public class caster implements Listener {
                             nekoReoparudoIndex++;
                             nekoReoparudoIndex = nekoReoparudoIndex % abilitiesIdentification.aNumberNekoReoparudo;
                         }
-
                     }
-}
+            }
     }
 }

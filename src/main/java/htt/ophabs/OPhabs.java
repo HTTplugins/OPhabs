@@ -35,17 +35,19 @@ public final class OPhabs extends JavaPlugin {
         gura_gura guraClass = new gura_gura(this);
         moku_moku mokuClass = new moku_moku(this);
         neko_neko_reoparudo nekoReoparudoClass = new neko_neko_reoparudo(this);
+        magu_magu maguClass = new magu_magu(this);
 
 
         getServer().getPluginManager().registerEvents(yamiClass, this);
         getServer().getPluginManager().registerEvents(nekoReoparudoClass,this);
         getServer().getPluginManager().registerEvents(meraClass,this);
 
-        getServer().getPluginManager().registerEvents(new caster(mokuClass, yamiClass, meraClass, guraClass, nekoReoparudoClass), this);
+        getServer().getPluginManager().registerEvents(new caster(mokuClass, yamiClass, meraClass, guraClass, nekoReoparudoClass,
+                                                      maguClass), this);
         getServer().getPluginManager().registerEvents(new noDropCaster(), this);
 
         //--------------
-        Bukkit.getConsoleSender().sendMessage(ChatColor.DARK_RED + "" + ChatColor.BOLD +  "OPhabs started correctly.");
+        Bukkit.getConsoleSender().sendMessage(ChatColor.GREEN + "" + ChatColor.BOLD +  "OPhabs started correctly.");
     }
 
     @Override

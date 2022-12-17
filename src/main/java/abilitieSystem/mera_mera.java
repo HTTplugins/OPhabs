@@ -5,11 +5,9 @@ import org.bukkit.*;
 import org.bukkit.block.Block;
 import org.bukkit.entity.*;
 import org.bukkit.event.EventHandler;
-import org.bukkit.event.HandlerList;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.entity.*;
-import org.bukkit.event.inventory.InventoryPickupItemEvent;
 import org.bukkit.event.player.PlayerEggThrowEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerItemConsumeEvent;
@@ -22,20 +20,15 @@ public class mera_mera implements Listener {
     private OPhabs plugin;
     final float ExplosionRadius = 4;
     final int BerserkFireRadius = 5, Hability1Radius = 10;
-    final Material NETHERRACK = Material.NETHERRACK;
-    final Material FIRE = Material.FIRE;
-    final Material DIRT = Material.DIRT;
-    final Material GREEN_DIRT = Material.GRASS_BLOCK;
-    final Material OBSIDIANA = Material.OBSIDIAN;
-    final Material BEDROCK = Material.BEDROCK;
-    final Material AIR = Material.AIR;
+    final Material NETHERRACK = Material.NETHERRACK, FIRE = Material.FIRE, DIRT = Material.DIRT, GREEN_DIRT = Material.GRASS_BLOCK,
+                   OBSIDIANA = Material.OBSIDIAN, BEDROCK = Material.BEDROCK, AIR = Material.AIR;
     final Particle PARTICULA_FUEGO = Particle.FLAME;
     final Sound RESPAWN_SOUND = Sound.ENTITY_DRAGON_FIREBALL_EXPLODE;
     final int N_PARTICULAS = 20, RADIO_PARTICULAS = 0, RESPAWN_HEALTH = 10, RESPAWN_FOOD = 10, BERSERK_DURATION = 3600,
-    BERSERK_AMPLIFIER = 2;
+              BERSERK_AMPLIFIER = 2;
     boolean BERSERK = true;
 
-    private int Hability1ColdDown = 0;
+    private int FIRE_POOL_COOLDOWN = 15, FIREBALL_STORM_COOLDOWN = 20;
 
     public mera_mera(OPhabs plugin){
         this.plugin = plugin;
@@ -146,7 +139,7 @@ public class mera_mera implements Listener {
             delante8.getBlock().setType(NETHERRACK);
     }
 
-    public void createHability1Effect(Location loc, Action accion, Material arma){
+    public void createHability1Effect(Location loc){
         Location loc_aux = loc.clone();
 
         for(int i = -Hability1Radius; i <= Hability1Radius; i++) {
@@ -197,7 +190,7 @@ public class mera_mera implements Listener {
         World mundo = jugador.getWorld();
         Location loc = jugador.getLocation();
 
-        if (BERSERK) {
+        if(BERSERK) {
             event.setDeathMessage("\n\n" + "BY THE POWER OF THE UNDERWORLD... DESTROY THEM!! FROM NOW ON, YOU SHOULDN'T" +
                     " LOVE FOOD SO MUCH... HAHAHA!! \n");
             event.setKeepInventory(true);
@@ -247,25 +240,43 @@ public class mera_mera implements Listener {
         CookFood(objeto.getItemStack());
     }
 
-    @EventHandler(ignoreCancelled = true)
-    public void onPlayerInteract(PlayerInteractEvent event){
-        Action accion = event.getAction();
-        Material arma = event.getMaterial();
-        World mundo = event.getPlayer().getWorld();
+    public void FirePool(Player player){
+        new BukkitRunnable() {
+            int i = 0;
+            @Override
+            public void run() {
+                if(i >= FIRE_POOL_COOLDOWN) cancelTask();
 
-        event.getPlayer().addPotionEffect(new PotionEffect(PotionEffectType.FIRE_RESISTANCE, BERSERK_DURATION, BERSERK_AMPLIFIER));
+                player.getWorld().playSound(player, Sound.BLOCK_FIRE_AMBIENT, 100, 10);
 
-        if(arma == Material.BLAZE_ROD && accion == Action.RIGHT_CLICK_BLOCK && Hability1ColdDown == 0){
-            createHability1Effect(event.getPlayer().getLocation(), accion, arma);
-            Hability1ColdDown += 10;
-        }
-        else if(arma == Material.BLAZE_ROD && accion == Action.RIGHT_CLICK_BLOCK)
-            Hability1ColdDown--;
+                player.addPotionEffect(new PotionEffect(PotionEffectType.FIRE_RESISTANCE, BERSERK_DURATION, BERSERK_AMPLIFIER));
 
-        if(arma == Material.BLAZE_ROD && accion == Action.RIGHT_CLICK_AIR){
-            mundo.spawnEntity(event.getPlayer().getLocation(), EntityType.FIREBALL);
-            System.out.println("Deberia spawnear");
-        }
+                createHability1Effect(player.getLocation());
+
+                i++;
+            }
+
+            public void cancelTask() { Bukkit.getScheduler().cancelTask(this.getTaskId()); }
+        }.runTaskTimer(plugin, 0, FIRE_POOL_COOLDOWN);
+    }
+
+    public void FireballStorm(Player player){
+        World mundo = player.getWorld();
+        new BukkitRunnable() {
+            @Override
+            public void run() {
+
+                mundo.spawnEntity(player.getLocation().clone().add(0, 5, 0), EntityType.FIREBALL);
+                mundo.spawnEntity(player.getLocation().clone().add(0, 5, 3), EntityType.FIREBALL);
+                mundo.spawnEntity(player.getLocation().clone().add(0, 5, -3), EntityType.FIREBALL);
+                mundo.spawnEntity(player.getLocation().clone().add(3, 5, 0), EntityType.FIREBALL);
+                mundo.spawnEntity(player.getLocation().clone().add(-3, 5, 0), EntityType.FIREBALL);
+
+                cancelTask();
+            }
+
+            public void cancelTask() {Bukkit.getScheduler().cancelTask(this.getTaskId()); }
+        }.runTaskTimer(plugin, 0, FIREBALL_STORM_COOLDOWN);
     }
 
     @EventHandler(ignoreCancelled = true)

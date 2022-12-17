@@ -34,7 +34,8 @@ public class fruitAssociation implements Listener {
                 meraValue = plugin.getConfig().getString("FruitAssociations.mera_mera"),
                 guraValue = plugin.getConfig().getString("FruitAssociations.gura_gura"),
                 mokuValue = plugin.getConfig().getString("FruitAssociations.moku_moku"),
-                nekoReoparudoValue = plugin.getConfig().getString("FruitAssociations.neko_neko_reoparudo");
+                nekoReoparudoValue = plugin.getConfig().getString("FruitAssociations.neko_neko_reoparudo"),
+                maguValue = plugin.getConfig().getString("FruitAssociations.magu_magu");
 
         String casterItemName = null;
         Material castMaterial = null;
@@ -76,6 +77,12 @@ public class fruitAssociation implements Listener {
                 casterItemName = castIdentification.castItemNameNekoReoparudo;
                 castMaterial = castIdentification.castMaterialNekoReoparudo;
                 break;
+
+            case fruitIdentification.fruitCommandNameMagu:
+                consumedFruit = consumedFruit(maguValue, event);
+                maguValue = event.getPlayer().getName();
+                casterItemName = castIdentification.castItemNameMagu;
+                castMaterial = castIdentification.castMaterialMagu;
 
             default:
                 break;
