@@ -46,99 +46,125 @@ public class caster implements Listener {
                             case 1:
                                 System.out.println("HABILIDAD2");
                                 break;
+                            case 2:
+                                System.out.println("HABILIDAD3");
+                                break;
+                            case 3:
+                                System.out.println("HABILIDAD4");
+                                break;
                             default:
-                                System.out.println("YAMI YAMI");
+                                System.out.println("defaultswitch");
                                 break;
                         }
 
                     if (casterItemName.equals(castIdentification.castItemNameMera) && casterMaterial.equals(castIdentification.castMaterialMera))
                         switch (meraIndex) {
+                            case 0:
+                                System.out.println("HABILIDAD1");
+                                break;
+                            case 1:
+                                System.out.println("HABILIDAD2");
+                                break;
+                            case 2:
+                                System.out.println("HABILIDAD3");
+                                break;
+                            case 3:
+                                System.out.println("HABILIDAD4");
+                                break;
                             default:
-                                System.out.println("Mera Mera");
+                                System.out.println("defaultswitch");
                                 break;
                         }
 
-                        if(casterItemName.equals(castIdentification.castItemNameGura) && casterMaterial.equals(castIdentification.castMaterialGura)){
-                            switch (guraIndex){
-                                case 0:
-                                    guraClass.earthquake(event.getPlayer());
-                                    break;
-                                case 1:
-                                    guraClass.createWave(event.getPlayer());
-                                    break;
-                                case 2:
-                                    guraClass.handVibration(event.getPlayer());
-                                    break;
-                                case 3:
-                                    guraClass.expansionWaveBlocks(event.getPlayer());
-                                    break;
-                                default:
-                                    System.out.println("GURA GURA");
-                                    event.getPlayer().sendMessage("GURA GURA");
-                                    break;
+                    if(casterItemName.equals(castIdentification.castItemNameGura) && casterMaterial.equals(castIdentification.castMaterialGura)){
+                        switch (guraIndex){
+                            case 0:
+                                guraClass.earthquake(event.getPlayer());
+                                break;
+                            case 1:
+                                guraClass.createWave(event.getPlayer());
+                                break;
+                            case 2:
+                                guraClass.handVibration(event.getPlayer());
+                                break;
+                            case 3:
+                                guraClass.expansionWaveBlocks(event.getPlayer());
+                                break;
+                           default:
+                               System.out.println("GURA GURA");
+                               break;
                             }
-
-                        }
-
-                        if(casterItemName.equals(castIdentification.castItemNameMoku) && casterMaterial.equals(castIdentification.castMaterialMoku)){
-                            switch (mokuIndex){
-                                default:
-                                    System.out.println("MOKU MOKU");
-                                    break;
-                                case 0:
-                                    mokuClass.runParticles(event.getPlayer(), mokuClass.logiaBody(event.getPlayer()));
-                                    break;
-                                case 1:
-                                    mokuClass.runParticles(event.getPlayer(), mokuClass.smokeLegs(event.getPlayer()));
-                                    break;
-                                case 2:
-                                    mokuClass.summonSmoker(event.getPlayer());
-                            }
-                        }
-                        if(casterItemName.equals(castIdentification.castItemNameNekoReoparudo) && casterMaterial.equals(castIdentification.castMaterialNekoReoparudo)){
-                            switch (nekoReoparudoIndex){
-                                default:
-                                    System.out.println("NEKO NEKO REOPARUDO");
-                                    break;
-                                case 0:
-                                    nekoReoparudoClass.transformation(event.getPlayer());
-                                    break;
-                                case 1:
-                                    nekoReoparudoClass.frontAttack(event.getPlayer());
-                                    break;
-                            }
-                        }
-                    } else {
-
-                        if(casterItemName.equals(castIdentification.castItemNameYami) && casterMaterial.equals(castIdentification.castMaterialYami)){
-                            yamiIndex++;
-                            yamiIndex = yamiIndex % abilitiesIdentification.aNumberYami;
-
-
-                        }
-
-                        if(casterItemName.equals(castIdentification.castItemNameMera) && casterMaterial.equals(castIdentification.castMaterialMera)){
-                            meraIndex++;
-                            meraIndex = meraIndex % abilitiesIdentification.aNumberMera;
-
-                        }
-
-                        if(casterItemName.equals(castIdentification.castItemNameGura) && casterMaterial.equals(castIdentification.castMaterialGura)){
-                            guraIndex++;
-                            guraIndex = guraIndex % abilitiesIdentification.aNumberGura;
-
-                        }
-
-                        if(casterItemName.equals(castIdentification.castItemNameMoku) && casterMaterial.equals(castIdentification.castMaterialMoku)){
-                            mokuIndex++;
-                            mokuIndex = mokuIndex % abilitiesIdentification.aNumberMoku;
-                        }
-                        if(casterItemName.equals(castIdentification.castItemNameNekoReoparudo) && casterMaterial.equals(castIdentification.castMaterialNekoReoparudo)){
-                            nekoReoparudoIndex++;
-                            nekoReoparudoIndex = nekoReoparudoIndex % abilitiesIdentification.aNumberNekoReoparudo;
-                        }
 
                     }
+
+                    if(casterItemName.equals(castIdentification.castItemNameMoku) && casterMaterial.equals(castIdentification.castMaterialMoku)){
+                        switch (mokuIndex){
+                            case 0:
+                                mokuClass.runParticles(event.getPlayer(), mokuClass.logiaBody(event.getPlayer()));
+                                break;
+                            case 1:
+                                mokuClass.runParticles(event.getPlayer(), mokuClass.smokeLegs(event.getPlayer()));
+                                break;
+                            case 2:
+                                mokuClass.summonSmoker(event.getPlayer());
+                                break;
+                            case 3:
+                                System.out.println("HABILIDAD4");
+                            default:
+                                System.out.println("MOKU MOKU");
+                                break;
+                        }
+                    }
+                    if(casterItemName.equals(castIdentification.castItemNameNekoReoparudo) && casterMaterial.equals(castIdentification.castMaterialNekoReoparudo)){
+                        switch (nekoReoparudoIndex){
+                            case 0:
+                                nekoReoparudoClass.transformation(event.getPlayer());
+                                break;
+                            case 1:
+                                nekoReoparudoClass.frontAttack(event.getPlayer());
+                                break;
+                            case 2:
+                                System.out.println("HABILIDAD3");
+                                break;
+                            case 3:
+                                System.out.println("HABILIDAD4");
+                                break;
+                            default:
+                                System.out.println("NEKO NEKO REOPARUDO");
+                                break;
+                        }
+                    }
+                } else {
+
+                    if(casterItemName.equals(castIdentification.castItemNameYami) && casterMaterial.equals(castIdentification.castMaterialYami)){
+                        yamiIndex++;
+                        yamiIndex = yamiIndex % abilitiesIdentification.aNumberYami;
+
+
+                    }
+
+                    if(casterItemName.equals(castIdentification.castItemNameMera) && casterMaterial.equals(castIdentification.castMaterialMera)){
+                        meraIndex++;
+                        meraIndex = meraIndex % abilitiesIdentification.aNumberMera;
+
+                    }
+
+                    if(casterItemName.equals(castIdentification.castItemNameGura) && casterMaterial.equals(castIdentification.castMaterialGura)){
+                        guraIndex++;
+                        guraIndex = guraIndex % abilitiesIdentification.aNumberGura;
+
+                    }
+
+                    if(casterItemName.equals(castIdentification.castItemNameMoku) && casterMaterial.equals(castIdentification.castMaterialMoku)){
+                        mokuIndex++;
+                        mokuIndex = mokuIndex % abilitiesIdentification.aNumberMoku;
+                    }
+                    if(casterItemName.equals(castIdentification.castItemNameNekoReoparudo) && casterMaterial.equals(castIdentification.castMaterialNekoReoparudo)){
+                        nekoReoparudoIndex++;
+                        nekoReoparudoIndex = nekoReoparudoIndex % abilitiesIdentification.aNumberNekoReoparudo;
+                    }
+
+                }
 }
     }
 }

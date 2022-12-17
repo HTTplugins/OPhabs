@@ -81,31 +81,33 @@ public class abilitiesScoreboard {
 
         switch (index){
             case 0:
-                abName1 = ChatColor.BOLD + "" + names.get(1);
+                abName1 = ChatColor.RED + "" + ChatColor.BOLD + "" + names.get(1);
                 abName2 = names.get(2);
-                abName3 = names.get(2);
-                abName4 = names.get(2);
+                abName3 = names.get(3);
+                abName4 = names.get(4);
                 break;
             case 1:
                 abName1 = names.get(1);
-                abName2 = ChatColor.BOLD+ "" + names.get(2);
-                abName3 = names.get(2);
-                abName4 = names.get(2);
+                abName2 = ChatColor.RED + "" + ChatColor.BOLD+ "" + names.get(2);
+                abName3 = names.get(3);
+                abName4 = names.get(4);
                 break;
             case 2:
                 abName1 = names.get(1);
                 abName2 =  names.get(2);
-                abName3 = ChatColor.BOLD + "" + names.get(2);
-                abName4 = names.get(2);
+                abName3 = ChatColor.RED + "" + ChatColor.BOLD + "" + names.get(3);
+                abName4 = names.get(4);
                 break;
             case 3:
                 abName1 = names.get(1);
                 abName2 = names.get(2);
-                abName3 = names.get(2);
-                abName4 = ChatColor.BOLD + "" + names.get(2);
+                abName3 = names.get(3);
+                abName4 = ChatColor.RED + "" + ChatColor.BOLD + "" + names.get(4);
                 break;
 
         }
+
+        player.setScoreboard(Bukkit.getScoreboardManager().getNewScoreboard());
 
         if(castIdentification.itemIsCaster(caster)){
 
@@ -119,6 +121,12 @@ public class abilitiesScoreboard {
 
             Score score2 = objctive.getScore(abName2);
             score2.setScore(1);
+
+            Score score3 = objctive.getScore(abName3);
+            score3.setScore(2);
+
+            Score score4 = objctive.getScore(abName4);
+            score4.setScore(3);
 
 
             player.setScoreboard(scoreboard);
