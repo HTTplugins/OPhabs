@@ -19,8 +19,7 @@ public final class OPhabs extends JavaPlugin {
         abilitiesIdentification.initialiceNames();
 
 
-        abilitiesScoreboard scoreboards = new abilitiesScoreboard(this);
-        scoreboards.ini();
+
 
 
         //---------------
@@ -51,6 +50,20 @@ public final class OPhabs extends JavaPlugin {
 
         getServer().getPluginManager().registerEvents(new caster(mokuClass, yamiClass, meraClass, guraClass, nekoReoparudoClass), this);
         getServer().getPluginManager().registerEvents(new noDropCaster(), this);
+
+
+
+
+
+
+
+
+
+
+        abilitiesScoreboard scoreboards = new abilitiesScoreboard(this);
+        scoreboards.ini();
+
+
 
         //--------------
         Bukkit.getConsoleSender().sendMessage(ChatColor.DARK_RED + "" + ChatColor.BOLD +  "OPhabs started correctly.");

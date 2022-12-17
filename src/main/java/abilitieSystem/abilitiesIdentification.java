@@ -17,25 +17,25 @@ public class abilitiesIdentification {
             namesNekoReoparudo=new ArrayList<>();
 
     public static void initialiceNames(){
-        namesYami.add(ChatColor.BLACK + "Yami Yami");
-        namesYami.add(ChatColor.BLACK + "Black Void");
-        namesYami.add(ChatColor.BLACK + "Abilitie name 2");
+        namesYami.add(ChatColor.BLACK + "" + ChatColor.BOLD + "Yami Yami");
+        namesYami.add( "Black Void");
+        namesYami.add( "Abilitie name 2");
 
-        namesMera.add(ChatColor.RED + "Mera Mera");
-        namesMera.add(ChatColor.RED + "Abilitie name 1");
-        namesMera.add(ChatColor.RED + "Abilitie name 2");
+        namesMera.add(ChatColor.RED + "" + ChatColor.BOLD +"Mera Mera");
+        namesMera.add("Abilitie name 1");
+        namesMera.add("Abilitie name 2");
 
-        namesGura.add(ChatColor.WHITE + "Gura Gura");
-        namesGura.add(ChatColor.WHITE + "Abilitie name 1");
-        namesGura.add(ChatColor.WHITE + "Abilitie name 2");
+        namesGura.add(ChatColor.WHITE + "" + ChatColor.BOLD +"Gura Gura");
+        namesGura.add("Abilitie name 1");
+        namesGura.add("Abilitie name 2");
 
-        namesMoku.add(ChatColor.WHITE + "Moku Moku");
-        namesMoku.add(ChatColor.WHITE + "Abilitie name 1");
-        namesMoku.add(ChatColor.WHITE + "Abilitie name 2");
+        namesMoku.add(ChatColor.WHITE + "" + ChatColor.BOLD +"Moku Moku");
+        namesMoku.add( "Abilitie name 1");
+        namesMoku.add("Abilitie name 2");
 
-        namesNekoReoparudo.add(ChatColor.YELLOW + "Neko Neko");
-        namesNekoReoparudo.add(ChatColor.YELLOW + "Abilitie name 1");
-        namesNekoReoparudo.add(ChatColor.YELLOW + "Abilitie name 2");
+        namesNekoReoparudo.add(ChatColor.YELLOW + "" + ChatColor.BOLD +"Neko Neko");
+        namesNekoReoparudo.add("Abilitie name 1");
+        namesNekoReoparudo.add("Abilitie name 2");
 
     }
 

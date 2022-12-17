@@ -15,7 +15,7 @@ public class caster implements Listener {
     private gura_gura guraClass;
     private neko_neko_reoparudo nekoReoparudoClass;
 
-    private int yamiIndex, meraIndex, guraIndex, mokuIndex, nekoReoparudoIndex;
+    public static int yamiIndex, meraIndex, guraIndex, mokuIndex, nekoReoparudoIndex;
 
     public caster(moku_moku mokuClass, yami_yami yamiClass, mera_mera meraClass, gura_gura guraClass, neko_neko_reoparudo nekoReoparudoClass){
         this.mokuClass = mokuClass;
