@@ -19,8 +19,14 @@ public class castIdentification {
                          castItemNameMagu = "Magu Magu caster";
 
     public static boolean itemIsCaster(ItemStack item) {
-        if (item == null)
+        if (item.getType() == Material.AIR){
+
+
             return false;
+        }
+
+
+
 
         String itemName = item.getItemMeta().getDisplayName();
         Material itemMaterial = item.getType();
@@ -34,6 +40,8 @@ public class castIdentification {
             return true;
         else
             return false;
+
+
     }
 
 }

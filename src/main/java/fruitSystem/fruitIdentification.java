@@ -2,6 +2,8 @@ package fruitSystem;
 
 public class fruitIdentification {
 
+    public final static int fruitsNumber = 5;
+
     public final static String
             fruitItemNameYami = "yami yami no mi",
             fruitItemNameMera = "mera mera no mi",
