@@ -10,11 +10,16 @@ import castSystem.*;
 import org.bukkit.ChatColor;
 import scoreboardSystem.*;
 
+import java.util.Objects;
+
 public final class OPhabs extends JavaPlugin {
 
     @Override
     public void onEnable(){
         registerCommands();
+
+        //---------------
+        //Initializations:
 
         abilitiesIdentification.initialiceNames();
 
@@ -31,7 +36,7 @@ public final class OPhabs extends JavaPlugin {
         getServer().getPluginManager().registerEvents(new loseFruit(this), this);
 
         //--------------
-        //abilitiesSystem
+        //abilitieSystem
 
         yami_yami yamiClass = new yami_yami(this);
         mera_mera meraClass = new mera_mera(this);
@@ -55,7 +60,6 @@ public final class OPhabs extends JavaPlugin {
         //--------------
         //ScoreBoards
 
-
         abilitiesScoreboard scoreboards = new abilitiesScoreboard(this,cooldown);
         scoreboards.ini();
 
@@ -71,6 +75,6 @@ public final class OPhabs extends JavaPlugin {
     }
 
     public void registerCommands(){
-        this.getCommand("oph").setExecutor(new oph(this));
+        Objects.requireNonNull(this.getCommand("oph")).setExecutor(new oph(this));
     }
 }

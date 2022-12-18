@@ -1,10 +1,7 @@
 package abilitieSystem;
 
 import htt.ophabs.OPhabs;
-import org.bukkit.Bukkit;
-import org.bukkit.Location;
-import org.bukkit.Material;
-import org.bukkit.Sound;
+import org.bukkit.*;
 import org.bukkit.block.Block;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
@@ -27,7 +24,8 @@ public class yami_yami implements Listener {
              damageAmount = 1,
              damageDelay = 0,
              damageSpeed = 15,
-             dissappearVoidBlocksDelay = 160;
+             dissappearVoidBlocksDelay = 90,
+             maxHeight = 10;
 
     private final Material voidMaterial= Material.BLACK_CONCRETE;
 
@@ -163,6 +161,7 @@ public class yami_yami implements Listener {
     }
 
     public void setBlockAndLineUP(Location perimeterPixel){
+        World world = perimeterPixel.getWorld();
 
             Location downBlockLocation;
             boolean found = false;
@@ -170,6 +169,7 @@ public class yami_yami implements Listener {
                 downBlockLocation = new Location(perimeterPixel.getWorld(), perimeterPixel.getBlockX(),perimeterPixel.getBlockY() - i,perimeterPixel.getBlockZ());
                 if( !downBlockLocation.getBlock().getType().equals(Material.AIR)){
                     found = true;
+                    world.spawnParticle(Particle.SMOKE_NORMAL,downBlockLocation.getBlock().getRelative(0,-1,0).getLocation(),5);
                     downBlockLocation.getBlock().setType(voidMaterial);
                     convertedToVoidBlocks.add(downBlockLocation.getBlock());
 
@@ -180,7 +180,7 @@ public class yami_yami implements Listener {
 
 
         Location upBlockLocation = new Location(perimeterPixel.getWorld(), perimeterPixel.getBlockX(),perimeterPixel.getBlockY(),perimeterPixel.getBlockZ());
-        for(int i=1; i<30; i++){
+        for(int i=1; i<maxHeight; i++){
             upBlockLocation.setY(perimeterPixel.getBlockY() + i );
 
             if(!upBlockLocation.getBlock().getType().equals(Material.AIR)){
