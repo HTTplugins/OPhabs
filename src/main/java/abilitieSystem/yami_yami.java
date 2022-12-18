@@ -3,6 +3,7 @@ package abilitieSystem;
 import htt.ophabs.OPhabs;
 import org.bukkit.*;
 import org.bukkit.block.Block;
+import org.bukkit.entity.Entity;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -10,6 +11,7 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityChangeBlockEvent;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.scheduler.BukkitTask;
+import org.bukkit.util.Vector;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -197,6 +199,79 @@ public class yami_yami implements Listener {
         for(int i=0; i<convertedToVoidBlocks.size(); i++){
             convertedToVoidBlocks.get(i).setType(Material.AIR);
         }
+    }
+
+
+
+    public void ab2(Player player){
+        World world = player.getWorld();
+
+        //world.spawnParticle(Particle.SMOKE_NORMAL,player.getEyeLocation(),10,1,0,0);
+       // world.spawnParticle(Particle.SMOKE_NORMAL,player.getLocation(),0,1,0,0);
+
+        for(Entity ent : player.getNearbyEntities(10,10,10)){
+            if(ent instanceof LivingEntity)
+                attractEntity(ent,player);
+
+
+        }
+
+
+
+
+
+
+    }
+
+    public void attractEntity(Entity ent, Player player){
+        World world = player.getWorld();
+        Vector FirstVector;
+        boolean fV = false;
+
+        new BukkitRunnable(){
+            @Override
+            public void run() {
+
+                double vx,vy,vz;
+                Location loc_aux ;
+
+
+
+                loc_aux = ent.getLocation().clone().add(0,1,0);
+                vx =  player.getLocation().getX() - ent.getLocation().getX() ;
+                vy =  player.getLocation().getY()-ent.getLocation().getY() ;
+                vz =  player.getLocation().getZ()-ent.getLocation().getZ() ;
+
+
+                for(int i=0; i<10; i++) {
+                    world.spawnParticle(Particle.ASH,loc_aux.add(vx/10,vy/10,vz/10),0,0,0,0);
+
+                }
+
+
+                Vector movement = player.getLocation().toVector().subtract(ent.getLocation().toVector()).normalize();
+
+                if(!fV){
+                    //FirstVector = movement.clone();
+                }
+                ent.setVelocity(movement);
+
+                if(Math.sqrt(Math.pow(vx,2) + Math.pow(vy,2) +  Math.pow(vz,2)) < 2){
+                    this.cancel();
+                }
+
+
+            }
+
+            void cancelRun(){
+                this.cancel();
+            }
+        }.runTaskTimer(plugin,0,1);
+
+    }
+
+    public void repealEntity(){
+
     }
 
 }
