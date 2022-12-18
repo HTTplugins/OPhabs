@@ -30,7 +30,7 @@ public class caster implements Listener {
         this.nekoReoparudoClass = nekoReoparudoClass;
         this.maguClass = maguClass;
 
-        yamiIndex = meraIndex = guraIndex = mokuIndex = nekoReoparudoIndex= 0;
+        yamiIndex = meraIndex = guraIndex = mokuIndex = nekoReoparudoIndex = maguIndex= 0;
     }
 
     @EventHandler
