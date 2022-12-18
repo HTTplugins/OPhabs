@@ -6,10 +6,8 @@ import org.bukkit.block.Block;
 import org.bukkit.entity.*;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
-import org.bukkit.event.block.Action;
 import org.bukkit.event.entity.*;
 import org.bukkit.event.player.PlayerEggThrowEvent;
-import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerItemConsumeEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.potion.PotionEffect;
@@ -19,7 +17,7 @@ import org.bukkit.scheduler.BukkitRunnable;
 public class mera_mera implements Listener {
     private OPhabs plugin;
     final float ExplosionRadius = 4;
-    final int BerserkFireRadius = 5, Hability1Radius = 10;
+    final int BerserkFireRadius = 5, Hability1Radius = 4;
     final Material NETHERRACK = Material.NETHERRACK, FIRE = Material.FIRE, DIRT = Material.DIRT, GREEN_DIRT = Material.GRASS_BLOCK,
                    OBSIDIANA = Material.OBSIDIAN, BEDROCK = Material.BEDROCK, AIR = Material.AIR;
     final Particle PARTICULA_FUEGO = Particle.FLAME;
@@ -28,7 +26,7 @@ public class mera_mera implements Listener {
               BERSERK_AMPLIFIER = 2;
     boolean BERSERK = true;
 
-    private int FIRE_POOL_COOLDOWN = 15, FIREBALL_STORM_COOLDOWN = 20;
+    private int FIRE_POOL_DURATION = 15, FIREBALL_STORM_COOLDOWN = 20;
 
     public mera_mera(OPhabs plugin){
         this.plugin = plugin;
@@ -94,51 +92,6 @@ public class mera_mera implements Listener {
             }
     }
 
-    public void createNetherrackEffect(Block bloque) {
-        Location delante1 = bloque.getLocation(), delante2 = bloque.getLocation(),
-                delante3 = bloque.getLocation(), delante4 = bloque.getLocation(),
-                delante5 = bloque.getLocation(), delante6 = bloque.getLocation(),
-                delante7 = bloque.getLocation(), delante8 = bloque.getLocation();
-
-        delante1.setX(delante1.getBlockX() + 1);
-        delante2.setX(delante2.getBlockX() - 1);
-        delante3.setZ(delante3.getBlockZ() + 1);
-        delante4.setZ(delante4.getBlockZ() - 1);
-
-        delante5.setX(delante5.getBlockX() + 1);
-        delante5.setZ(delante5.getBlockZ() + 1);
-        delante6.setX(delante6.getBlockX() + 1);
-        delante6.setZ(delante6.getBlockZ() - 1);
-        delante7.setX(delante7.getBlockX() - 1);
-        delante7.setZ(delante7.getBlockZ() + 1);
-        delante8.setX(delante8.getBlockX() - 1);
-        delante8.setZ(delante8.getBlockZ() - 1);
-
-        if (isDirt(delante1.getBlock()))
-            delante1.getBlock().setType(NETHERRACK);
-
-        if (isDirt(delante2.getBlock()))
-            delante2.getBlock().setType(NETHERRACK);
-
-        if (isDirt(delante3.getBlock()))
-            delante3.getBlock().setType(NETHERRACK);
-
-        if (isDirt(delante4.getBlock()))
-            delante4.getBlock().setType(NETHERRACK);
-
-        if (isDirt(delante5.getBlock()))
-            delante5.getBlock().setType(NETHERRACK);
-
-        if (isDirt(delante6.getBlock()))
-            delante6.getBlock().setType(NETHERRACK);
-
-        if (isDirt(delante7.getBlock()))
-            delante7.getBlock().setType(NETHERRACK);
-
-        if (isDirt(delante8.getBlock()))
-            delante8.getBlock().setType(NETHERRACK);
-    }
-
     public void createHability1Effect(Location loc){
         Location loc_aux = loc.clone();
 
@@ -154,28 +107,11 @@ public class mera_mera implements Listener {
 
     @EventHandler(ignoreCancelled = true)
     public void onProjectileHit(ProjectileHitEvent event) {
-        Entity entidad;
-        Block bloque;
-        Location loc;
+        Entity flecha = event.getEntity();
+        Location loc_flecha = flecha.getLocation();
 
-        if ((entidad = event.getHitEntity()) != null) {
-            loc = entidad.getLocation();
-            Location delante = loc;
-
-            delante.setX(delante.getBlockX() + 1);
-
-            if (entidad.getWorld().isClearWeather() && !isIndestructible(delante.getBlock()))
-                delante.getBlock().setType(FIRE);
-        } else if ((bloque = event.getHitBlock()) != null) {
-            if (bloque.getType() != NETHERRACK) {
-                createNetherrackEffect(bloque);
-                if (bloque.getWorld().isClearWeather() && !isIndestructible(bloque))
-                    bloque.setType(FIRE);
-            } else
-                bloque.getWorld().createExplosion(bloque.getLocation(), ExplosionRadius);
-        }
-
-        event.getEntity().remove();
+        event.getEntity().getWorld().spawnEntity(loc_flecha, EntityType.FIREBALL);
+        flecha.remove();
     }
 
     @EventHandler(ignoreCancelled = true)
@@ -186,58 +122,62 @@ public class mera_mera implements Listener {
 
     @EventHandler(ignoreCancelled = true)
     public void onPlayerDeath(PlayerDeathEvent event) {
+        String nombre_user = plugin.getConfig().getString("FruitAssociations.mera_mera");
+        Player p = Bukkit.getPlayerExact(nombre_user);
         Player jugador = event.getEntity();
-        World mundo = jugador.getWorld();
-        Location loc = jugador.getLocation();
 
-        if(BERSERK) {
-            event.setDeathMessage("\n\n" + "BY THE POWER OF THE UNDERWORLD... DESTROY THEM!! FROM NOW ON, YOU SHOULDN'T" +
-                    " LOVE FOOD SO MUCH... HAHAHA!! \n");
-            event.setKeepInventory(true);
-            event.setKeepLevel(true);
+        if(p != null && p == jugador) {
+            World mundo = jugador.getWorld();
+            Location loc = jugador.getLocation();
 
-            mundo.createExplosion(loc, ExplosionRadius * ExplosionRadius);
-            createBerserkEffect(loc);
-            mundo.playSound(jugador, RESPAWN_SOUND, SoundCategory.HOSTILE, ExplosionRadius * ExplosionRadius * ExplosionRadius,
-                    100);
+            if(BERSERK) {
+                event.setDeathMessage("\n\n" + "MERA MERA USER: BY THE POWER OF THE UNDERWORLD... DESTROY THEM!! FROM NOW ON, don't u dare to " +
+                        " feed yourself so much...!! \n");
+                event.setKeepInventory(true);
+                event.setKeepLevel(true);
 
-            jugador.setHealth(RESPAWN_HEALTH);
-            jugador.setFoodLevel(RESPAWN_FOOD);
-            BerserkEffects(jugador);
-            new BukkitRunnable(){
-                @Override
-                public void run(){
-                    if(BERSERK)
-                        cancelTask();
+                mundo.createExplosion(loc, ExplosionRadius * ExplosionRadius);
+                createBerserkEffect(loc);
+                mundo.playSound(jugador, RESPAWN_SOUND, SoundCategory.HOSTILE, ExplosionRadius * ExplosionRadius * ExplosionRadius,
+                        100);
 
-                    mundo.spawnParticle(PARTICULA_FUEGO, jugador.getLocation(), N_PARTICULAS, RADIO_PARTICULAS,
-                                        RADIO_PARTICULAS, RADIO_PARTICULAS, 0.05);
-                }
-                public void cancelTask(){
-                    Bukkit.getScheduler().cancelTask(this.getTaskId());
-                }
-            }.runTaskTimer(plugin, 0, 5);
+                jugador.setHealth(RESPAWN_HEALTH);
+                jugador.setFoodLevel(RESPAWN_FOOD);
+                BerserkEffects(jugador);
+                new BukkitRunnable(){
+                    @Override
+                    public void run(){
+                        if(BERSERK)
+                            cancelTask();
 
-            event.getDrops().clear();
-            BERSERK = false;
-        } else {
-            event.setKeepInventory(false);
-            event.setKeepLevel(false);
-            BERSERK = true;
+                        mundo.spawnParticle(PARTICULA_FUEGO, jugador.getLocation(), N_PARTICULAS, RADIO_PARTICULAS,
+                                            RADIO_PARTICULAS, RADIO_PARTICULAS, 0.05);
+                    }
+                    public void cancelTask(){
+                        Bukkit.getScheduler().cancelTask(this.getTaskId());
+                    }
+                }.runTaskTimer(plugin, 0, 5);
+
+                event.getDrops().clear();
+                BERSERK = false;
+            } else {
+                event.setKeepInventory(false);
+                event.setKeepLevel(false);
+                BERSERK = true;
+            }
         }
     }
 
     @EventHandler(ignoreCancelled = true)
-    public void onEntityShootBow(EntityShootBowEvent event) {
-        event.getEntity().getWorld().spawnParticle(PARTICULA_FUEGO, event.getEntity().getLocation(), N_PARTICULAS,
-                RADIO_PARTICULAS, RADIO_PARTICULAS, RADIO_PARTICULAS);
-    }
-
-    @EventHandler(ignoreCancelled = true)
-    public void onEntityPickupItem(EntityPickupItemEvent event) {           // Arreglar.
+    public void onEntityPickupItem(EntityPickupItemEvent event) {
+        String nombre_user = plugin.getConfig().getString("FruitAssociations.mera_mera");
+        Player p = Bukkit.getPlayerExact(nombre_user);
         Item objeto = event.getItem();
 
-        CookFood(objeto.getItemStack());
+        if(event.getEntity() instanceof Player)
+            if(p != null && (Player) event.getEntity() == p)
+                CookFood(objeto.getItemStack());
+
     }
 
     public void FirePool(Player player){
@@ -245,9 +185,9 @@ public class mera_mera implements Listener {
             int i = 0;
             @Override
             public void run() {
-                if(i >= FIRE_POOL_COOLDOWN) cancelTask();
+                if(i >= FIRE_POOL_DURATION) cancelTask();
 
-                player.getWorld().playSound(player, Sound.BLOCK_FIRE_AMBIENT, 100, 10);
+                player.getWorld().playSound(player, Sound.MUSIC_DRAGON, 100, 10);
 
                 player.addPotionEffect(new PotionEffect(PotionEffectType.FIRE_RESISTANCE, BERSERK_DURATION, BERSERK_AMPLIFIER));
 
@@ -257,26 +197,18 @@ public class mera_mera implements Listener {
             }
 
             public void cancelTask() { Bukkit.getScheduler().cancelTask(this.getTaskId()); }
-        }.runTaskTimer(plugin, 0, FIRE_POOL_COOLDOWN);
+        }.runTaskTimer(plugin, 0, FIRE_POOL_DURATION);
     }
 
-    public void FireballStorm(Player player){
+    public void FireballStorm(Player player) {
         World mundo = player.getWorld();
-        new BukkitRunnable() {
-            @Override
-            public void run() {
 
-                mundo.spawnEntity(player.getLocation().clone().add(0, 5, 0), EntityType.FIREBALL);
-                mundo.spawnEntity(player.getLocation().clone().add(0, 5, 3), EntityType.FIREBALL);
-                mundo.spawnEntity(player.getLocation().clone().add(0, 5, -3), EntityType.FIREBALL);
-                mundo.spawnEntity(player.getLocation().clone().add(3, 5, 0), EntityType.FIREBALL);
-                mundo.spawnEntity(player.getLocation().clone().add(-3, 5, 0), EntityType.FIREBALL);
-
-                cancelTask();
-            }
-
-            public void cancelTask() {Bukkit.getScheduler().cancelTask(this.getTaskId()); }
-        }.runTaskTimer(plugin, 0, FIREBALL_STORM_COOLDOWN);
+        mundo.playSound(player, Sound.MUSIC_DRAGON, 100, 10);
+        mundo.spawnEntity(player.getLocation().clone().add(0, 5, 0), EntityType.FIREBALL);
+        mundo.spawnEntity(player.getLocation().clone().add(0, 5, 3), EntityType.FIREBALL);
+        mundo.spawnEntity(player.getLocation().clone().add(0, 5, -3), EntityType.FIREBALL);
+        mundo.spawnEntity(player.getLocation().clone().add(3, 5, 0), EntityType.FIREBALL);
+        mundo.spawnEntity(player.getLocation().clone().add(-3, 5, 0), EntityType.FIREBALL);
     }
 
     @EventHandler(ignoreCancelled = true)
