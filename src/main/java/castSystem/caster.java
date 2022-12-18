@@ -211,20 +211,16 @@ public class caster implements Listener {
                     if(casterItemName.equals(castIdentification.castItemNameYami) && casterMaterial.equals(castIdentification.castMaterialYami)){
                         yamiIndex++;
                         yamiIndex = yamiIndex % abilitiesIdentification.aNumberYami;
-
-
                     }
 
                     if(casterItemName.equals(castIdentification.castItemNameMera) && casterMaterial.equals(castIdentification.castMaterialMera)){
                         meraIndex++;
                         meraIndex = meraIndex % abilitiesIdentification.aNumberMera;
-
                     }
 
                     if(casterItemName.equals(castIdentification.castItemNameGura) && casterMaterial.equals(castIdentification.castMaterialGura)){
                         guraIndex++;
                         guraIndex = guraIndex % abilitiesIdentification.aNumberGura;
-
                     }
 
                     if(casterItemName.equals(castIdentification.castItemNameMoku) && casterMaterial.equals(castIdentification.castMaterialMoku)){
@@ -235,8 +231,7 @@ public class caster implements Listener {
                         nekoReoparudoIndex++;
                         nekoReoparudoIndex = nekoReoparudoIndex % abilitiesIdentification.aNumberNekoReoparudo;
                     }
-
                 }
-}
+        }
     }
 }
