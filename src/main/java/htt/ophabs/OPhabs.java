@@ -42,7 +42,7 @@ public final class OPhabs extends JavaPlugin {
 
         getServer().getPluginManager().registerEvents(yamiClass, this);
         getServer().getPluginManager().registerEvents(nekoReoparudoClass,this);
-        getServer().getPluginManager().registerEvents(meraClass,this);
+        //getServer().getPluginManager().registerEvents(meraClass,this);
 
         //--------------
         //CasterSystem
