@@ -13,6 +13,8 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import org.bukkit.scheduler.BukkitRunnable;
+import org.bukkit.util.Vector;
+
 
 public class mera_mera implements Listener {
     private OPhabs plugin;
@@ -106,12 +108,26 @@ public class mera_mera implements Listener {
     }
 
     @EventHandler(ignoreCancelled = true)
-    public void onProjectileHit(ProjectileHitEvent event) {
-        Entity flecha = event.getEntity();
+    public void onEntityShootBow(EntityShootBowEvent event) {
+        Entity flecha = event.getProjectile();
         Location loc_flecha = flecha.getLocation();
+        String nombre_user = plugin.getConfig().getString("FruitAssociations.mera_mera");
+        Player p = Bukkit.getPlayerExact(nombre_user);
 
-        event.getEntity().getWorld().spawnEntity(loc_flecha, EntityType.FIREBALL);
-        flecha.remove();
+        if(event.getEntity() instanceof Player) {
+            System.out.println("AAA");
+            if (!p.equals(null) && p.equals((Player) event.getEntity())) {
+                System.out.println("BBBB");
+                if (flecha instanceof Arrow) {
+                    System.out.println("CCCC");
+                    Entity fb = event.getEntity().getWorld().spawnEntity(event.getEntity().getLocation(), EntityType.FIREBALL);
+                    //Vector a = new Vector(fb.getLocation().toVector().getX(),fb.getLocation().toVector().getY(),fb.getLocation().toVector().getZ());
+                    //fb.setVelocity(a);
+
+                    flecha.remove();
+                }
+            }
+        }
     }
 
     @EventHandler(ignoreCancelled = true)
@@ -123,10 +139,11 @@ public class mera_mera implements Listener {
     @EventHandler(ignoreCancelled = true)
     public void onPlayerDeath(PlayerDeathEvent event) {
         String nombre_user = plugin.getConfig().getString("FruitAssociations.mera_mera");
+        System.out.println(nombre_user);
         Player p = Bukkit.getPlayerExact(nombre_user);
         Player jugador = event.getEntity();
 
-        if(p != null && p == jugador) {
+        if(p.equals(null) && p.equals(jugador)) {
             World mundo = jugador.getWorld();
             Location loc = jugador.getLocation();
 
