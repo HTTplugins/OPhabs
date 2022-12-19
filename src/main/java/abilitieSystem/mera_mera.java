@@ -13,34 +13,33 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import org.bukkit.scheduler.BukkitRunnable;
-import org.bukkit.util.Vector;
 
 
 public class mera_mera implements Listener {
     private OPhabs plugin;
     final float ExplosionRadius = 4;
-    final int BerserkFireRadius = 5, Hability1Radius = 4;
-    final Material NETHERRACK = Material.NETHERRACK, FIRE = Material.FIRE, DIRT = Material.DIRT, GREEN_DIRT = Material.GRASS_BLOCK,
-                   OBSIDIANA = Material.OBSIDIAN, BEDROCK = Material.BEDROCK, AIR = Material.AIR;
+    final int Abilitie1Radius = 4;
+    final Material FIRE = Material.FIRE, OBSIDIANA = Material.OBSIDIAN, BEDROCK = Material.BEDROCK, AIR = Material.AIR;
     final Particle PARTICULA_FUEGO = Particle.FLAME;
-    final Sound RESPAWN_SOUND = Sound.ENTITY_DRAGON_FIREBALL_EXPLODE;
     final int N_PARTICULAS = 20, RADIO_PARTICULAS = 0, RESPAWN_HEALTH = 10, RESPAWN_FOOD = 10, BERSERK_DURATION = 3600,
               BERSERK_AMPLIFIER = 2;
     boolean BERSERK = true;
 
-    private int FIRE_POOL_DURATION = 15, FIREBALL_STORM_COOLDOWN = 20;
+    private int FIRE_POOL_DURATION = 5, FIREBALL_STORM_COOLDOWN = 20;
 
     public mera_mera(OPhabs plugin){
         this.plugin = plugin;
     }
 
-    public boolean isDirt(Block bloque) {
-        boolean esTierra = false;
+    public boolean comprobarUser(Player jugador){
+        String nombre_user = plugin.getConfig().getString("FruitAssociations.mera_mera");
+        boolean es_user = false;
+        Player user = Bukkit.getPlayerExact(nombre_user);
 
-        if ((bloque.getType() == DIRT) || (bloque.getType() == GREEN_DIRT))
-            esTierra = true;
+        if(!nombre_user.equals("none") && user.equals(jugador))
+            es_user = true;
 
-        return esTierra;
+        return es_user;
     }
 
     private void CookFood(ItemStack comida){
@@ -83,23 +82,12 @@ public class mera_mera implements Listener {
         jugador.addPotionEffect(new PotionEffect(PotionEffectType.SLOW_FALLING, BERSERK_DURATION, BERSERK_AMPLIFIER));
     }
 
-    private void createBerserkEffect(Location loc) {
-        for(int i = -BerserkFireRadius; i <= BerserkFireRadius; i++)
-            for(int j = -BerserkFireRadius; j <= BerserkFireRadius; j++){
-                Location loc_aux = loc.clone();
-                loc_aux.setX(loc.getBlockX() + i);   loc_aux.setZ(loc.getBlockZ() + j);
-
-                if(!isIndestructible(loc_aux.getBlock()))
-                    loc_aux.getBlock().setType(FIRE);
-            }
-    }
-
-    public void createHability1Effect(Location loc){
+    public void createAbilitie1Effect(Location loc){
         Location loc_aux = loc.clone();
 
-        for(int i = -Hability1Radius; i <= Hability1Radius; i++) {
+        for(int i = -Abilitie1Radius; i <= Abilitie1Radius; i++) {
             loc_aux.setX(loc.getX() + i);
-            for(int j = -Hability1Radius; j <= Hability1Radius; j++) {
+            for(int j = -Abilitie1Radius; j <= Abilitie1Radius; j++) {
                 loc_aux.setZ(loc.getZ() + j);
                 if(loc_aux.getBlock().getType() == AIR)
                     loc_aux.getBlock().setType(FIRE);
@@ -110,19 +98,12 @@ public class mera_mera implements Listener {
     @EventHandler(ignoreCancelled = true)
     public void onEntityShootBow(EntityShootBowEvent event) {
         Entity flecha = event.getProjectile();
-        Location loc_flecha = flecha.getLocation();
-        String nombre_user = plugin.getConfig().getString("FruitAssociations.mera_mera");
-        Player p = Bukkit.getPlayerExact(nombre_user);
 
         if(event.getEntity() instanceof Player) {
-            System.out.println("AAA");
-            if (!p.equals(null) && p.equals((Player) event.getEntity())) {
-                System.out.println("BBBB");
+            if (comprobarUser((Player) event.getEntity())) {
                 if (flecha instanceof Arrow) {
-                    System.out.println("CCCC");
-                    Entity fb = event.getEntity().getWorld().spawnEntity(event.getEntity().getLocation(), EntityType.FIREBALL);
-                    //Vector a = new Vector(fb.getLocation().toVector().getX(),fb.getLocation().toVector().getY(),fb.getLocation().toVector().getZ());
-                    //fb.setVelocity(a);
+                    Entity fb = event.getEntity().getWorld().spawnEntity(event.getEntity().getLocation().add(0, 1, 0), EntityType.FIREBALL);
+                    fb.getVelocity().multiply(1.5);
 
                     flecha.remove();
                 }
@@ -132,18 +113,16 @@ public class mera_mera implements Listener {
 
     @EventHandler(ignoreCancelled = true)
     public void onPlayerItemConsume(PlayerItemConsumeEvent event) {
-        event.getPlayer().getWorld().spawnParticle(PARTICULA_FUEGO, event.getPlayer().getLocation(), N_PARTICULAS,
-                RADIO_PARTICULAS, RADIO_PARTICULAS, RADIO_PARTICULAS);
+        if(comprobarUser(event.getPlayer()))
+            event.getPlayer().getWorld().spawnParticle(PARTICULA_FUEGO, event.getPlayer().getLocation(), N_PARTICULAS,
+                    RADIO_PARTICULAS, RADIO_PARTICULAS, RADIO_PARTICULAS);
     }
 
     @EventHandler(ignoreCancelled = true)
     public void onPlayerDeath(PlayerDeathEvent event) {
-        String nombre_user = plugin.getConfig().getString("FruitAssociations.mera_mera");
-        System.out.println(nombre_user);
-        Player p = Bukkit.getPlayerExact(nombre_user);
         Player jugador = event.getEntity();
 
-        if(p.equals(null) && p.equals(jugador)) {
+        if(comprobarUser(jugador)) {
             World mundo = jugador.getWorld();
             Location loc = jugador.getLocation();
 
@@ -154,8 +133,8 @@ public class mera_mera implements Listener {
                 event.setKeepLevel(true);
 
                 mundo.createExplosion(loc, ExplosionRadius * ExplosionRadius);
-                createBerserkEffect(loc);
-                mundo.playSound(jugador, RESPAWN_SOUND, SoundCategory.HOSTILE, ExplosionRadius * ExplosionRadius * ExplosionRadius,
+                createAbilitie1Effect(loc);
+                mundo.playSound(jugador, Sound.MUSIC_NETHER_SOUL_SAND_VALLEY, SoundCategory.HOSTILE, ExplosionRadius * ExplosionRadius * ExplosionRadius,
                         100);
 
                 jugador.setHealth(RESPAWN_HEALTH);
@@ -187,12 +166,10 @@ public class mera_mera implements Listener {
 
     @EventHandler(ignoreCancelled = true)
     public void onEntityPickupItem(EntityPickupItemEvent event) {
-        String nombre_user = plugin.getConfig().getString("FruitAssociations.mera_mera");
-        Player p = Bukkit.getPlayerExact(nombre_user);
         Item objeto = event.getItem();
 
         if(event.getEntity() instanceof Player)
-            if(p != null && (Player) event.getEntity() == p)
+            if(comprobarUser((Player) event.getEntity()))
                 CookFood(objeto.getItemStack());
 
     }
@@ -208,7 +185,7 @@ public class mera_mera implements Listener {
 
                 player.addPotionEffect(new PotionEffect(PotionEffectType.FIRE_RESISTANCE, BERSERK_DURATION, BERSERK_AMPLIFIER));
 
-                createHability1Effect(player.getLocation());
+                createAbilitie1Effect(player.getLocation());
 
                 i++;
             }
@@ -220,7 +197,7 @@ public class mera_mera implements Listener {
     public void FireballStorm(Player player) {
         World mundo = player.getWorld();
 
-        mundo.playSound(player, Sound.MUSIC_DRAGON, 100, 10);
+        mundo.playSound(player, Sound.ITEM_FIRECHARGE_USE, 100, 10);
         mundo.spawnEntity(player.getLocation().clone().add(0, 5, 0), EntityType.FIREBALL);
         mundo.spawnEntity(player.getLocation().clone().add(0, 5, 3), EntityType.FIREBALL);
         mundo.spawnEntity(player.getLocation().clone().add(0, 5, -3), EntityType.FIREBALL);

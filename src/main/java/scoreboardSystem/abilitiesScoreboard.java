@@ -53,7 +53,7 @@ public class abilitiesScoreboard {
                     updateScoreboard(scoreboardYami ,Bukkit.getPlayerExact(yamiValue),abilitiesIdentification.namesYami, caster.yamiIndex,cd.getBlackVoidYamiCD(),cd.getAbilitie2YamiCD(), cd.getAbilitie3YamiCD(), cd.getAbilitie4YamiCD() );
 
                 if(!meraValue.equals("none") && Bukkit.getPlayerExact(meraValue) != null)
-                    updateScoreboard(scoreboardMera ,Bukkit.getPlayerExact(meraValue),abilitiesIdentification.namesMera, caster.meraIndex,cd.getFirePool(), cd.getFireballStorm(), cd.getAbilitie3MeraCD(), cd.getAbilitie4MeraCD());
+                    updateScoreboard(scoreboardMera ,Bukkit.getPlayerExact(meraValue),abilitiesIdentification.namesMera, caster.meraIndex,cd.getFirePoolCD(), cd.getFireballStormCD(), cd.getAbilitie3MeraCD(), cd.getAbilitie4MeraCD());
 
                 if(!guraValue.equals("none") && Bukkit.getPlayerExact(guraValue) != null)
                     updateScoreboard(scoreboardGura ,Bukkit.getPlayerExact(guraValue),abilitiesIdentification.namesGura, caster.guraIndex,cd.getEarthquakeGuraCD(),cd.getCreateWaveGuraCD(), cd.getHandVibrationGuraCD(),cd.getExpansionWaveGuraCD());

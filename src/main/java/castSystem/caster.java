@@ -83,9 +83,19 @@ public class caster implements Listener {
 
                     if (casterItemName.equals(castIdentification.castItemNameMera) && casterMaterial.equals(castIdentification.castMaterialMera))
                         switch (meraIndex) {
-                            case 0: meraClass.FirePool(event.getPlayer()); break;
+                            case 0:
+                                if (cooldown.getFirePoolCD() == 0) {
+                                    meraClass.FirePool(event.getPlayer());
+                                    cooldown.setFirePoolCD(20);
+                                }
+                                break;
 
-                            case 1: meraClass.FireballStorm(event.getPlayer()); break;
+                            case 1:
+                                if (cooldown.getFireballStormCD() == 0) {
+                                    meraClass.FireballStorm(event.getPlayer());
+                                    cooldown.setFireballStormCD(5);
+                                }
+                                break;
                             case 2:
                                 System.out.println("HABILIDAD3");
                                 break;
@@ -232,6 +242,6 @@ public class caster implements Listener {
                         nekoReoparudoIndex = nekoReoparudoIndex % abilitiesIdentification.aNumberNekoReoparudo;
                     }
                 }
-        }
+            }
     }
 }

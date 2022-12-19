@@ -133,12 +133,12 @@ public class coolDown {
         Abilitie4YamiCD = abilitie4YamiCD;
     }
 
-    public void setFirePool(int firePool) {
-        FirePool = firePool;
+    public void setFirePoolCD(int firePoolCD) {
+        FirePool = firePoolCD;
     }
 
-    public void setFireballStorm(int fireballStorm) {
-        FireballStorm = fireballStorm;
+    public void setFireballStormCD(int fireballStormCD) {
+        FireballStorm = fireballStormCD;
     }
 
     public void setAbilitie3MeraCD(int abilitie3MeraCD) {
@@ -213,11 +213,11 @@ public class coolDown {
         return Abilitie4YamiCD;
     }
 
-    public int getFirePool() {
+    public int getFirePoolCD() {
         return FirePool;
     }
 
-    public int getFireballStorm() {
+    public int getFireballStormCD() {
         return FireballStorm;
     }
 
