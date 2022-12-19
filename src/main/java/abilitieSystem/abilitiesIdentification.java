@@ -21,7 +21,7 @@ public class abilitiesIdentification {
     public static void initialiceNames(){
         namesYami.add(ChatColor.BLACK + "" + ChatColor.BOLD + "Yami Yami");
         namesYami.add( "BlackVoid");
-        namesYami.add( "Abilitie2");
+        namesYami.add( "LivingVoid");
         namesYami.add( "Abilitie3");
         namesYami.add( "Abilitie4");
 

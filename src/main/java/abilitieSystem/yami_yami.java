@@ -201,77 +201,109 @@ public class yami_yami implements Listener {
         }
     }
 
+    public void livingVoid(Player player){
 
+        player.playSound(player.getLocation(),Sound.BLOCK_REDSTONE_TORCH_BURNOUT,10,0);
 
-    public void ab2(Player player){
-        World world = player.getWorld();
-
-        //world.spawnParticle(Particle.SMOKE_NORMAL,player.getEyeLocation(),10,1,0,0);
-       // world.spawnParticle(Particle.SMOKE_NORMAL,player.getLocation(),0,1,0,0);
-
-        for(Entity ent : player.getNearbyEntities(10,10,10)){
-            if(ent instanceof LivingEntity)
-                attractEntity(ent,player);
-
-
-        }
-
-
-
-
-
-
+        player.getWorld().spawnParticle(Particle.SMOKE_NORMAL,player.getLocation().add(0,1,0),100);
+        player.getWorld().spawnParticle(Particle.SMOKE_NORMAL,player.getLocation().add(1,1,1),100);
+        player.getWorld().spawnParticle(Particle.SMOKE_NORMAL,player.getLocation().add(1,1,-1),100);
+        player.getWorld().spawnParticle(Particle.SMOKE_NORMAL,player.getLocation().add(-1,1,1),100);
+        player.getWorld().spawnParticle(Particle.SMOKE_NORMAL,player.getLocation().add(-1,1,-1),100);
+        for(Entity ent : player.getNearbyEntities(10,10,10))
+            if(ent instanceof LivingEntity && !player.equals(ent))
+                livingVoidForEntity(ent,player);
     }
 
-    public void attractEntity(Entity ent, Player player){
+    public void livingVoidForEntity(Entity ent, Player player){
         World world = player.getWorld();
-        Vector FirstVector;
-        boolean fV = false;
 
-        new BukkitRunnable(){
+        BukkitTask attract = new BukkitRunnable(){
+            Vector FirstVector;
+            boolean fV = false;
+            boolean entityInHand = false;
             @Override
             public void run() {
+                if(ent.isDead() || player.isDead())
+                    this.cancel();
 
                 double vx,vy,vz;
                 Location loc_aux ;
 
-
-
                 loc_aux = ent.getLocation().clone().add(0,1,0);
-                vx =  player.getLocation().getX() - ent.getLocation().getX() ;
-                vy =  player.getLocation().getY()-ent.getLocation().getY() ;
-                vz =  player.getLocation().getZ()-ent.getLocation().getZ() ;
+                vx =  player.getLocation().getX() - ent.getLocation().getX();
+                vy =  player.getLocation().getY()-ent.getLocation().getY();
+                vz =  player.getLocation().getZ()-ent.getLocation().getZ();
 
 
-                for(int i=0; i<10; i++) {
-                    world.spawnParticle(Particle.ASH,loc_aux.add(vx/10,vy/10,vz/10),0,0,0,0);
+
+
+                for(int i=0; i<5 && !ent.isDead(); i++) {
+                    world.spawnParticle(Particle.SMOKE_NORMAL,loc_aux.add(vx/5,vy/5,vz/5),0,0,0,0);
+                    world.spawnParticle(Particle.SMOKE_NORMAL,loc_aux.add(vx/5,vy/5,vz/5),1);
 
                 }
-
 
                 Vector movement = player.getLocation().toVector().subtract(ent.getLocation().toVector()).normalize();
 
                 if(!fV){
-                    //FirstVector = movement.clone();
+                    FirstVector = movement.clone();
+                    fV = true;
+
                 }
+
+                //Para levantar al mob si hay desnivel
+                if(player.getLocation().getY() >= ent.getLocation().getY() && !entityInHand)
+                    movement.setY(movement.getY() + (player.getLocation().getY() - ent.getLocation().getY()) + 3);
+
+
                 ent.setVelocity(movement);
 
-                if(Math.sqrt(Math.pow(vx,2) + Math.pow(vy,2) +  Math.pow(vz,2)) < 2){
-                    this.cancel();
+                if(Math.sqrt(Math.pow(vx,2) + Math.pow(vy,2) +  Math.pow(vz,2)) <= 1){
+                    entityInHand = true;
+                    if(player.isSneaking()){
+                        this.cancel();
+                        repealEntity(FirstVector,ent);
+                    }
                 }
 
 
             }
 
-            void cancelRun(){
-                this.cancel();
-            }
+
         }.runTaskTimer(plugin,0,1);
 
     }
 
-    public void repealEntity(){
+    public void repealEntity(Vector direction, Entity ent){
+        direction.setX(4*(direction.getX() * -1));
+        direction.setZ(4*(direction.getZ() * -1));
+        direction.setY(1);
 
+        ent.getWorld().playSound(ent.getLocation(),Sound.BLOCK_REDSTONE_TORCH_BURNOUT,10,2);
+
+
+        new BukkitRunnable(){
+            boolean isInGround = true;
+            @Override
+            public void run() {
+                for(int i=0; i<100; i++) {
+                    ent.getWorld().spawnParticle(Particle.ASH, ent.getLocation(), 0, 0, 0, 0);
+
+                }
+
+                if(ent.getLocation().getBlock().getRelative(0,-1,0).getType().equals(Material.AIR))
+                    isInGround = false;
+
+                if((!ent.getLocation().getBlock().getRelative(0,-1,0).getType().equals(Material.AIR) && !isInGround)|| ent.isDead()){
+                    this.cancel();
+                }
+
+            }
+        }.runTaskTimer(plugin,0,1);
+
+        ent.setVelocity(direction);
     }
+
 
 }
