@@ -263,7 +263,7 @@ public class yami_yami implements Listener {
                     entityInHand = true;
                     if(player.isSneaking()){
                         this.cancel();
-                        repealEntity(FirstVector,ent);
+                        repealEntity(FirstVector,ent,player);
                     }
                 }
 
@@ -275,7 +275,7 @@ public class yami_yami implements Listener {
 
     }
 
-    public void repealEntity(Vector direction, Entity ent){
+    public void repealEntity(Vector direction, Entity ent, Player player){
         direction.setX(4*(direction.getX() * -1));
         direction.setZ(4*(direction.getZ() * -1));
         direction.setY(1);
@@ -283,6 +283,7 @@ public class yami_yami implements Listener {
         ent.getWorld().playSound(ent.getLocation(),Sound.BLOCK_REDSTONE_TORCH_BURNOUT,10,2);
 
 
+        /*
         new BukkitRunnable(){
             boolean isInGround = true;
             @Override
@@ -302,7 +303,21 @@ public class yami_yami implements Listener {
             }
         }.runTaskTimer(plugin,0,1);
 
-        ent.setVelocity(direction);
+        */
+
+        //ent.setVelocity(direction);
+        Vector v = new Vector(1,1,1);
+
+
+        Vector dir = player.getLocation().getDirection();
+
+        dir.setY(1);
+        dir.setX(dir.getX() % 5);
+        dir.setZ(dir.getZ() % 5);
+
+        System.out.println(dir);
+
+        ent.setVelocity(dir);
     }
 
 
