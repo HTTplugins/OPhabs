@@ -208,33 +208,26 @@ public class yami_yami implements Listener {
         player.playSound(player.getLocation(),Sound.BLOCK_REDSTONE_TORCH_BURNOUT,10,0);
         World world = player.getWorld();
 
-        double ajuste;
+
         double angle = -player.getLocation().getYaw();
 
         System.out.println(player.getLocation().getYaw());
 
-        for(float i=0; i< 2*Math.PI*5; i+=0.01) {
+        for(double i=2*Math.PI*5; i>0 ; i-=0.05) {
 
             double x =  i*sin(i)/5;
             double y =  i*cos(i)/5;
             double z =  i;
 
-            Location normal = new Location(player.getWorld(), x,y,z);
+
 
             double xr = player.getLocation().getX() + cos(toRadians(angle))*x + sin(Math.toRadians(angle))*z;
-            double yr = player.getLocation().getY() + y;
+            double yr = 1 + player.getLocation().getY() + y;
             double zr = player.getLocation().getZ() + -sin(toRadians(angle))*x + cos(toRadians(angle))*z;
 
             Location rotation = new Location(player.getWorld(), xr,yr,zr);
 
-
-
-
-
-
-
-            world.spawnParticle(Particle.FLAME,normal,0,0,0,0);
-            world.spawnParticle(Particle.FLAME,rotation,0,0,0,0);
+            world.spawnParticle(Particle.SMOKE_NORMAL,rotation,0,0,0,0);
 
         }
 
@@ -262,17 +255,6 @@ public class yami_yami implements Listener {
                 vx =  player.getLocation().getX() - ent.getLocation().getX();
                 vy =  player.getLocation().getY()-ent.getLocation().getY();
                 vz =  player.getLocation().getZ()-ent.getLocation().getZ();
-
-
-
-
-                for(float i=0; i<1 && !ent.isDead(); i+=0.1) {
-                    //world.spawnParticle(Particle.SMOKE_NORMAL,loc_aux.add(vx/5,vy/5,vz/5),0,0,0,0);
-                    //world.spawnParticle(Particle.SMOKE_NORMAL,loc_aux.add(vx/5,vy/5,vz/5),1);
-                    //Location loc = new Location(player.getWorld(), player.getLocation().getX() + i*sin(i),player.getLocation().getY() + 1 + i*cos(i),player.getLocation().getZ() + i);
-                   // world.spawnParticle(Particle.FLAME,loc,0,0,0,0);
-
-                }
 
                 Vector movement = player.getLocation().toVector().subtract(ent.getLocation().toVector()).normalize();
 
@@ -305,7 +287,28 @@ public class yami_yami implements Listener {
 
     }
 
-    public void repealEntity(Vector direction, Entity ent, Player player){
+    public void repealEntity(Vector direction, Entity ent, Player player ){
+        World world = player.getWorld();
+        double angle = -player.getLocation().getYaw();
+
+        for(double i=0; i<2*Math.PI*5 ; i+=0.05) {
+
+            double x =  i*sin(i)/5;
+            double y =  i*cos(i)/5;
+            double z =  i;
+
+
+
+            double xr = player.getLocation().getX() + cos(toRadians(angle))*x + sin(Math.toRadians(angle))*z;
+            double yr = 1 + player.getLocation().getY() + y;
+            double zr = player.getLocation().getZ() + -sin(toRadians(angle))*x + cos(toRadians(angle))*z;
+
+            Location rotation = new Location(player.getWorld(), xr,yr,zr);
+
+            world.spawnParticle(Particle.SMOKE_NORMAL,rotation,0,0,0,0);
+
+        }
+
         direction.setX(4*(direction.getX() * -1));
         direction.setZ(4*(direction.getZ() * -1));
         direction.setY(1);
