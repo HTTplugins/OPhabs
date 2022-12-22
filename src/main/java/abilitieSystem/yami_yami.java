@@ -12,26 +12,18 @@ import org.bukkit.event.entity.EntityChangeBlockEvent;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.scheduler.BukkitTask;
 import org.bukkit.util.Vector;
-
 import java.util.ArrayList;
 import java.util.List;
-
 import static java.lang.Math.*;
 
 public class yami_yami implements Listener {
-
+    private final OPhabs plugin;
     private int repealAnimationCounter = 0;
-    private OPhabs plugin;
+
      private final int
-             radius = 3,
-             maxRadiusAmplification = 9,
-             voidExpansionDelay = 6,
-             voidExpansionSpeed = 5, //less is faster
-             damageAmount = 1,
-             damageDelay = 0,
-             damageSpeed = 15,
-             dissappearVoidBlocksDelay = 90,
-             maxHeight = 10;
+             radius = 3;
+    private final int maxRadiusAmplification = 9;
+    private final int damageAmount = 1;
 
     private final Material voidMaterial= Material.BLACK_CONCRETE;
 
@@ -44,6 +36,9 @@ public class yami_yami implements Listener {
 
         bresenham(radius, playerLocation, true);
 
+        int voidExpansionDelay = 6;
+
+        int voidExpansionSpeed = 5; //less is faster
         BukkitTask circle = new BukkitRunnable() {
                 int radiusCounter = radius;
 
@@ -52,46 +47,34 @@ public class yami_yami implements Listener {
 
                     bresenham(radiusCounter, playerLocation, true);
                     if (radiusCounter == radius + maxRadiusAmplification)
-                        cancelTask();
-                }
-
-                public void cancelTask() {
-                    Bukkit.getScheduler().cancelTask(this.getTaskId());
+                        this.cancel();
                 }
             }.runTaskTimer(plugin, voidExpansionDelay, voidExpansionSpeed);
 
-            BukkitTask damageAndParticles = new BukkitRunnable() {
-                LivingEntity livEnt;
-
+        int damageDelay = 0;
+        int damageSpeed = 15;
+        BukkitTask damageAndParticles = new BukkitRunnable() {
                 public void run() {
-                    List<LivingEntity> livingEntities = player.getWorld().getLivingEntities();
+                    for(LivingEntity livEnt : player.getWorld().getLivingEntities())
+                        if (livEnt != player && livEnt.getLocation().getBlock().getRelative(0,-1,0).getType().equals(voidMaterial))
+                            livEnt.damage(damageAmount);
 
-                    for(LivingEntity livEnt : player.getWorld().getLivingEntities()){
-                        if (livEnt != player) {
-                            Location downBlock = livEnt.getLocation();
-                            downBlock.setY(downBlock.getBlockY() - 1);
-
-                            if (downBlock.getBlock().getType().equals(voidMaterial))
-                                    livEnt.damage(damageAmount);
-                        }
-                    }
 
                     for(double x = playerLocation.getX() - maxRadiusAmplification; x < playerLocation.getX() + maxRadiusAmplification; x++ ){
                         for(double z = playerLocation.getZ() - maxRadiusAmplification; z < playerLocation.getZ() + maxRadiusAmplification; z++ ){
                             boolean foundY=false;
                             for(double y = playerLocation.getBlockY() - 1;  y > playerLocation.getBlockY() - 3 && !foundY; y--){
                                 Block block = new Location(player.getWorld(), x,y,z).getBlock();
-                                if(block.getType().equals(voidMaterial)){
+                                if(block.getType().equals(voidMaterial))
                                     player.getWorld().spawnParticle(abilitiesIdentification.yamiParticle,block.getRelative(0,1,0).getLocation(),0,0,1,0,abilitiesIdentification.yamiDO);
-                                }
                             }
-
                         }
                     }
                 }
             }.runTaskTimer(plugin, damageDelay, damageSpeed);
 
-            new BukkitRunnable() {
+        int dissappearVoidBlocksDelay = 90;
+        new BukkitRunnable() {
                 @Override
                 public void run() {
                     dissappearVoidBlocks();
@@ -103,9 +86,7 @@ public class yami_yami implements Listener {
 
     @EventHandler(ignoreCancelled = true)
     public void onEntityChangeBlock(EntityChangeBlockEvent event) {
-        Location downBlockLocation = new Location(event.getBlock().getWorld(), event.getBlock().getX(), event.getBlock().getY() - 1, event.getBlock().getZ());
-
-        if(downBlockLocation.getBlock().getType().equals(voidMaterial) )
+        if(event.getBlock().getRelative(0,-1,0).getType().equals(voidMaterial))
             event.setCancelled(true);
     }
 
@@ -180,16 +161,14 @@ public class yami_yami implements Listener {
     }
 
     public void setBlockAndLineUP(Location perimeterPixel){
-        World world = perimeterPixel.getWorld();
-
-            Location downBlockLocation;
             boolean found = false;
             for(int i=0; i < 3 && !found; i++){
-                downBlockLocation = new Location(perimeterPixel.getWorld(), perimeterPixel.getBlockX(),perimeterPixel.getBlockY() - i,perimeterPixel.getBlockZ());
-                if( !downBlockLocation.getBlock().getType().equals(Material.AIR)){
+
+
+                if( !perimeterPixel.getBlock().getRelative(0,-i,0).getType().equals(Material.AIR)){
                     found = true;
-                    downBlockLocation.getBlock().setType(voidMaterial);
-                    convertedToVoidBlocks.add(downBlockLocation.getBlock());
+                    perimeterPixel.getBlock().getRelative(0,-i,0).setType(voidMaterial);
+                    convertedToVoidBlocks.add(perimeterPixel.getBlock().getRelative(0,-i,0));
 
                 }
             }
@@ -198,7 +177,8 @@ public class yami_yami implements Listener {
 
 
         Location upBlockLocation = new Location(perimeterPixel.getWorld(), perimeterPixel.getBlockX(),perimeterPixel.getBlockY(),perimeterPixel.getBlockZ());
-        for(int i=1; i<maxHeight; i++){
+        int maxHeight = 10;
+        for(int i = 1; i< maxHeight; i++){
             upBlockLocation.setY(perimeterPixel.getBlockY() + i );
 
             if(!upBlockLocation.getBlock().getType().equals(Material.AIR)){
@@ -212,9 +192,9 @@ public class yami_yami implements Listener {
     }
 
     public void dissappearVoidBlocks(){
-        for(int i=0; i<convertedToVoidBlocks.size(); i++){
-            convertedToVoidBlocks.get(i).setType(Material.AIR);
-        }
+        for(Block convertedTVblock : convertedToVoidBlocks)
+            convertedTVblock.setType(Material.AIR);
+
     }
 
     public void livingVoid(Player player){
@@ -265,21 +245,17 @@ public class yami_yami implements Listener {
     }
 
     public void livingVoidForEntity(Entity ent, Player player){
-        World world = player.getWorld();
 
         BukkitTask attract = new BukkitRunnable(){
             Vector FirstVector;
             boolean fV = false;
             boolean entityInHand = false;
+            double vx,vy,vz;
             @Override
             public void run() {
                 if(ent.isDead() || player.isDead())
                     this.cancel();
 
-                double vx,vy,vz;
-                Location loc_aux ;
-
-                loc_aux = ent.getLocation().clone().add(0,1,0);
                 vx =  player.getLocation().getX() - ent.getLocation().getX();
                 vy =  player.getLocation().getY()-ent.getLocation().getY();
                 vz =  player.getLocation().getZ()-ent.getLocation().getZ();
@@ -303,21 +279,20 @@ public class yami_yami implements Listener {
                     entityInHand = true;
                     if(player.isSneaking()){
                         this.cancel();
-                        repealEntity(FirstVector,ent,player);
+                        repealEntity(ent,player);
                     }
                 }
             }
         }.runTaskTimer(plugin,0,1);
     }
 
-    public void repealEntity(Vector direction, Entity ent, Player player ){
+    public void repealEntity(Entity ent, Player player ){
         repealAnimationCounter++;
         World world = player.getWorld();
 
         if(repealAnimationCounter == 1){
-
             new BukkitRunnable(){
-                double angle = -player.getLocation().getYaw();
+                final double angle = -player.getLocation().getYaw();
 
                 double start = 0;
                 double finish = 0 + 2* PI*5/10;
@@ -352,25 +327,12 @@ public class yami_yami implements Listener {
             }.runTaskTimer(plugin,0,1);
         }
 
-
-
-        direction.setX(4*(direction.getX() * -1));
-        direction.setZ(4*(direction.getZ() * -1));
-        direction.setY(1);
-
         ent.getWorld().playSound(ent.getLocation(),Sound.BLOCK_REDSTONE_TORCH_BURNOUT,10,2);
 
-        Vector v = new Vector(1,1,1);
-
-
         Vector dir = player.getLocation().getDirection();
-
         dir.setY(1);
         dir.setX(dir.getX() % 5);
         dir.setZ(dir.getZ() % 5);
-
-
-
         ent.setVelocity(dir);
 
     }
