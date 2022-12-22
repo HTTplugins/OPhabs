@@ -16,6 +16,8 @@ import org.bukkit.util.Vector;
 import java.util.ArrayList;
 import java.util.List;
 
+import static java.lang.Math.*;
+
 public class yami_yami implements Listener {
     private OPhabs plugin;
      private final int
@@ -204,12 +206,38 @@ public class yami_yami implements Listener {
     public void livingVoid(Player player){
 
         player.playSound(player.getLocation(),Sound.BLOCK_REDSTONE_TORCH_BURNOUT,10,0);
+        World world = player.getWorld();
 
-        player.getWorld().spawnParticle(Particle.SMOKE_NORMAL,player.getLocation().add(0,1,0),100);
-        player.getWorld().spawnParticle(Particle.SMOKE_NORMAL,player.getLocation().add(1,1,1),100);
-        player.getWorld().spawnParticle(Particle.SMOKE_NORMAL,player.getLocation().add(1,1,-1),100);
-        player.getWorld().spawnParticle(Particle.SMOKE_NORMAL,player.getLocation().add(-1,1,1),100);
-        player.getWorld().spawnParticle(Particle.SMOKE_NORMAL,player.getLocation().add(-1,1,-1),100);
+        double ajuste;
+        double angle = -player.getLocation().getYaw();
+
+        System.out.println(player.getLocation().getYaw());
+
+        for(float i=0; i< 2*Math.PI*5; i+=0.01) {
+
+            double x =  i*sin(i)/5;
+            double y =  i*cos(i)/5;
+            double z =  i;
+
+            Location normal = new Location(player.getWorld(), x,y,z);
+
+            double xr = player.getLocation().getX() + cos(toRadians(angle))*x + sin(Math.toRadians(angle))*z;
+            double yr = player.getLocation().getY() + y;
+            double zr = player.getLocation().getZ() + -sin(toRadians(angle))*x + cos(toRadians(angle))*z;
+
+            Location rotation = new Location(player.getWorld(), xr,yr,zr);
+
+
+
+
+
+
+
+            world.spawnParticle(Particle.FLAME,normal,0,0,0,0);
+            world.spawnParticle(Particle.FLAME,rotation,0,0,0,0);
+
+        }
+
         for(Entity ent : player.getNearbyEntities(10,10,10))
             if(ent instanceof LivingEntity && !player.equals(ent))
                 livingVoidForEntity(ent,player);
@@ -238,9 +266,11 @@ public class yami_yami implements Listener {
 
 
 
-                for(int i=0; i<5 && !ent.isDead(); i++) {
-                    world.spawnParticle(Particle.SMOKE_NORMAL,loc_aux.add(vx/5,vy/5,vz/5),0,0,0,0);
-                    world.spawnParticle(Particle.SMOKE_NORMAL,loc_aux.add(vx/5,vy/5,vz/5),1);
+                for(float i=0; i<1 && !ent.isDead(); i+=0.1) {
+                    //world.spawnParticle(Particle.SMOKE_NORMAL,loc_aux.add(vx/5,vy/5,vz/5),0,0,0,0);
+                    //world.spawnParticle(Particle.SMOKE_NORMAL,loc_aux.add(vx/5,vy/5,vz/5),1);
+                    //Location loc = new Location(player.getWorld(), player.getLocation().getX() + i*sin(i),player.getLocation().getY() + 1 + i*cos(i),player.getLocation().getZ() + i);
+                   // world.spawnParticle(Particle.FLAME,loc,0,0,0,0);
 
                 }
 
