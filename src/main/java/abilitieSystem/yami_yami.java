@@ -60,7 +60,7 @@ public class yami_yami implements Listener {
                 }
             }.runTaskTimer(plugin, voidExpansionDelay, voidExpansionSpeed);
 
-            BukkitTask damage = new BukkitRunnable() {
+            BukkitTask damageAndParticles = new BukkitRunnable() {
                 LivingEntity livEnt;
 
                 public void run() {
@@ -75,6 +75,19 @@ public class yami_yami implements Listener {
                                     livEnt.damage(damageAmount);
                         }
                     }
+
+                    for(double x = playerLocation.getX() - maxRadiusAmplification; x < playerLocation.getX() + maxRadiusAmplification; x++ ){
+                        for(double z = playerLocation.getZ() - maxRadiusAmplification; z < playerLocation.getZ() + maxRadiusAmplification; z++ ){
+                            boolean foundY=false;
+                            for(double y = playerLocation.getBlockY() - 1;  y > playerLocation.getBlockY() - 3 && !foundY; y--){
+                                Block block = new Location(player.getWorld(), x,y,z).getBlock();
+                                if(block.getType().equals(voidMaterial)){
+                                    player.getWorld().spawnParticle(abilitiesIdentification.yamiParticle,block.getRelative(0,1,0).getLocation(),0,0,1,0,abilitiesIdentification.yamiDO);
+                                }
+                            }
+
+                        }
+                    }
                 }
             }.runTaskTimer(plugin, damageDelay, damageSpeed);
 
@@ -82,7 +95,7 @@ public class yami_yami implements Listener {
                 @Override
                 public void run() {
                     dissappearVoidBlocks();
-                    damage.cancel();
+                    damageAndParticles.cancel();
                     player.getWorld().playSound(player, Sound.ENTITY_ENDERMAN_TELEPORT, 10, 2);
                 }
             }.runTaskLater(plugin, dissappearVoidBlocksDelay);
@@ -175,7 +188,6 @@ public class yami_yami implements Listener {
                 downBlockLocation = new Location(perimeterPixel.getWorld(), perimeterPixel.getBlockX(),perimeterPixel.getBlockY() - i,perimeterPixel.getBlockZ());
                 if( !downBlockLocation.getBlock().getType().equals(Material.AIR)){
                     found = true;
-                    world.spawnParticle(abilitiesIdentification.yamiParticle,downBlockLocation.getBlock().getRelative(0,-1,0).getLocation(),5,abilitiesIdentification.yamiDO);
                     downBlockLocation.getBlock().setType(voidMaterial);
                     convertedToVoidBlocks.add(downBlockLocation.getBlock());
 

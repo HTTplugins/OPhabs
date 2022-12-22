@@ -56,7 +56,7 @@ public class caster implements Listener {
                                 break;
                             case 1:
                                 if(cooldown.getAbilitie2YamiCD() == 0){
-                                    cooldown.setAbilitie2YamiCD(0); //a 0 pq estoy probando cosas
+                                    cooldown.setAbilitie2YamiCD(20);
                                     yamiClass.livingVoid(event.getPlayer());
 
                                 }
