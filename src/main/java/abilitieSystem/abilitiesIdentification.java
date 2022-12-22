@@ -1,6 +1,9 @@
 package abilitieSystem;
 
 import org.bukkit.ChatColor;
+import org.bukkit.Color;
+import org.bukkit.Material;
+import org.bukkit.Particle;
 
 import java.sql.Array;
 import java.util.ArrayList;
@@ -10,6 +13,8 @@ public class abilitiesIdentification {
 
     public static int aNumberYami = 4, aNumberMera = 4, aNumberGura = 4, aNumberMoku = 4, aNumberNekoReoparudo = 4, aNumberMagu = 4; //number of abilities.
 
+    public static Particle.DustOptions yamiDO = new Particle.DustOptions(Color.BLACK,1.0F);
+    public static Particle yamiParticle = Particle.REDSTONE;
     public static
             List<String>  namesYami = new ArrayList<>(),
             namesMera = new ArrayList<>(),

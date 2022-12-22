@@ -19,6 +19,8 @@ import java.util.List;
 import static java.lang.Math.*;
 
 public class yami_yami implements Listener {
+
+    private int repealAnimationCounter = 0;
     private OPhabs plugin;
      private final int
              radius = 3,
@@ -173,7 +175,7 @@ public class yami_yami implements Listener {
                 downBlockLocation = new Location(perimeterPixel.getWorld(), perimeterPixel.getBlockX(),perimeterPixel.getBlockY() - i,perimeterPixel.getBlockZ());
                 if( !downBlockLocation.getBlock().getType().equals(Material.AIR)){
                     found = true;
-                    world.spawnParticle(Particle.SMOKE_NORMAL,downBlockLocation.getBlock().getRelative(0,-1,0).getLocation(),5);
+                    world.spawnParticle(abilitiesIdentification.yamiParticle,downBlockLocation.getBlock().getRelative(0,-1,0).getLocation(),5);
                     downBlockLocation.getBlock().setType(voidMaterial);
                     convertedToVoidBlocks.add(downBlockLocation.getBlock());
 
@@ -208,32 +210,46 @@ public class yami_yami implements Listener {
         player.playSound(player.getLocation(),Sound.BLOCK_REDSTONE_TORCH_BURNOUT,10,0);
         World world = player.getWorld();
 
+        new BukkitRunnable(){
+            double angle = -player.getLocation().getYaw();
 
-        double angle = -player.getLocation().getYaw();
+            double start = 2* PI*5;
+            double finish = 2* PI*5 - 2* PI*5/10;
+            @Override
+            public void run() {
 
-        System.out.println(player.getLocation().getYaw());
+                for(double i=start; i>finish ; i-=0.05) {
 
-        for(double i=2*Math.PI*5; i>0 ; i-=0.05) {
+                    double x = i * sin(i) / 5;
+                    double y = i * cos(i) / 5;
+                    double z = i;
 
-            double x =  i*sin(i)/5;
-            double y =  i*cos(i)/5;
-            double z =  i;
+                    double xr = player.getLocation().getX() + cos(toRadians(angle))*x + sin(toRadians(angle))*z;
+                    double yr = 1 + player.getLocation().getY() + y;
+                    double zr = player.getLocation().getZ() + -sin(toRadians(angle))*x + cos(toRadians(angle))*z;
+
+                    Location rotation = new Location(player.getWorld(), xr,yr,zr);
 
 
 
-            double xr = player.getLocation().getX() + cos(toRadians(angle))*x + sin(Math.toRadians(angle))*z;
-            double yr = 1 + player.getLocation().getY() + y;
-            double zr = player.getLocation().getZ() + -sin(toRadians(angle))*x + cos(toRadians(angle))*z;
+                    world.spawnParticle(abilitiesIdentification.yamiParticle,rotation,0,0,0,0,abilitiesIdentification.yamiDO);
 
-            Location rotation = new Location(player.getWorld(), xr,yr,zr);
+                }
+                start = finish;
 
-            world.spawnParticle(Particle.SMOKE_NORMAL,rotation,0,0,0,0);
+                finish = finish -  2* PI*5/10;
 
-        }
+
+                if(finish < 0) this.cancel();
+
+            }
+        }.runTaskTimer(plugin,0,1);
 
         for(Entity ent : player.getNearbyEntities(10,10,10))
             if(ent instanceof LivingEntity && !player.equals(ent))
                 livingVoidForEntity(ent,player);
+
+        repealAnimationCounter = 0;
     }
 
     public void livingVoidForEntity(Entity ent, Player player){
@@ -278,36 +294,53 @@ public class yami_yami implements Listener {
                         repealEntity(FirstVector,ent,player);
                     }
                 }
-
-
             }
-
-
         }.runTaskTimer(plugin,0,1);
-
     }
 
     public void repealEntity(Vector direction, Entity ent, Player player ){
+        repealAnimationCounter++;
         World world = player.getWorld();
-        double angle = -player.getLocation().getYaw();
 
-        for(double i=0; i<2*Math.PI*5 ; i+=0.05) {
+        if(repealAnimationCounter == 1){
 
-            double x =  i*sin(i)/5;
-            double y =  i*cos(i)/5;
-            double z =  i;
+            new BukkitRunnable(){
+                double angle = -player.getLocation().getYaw();
+
+                double start = 0;
+                double finish = 0 + 2* PI*5/10;
+                @Override
+                public void run() {
+
+                    for(double i=start; i<finish ; i+=0.05) {
+
+                        double x = i * sin(i) / 5;
+                        double y = i * cos(i) / 5;
+                        double z = i;
+
+                        double xr = player.getLocation().getX() + cos(toRadians(angle))*x + sin(toRadians(angle))*z;
+                        double yr = 1 + player.getLocation().getY() + y;
+                        double zr = player.getLocation().getZ() + -sin(toRadians(angle))*x + cos(toRadians(angle))*z;
+
+                        Location rotation = new Location(player.getWorld(), xr,yr,zr);
 
 
 
-            double xr = player.getLocation().getX() + cos(toRadians(angle))*x + sin(Math.toRadians(angle))*z;
-            double yr = 1 + player.getLocation().getY() + y;
-            double zr = player.getLocation().getZ() + -sin(toRadians(angle))*x + cos(toRadians(angle))*z;
+                        world.spawnParticle(abilitiesIdentification.yamiParticle,rotation,0,0,0,0,abilitiesIdentification.yamiDO);
 
-            Location rotation = new Location(player.getWorld(), xr,yr,zr);
+                    }
+                    start = finish;
 
-            world.spawnParticle(Particle.SMOKE_NORMAL,rotation,0,0,0,0);
+                    finish = finish +  2* PI*5/10;
 
+
+                    if(finish < 0) this.cancel();
+
+                }
+            }.runTaskTimer(plugin,0,1);
         }
+
+
 
         direction.setX(4*(direction.getX() * -1));
         direction.setZ(4*(direction.getZ() * -1));
@@ -315,30 +348,6 @@ public class yami_yami implements Listener {
 
         ent.getWorld().playSound(ent.getLocation(),Sound.BLOCK_REDSTONE_TORCH_BURNOUT,10,2);
 
-
-        /*
-        new BukkitRunnable(){
-            boolean isInGround = true;
-            @Override
-            public void run() {
-                for(int i=0; i<100; i++) {
-                    ent.getWorld().spawnParticle(Particle.ASH, ent.getLocation(), 0, 0, 0, 0);
-
-                }
-
-                if(ent.getLocation().getBlock().getRelative(0,-1,0).getType().equals(Material.AIR))
-                    isInGround = false;
-
-                if((!ent.getLocation().getBlock().getRelative(0,-1,0).getType().equals(Material.AIR) && !isInGround)|| ent.isDead()){
-                    this.cancel();
-                }
-
-            }
-        }.runTaskTimer(plugin,0,1);
-
-        */
-
-        //ent.setVelocity(direction);
         Vector v = new Vector(1,1,1);
 
 
@@ -348,9 +357,10 @@ public class yami_yami implements Listener {
         dir.setX(dir.getX() % 5);
         dir.setZ(dir.getZ() % 5);
 
-        System.out.println(dir);
+
 
         ent.setVelocity(dir);
+
     }
 
 
