@@ -175,7 +175,7 @@ public class yami_yami implements Listener {
                 downBlockLocation = new Location(perimeterPixel.getWorld(), perimeterPixel.getBlockX(),perimeterPixel.getBlockY() - i,perimeterPixel.getBlockZ());
                 if( !downBlockLocation.getBlock().getType().equals(Material.AIR)){
                     found = true;
-                    world.spawnParticle(abilitiesIdentification.yamiParticle,downBlockLocation.getBlock().getRelative(0,-1,0).getLocation(),5);
+                    world.spawnParticle(abilitiesIdentification.yamiParticle,downBlockLocation.getBlock().getRelative(0,-1,0).getLocation(),5,abilitiesIdentification.yamiDO);
                     downBlockLocation.getBlock().setType(voidMaterial);
                     convertedToVoidBlocks.add(downBlockLocation.getBlock());
 
