@@ -56,7 +56,7 @@ public class caster implements Listener {
                                 break;
                             case 1:
                                 if(cooldown.getAbilitie2YamiCD() == 0){
-                                    cooldown.setAbilitie2YamiCD(20);
+                                    cooldown.setAbilitie2YamiCD(20); //a 0 pq estoy probando cosas
                                     yamiClass.livingVoid(event.getPlayer());
 
                                 }
@@ -64,14 +64,15 @@ public class caster implements Listener {
                                 break;
                             case 2:
                                 if(cooldown.getAbilitie3YamiCD() == 0){
-                                    cooldown.setAbilitie3YamiCD(15);
-                                    System.out.println("HABILIDAD3");
+                                    cooldown.setAbilitie3YamiCD(20);
+                                    yamiClass.liberateAbsorptions(event.getPlayer());
+
                                 }
 
                                 break;
                             case 3:
                                 if(cooldown.getAbilitie4YamiCD() == 0){
-                                    cooldown.setAbilitie4YamiCD(11);
+                                    cooldown.setAbilitie4YamiCD(0);
                                     System.out.println("HABILIDAD4");
                                 }
 

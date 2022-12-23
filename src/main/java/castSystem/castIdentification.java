@@ -3,6 +3,8 @@ package castSystem;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
 
+import java.util.Objects;
+
 public class castIdentification {
     public static Material castMaterialYami = Material.BLACK_DYE,
                             castMaterialMera = Material.BLAZE_ROD,
@@ -40,8 +42,6 @@ public class castIdentification {
             return true;
         else
             return false;
-
-
     }
 
 }

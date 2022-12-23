@@ -4,6 +4,7 @@ import htt.ophabs.OPhabs;
 import org.bukkit.*;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Entity;
+import org.bukkit.entity.FallingBlock;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -14,6 +15,8 @@ import org.bukkit.scheduler.BukkitTask;
 import org.bukkit.util.Vector;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Stack;
+
 import static java.lang.Math.*;
 
 public class yami_yami implements Listener {
@@ -26,6 +29,8 @@ public class yami_yami implements Listener {
     private final int damageAmount = 1;
 
     private final Material voidMaterial= Material.BLACK_CONCRETE;
+
+    private Stack<Material> absorbedMaterials = new Stack<>();
 
     private List<Block> convertedToVoidBlocks = new ArrayList<>();
     public yami_yami(OPhabs plugin){this.plugin = plugin;}
@@ -86,8 +91,12 @@ public class yami_yami implements Listener {
 
     @EventHandler(ignoreCancelled = true)
     public void onEntityChangeBlock(EntityChangeBlockEvent event) {
-        if(event.getBlock().getRelative(0,-1,0).getType().equals(voidMaterial))
+        if(event.getBlock().getRelative(0,-1,0).getType().equals(voidMaterial)) {
+
+           // absorbedMaterials.add(event.getBlock().getType());
+            //System.out.println(event.getBlock().getType());
             event.setCancelled(true);
+        }
     }
 
     public void bresenham(int radius, Location playerLocation, boolean fill){
@@ -183,6 +192,7 @@ public class yami_yami implements Listener {
 
             if(!upBlockLocation.getBlock().getType().equals(Material.AIR)){
                 Material matFallingBlock = upBlockLocation.getBlock().getType();
+                absorbedMaterials.add(matFallingBlock);
                 upBlockLocation.getBlock().setType(Material.AIR);
                 upBlockLocation.getWorld().spawnFallingBlock(upBlockLocation,matFallingBlock,(byte) 9);
             }
@@ -202,8 +212,19 @@ public class yami_yami implements Listener {
         player.playSound(player.getLocation(),Sound.BLOCK_REDSTONE_TORCH_BURNOUT,10,0);
         World world = player.getWorld();
 
+        absorbAnimation(player);
+
+        for(Entity ent : player.getNearbyEntities(10,10,10))
+            if(ent instanceof LivingEntity && !player.equals(ent))
+                livingVoidForEntity(ent,player);
+
+        repealAnimationCounter = 0;
+    }
+
+    public void absorbAnimation(Player player){
         new BukkitRunnable(){
             double angle = -player.getLocation().getYaw();
+            World world = player.getWorld();
 
             double start = 2* PI*5;
             double finish = 2* PI*5 - 2* PI*5/10;
@@ -236,14 +257,47 @@ public class yami_yami implements Listener {
 
             }
         }.runTaskTimer(plugin,0,1);
-
-        for(Entity ent : player.getNearbyEntities(10,10,10))
-            if(ent instanceof LivingEntity && !player.equals(ent))
-                livingVoidForEntity(ent,player);
-
-        repealAnimationCounter = 0;
     }
 
+    public void repealAnimation(Player player){
+
+        new BukkitRunnable(){
+            final double angle = -player.getLocation().getYaw();
+            World world = player.getWorld();
+
+            double start = 0;
+            double finish = 0 + 2* PI*5/10;
+            @Override
+            public void run() {
+
+                for(double i=start; i<finish ; i+=0.05) {
+
+                    double x = i * sin(i) / 5;
+                    double y = i * cos(i) / 5;
+                    double z = i;
+
+                    double xr = player.getLocation().getX() + cos(toRadians(angle))*x + sin(toRadians(angle))*z;
+                    double yr = 1 + player.getLocation().getY() + y;
+                    double zr = player.getLocation().getZ() + -sin(toRadians(angle))*x + cos(toRadians(angle))*z;
+
+                    Location rotation = new Location(player.getWorld(), xr,yr,zr);
+
+
+
+                    world.spawnParticle(abilitiesIdentification.yamiParticle,rotation,0,0,0,0,abilitiesIdentification.yamiDO);
+
+                }
+                start = finish;
+
+                finish = finish +  2* PI*5/10;
+
+
+                if(finish < 0) this.cancel();
+
+            }
+        }.runTaskTimer(plugin,0,1);
+
+    }
     public void livingVoidForEntity(Entity ent, Player player){
 
         BukkitTask attract = new BukkitRunnable(){
@@ -257,15 +311,14 @@ public class yami_yami implements Listener {
                     this.cancel();
 
                 vx =  player.getLocation().getX() - ent.getLocation().getX();
-                vy =  player.getLocation().getY()-ent.getLocation().getY();
-                vz =  player.getLocation().getZ()-ent.getLocation().getZ();
+                vy =  player.getLocation().getY() - ent.getLocation().getY();
+                vz =  player.getLocation().getZ() - ent.getLocation().getZ();
 
                 Vector movement = player.getLocation().toVector().subtract(ent.getLocation().toVector()).normalize();
 
                 if(!fV){
                     FirstVector = movement.clone();
                     fV = true;
-
                 }
 
                 //Para levantar al mob si hay desnivel
@@ -291,40 +344,7 @@ public class yami_yami implements Listener {
         World world = player.getWorld();
 
         if(repealAnimationCounter == 1){
-            new BukkitRunnable(){
-                final double angle = -player.getLocation().getYaw();
-
-                double start = 0;
-                double finish = 0 + 2* PI*5/10;
-                @Override
-                public void run() {
-
-                    for(double i=start; i<finish ; i+=0.05) {
-
-                        double x = i * sin(i) / 5;
-                        double y = i * cos(i) / 5;
-                        double z = i;
-
-                        double xr = player.getLocation().getX() + cos(toRadians(angle))*x + sin(toRadians(angle))*z;
-                        double yr = 1 + player.getLocation().getY() + y;
-                        double zr = player.getLocation().getZ() + -sin(toRadians(angle))*x + cos(toRadians(angle))*z;
-
-                        Location rotation = new Location(player.getWorld(), xr,yr,zr);
-
-
-
-                        world.spawnParticle(abilitiesIdentification.yamiParticle,rotation,0,0,0,0,abilitiesIdentification.yamiDO);
-
-                    }
-                    start = finish;
-
-                    finish = finish +  2* PI*5/10;
-
-
-                    if(finish < 0) this.cancel();
-
-                }
-            }.runTaskTimer(plugin,0,1);
+            repealAnimation(player);
         }
 
         ent.getWorld().playSound(ent.getLocation(),Sound.BLOCK_REDSTONE_TORCH_BURNOUT,10,2);
@@ -336,6 +356,39 @@ public class yami_yami implements Listener {
         ent.setVelocity(dir);
 
     }
+    public void liberateAbsorptions(Player player){
 
+        new BukkitRunnable(){
+            int tickCounter = 0;
+            @Override
+            public void run() {
+                tickCounter++;
+                repealAnimation(player);
+                if(tickCounter == 3) this.cancel();
+            }
+        }.runTaskTimer(plugin,0,20);
+        
+        new BukkitRunnable(){
+            int i = 0;
 
+            World world = player.getWorld();
+
+            Material usedMAterial;
+            @Override
+            public void run() {
+
+                if(!absorbedMaterials.empty()){
+                    usedMAterial = absorbedMaterials.pop();
+
+                    FallingBlock block = world.spawnFallingBlock(player.getLocation().add(player.getLocation().getBlock().getRelative(0,1,0).getLocation().getDirection()),usedMAterial.createBlockData());
+
+                    block.setVelocity(player.getLocation().getDirection().add(new Vector(0,0.5,0)));
+                }
+
+                i++;
+
+                if(i == 10) this.cancel();
+            }
+        }.runTaskTimer(plugin,0,4);
+    }
 }
