@@ -53,7 +53,7 @@ public class abilitiesScoreboard {
                     updateScoreboard(scoreboardYami ,Bukkit.getPlayerExact(yamiValue),abilitiesIdentification.namesYami, caster.yamiIndex,cd.getBlackVoidYamiCD(),cd.getAbilitie2YamiCD(), cd.getAbilitie3YamiCD(), cd.getAbilitie4YamiCD() );
 
                 if(!meraValue.equals("none") && Bukkit.getPlayerExact(meraValue) != null)
-                    updateScoreboard(scoreboardMera ,Bukkit.getPlayerExact(meraValue),abilitiesIdentification.namesMera, caster.meraIndex,cd.getAbilitie1MeraCD(), cd.getAbilitie2MeraCD(), cd.getAbilitie3MeraCD(), cd.getAbilitie4MeraCD());
+                    updateScoreboard(scoreboardMera ,Bukkit.getPlayerExact(meraValue),abilitiesIdentification.namesMera, caster.meraIndex,cd.getFirePool(), cd.getFireballStorm(), cd.getAbilitie3MeraCD(), cd.getAbilitie4MeraCD());
 
                 if(!guraValue.equals("none") && Bukkit.getPlayerExact(guraValue) != null)
                     updateScoreboard(scoreboardGura ,Bukkit.getPlayerExact(guraValue),abilitiesIdentification.namesGura, caster.guraIndex,cd.getEarthquakeGuraCD(),cd.getCreateWaveGuraCD(), cd.getHandVibrationGuraCD(),cd.getExpansionWaveGuraCD());
@@ -70,8 +70,6 @@ public class abilitiesScoreboard {
     }
 
     public boolean updateScoreboard(Scoreboard scoreboard , Player player, List<String> names, int index,int Ab1CD, int Ab2CD, int Ab3CD, int Ab4CD){
-
-
 
         Objective objctive = scoreboard.registerNewObjective("abilitiesScoreboard","dummy");
 

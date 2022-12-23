@@ -10,17 +10,18 @@ import castSystem.*;
 import org.bukkit.ChatColor;
 import scoreboardSystem.*;
 
+import java.util.Objects;
+
 public final class OPhabs extends JavaPlugin {
 
     @Override
     public void onEnable(){
         registerCommands();
 
+        //---------------
+        //Initializations:
+
         abilitiesIdentification.initialiceNames();
-
-
-
-
 
         //---------------
         //Files
@@ -35,30 +36,29 @@ public final class OPhabs extends JavaPlugin {
         getServer().getPluginManager().registerEvents(new loseFruit(this), this);
 
         //--------------
-        //abilitiesSystem
+        //abilitieSystem
 
         yami_yami yamiClass = new yami_yami(this);
         mera_mera meraClass = new mera_mera(this);
         gura_gura guraClass = new gura_gura(this);
         moku_moku mokuClass = new moku_moku(this);
         neko_neko_reoparudo nekoReoparudoClass = new neko_neko_reoparudo(this);
-
+        magu_magu maguClass = new magu_magu(this);
 
         getServer().getPluginManager().registerEvents(yamiClass, this);
         getServer().getPluginManager().registerEvents(nekoReoparudoClass,this);
-        //getServer().getPluginManager().registerEvents(meraClass,this);
+        getServer().getPluginManager().registerEvents(meraClass,this);
 
         //--------------
         //CasterSystem
         coolDown cooldown = new coolDown(this);
         cooldown.runCoolDownSystem();
 
-        getServer().getPluginManager().registerEvents(new caster(cooldown,mokuClass, yamiClass, meraClass, guraClass, nekoReoparudoClass), this);
+        getServer().getPluginManager().registerEvents(new caster(cooldown, mokuClass, yamiClass, meraClass, guraClass, nekoReoparudoClass, maguClass), this);
         getServer().getPluginManager().registerEvents(new noDropCaster(), this);
 
         //--------------
         //ScoreBoards
-
 
         abilitiesScoreboard scoreboards = new abilitiesScoreboard(this,cooldown);
         scoreboards.ini();
@@ -66,7 +66,7 @@ public final class OPhabs extends JavaPlugin {
 
 
         //--------------
-        Bukkit.getConsoleSender().sendMessage(ChatColor.DARK_RED + "" + ChatColor.BOLD +  "OPhabs started correctly.");
+        Bukkit.getConsoleSender().sendMessage(ChatColor.GREEN + "" + ChatColor.BOLD +  "OPhabs started correctly.");
     }
 
     @Override
@@ -75,6 +75,6 @@ public final class OPhabs extends JavaPlugin {
     }
 
     public void registerCommands(){
-        this.getCommand("oph").setExecutor(new oph(this));
+        Objects.requireNonNull(this.getCommand("oph")).setExecutor(new oph(this));
     }
 }

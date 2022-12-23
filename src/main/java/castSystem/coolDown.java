@@ -9,21 +9,21 @@ public class coolDown {
 
     private int
             BlackVoidYamiCD, Abilitie2YamiCD, Abilitie3YamiCD, Abilitie4YamiCD,
-            Abilitie1MeraCD, Abilitie2MeraCD, Abilitie3MeraCD, Abilitie4MeraCD,
+            FirePool, FireballStorm, Abilitie3MeraCD, Abilitie4MeraCD,
             EarthquakeGuraCD, CreateWaveGuraCD, HandVibrationGuraCD, ExpansionWaveGuraCD,
             LogiaBodyMokuCD, SmokeLegsMokuCD, SummonSmokerMokuCD, Abilitie4MokuCD,
+            Abilitie1MaguCD, Abilitie2MaguCD, Abilitie3MaguCD, Abilitie4MaguCD,
             TransformationNekoReoparudoCD, FrontAttackNekoReoparudoCD, Abilitie3NekoReoparudoCD, Abilitie4NekoReoparudoCD;
 
     public coolDown(OPhabs plugin){
         this.plugin = plugin;
         BlackVoidYamiCD = Abilitie2YamiCD = Abilitie3YamiCD = Abilitie4YamiCD = 0;
-        Abilitie1MeraCD = Abilitie2MeraCD = Abilitie3MeraCD = Abilitie4MeraCD = 0;
+        FirePool = FireballStorm = Abilitie3MeraCD = Abilitie4MeraCD = 0;
         EarthquakeGuraCD = CreateWaveGuraCD = HandVibrationGuraCD = ExpansionWaveGuraCD = 0;
         LogiaBodyMokuCD = SmokeLegsMokuCD = SummonSmokerMokuCD = Abilitie4MokuCD = 0;
+        Abilitie1MaguCD = Abilitie2MaguCD = Abilitie3MaguCD = Abilitie4MaguCD = 0;
         TransformationNekoReoparudoCD = FrontAttackNekoReoparudoCD = Abilitie3NekoReoparudoCD = Abilitie4NekoReoparudoCD = 0;
     }
-
-
 
     public void runCoolDownSystem(){
 
@@ -45,10 +45,10 @@ public class coolDown {
                     Abilitie4YamiCD--;
 
                 //MERA
-                if(Abilitie1MeraCD > 0)
-                    Abilitie1MeraCD--;
-                if(Abilitie2MeraCD > 0)
-                    Abilitie2MeraCD--;
+                if(FirePool > 0)
+                    FirePool--;
+                if(FireballStorm > 0)
+                    FireballStorm--;
                 if(Abilitie3MeraCD > 0)
                     Abilitie3MeraCD--;
                 if(Abilitie4MeraCD > 0)
@@ -85,12 +85,36 @@ public class coolDown {
                 if(Abilitie4NekoReoparudoCD > 0)
                     Abilitie4NekoReoparudoCD--;
 
-
+                //Magu
+                if(Abilitie1MaguCD > 0)
+                    Abilitie1MaguCD--;
+                if(Abilitie2MaguCD > 0)
+                    Abilitie2MaguCD--;
+                if(Abilitie3MaguCD > 0)
+                    Abilitie3MaguCD--;
+                if(Abilitie4MaguCD > 0)
+                    Abilitie4MaguCD--;
             }
 
 
         }.runTaskTimer(plugin,0,20);
 
+    }
+
+    public void setAbilitie1MaguCD(int abilitie1MaguCD) {
+        Abilitie1MaguCD = abilitie1MaguCD;
+    }
+
+    public void setAbilitie2MaguCD(int abilitie2MaguCD) {
+        Abilitie2MaguCD = abilitie2MaguCD;
+    }
+
+    public void setAbilitie3MaguCD(int abilitie3MaguCD) {
+        Abilitie3MaguCD = abilitie3MaguCD;
+    }
+
+    public void setAbilitie4MaguCD(int abilitie4MaguCD) {
+        Abilitie4MaguCD = abilitie4MaguCD;
     }
 
     public void setBlackVoidYamiCD(int blackVoidYamiCD) {
@@ -109,12 +133,12 @@ public class coolDown {
         Abilitie4YamiCD = abilitie4YamiCD;
     }
 
-    public void setAbilitie1MeraCD(int abilitie1MeraCD) {
-        Abilitie1MeraCD = abilitie1MeraCD;
+    public void setFirePool(int firePool) {
+        FirePool = firePool;
     }
 
-    public void setAbilitie2MeraCD(int abilitie2MeraCD) {
-        Abilitie2MeraCD = abilitie2MeraCD;
+    public void setFireballStorm(int fireballStorm) {
+        FireballStorm = fireballStorm;
     }
 
     public void setAbilitie3MeraCD(int abilitie3MeraCD) {
@@ -189,12 +213,12 @@ public class coolDown {
         return Abilitie4YamiCD;
     }
 
-    public int getAbilitie1MeraCD() {
-        return Abilitie1MeraCD;
+    public int getFirePool() {
+        return FirePool;
     }
 
-    public int getAbilitie2MeraCD() {
-        return Abilitie2MeraCD;
+    public int getFireballStorm() {
+        return FireballStorm;
     }
 
     public int getAbilitie3MeraCD() {
@@ -251,5 +275,21 @@ public class coolDown {
 
     public int getAbilitie4NekoReoparudoCD() {
         return Abilitie4NekoReoparudoCD;
+    }
+
+    public int getAbilitie1MaguCD() {
+        return Abilitie1MaguCD;
+    }
+
+    public int getAbilitie2MaguCD() {
+        return Abilitie2MaguCD;
+    }
+
+    public int getAbilitie3MaguCD() {
+        return Abilitie3MaguCD;
+    }
+
+    public int getAbilitie4MaguCD() {
+        return Abilitie4MaguCD;
     }
 }

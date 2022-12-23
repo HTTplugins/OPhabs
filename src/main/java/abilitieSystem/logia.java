@@ -21,17 +21,15 @@ import org.bukkit.block.Biome;
 import org.bukkit.entity.Vex;
 import java.util.ArrayList;
 
-public class logia {
-    final Material AIR = Material.AIR;
+public class logia extends abilities {
     Particle element = null;
-    protected OPhabs plugin;
     ArrayList<String> logiaBodyON = new ArrayList<>();
 
     public logia(OPhabs plugin){
-        this.plugin = plugin;
+        super(plugin);
     }
 
-/*    @EventHandler
+/*@EventHandler
     public void playerOnWater(PlayerMoveEvent event) {
         if (event.getPlayer().getLocation().getBlock().isLiquid() && event.getPlayer().getLocation().getBlock().getType() != Material.LAVA) {
             Player player = event.getPlayer();

@@ -16,18 +16,21 @@ public class caster implements Listener {
     private mera_mera meraClass;
     private gura_gura guraClass;
     private neko_neko_reoparudo nekoReoparudoClass;
+    private magu_magu maguClass;
 
-    public static int yamiIndex, meraIndex, guraIndex, mokuIndex, nekoReoparudoIndex;
+    public static int yamiIndex, meraIndex, guraIndex, mokuIndex, nekoReoparudoIndex, maguIndex;
 
-    public caster(coolDown cooldown,moku_moku mokuClass, yami_yami yamiClass, mera_mera meraClass, gura_gura guraClass, neko_neko_reoparudo nekoReoparudoClass){
+    public caster(coolDown cooldown, moku_moku mokuClass, yami_yami yamiClass, mera_mera meraClass, gura_gura guraClass, neko_neko_reoparudo nekoReoparudoClass,
+                  magu_magu maguClass){
         this.cooldown = cooldown;
         this.mokuClass = mokuClass;
         this.yamiClass = yamiClass;
         this.meraClass = meraClass;
         this.guraClass = guraClass;
         this.nekoReoparudoClass = nekoReoparudoClass;
+        this.maguClass = maguClass;
 
-        yamiIndex = meraIndex = guraIndex = mokuIndex = nekoReoparudoIndex= 0;
+        yamiIndex = meraIndex = guraIndex = mokuIndex = nekoReoparudoIndex = maguIndex= 0;
     }
 
     @EventHandler
@@ -39,7 +42,7 @@ public class caster implements Listener {
                 Material casterMaterial = event.getMaterial();
                 Action action = event.getAction();
 
-                if ((action == Action.RIGHT_CLICK_AIR || action == Action.RIGHT_CLICK_BLOCK)) {
+                if ((action == Action.RIGHT_CLICK_AIR || action == Action.RIGHT_CLICK_BLOCK)){
 
                     if (casterItemName.equals(castIdentification.castItemNameYami) && casterMaterial.equals(castIdentification.castMaterialYami))
                         switch (yamiIndex) {
@@ -54,7 +57,8 @@ public class caster implements Listener {
                             case 1:
                                 if(cooldown.getAbilitie2YamiCD() == 0){
                                     cooldown.setAbilitie2YamiCD(20);
-                                    System.out.println("HABILIDAD2");
+                                    yamiClass.livingVoid(event.getPlayer());
+
                                 }
 
                                 break;
@@ -79,35 +83,24 @@ public class caster implements Listener {
 
                     if (casterItemName.equals(castIdentification.castItemNameMera) && casterMaterial.equals(castIdentification.castMaterialMera))
                         switch (meraIndex) {
-                            case 0:
-                                if(cooldown.getAbilitie1MeraCD() == 0){
-                                    cooldown.setAbilitie1MeraCD(20);
-                                    System.out.println("HABILIDAD1");
-                                }
+                            case 0: meraClass.FirePool(event.getPlayer()); break;
 
-                                break;
-                            case 1:
-                                if(cooldown.getAbilitie2MeraCD() == 0){
-                                    cooldown.setAbilitie2MeraCD(20);
-                                    System.out.println("HABILIDAD2");
-                                }
-
-                                break;
+                            case 1: meraClass.FireballStorm(event.getPlayer()); break;
                             case 2:
-                                if(cooldown.getAbilitie3MeraCD() == 0){
-                                    cooldown.setAbilitie3MeraCD(20);
-                                    System.out.println("HABILIDAD3");
-                                }
+                                System.out.println("HABILIDAD3");
                                 break;
                             case 3:
-                                if(cooldown.getAbilitie4MeraCD() == 0){
-                                    cooldown.setAbilitie4MeraCD(20);
-                                    System.out.println("HABILIDAD4");
-                                }
-
+                                System.out.println("HABILIDAD4");
                                 break;
                             default:
                                 System.out.println("defaultswitch");
+                                break;
+                        }
+
+                    if (casterItemName.equals(castIdentification.castItemNameMagu) && casterMaterial.equals(castIdentification.castMaterialMagu))
+                        switch (maguIndex) {
+                            default:
+                                System.out.println("Magu Magu");
                                 break;
                         }
 
@@ -140,12 +133,13 @@ public class caster implements Listener {
                                     guraClass.expansionWaveBlocks(event.getPlayer());
                                 }
                                 break;
-                           default:
-                               System.out.println("GURA GURA");
-                               break;
+
+                               default:
+                                   System.out.println("GURA GURA");
+                                   break;
                             }
 
-                    }
+                        }
 
                     if(casterItemName.equals(castIdentification.castItemNameMoku) && casterMaterial.equals(castIdentification.castMaterialMoku)){
                         switch (mokuIndex){
@@ -217,20 +211,16 @@ public class caster implements Listener {
                     if(casterItemName.equals(castIdentification.castItemNameYami) && casterMaterial.equals(castIdentification.castMaterialYami)){
                         yamiIndex++;
                         yamiIndex = yamiIndex % abilitiesIdentification.aNumberYami;
-
-
                     }
 
                     if(casterItemName.equals(castIdentification.castItemNameMera) && casterMaterial.equals(castIdentification.castMaterialMera)){
                         meraIndex++;
                         meraIndex = meraIndex % abilitiesIdentification.aNumberMera;
-
                     }
 
                     if(casterItemName.equals(castIdentification.castItemNameGura) && casterMaterial.equals(castIdentification.castMaterialGura)){
                         guraIndex++;
                         guraIndex = guraIndex % abilitiesIdentification.aNumberGura;
-
                     }
 
                     if(casterItemName.equals(castIdentification.castItemNameMoku) && casterMaterial.equals(castIdentification.castMaterialMoku)){
@@ -241,8 +231,7 @@ public class caster implements Listener {
                         nekoReoparudoIndex++;
                         nekoReoparudoIndex = nekoReoparudoIndex % abilitiesIdentification.aNumberNekoReoparudo;
                     }
-
                 }
-}
+        }
     }
 }

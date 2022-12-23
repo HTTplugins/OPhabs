@@ -12,6 +12,7 @@ public class noDropCaster implements Listener {
     public void onPlayerDeath(PlayerDeathEvent event) {
 
         event.getEntity().setScoreboard(Bukkit.getScoreboardManager().getNewScoreboard());
+
         for(ItemStack drop : event.getDrops())
             if(castIdentification.itemIsCaster(drop))
                     drop.setAmount(0);

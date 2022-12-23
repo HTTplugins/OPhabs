@@ -18,7 +18,7 @@ import java.util.List;
 
 public class fruitAssociation implements Listener {
     private final OPhabs plugin;
-    public static List<Player> dfPlayers = new ArrayList<>();
+    public static List<devilFruitUser> dfPlayers = new ArrayList<>();
 
     public fruitAssociation(OPhabs plugin){
         this.plugin = plugin;
@@ -27,6 +27,7 @@ public class fruitAssociation implements Listener {
     @EventHandler(ignoreCancelled = true)
     public void onPlayerItemConsume(PlayerItemConsumeEvent event){
 
+       
         ItemStack fruit = event.getItem();
 
         String
@@ -34,7 +35,8 @@ public class fruitAssociation implements Listener {
                 meraValue = plugin.getConfig().getString("FruitAssociations.mera_mera"),
                 guraValue = plugin.getConfig().getString("FruitAssociations.gura_gura"),
                 mokuValue = plugin.getConfig().getString("FruitAssociations.moku_moku"),
-                nekoReoparudoValue = plugin.getConfig().getString("FruitAssociations.neko_neko_reoparudo");
+                nekoReoparudoValue = plugin.getConfig().getString("FruitAssociations.neko_neko_reoparudo"),
+                maguValue = plugin.getConfig().getString("FruitAssociations.magu_magu");
 
         String casterItemName = null;
         Material castMaterial = null;
@@ -77,6 +79,12 @@ public class fruitAssociation implements Listener {
                 castMaterial = castIdentification.castMaterialNekoReoparudo;
                 break;
 
+            case fruitIdentification.fruitCommandNameMagu:
+                consumedFruit = consumedFruit(maguValue, event);
+                maguValue = event.getPlayer().getName();
+                casterItemName = castIdentification.castItemNameMagu;
+                castMaterial = castIdentification.castMaterialMagu;
+
             default:
                 break;
         }
@@ -95,8 +103,8 @@ public class fruitAssociation implements Listener {
         casterItemMeta.setDisplayName(casterItemName);
         caster.setItemMeta(casterItemMeta);
         event.getPlayer().getInventory().addItem(caster);
-
-        if(dfPlayers.contains(event.getPlayer())){
+//MODIFICAR
+        if(event.getPlayer()){
             event.getPlayer().getWorld().strikeLightningEffect(event.getPlayer().getLocation());
             event.getPlayer().setHealth(0);
         } else

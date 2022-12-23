@@ -19,14 +19,12 @@ import org.bukkit.scheduler.BukkitRunnable;
 import skin.changer.skinsChanger;
 
 
-public class zoan {
-    protected OPhabs plugin;
+public class zoan extends abilities{
     public boolean transformed = false;
     skinsChanger skinC = new skinsChanger();
-    Player user = null; 
-    String skinUrl="";
+    String skinUrl="", skinAwakenUrl="";
     public zoan(OPhabs plugin){
-        this.plugin = plugin;
+        super(plugin);
     }
 
     public void transformation(Player player){
