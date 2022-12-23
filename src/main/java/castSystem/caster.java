@@ -49,7 +49,7 @@ public class caster implements Listener {
                             case 0:
 
                                 if(cooldown.getBlackVoidYamiCD() == 0) {
-                                    cooldown.setBlackVoidYamiCD(20);
+                                    cooldown.setBlackVoidYamiCD(0);
                                     yamiClass.blackVoid(event.getPlayer());
 
                                 }
@@ -64,7 +64,7 @@ public class caster implements Listener {
                                 break;
                             case 2:
                                 if(cooldown.getAbilitie3YamiCD() == 0){
-                                    cooldown.setAbilitie3YamiCD(20);
+                                    cooldown.setAbilitie3YamiCD(0);
                                     yamiClass.liberateAbsorptions(event.getPlayer());
 
                                 }

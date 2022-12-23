@@ -15,9 +15,11 @@ import org.bukkit.scheduler.BukkitTask;
 import org.bukkit.util.Vector;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 import java.util.Stack;
 
 import static java.lang.Math.*;
+
 
 public class yami_yami implements Listener {
     private final OPhabs plugin;
@@ -92,9 +94,6 @@ public class yami_yami implements Listener {
     @EventHandler(ignoreCancelled = true)
     public void onEntityChangeBlock(EntityChangeBlockEvent event) {
         if(event.getBlock().getRelative(0,-1,0).getType().equals(voidMaterial)) {
-
-           // absorbedMaterials.add(event.getBlock().getType());
-            //System.out.println(event.getBlock().getType());
             event.setCancelled(true);
         }
     }
@@ -358,15 +357,32 @@ public class yami_yami implements Listener {
     }
     public void liberateAbsorptions(Player player){
 
-        new BukkitRunnable(){
-            int tickCounter = 0;
+        World world = player.getWorld();
+        Random random = new Random();
+
+        BukkitTask particles = new BukkitRunnable(){
+            int tickTime = 0;
             @Override
             public void run() {
-                tickCounter++;
-                repealAnimation(player);
-                if(tickCounter == 3) this.cancel();
+                tickTime++;
+                for(int i=0; i<100; i++){
+
+                    double xdecimals = random.nextDouble();
+                    double ydecimals = random.nextDouble();
+                    double zdecimals = random.nextDouble();
+
+                    double x = random.nextInt(4 + 4 ) - 4 + xdecimals;
+                    double y = random.nextInt(4 + 4 ) - 4 + xdecimals;
+                    double z = random.nextInt(4 + 4 ) - 4 + zdecimals;
+                    player.getWorld().spawnParticle(abilitiesIdentification.yamiParticle,player.getLocation().getBlock().getRelative(0,2,0).getLocation().add(x,y,z),0,0,1,0,abilitiesIdentification.yamiDO);
+
+                }
+
             }
-        }.runTaskTimer(plugin,0,20);
+
+        }.runTaskTimer(plugin,0,4);
+
+
         
         new BukkitRunnable(){
             int i = 0;
@@ -380,14 +396,25 @@ public class yami_yami implements Listener {
                 if(!absorbedMaterials.empty()){
                     usedMAterial = absorbedMaterials.pop();
 
-                    FallingBlock block = world.spawnFallingBlock(player.getLocation().add(player.getLocation().getBlock().getRelative(0,1,0).getLocation().getDirection()),usedMAterial.createBlockData());
+                    FallingBlock block = world.spawnFallingBlock(player.getLocation().getBlock().getRelative(0,2,0).getLocation(),usedMAterial.createBlockData());
 
-                    block.setVelocity(player.getLocation().getDirection().add(new Vector(0,0.5,0)));
+                    Random random = new Random();
+
+                    double xdecimals = random.nextDouble();
+                    double zdecimals = random.nextDouble();
+
+                    double x = random.nextInt(1 + 1 ) - 1 + xdecimals;
+                    double z = random.nextInt(1 + 1 ) - 1 + zdecimals;
+
+                    block.setVelocity(new Vector(x,0.5,z));
                 }
 
                 i++;
 
-                if(i == 10) this.cancel();
+                if(i == 85){
+                    particles.cancel();
+                    this.cancel();
+                }
             }
         }.runTaskTimer(plugin,0,4);
     }
