@@ -418,4 +418,78 @@ public class yami_yami implements Listener {
             }
         }.runTaskTimer(plugin,0,4);
     }
+
+    public void voidMeteore(Player player){
+        World world = player.getWorld();
+
+
+        new BukkitRunnable(){
+            double x,y,z, xr,yr,zr;
+
+            Location startPosition = player.getLocation().add(0,3,0);
+
+            Vector direction = new Vector(0,0,0);
+
+            Vector facingDirection = player.getLocation().getDirection();
+            double sumX = facingDirection.getX();
+            double sumY = facingDirection.getY();
+            double sumZ = facingDirection.getZ();
+
+            int ticks = 0;
+
+            int numplarticles = 0;
+
+            Location spawnBallPos;
+            @Override
+            public void run() {
+                ticks++;
+                numplarticles = 0;
+
+                for (double i = 0; i < 2*PI*4; i+=0.05){
+                    x = sin(i/10*PI);
+                    y = sin((i%10)*PI) * cos(i/10*PI);
+                    z =cos((i%10)*PI)*cos(i/10*PI);
+
+                    xr = startPosition.getX() + x ;
+                    yr = startPosition.getY() + y ;
+                    zr = startPosition.getZ() + z ;
+
+                    spawnBallPos = new Location(player.getWorld(), xr,yr,zr);
+
+                    spawnBallPos.add(direction);
+                    if(spawnBallPos.getBlock().getType().equals(Material.AIR)) {
+                        world.spawnParticle(abilitiesIdentification.yamiParticle, spawnBallPos, 0, 0, 0, 0, abilitiesIdentification.yamiDO);
+                        numplarticles++;
+                    }
+
+                }
+
+                for(Entity ent : world.getNearbyEntities(spawnBallPos,2,2,2))
+                    if(ent instanceof LivingEntity && !player.equals(ent))
+                        ((LivingEntity)ent).damage(10);
+
+
+
+
+                direction.add(new Vector(sumX,sumY,sumZ));
+
+                if(numplarticles < 25 || ticks > 50){
+                    this.cancel();
+                }
+
+            }
+        }.runTaskTimer(plugin,0,1);
+
+
+
+
+
+
+
+    }
+
+
+
+
+
 }

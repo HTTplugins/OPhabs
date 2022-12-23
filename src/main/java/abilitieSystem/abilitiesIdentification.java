@@ -28,7 +28,7 @@ public class abilitiesIdentification {
         namesYami.add( "Black Void");
         namesYami.add( "Living Void");
         namesYami.add( "Liberate Absorptions");
-        namesYami.add( "Abilitie4");
+        namesYami.add( "Void Meteore");
 
         namesMera.add(ChatColor.RED + "" + ChatColor.BOLD +"Mera Mera");
         namesMera.add("Fire Pool");
