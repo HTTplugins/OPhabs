@@ -16,11 +16,12 @@ import java.util.ArrayList;
 import java.util.List;
 import static java.lang.Math.*;
 
-public class yami_yami implements Listener {
-    private final OPhabs plugin;
+public class yami_yami extends logia {
     private int repealAnimationCounter = 0;
+    public static Particle.DustOptions yamiDO = new Particle.DustOptions(Color.BLACK,1.0F);
+    public static Particle yamiParticle = Particle.REDSTONE;
 
-     private final int
+    private final int
              radius = 3;
     private final int maxRadiusAmplification = 9;
     private final int damageAmount = 1;
@@ -28,7 +29,19 @@ public class yami_yami implements Listener {
     private final Material voidMaterial= Material.BLACK_CONCRETE;
 
     private List<Block> convertedToVoidBlocks = new ArrayList<>();
-    public yami_yami(OPhabs plugin){this.plugin = plugin;}
+    public yami_yami(OPhabs plugin){
+        super(plugin, yamiParticle);
+
+        abilitiesNames.add("BlackVoid");
+        abilitiesNames.add("LivingVoid");
+    }
+
+    public void ability1(){
+        blackVoid(user.getPlayer());
+    }
+    public void ability2(){
+        livingVoid(user.getPlayer());
+    }
 
     public void blackVoid(Player player) {
         player.getWorld().playSound(player, Sound.AMBIENT_CRIMSON_FOREST_MOOD, 10, 2);
@@ -336,6 +349,5 @@ public class yami_yami implements Listener {
         ent.setVelocity(dir);
 
     }
-
 
 }

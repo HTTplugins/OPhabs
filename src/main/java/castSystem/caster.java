@@ -9,13 +9,24 @@ import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.EquipmentSlot;
 import abilitieSystem.*;
 
+import org.bukkit.event.entity.EntityDamageEvent;
+import org.bukkit.event.entity.EntityChangeBlockEvent;
+import org.bukkit.event.entity.PlayerDeathEvent;
+import org.bukkit.event.entity.EntityShootBowEvent;
+import org.bukkit.event.entity.EntityPickupItemEvent;
+import org.bukkit.event.player.PlayerMoveEvent;
+import org.bukkit.event.player.PlayerEggThrowEvent;
+import org.bukkit.event.player.PlayerToggleSneakEvent;
+import org.bukkit.event.player.PlayerItemConsumeEvent;
+
+
 import java.util.HashMap;
 import java.util.Map;
 
 
 public class caster implements Listener {
     private coolDown cooldown;
-    private static Map<String, devilFruitUser> dfPlayers = new HashMap<>();
+    private Map<String, devilFruitUser> dfPlayers = new HashMap<>();
 
     public caster(coolDown cooldown, Map<String, devilFruitUser> dfPlayers){
         this.cooldown = cooldown;
@@ -34,7 +45,14 @@ public class caster implements Listener {
                     Action action = event.getAction();
 
                     if ((action == Action.RIGHT_CLICK_AIR || action == Action.RIGHT_CLICK_BLOCK)) {
-                        user.abilityActive();
+                        // if(cooldown.getBlackVoidYamiCD() == 0) {
+                        //     cooldown.setBlackVoidYamiCD(20);
+                            user.abilityActive();
+                        // }
+                    }
+                    else 
+                        user.switchAbility();
+
 
                         /*
                     if (casterItemName.equals(castIdentification.castItemNameYami) && casterMaterial.equals(castIdentification.castMaterialYami))
@@ -199,11 +217,8 @@ public class caster implements Listener {
                                 break;
                         }
                     }
-
- */
                     } else {
-                        user.switchAbility();
-/*
+
                     if(casterItemName.equals(castIdentification.castItemNameYami) && casterMaterial.equals(castIdentification.castMaterialYami)){
                         yamiIndex++;
                         yamiIndex = yamiIndex % abilitiesIdentification.aNumberYami;
@@ -227,10 +242,80 @@ public class caster implements Listener {
                         nekoReoparudoIndex++;
                         nekoReoparudoIndex = nekoReoparudoIndex % abilitiesIdentification.aNumberNekoReoparudo;
                     }
-                    */
+                    
  
                     }
+                    */
                 }
         }
     }
+
+    @EventHandler
+    public void onEntityDamage(EntityDamageEvent event){
+        if(dfPlayers.containsKey(event.getEntity().getName())) {
+            devilFruitUser user = dfPlayers.get(event.getEntity().getName());
+            user.onEntityDamage(event);
+            user.onFall(event);
+        }
+    }
+    @EventHandler
+    public void onPlayerDeath(PlayerDeathEvent event){
+        if(dfPlayers.containsKey(event.getEntity().getName())) {
+            devilFruitUser user = dfPlayers.get(event.getEntity().getName());
+            user.onPlayerDeath(event);
+        }
+    }
+/*
+    @EventHandler
+    public void playerOnWater(PlayerMoveEvent event){
+        if(dfPlayers.containsKey(event.getPlayer().getName())) {
+            devilFruitUser user = dfPlayers.get(event.getPlayer().getName());
+            user.playerOnWater(event);
+        }
+    }
+*/
+    @EventHandler
+    public void onPlayerToggleSneak(PlayerToggleSneakEvent e){
+        if(dfPlayers.containsKey(e.getPlayer().getName())) {
+            devilFruitUser user = dfPlayers.get(e.getPlayer().getName());
+            user.onPlayerToggleSneak(e);
+        }
+    }
+
+    @EventHandler
+    public void onPlayerItemConsume(PlayerItemConsumeEvent event){
+        if(dfPlayers.containsKey(event.getPlayer().getName())) {
+            devilFruitUser user = dfPlayers.get(event.getPlayer().getName());
+            user.onPlayerItemConsume(event);
+        }
+    }
+    @EventHandler
+    public void onEntityPickupItem(EntityPickupItemEvent event){
+        if(dfPlayers.containsKey(event.getEntity().getName())) {
+            devilFruitUser user = dfPlayers.get(event.getEntity().getName());
+            user.onEntityPickupItem(event);
+        }
+    }
+    @EventHandler
+    public void onPlayerEggThrow(PlayerEggThrowEvent event){
+        if(dfPlayers.containsKey(event.getPlayer().getName())) {
+            devilFruitUser user = dfPlayers.get(event.getPlayer().getName());
+            user.onPlayerEggThrow(event);
+        }
+    }
+    @EventHandler
+    public void onEntityShootBow(EntityShootBowEvent event){
+        if(dfPlayers.containsKey(event.getEntity().getName())) {
+            devilFruitUser user = dfPlayers.get(event.getEntity().getName());
+            user.onEntityShootBow(event);
+        }
+    }
+    @EventHandler
+    public void onEntityChangeBlock(EntityChangeBlockEvent event){
+        if(dfPlayers.containsKey(event.getEntity().getName())) {
+            devilFruitUser user = dfPlayers.get(event.getEntity().getName());
+            user.onEntityChangeBlock(event);
+        }
+    }
+
 }

@@ -16,8 +16,7 @@ import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.util.Vector;
 
 
-public class mera_mera implements Listener {
-    private OPhabs plugin;
+public class mera_mera extends logia {
     final float ExplosionRadius = 4;
     final int BerserkFireRadius = 5, Hability1Radius = 4;
     final Material NETHERRACK = Material.NETHERRACK, FIRE = Material.FIRE, DIRT = Material.DIRT, GREEN_DIRT = Material.GRASS_BLOCK,
@@ -31,8 +30,16 @@ public class mera_mera implements Listener {
     private int FIRE_POOL_DURATION = 15, FIREBALL_STORM_COOLDOWN = 20;
 
     public mera_mera(OPhabs plugin){
-        this.plugin = plugin;
+        super(plugin, Particle.FLAME);
+        //
+        //Nombres de las habilidades: 
+        //abilitiesNames.add("Fire Pool");
+        //abilitiesNames.add("Fireball Storm");
     }
+
+    //Habilidades activas:
+    //public void ability1(){ firePool(user.getPlayer()); }
+    //public void ability2(){ fireballStorm(user.getPlayer()); }
 
     public boolean isDirt(Block bloque) {
         boolean esTierra = false;
@@ -107,7 +114,6 @@ public class mera_mera implements Listener {
         }
     }
 
-    @EventHandler(ignoreCancelled = true)
     public void onEntityShootBow(EntityShootBowEvent event) {
         Entity flecha = event.getProjectile();
         Location loc_flecha = flecha.getLocation();
@@ -130,13 +136,11 @@ public class mera_mera implements Listener {
         }
     }
 
-    @EventHandler(ignoreCancelled = true)
     public void onPlayerItemConsume(PlayerItemConsumeEvent event) {
         event.getPlayer().getWorld().spawnParticle(PARTICULA_FUEGO, event.getPlayer().getLocation(), N_PARTICULAS,
                 RADIO_PARTICULAS, RADIO_PARTICULAS, RADIO_PARTICULAS);
     }
 
-    @EventHandler(ignoreCancelled = true)
     public void onPlayerDeath(PlayerDeathEvent event) {
         String nombre_user = plugin.getConfig().getString("FruitAssociations.mera_mera");
         System.out.println(nombre_user);
@@ -185,7 +189,6 @@ public class mera_mera implements Listener {
         }
     }
 
-    @EventHandler(ignoreCancelled = true)
     public void onEntityPickupItem(EntityPickupItemEvent event) {
         String nombre_user = plugin.getConfig().getString("FruitAssociations.mera_mera");
         Player p = Bukkit.getPlayerExact(nombre_user);
@@ -228,7 +231,6 @@ public class mera_mera implements Listener {
         mundo.spawnEntity(player.getLocation().clone().add(-3, 5, 0), EntityType.FIREBALL);
     }
 
-    @EventHandler(ignoreCancelled = true)
     public void onPlayerEggThrow(PlayerEggThrowEvent event) {                   // HABILIDAD 2
         Location loc = event.getEgg().getLocation();
         World mundo = event.getEgg().getWorld();

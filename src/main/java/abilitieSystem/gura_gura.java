@@ -26,7 +26,6 @@ public class gura_gura extends paramecia {
     final int earthquakeDuration = 5;
     int numberOfWaves = 0;
     final int numberOfWavesMax = 5;
-    private OPhabs plugin;
     boolean  enabledVH = true;
     public gura_gura(OPhabs plugin) {
         super(plugin);
@@ -34,16 +33,25 @@ public class gura_gura extends paramecia {
         abilitiesNames.add("CreateWave");       
         abilitiesNames.add("HandVibration");
         abilitiesNames.add("ExpansionWave");
-  }
+    }
+    public gura_gura(OPhabs plugin, devilFruitUser user) {
+        super(plugin, user);
+        abilitiesNames.add("Earthquake");
+        abilitiesNames.add("CreateWave");       
+        abilitiesNames.add("HandVibration");
+        abilitiesNames.add("ExpansionWave");
+    }
    
     public void ability1(){
         earthquake(user.getPlayer());
     }
     public void ability2(){
+
         createWave(user.getPlayer());
     }
     public void ability3(){
         handVibration(user.getPlayer());
+        user.getPlayer().sendMessage("HandVibration");
     }
     public void ability4(){
         expansionWaveBlocks(user.getPlayer());

@@ -24,14 +24,15 @@ public class fruitAssociation implements Listener {
     public static Map<String, devilFruitUser> dfPlayers = new HashMap<>();
     public static Map<String, abilities> abilities = new HashMap<>();
 
-    public fruitAssociation(OPhabs plugin){
+    public fruitAssociation(OPhabs plugin, yami_yami yamiClass, mera_mera meraClass, gura_gura guraClass, moku_moku mokuClass, neko_neko_reoparudo nekoReoparudoClass, magu_magu maguClass){
         this.plugin = plugin;
-        abilities.put(fruitIdentification.fruitItemNameGura,new gura_gura(plugin));/*
-        abilities.put(fruitIdentification.fruitItemNameMagu,new magu_magu(plugin));
-        abilities.put(fruitIdentification.fruitItemNameMera,new mera_mera(plugin));
-        abilities.put(fruitIdentification.fruitItemNameMoku,new moku_moku(plugin));
-        abilities.put(fruitIdentification.fruitItemNameYami,new yami_yami(plugin));
-        abilities.put(fruitIdentification.fruitItemNameNekoReoparudo,new neko_neko_reoparudo(plugin));*/
+        abilities.put(fruitIdentification.fruitItemNameGura,guraClass);
+        abilities.put(fruitIdentification.fruitItemNameMera,meraClass);
+        abilities.put(fruitIdentification.fruitItemNameYami,yamiClass);
+        abilities.put(fruitIdentification.fruitItemNameMoku,mokuClass);
+        abilities.put(fruitIdentification.fruitItemNameNekoReoparudo,nekoReoparudoClass);
+        abilities.put(fruitIdentification.fruitItemNameMagu,maguClass);
+
     }
 
     @EventHandler(ignoreCancelled = true)

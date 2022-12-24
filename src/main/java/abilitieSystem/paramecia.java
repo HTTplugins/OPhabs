@@ -16,13 +16,16 @@ import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import org.bukkit.scheduler.BukkitRunnable;
-import skin.changer.skinsChanger;
+import fruitSystem.devilFruitUser;
 
 
 public class paramecia extends abilities{
     
     public paramecia(OPhabs plugin){
         super(plugin);
+    }
+    public paramecia(OPhabs plugin, devilFruitUser user){
+        super(plugin, user);
     }
     
 }

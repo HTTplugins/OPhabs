@@ -16,11 +16,12 @@ import org.bukkit.scheduler.BukkitTask;
 import org.bukkit.entity.LivingEntity;
 import java.util.ArrayList;
 
-public class neko_neko_reoparudo extends zoan implements Listener {
+public class neko_neko_reoparudo extends zoan {
 
     public neko_neko_reoparudo(OPhabs plugin){
         super(plugin);
         super.skinUrl = "https://s.namemc.com/i/18525c829f6918fe.png";
+        abilitiesNames.add("FrontalAttack");
     }
     public void transformation(){
         super.transformation();
@@ -82,25 +83,16 @@ public class neko_neko_reoparudo extends zoan implements Listener {
         return loc;
     }
 
-    @EventHandler
     public void onFall(EntityDamageEvent e) {
-        if (super.user != null && e.getCause() == EntityDamageEvent.DamageCause.FALL && e.getEntity().getName() == super.user.getPlayer().getName()) {
+        if (super.user != null && e.getCause() == EntityDamageEvent.DamageCause.FALL && e.getEntity().getName() == super.user.getPlayer().getName()){
             e.setCancelled(true);
         }
     }
 
-    @EventHandler
-    public void onDeath(PlayerDeathEvent e) {
-        if (super.user != null && e.getEntity() == super.user) {
-            super.transformed = false;
-            super.user = null;
-        }
-    }
 
-    @EventHandler
-     public void onPlayerToggleSneak(PlayerToggleSneakEvent e) {
+    public void onPlayerToggleSneak(PlayerToggleSneakEvent e) {
         Player player = e.getPlayer();
-        if(player == super.user){
+        if(player.getName() == user.getPlayer().getName()){
             new BukkitRunnable() {
                 Location loc =climbWall();
                 @Override
@@ -117,18 +109,13 @@ public class neko_neko_reoparudo extends zoan implements Listener {
                     Bukkit.getScheduler().cancelTask(this.getTaskId());
                 }
             }.runTaskTimer(plugin, 0, 3);
-
-
-        /*if (!player.isSneaking()){
-            if (super.user != null && e.getPlayer().getName() == super.user.getName()) {
-                if (player.getLocation().getBlock().getRelative(0, -1, 0).getType() == Material.AIR) {
-
-                    player.sendMessage("You are now climbing");
-                }
-            }
-        }*/
         }
     }
+
+    public void ability2(){
+        frontAttack();
+    }
+
     
 }
 

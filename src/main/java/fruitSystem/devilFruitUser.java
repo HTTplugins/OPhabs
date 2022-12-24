@@ -3,6 +3,16 @@ package fruitSystem;
 import org.bukkit.entity.Player;
 import abilitieSystem.abilities;
 
+import org.bukkit.event.entity.EntityDamageEvent;
+import org.bukkit.event.entity.EntityChangeBlockEvent;
+import org.bukkit.event.entity.PlayerDeathEvent;
+import org.bukkit.event.entity.EntityShootBowEvent;
+import org.bukkit.event.entity.EntityPickupItemEvent;
+import org.bukkit.event.player.PlayerMoveEvent;
+import org.bukkit.event.player.PlayerEggThrowEvent;
+import org.bukkit.event.player.PlayerToggleSneakEvent;
+import org.bukkit.event.player.PlayerItemConsumeEvent;
+
 public class devilFruitUser{
     private Player player;
     private devilFruit Fruit;
@@ -60,6 +70,36 @@ public class devilFruitUser{
                 ability.ability6();
                 break;
         }
+    }
 
+    public void onEntityDamage(EntityDamageEvent event){
+        ability.onEntityDamage(event);
+    }
+    public void onPlayerDeath(PlayerDeathEvent event){
+        ability.onPlayerDeath(event);
+    }
+    public void playerOnWater(PlayerMoveEvent event){
+        ability.playerOnWater(event);
+    }
+    public void onPlayerToggleSneak(PlayerToggleSneakEvent e){
+        ability.onPlayerToggleSneak(e);
+    }
+    public void onFall(EntityDamageEvent e){
+        ability.onFall(e);
+    }
+    public void onPlayerItemConsume(PlayerItemConsumeEvent event){
+        ability.onPlayerItemConsume(event);
+    }
+    public void onEntityPickupItem(EntityPickupItemEvent event){
+        ability.onEntityPickupItem(event);
+    }
+    public void onPlayerEggThrow(PlayerEggThrowEvent event){
+        ability.onPlayerEggThrow(event);
+    }
+    public void onEntityShootBow(EntityShootBowEvent event){
+        ability.onEntityShootBow(event);
+    }
+    public void onEntityChangeBlock(EntityChangeBlockEvent event){
+        ability.onEntityChangeBlock(event);
     }
 }
