@@ -17,11 +17,13 @@ public class zoan extends abilities{
     public zoan(OPhabs plugin){
         super(plugin);
         abilitiesNames.add("Transform");
+        abilitiesCD.add(0);
     }
 
     public zoan(OPhabs plugin, devilFruitUser user){
         super(plugin, user);
         abilitiesNames.add("Transform");
+        abilitiesCD.add(0);
     }
 
 

@@ -33,13 +33,26 @@ public class mera_mera extends logia {
         super(plugin, Particle.FLAME);
         //
         //Nombres de las habilidades: 
-        //abilitiesNames.add("Fire Pool");
-        //abilitiesNames.add("Fireball Storm");
+        abilitiesNames.add("Fire Pool");
+        abilitiesCD.add(0);
+        abilitiesNames.add("Fireball Storm");
+        abilitiesCD.add(0);
     }
 
     //Habilidades activas:
-    //public void ability1(){ firePool(user.getPlayer()); }
-    //public void ability2(){ fireballStorm(user.getPlayer()); }
+    public void ability1(){ 
+        if(abilitiesCD.get(0) == 0){
+            FirePool(user.getPlayer());
+            abilitiesCD.set(0, 20); // Pon el cooldown en segundos
+        }
+    }
+
+    public void ability2(){
+        if(abilitiesCD.get(1) == 0){
+            FireballStorm(user.getPlayer());
+            abilitiesCD.set(1, 20); // Pon el cooldown en segundos
+        }
+    }
 
     public boolean isDirt(Block bloque) {
         boolean esTierra = false;

@@ -7,22 +7,16 @@ public class coolDown {
 
     OPhabs plugin;
 
-    private int
-            BlackVoidYamiCD, Abilitie2YamiCD, Abilitie3YamiCD, Abilitie4YamiCD,
-            FirePool, FireballStorm, Abilitie3MeraCD, Abilitie4MeraCD,
-            EarthquakeGuraCD, CreateWaveGuraCD, HandVibrationGuraCD, ExpansionWaveGuraCD,
-            LogiaBodyMokuCD, SmokeLegsMokuCD, SummonSmokerMokuCD, Abilitie4MokuCD,
-            Abilitie1MaguCD, Abilitie2MaguCD, Abilitie3MaguCD, Abilitie4MaguCD,
-            TransformationNekoReoparudoCD, FrontAttackNekoReoparudoCD, Abilitie3NekoReoparudoCD, Abilitie4NekoReoparudoCD;
+    private int Abilitie1, Abilitie2, Abilitie3, Abilitie4, Abilitie5, Abilitie6;
 
     public coolDown(OPhabs plugin){
         this.plugin = plugin;
-        BlackVoidYamiCD = Abilitie2YamiCD = Abilitie3YamiCD = Abilitie4YamiCD = 0;
-        FirePool = FireballStorm = Abilitie3MeraCD = Abilitie4MeraCD = 0;
-        EarthquakeGuraCD = CreateWaveGuraCD = HandVibrationGuraCD = ExpansionWaveGuraCD = 0;
-        LogiaBodyMokuCD = SmokeLegsMokuCD = SummonSmokerMokuCD = Abilitie4MokuCD = 0;
-        Abilitie1MaguCD = Abilitie2MaguCD = Abilitie3MaguCD = Abilitie4MaguCD = 0;
-        TransformationNekoReoparudoCD = FrontAttackNekoReoparudoCD = Abilitie3NekoReoparudoCD = Abilitie4NekoReoparudoCD = 0;
+        Abilitie1 = 0;
+        Abilitie2 = 0;
+        Abilitie3 = 0;
+        Abilitie4 = 0;
+        Abilitie5 = 0;
+        Abilitie6 = 0;
     }
 
     public void runCoolDownSystem(){
@@ -31,69 +25,19 @@ public class coolDown {
 
             @Override
             public void run() {
-                //YAMI
-                if(BlackVoidYamiCD > 0)
-                    BlackVoidYamiCD--;
 
-                if(Abilitie2YamiCD > 0)
-                    Abilitie2YamiCD--;
-
-                if(Abilitie3YamiCD > 0)
-                    Abilitie3YamiCD--;
-
-                if(Abilitie4YamiCD > 0)
-                    Abilitie4YamiCD--;
-
-                //MERA
-                if(FirePool > 0)
-                    FirePool--;
-                if(FireballStorm > 0)
-                    FireballStorm--;
-                if(Abilitie3MeraCD > 0)
-                    Abilitie3MeraCD--;
-                if(Abilitie4MeraCD > 0)
-                    Abilitie4MeraCD--;
-
-                //GURA
-                if(EarthquakeGuraCD > 0)
-                    EarthquakeGuraCD--;
-                if(CreateWaveGuraCD > 0)
-                    CreateWaveGuraCD--;
-                if(HandVibrationGuraCD > 0)
-                    HandVibrationGuraCD--;
-                if(ExpansionWaveGuraCD > 0)
-                    ExpansionWaveGuraCD--;
-
-
-                //Moku
-                if(LogiaBodyMokuCD > 0)
-                    LogiaBodyMokuCD--;
-                if(SmokeLegsMokuCD > 0)
-                    SmokeLegsMokuCD--;
-                if(SummonSmokerMokuCD > 0)
-                    SummonSmokerMokuCD--;
-                if(Abilitie4MokuCD > 0)
-                    Abilitie4MokuCD--;
-
-                //Reoparudo
-                if(TransformationNekoReoparudoCD > 0)
-                    TransformationNekoReoparudoCD--;
-                if(FrontAttackNekoReoparudoCD > 0)
-                    FrontAttackNekoReoparudoCD--;
-                if(Abilitie3NekoReoparudoCD > 0)
-                    Abilitie3NekoReoparudoCD--;
-                if(Abilitie4NekoReoparudoCD > 0)
-                    Abilitie4NekoReoparudoCD--;
-
-                //Magu
-                if(Abilitie1MaguCD > 0)
-                    Abilitie1MaguCD--;
-                if(Abilitie2MaguCD > 0)
-                    Abilitie2MaguCD--;
-                if(Abilitie3MaguCD > 0)
-                    Abilitie3MaguCD--;
-                if(Abilitie4MaguCD > 0)
-                    Abilitie4MaguCD--;
+                if(Abilitie1 > 0)
+                    Abilitie1--;
+                if(Abilitie2 > 0)
+                    Abilitie2--;
+                if(Abilitie3 > 0)
+                    Abilitie3--;
+                if(Abilitie4 > 0)
+                    Abilitie4--;
+                if(Abilitie5 > 0)
+                    Abilitie5--;
+                if(Abilitie6 > 0)
+                    Abilitie6--;
             }
 
 
@@ -101,195 +45,52 @@ public class coolDown {
 
     }
 
-    public void setAbilitie1MaguCD(int abilitie1MaguCD) {
-        Abilitie1MaguCD = abilitie1MaguCD;
+    public void setAbilitie1CD(int CD) {
+        Abilitie1 = CD;
     }
 
-    public void setAbilitie2MaguCD(int abilitie2MaguCD) {
-        Abilitie2MaguCD = abilitie2MaguCD;
+    public void setAbilitie2CD(int CD) {
+        Abilitie2 = CD;
     }
 
-    public void setAbilitie3MaguCD(int abilitie3MaguCD) {
-        Abilitie3MaguCD = abilitie3MaguCD;
+    public void setAbilitie3CD(int CD) {
+        Abilitie3 = CD;
     }
 
-    public void setAbilitie4MaguCD(int abilitie4MaguCD) {
-        Abilitie4MaguCD = abilitie4MaguCD;
+    public void setAbilitie4CD(int CD) {
+        Abilitie4 = CD;
     }
 
-    public void setBlackVoidYamiCD(int blackVoidYamiCD) {
-        BlackVoidYamiCD = blackVoidYamiCD;
+    public void setAbilitie5CD(int CD) {
+        Abilitie5 = CD;
     }
 
-    public void setAbilitie2YamiCD(int abilitie2YamiCD) {
-        Abilitie2YamiCD = abilitie2YamiCD;
+    public void setAbilitie6CD(int CD) {
+        Abilitie6 = CD;
     }
 
-    public void setAbilitie3YamiCD(int abilitie3YamiCD) {
-        Abilitie3YamiCD = abilitie3YamiCD;
+
+    public int getAbilitie1CD() {
+        return Abilitie1;
     }
 
-    public void setAbilitie4YamiCD(int abilitie4YamiCD) {
-        Abilitie4YamiCD = abilitie4YamiCD;
+    public int getAbilitie2CD() {
+        return Abilitie2;
     }
 
-    public void setFirePool(int firePool) {
-        FirePool = firePool;
+    public int getAbilitie3CD() {
+        return Abilitie3;
     }
 
-    public void setFireballStorm(int fireballStorm) {
-        FireballStorm = fireballStorm;
+    public int getAbilitie4CD() {
+        return Abilitie4;
     }
 
-    public void setAbilitie3MeraCD(int abilitie3MeraCD) {
-        Abilitie3MeraCD = abilitie3MeraCD;
+    public int getAbilitie5CD() {
+        return Abilitie5;
     }
 
-    public void setAbilitie4MeraCD(int abilitie4MeraCD) {
-        Abilitie4MeraCD = abilitie4MeraCD;
-    }
-
-    public void setEarthquakeGuraCD(int earthquakeGuraCD) {
-        EarthquakeGuraCD = earthquakeGuraCD;
-    }
-
-    public void setCreateWaveGuraCD(int createWaveGuraCD) {
-        CreateWaveGuraCD = createWaveGuraCD;
-    }
-
-    public void setHandVibrationGuraCD(int handVibrationGuraCD) {
-        HandVibrationGuraCD = handVibrationGuraCD;
-    }
-
-    public void setExpansionWaveGuraCD(int expansionWaveGuraCD) {
-        ExpansionWaveGuraCD = expansionWaveGuraCD;
-    }
-
-    public void setLogiaBodyMokuCD(int logiaBodyMokuCD) {
-        LogiaBodyMokuCD = logiaBodyMokuCD;
-    }
-
-    public void setSmokeLegsMokuCD(int smokeLegsMokuCD) {
-        SmokeLegsMokuCD = smokeLegsMokuCD;
-    }
-
-    public void setSummonSmokerMokuCD(int summonSmokerMokuCD) {
-        SummonSmokerMokuCD = summonSmokerMokuCD;
-    }
-
-    public void setAbilitie4MokuCD(int abilitie4MokuCD) {
-        Abilitie4MokuCD = abilitie4MokuCD;
-    }
-
-    public void setTransformationNekoReoparudoCD(int abilitie1NekoReoparudoCD) {
-        TransformationNekoReoparudoCD = abilitie1NekoReoparudoCD;
-    }
-
-    public void setFrontAttack2NekoReoparudoCD(int FrontAttackNekoReoparudoCD) {
-        FrontAttackNekoReoparudoCD = FrontAttackNekoReoparudoCD;
-    }
-
-    public void setAbilitie3NekoReoparudoCD(int abilitie3NekoReoparudoCD) {
-        Abilitie3NekoReoparudoCD = abilitie3NekoReoparudoCD;
-    }
-
-    public void setAbilitie4NekoReoparudoCD(int abilitie4NekoReoparudoCD) {
-        Abilitie4NekoReoparudoCD = abilitie4NekoReoparudoCD;
-    }
-
-    public int getBlackVoidYamiCD() {
-        return BlackVoidYamiCD;
-    }
-
-    public int getAbilitie2YamiCD() {
-        return Abilitie2YamiCD;
-    }
-
-    public int getAbilitie3YamiCD() {
-        return Abilitie3YamiCD;
-    }
-
-    public int getAbilitie4YamiCD() {
-        return Abilitie4YamiCD;
-    }
-
-    public int getFirePool() {
-        return FirePool;
-    }
-
-    public int getFireballStorm() {
-        return FireballStorm;
-    }
-
-    public int getAbilitie3MeraCD() {
-        return Abilitie3MeraCD;
-    }
-
-    public int getAbilitie4MeraCD() {
-        return Abilitie4MeraCD;
-    }
-
-    public int getEarthquakeGuraCD() {
-        return EarthquakeGuraCD;
-    }
-
-    public int getCreateWaveGuraCD() {
-        return CreateWaveGuraCD;
-    }
-
-    public int getHandVibrationGuraCD() {
-        return HandVibrationGuraCD;
-    }
-
-    public int getExpansionWaveGuraCD() {
-        return ExpansionWaveGuraCD;
-    }
-
-    public int getLogiaBodyMokuCD() {
-        return LogiaBodyMokuCD;
-    }
-
-    public int getSmokeLegsMokuCD() {
-        return SmokeLegsMokuCD;
-    }
-
-    public int getSummonSmokerMokuCD() {
-        return SummonSmokerMokuCD;
-    }
-
-    public int getAbilitie4MokuCD() {
-        return Abilitie4MokuCD;
-    }
-
-    public int getTransformationNekoReoparudoCD() {
-        return TransformationNekoReoparudoCD;
-    }
-
-    public int getFrontAttackNekoReoparudoCD() {
-        return FrontAttackNekoReoparudoCD;
-    }
-
-    public int getAbilitie3NekoReoparudoCD() {
-        return Abilitie3NekoReoparudoCD;
-    }
-
-    public int getAbilitie4NekoReoparudoCD() {
-        return Abilitie4NekoReoparudoCD;
-    }
-
-    public int getAbilitie1MaguCD() {
-        return Abilitie1MaguCD;
-    }
-
-    public int getAbilitie2MaguCD() {
-        return Abilitie2MaguCD;
-    }
-
-    public int getAbilitie3MaguCD() {
-        return Abilitie3MaguCD;
-    }
-
-    public int getAbilitie4MaguCD() {
-        return Abilitie4MaguCD;
+    public int getAbilitie6CD() {
+        return Abilitie6;
     }
 }

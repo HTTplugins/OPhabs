@@ -2,6 +2,7 @@ package fruitSystem;
 
 import org.bukkit.entity.Player;
 import abilitieSystem.abilities;
+import castSystem.coolDown;
 
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.EntityChangeBlockEvent;
@@ -13,11 +14,14 @@ import org.bukkit.event.player.PlayerEggThrowEvent;
 import org.bukkit.event.player.PlayerToggleSneakEvent;
 import org.bukkit.event.player.PlayerItemConsumeEvent;
 
+import java.util.ArrayList;
+
 public class devilFruitUser{
     private Player player;
     private devilFruit Fruit;
-    private Integer actual;
+    public int actual;
     protected abilities ability;
+    protected coolDown cooldown;
 
     private boolean awakened;
 
@@ -49,7 +53,7 @@ public class devilFruitUser{
         actual++;
         actual = actual % ability.getAbilitiesNames().size();
     }
-    public void abilityActive(){
+    public int abilityActive(){
         switch (actual){
             case 0:
                 ability.ability1();
@@ -70,6 +74,14 @@ public class devilFruitUser{
                 ability.ability6();
                 break;
         }
+        return ability.abilitiesCD.get(actual);
+    }
+
+    public ArrayList<Integer> getAbilitiesCD(){
+        return ability.abilitiesCD;
+    }
+    public ArrayList<String> getAbilitiesNames(){
+        return ability.getAbilitiesNames();
     }
 
     public void onEntityDamage(EntityDamageEvent event){

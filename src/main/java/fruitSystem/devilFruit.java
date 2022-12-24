@@ -57,6 +57,10 @@ public class devilFruit{
 
     }
 
+    public String getFruitName(){
+        return devilFruit.getItemMeta().getDisplayName();
+    }
+
     public void playerObtainFruit(Player player){
         player.getInventory().addItem(devilFruit);
     }

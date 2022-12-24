@@ -26,18 +26,31 @@ public class moku_moku extends logia {
     public moku_moku(OPhabs plugin){
         super(plugin, Particle.CAMPFIRE_COSY_SMOKE);
         abilitiesNames.add("SmokeLegs");
+        abilitiesCD.add(0);
         abilitiesNames.add("SmokeBody");
+        abilitiesCD.add(0);
         abilitiesNames.add("SummonSmoker");
+        abilitiesCD.add(0);
     }
 
     public void ability1(){
-        smokeLegs(user.getPlayer());
+        if(abilitiesCD.get(0)==0){
+            smokeLegs(user.getPlayer());
+            abilitiesCD.set(0, 0);
+        }
     }
+
     public void ability2(){
-        logiaBody(user.getPlayer());
+        if(abilitiesCD.get(1)==0){
+            logiaBody(user.getPlayer());
+            abilitiesCD.set(1, 0);
+        }
     }
     public void ability3(){
-        summonSmoker(user.getPlayer());
+        if(abilitiesCD.get(2)==0){
+            summonSmoker(user.getPlayer());
+            abilitiesCD.set(2, 3);
+        }
     }
 
     public void toggleFly(Player player){

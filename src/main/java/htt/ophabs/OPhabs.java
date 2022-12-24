@@ -11,6 +11,7 @@ import org.bukkit.ChatColor;
 import scoreboardSystem.*;
 
 import java.util.Objects;
+import java.util.ArrayList;
 
 public final class OPhabs extends JavaPlugin {
 
@@ -19,17 +20,12 @@ public final class OPhabs extends JavaPlugin {
         registerCommands();
 
         //---------------
-        //Initializations:
-
-        abilitiesIdentification.initialiceNames();
-
-        //---------------
         //Files
 
         getConfig().options().copyDefaults();
         saveDefaultConfig();
 
-    //--------------
+        //--------------
         //abilitieSystem
 
         yami_yami yamiClass = new yami_yami(this);
@@ -45,8 +41,6 @@ public final class OPhabs extends JavaPlugin {
         getServer().getPluginManager().registerEvents(association, this);
         getServer().getPluginManager().registerEvents(new loseFruit(this, association.dfPlayers), this);
 
-      
-
         //--------------
         //CasterSystem
         coolDown cooldown = new coolDown(this);
@@ -58,8 +52,11 @@ public final class OPhabs extends JavaPlugin {
         //--------------
         //ScoreBoards
 
-        abilitiesScoreboard scoreboards = new abilitiesScoreboard(this,cooldown);
-        //scoreboards.ini();
+        ArrayList<abilitiesScoreboard> scoreboards = new ArrayList<>();
+        for(int i = 0; i < association.dfPlayers.size(); i++){
+            scoreboards.add(new abilitiesScoreboard(this, cooldown, association.dfPlayers.get(i)));
+            scoreboards.get(i).ini();
+        }
 
 
 

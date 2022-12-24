@@ -22,6 +22,7 @@ public class abilities {
     protected devilFruitUser user=null;
     protected Integer actual;
     public ArrayList<String> abilitiesNames = new ArrayList<>();
+    public ArrayList<Integer> abilitiesCD = new ArrayList<>();
 
     public abilities(OPhabs plugin, devilFruitUser user){
         this.plugin = plugin;

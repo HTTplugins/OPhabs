@@ -33,14 +33,22 @@ public class yami_yami extends logia {
         super(plugin, yamiParticle);
 
         abilitiesNames.add("BlackVoid");
+        abilitiesCD.add(0);
         abilitiesNames.add("LivingVoid");
+        abilitiesCD.add(0);
     }
 
     public void ability1(){
-        blackVoid(user.getPlayer());
+        if(abilitiesCD.get(0) == 0){
+            blackVoid(user.getPlayer());
+            abilitiesCD.set(0, 30);
+        }
     }
     public void ability2(){
-        livingVoid(user.getPlayer());
+        if(abilitiesCD.get(1) == 0){
+            livingVoid(user.getPlayer());
+            abilitiesCD.set(1, 3);
+        }
     }
 
     public void blackVoid(Player player) {
