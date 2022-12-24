@@ -1,5 +1,6 @@
 package castSystem;
 
+import fruitSystem.devilFruitUser;
 import org.bukkit.Material;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -8,42 +9,34 @@ import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.EquipmentSlot;
 import abilitieSystem.*;
 
+import java.util.HashMap;
+import java.util.Map;
+
 
 public class caster implements Listener {
     private coolDown cooldown;
-    private moku_moku mokuClass;
-    private yami_yami yamiClass;
-    private mera_mera meraClass;
-    private gura_gura guraClass;
-    private neko_neko_reoparudo nekoReoparudoClass;
-    private magu_magu maguClass;
+    private static Map<String, devilFruitUser> dfPlayers = new HashMap<>();
 
-    public static int yamiIndex, meraIndex, guraIndex, mokuIndex, nekoReoparudoIndex, maguIndex;
-
-    public caster(coolDown cooldown, moku_moku mokuClass, yami_yami yamiClass, mera_mera meraClass, gura_gura guraClass, neko_neko_reoparudo nekoReoparudoClass,
-                  magu_magu maguClass){
+    public caster(coolDown cooldown, Map<String, devilFruitUser> dfPlayers){
         this.cooldown = cooldown;
-        this.mokuClass = mokuClass;
-        this.yamiClass = yamiClass;
-        this.meraClass = meraClass;
-        this.guraClass = guraClass;
-        this.nekoReoparudoClass = nekoReoparudoClass;
-        this.maguClass = maguClass;
-
-        yamiIndex = meraIndex = guraIndex = mokuIndex = nekoReoparudoIndex = maguIndex= 0;
+        this.dfPlayers = dfPlayers;
     }
 
     @EventHandler
     public void onInteract(PlayerInteractEvent event){
-        if(event.getHand().equals(EquipmentSlot.HAND))
-            if (castIdentification.itemIsCaster(event.getItem())){
+        if(dfPlayers.containsKey(event.getPlayer().getName())) {
+            devilFruitUser user = dfPlayers.get(event.getPlayer().getName());
+            if (event.getHand().equals(EquipmentSlot.HAND))
+                if (castIdentification.itemIsCaster(event.getItem())) {
 
-                String casterItemName = event.getItem().getItemMeta().getDisplayName();
-                Material casterMaterial = event.getMaterial();
-                Action action = event.getAction();
+                    String casterItemName = event.getItem().getItemMeta().getDisplayName();
+                    Material casterMaterial = event.getMaterial();
+                    Action action = event.getAction();
 
-                if ((action == Action.RIGHT_CLICK_AIR || action == Action.RIGHT_CLICK_BLOCK)){
+                    if ((action == Action.RIGHT_CLICK_AIR || action == Action.RIGHT_CLICK_BLOCK)) {
+                        user.abilityActive();
 
+                        /*
                     if (casterItemName.equals(castIdentification.castItemNameYami) && casterMaterial.equals(castIdentification.castMaterialYami))
                         switch (yamiIndex) {
                             case 0:
@@ -179,13 +172,13 @@ public class caster implements Listener {
                             case 0:
                                 if(cooldown.getTransformationNekoReoparudoCD() == 0){
                                     cooldown.setTransformationNekoReoparudoCD(20);
-                                    nekoReoparudoClass.transformation(event.getPlayer());
+                                    nekoReoparudoClass.transformation();
                                 }
                                 break;
                             case 1:
                                 if(cooldown.getFrontAttackNekoReoparudoCD() == 0){
                                     cooldown.setFrontAttack2NekoReoparudoCD(20);
-                                    nekoReoparudoClass.frontAttack(event.getPlayer());
+                                    nekoReoparudoClass.frontAttack();
                                 }
 
                                 break;
@@ -206,8 +199,11 @@ public class caster implements Listener {
                                 break;
                         }
                     }
-                } else {
 
+ */
+                    } else {
+                        user.switchAbility();
+/*
                     if(casterItemName.equals(castIdentification.castItemNameYami) && casterMaterial.equals(castIdentification.castMaterialYami)){
                         yamiIndex++;
                         yamiIndex = yamiIndex % abilitiesIdentification.aNumberYami;
@@ -230,6 +226,9 @@ public class caster implements Listener {
                     if(casterItemName.equals(castIdentification.castItemNameNekoReoparudo) && casterMaterial.equals(castIdentification.castMaterialNekoReoparudo)){
                         nekoReoparudoIndex++;
                         nekoReoparudoIndex = nekoReoparudoIndex % abilitiesIdentification.aNumberNekoReoparudo;
+                    }
+                    */
+ 
                     }
                 }
         }

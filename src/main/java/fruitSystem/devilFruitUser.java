@@ -1,32 +1,65 @@
 package fruitSystem;
 
 import org.bukkit.entity.Player;
-
+import abilitieSystem.abilities;
 
 public class devilFruitUser{
-    private Player user;
+    private Player player;
     private devilFruit Fruit;
-    private boolean logia, awakened;
+    private Integer actual;
+    protected abilities ability;
 
-    public devilFruitUser(Player player, devilFruit Fruit, boolean logia){
-        user = player;
+    private boolean awakened;
+
+
+    public devilFruitUser(Player player, devilFruit Fruit, abilities ability){
+        this.player = player;
         this.Fruit=Fruit;
-        this.logia=logia;
+        this.ability = ability;
+        this.ability.setUser(this);
+        actual = 0;
         awakened=false;
+    }
+
+    public Player getPlayer(){
+        return player;
     }
 
     public void playerAwakens(){
         awakened=true;
     }
-					
-    public static boolean isAwaken(){
+		
+    public boolean isAwaken(){
         return awakened;
     }
-    public static boolean isLogia(){
-        return logia;
-    }
-    public static devilFruit getFruit(){
+    public devilFruit getFruit(){
         return Fruit;
     }
+    public void switchAbility(){
+        actual++;
+        actual = actual % ability.getAbilitiesNames().size();
+    }
+    public void abilityActive(){
+        switch (actual){
+            case 0:
+                ability.ability1();
+                break;
+            case 1:
+                ability.ability2();
+                break;
+            case 2:
+                ability.ability3();
+                break;
+            case 3:
+                ability.ability4();
+                break;
+            case 4:
+                ability.ability5();
+                break;
+            case 5:
+                ability.ability6();
+                break;
+        }
 
+    }
 }

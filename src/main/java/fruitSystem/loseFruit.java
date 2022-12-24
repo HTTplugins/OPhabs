@@ -24,7 +24,7 @@ public class loseFruit implements Listener {
                 nekoReoparudoValue = plugin.getConfig().getString("FruitAssociations.neko_neko_reoparudo"),
                 maguValue = plugin.getConfig().getString("FruitAssociations.magu_magu");;
 
-        if(fruitAssociation.dfPlayers.contains(player)){
+        if(fruitAssociation.dfPlayers.containsKey(player.getName())){
             fruitAssociation.dfPlayers.remove(player);
 
             if(yamiValue.equals(event.getEntity().getName())) yamiValue = "none";

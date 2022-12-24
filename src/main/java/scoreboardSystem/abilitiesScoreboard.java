@@ -23,7 +23,7 @@ public class abilitiesScoreboard {
         this.plugin = plugin;
         this.cd = cd;
     }
-
+/*
 
     public void ini(){
 
@@ -136,5 +136,5 @@ public class abilitiesScoreboard {
         return true;
     }
 
-
+*/
 }

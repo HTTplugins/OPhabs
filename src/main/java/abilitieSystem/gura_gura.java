@@ -1,6 +1,7 @@
 package abilitieSystem;
 
 import htt.ophabs.OPhabs;
+import fruitSystem.devilFruitUser;
 import java.util.ArrayList;
 import java.util.Random;
 import org.bukkit.*;
@@ -16,21 +17,38 @@ import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.util.Vector;
 import org.bukkit.block.Block;
 
-public class gura_gura {
-  final int waveDistance = 8, radiusFloor = 4, radiusWall = 3;
-  final Material AIR = Material.AIR;
-  final int earthquakeDelay = 5;
-  final int earthquakeSpeed = 10;
-  final int earthquakeDamage = 2;
-  final int earthquakeDuration = 5;
-  int numberOfWaves = 0;
-  final int numberOfWavesMax = 5;
-  private OPhabs plugin;
+public class gura_gura extends paramecia {
+    final int waveDistance = 8, radiusFloor = 4, radiusWall = 3;
+    final Material AIR = Material.AIR;
+    final int earthquakeDelay = 5;
+    final int earthquakeSpeed = 10;
+    final int earthquakeDamage = 2;
+    final int earthquakeDuration = 5;
+    int numberOfWaves = 0;
+    final int numberOfWavesMax = 5;
+    private OPhabs plugin;
     boolean  enabledVH = true;
-  public gura_gura(OPhabs plugin) {
-    this.plugin = plugin;
+    public gura_gura(OPhabs plugin) {
+        super(plugin);
+        abilitiesNames.add("Earthquake");
+        abilitiesNames.add("CreateWave");       
+        abilitiesNames.add("HandVibration");
+        abilitiesNames.add("ExpansionWave");
   }
-    
+   
+    public void ability1(){
+        earthquake(user.getPlayer());
+    }
+    public void ability2(){
+        createWave(user.getPlayer());
+    }
+    public void ability3(){
+        handVibration(user.getPlayer());
+    }
+    public void ability4(){
+        expansionWaveBlocks(user.getPlayer());
+    }
+
     public void handVibration(Player player){
         if(enabledVH){
             enabledVH = false;

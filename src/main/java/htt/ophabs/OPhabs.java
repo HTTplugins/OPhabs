@@ -31,8 +31,8 @@ public final class OPhabs extends JavaPlugin {
 
         //--------------
         //FruitSystem
-
-        getServer().getPluginManager().registerEvents(new fruitAssociation(this), this);
+        fruitAssociation association = new fruitAssociation(this);
+        getServer().getPluginManager().registerEvents(association, this);
         getServer().getPluginManager().registerEvents(new loseFruit(this), this);
 
         //--------------
@@ -54,14 +54,14 @@ public final class OPhabs extends JavaPlugin {
         coolDown cooldown = new coolDown(this);
         cooldown.runCoolDownSystem();
 
-        getServer().getPluginManager().registerEvents(new caster(cooldown, mokuClass, yamiClass, meraClass, guraClass, nekoReoparudoClass, maguClass), this);
+        getServer().getPluginManager().registerEvents(new caster(cooldown,association.dfPlayers), this);
         getServer().getPluginManager().registerEvents(new noDropCaster(), this);
 
         //--------------
         //ScoreBoards
 
         abilitiesScoreboard scoreboards = new abilitiesScoreboard(this,cooldown);
-        scoreboards.ini();
+        //scoreboards.ini();
 
 
 
