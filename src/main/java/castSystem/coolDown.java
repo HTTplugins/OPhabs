@@ -25,6 +25,8 @@ public class coolDown {
         TransformationNekoReoparudoCD = FrontAttackNekoReoparudoCD = Abilitie3NekoReoparudoCD = Abilitie4NekoReoparudoCD = 0;
     }
 
+
+
     public void runCoolDownSystem(){
 
         new BukkitRunnable(){

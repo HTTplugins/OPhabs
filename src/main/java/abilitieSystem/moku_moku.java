@@ -21,15 +21,27 @@ import java.util.ArrayList;
 public class moku_moku extends logia {
     final int numMaxSmokers=4;
     public int numSmokers=0;
-    ArrayList<String> smokeLegsON = new ArrayList<>();
+    boolean smokeLegsON = false;
 
     public moku_moku(OPhabs plugin){
-        super(plugin);
-        super.element = Particle.CAMPFIRE_COSY_SMOKE;
+        super(plugin, Particle.CAMPFIRE_COSY_SMOKE);
+        abilitiesNames.add("SmokeLegs");
+        abilitiesNames.add("SmokeBody");
+        abilitiesNames.add("SummonSmoker");
+    }
+
+    public void ability1(){
+        smokeLegs(user.getPlayer());
+    }
+    public void ability2(){
+        logiaBody(user.getPlayer());
+    }
+    public void ability3(){
+        summonSmoker(user.getPlayer());
     }
 
     public void toggleFly(Player player){
-        if (smokeLegsON.contains(player.getName()) || logiaBodyON.contains(player.getName()) ){
+        if (smokeLegsON || logiaBodyON){
             player.setAllowFlight(true);
             player.setFlying(true);
         } else {
@@ -38,28 +50,26 @@ public class moku_moku extends logia {
         }
     }
     
-    public void runParticles(Player player, boolean oldP){
+    public void runParticles(Player player){
         new BukkitRunnable() {
             @Override
             public void run() {
-                if (!(logiaBodyON.contains(player.getName()) || smokeLegsON.contains(player.getName())) || player.isDead())
+                if (!(logiaBodyON || smokeLegsON || player.isDead()))
                     cancelTask();
-
                 player.getWorld().spawnParticle(element, player.getLocation(), 10, 0.5, 0.5, 0.5, 0);
             }
 
             public void cancelTask() {
                 Bukkit.getScheduler().cancelTask(this.getTaskId());
             }
-        }.runTaskTimer(plugin, 0, 3);
+        }.runTaskTimer(plugin, 5, 3);
     }
 
-//    @EventHandler(ignoreCancelled = true)
     public void onEntityDamage(EntityDamageEvent event) {
         Player player;
         if (event.getEntity() instanceof Player) {
             player = (Player) event.getEntity();
-            if (logiaBodyON.contains(player.getName()) && !(player.getLocation().getBlock().isLiquid() && player.getLocation().getBlock().getType() != Material.LAVA)) {
+            if (logiaBodyON && !(player.getLocation().getBlock().isLiquid() && player.getLocation().getBlock().getType() != Material.LAVA)) {
                 event.setCancelled(true);
             }
         }
@@ -67,43 +77,45 @@ public class moku_moku extends logia {
 //    @EventHandler(ignoreCancelled = true)
     public void onPlayerDeath(PlayerDeathEvent event) {
         Player player = event.getEntity();
-        if(smokeLegsON.contains(player.getName()))
+        if(smokeLegsON)
             smokeLegs(player);
-        if (logiaBodyON.contains(player.getName()))
+        if (logiaBodyON)
             logiaBody(player);
     }
 
     public boolean logiaBody(Player player) {
-            if (!logiaBodyON.contains(player.getName())) {
-                if (smokeLegsON.contains(player.getName()))
+            if (!logiaBodyON) {
+                if (smokeLegsON)
                     smokeLegs(player);
-                logiaBodyON.add(player.getName());
+                logiaBodyON = true;
                 player.addPotionEffect(new PotionEffect(PotionEffectType.SPEED, 9999999, 2, false, false));
                 player.addPotionEffect(new PotionEffect(PotionEffectType.REGENERATION, 9999999, 1, false, false));
                 player.addPotionEffect(new PotionEffect(PotionEffectType.INCREASE_DAMAGE, 999999, 3, false, false));
+                runParticles(player);
             } else {
-                logiaBodyON.remove(player.getName());
+                logiaBodyON = false;
                 player.removePotionEffect(PotionEffectType.SPEED);
                 player.removePotionEffect(PotionEffectType.REGENERATION);
                 player.removePotionEffect(PotionEffectType.INCREASE_DAMAGE);
             }
             toggleFly(player);
-            return (logiaBodyON.contains(player.getName()) || smokeLegsON.contains(player.getName()));
-        }
+            return (logiaBodyON|| smokeLegsON);
+    }
 
     public boolean smokeLegs(Player player){
-        if (!logiaBodyON.contains(player.getName())){
-            if (!smokeLegsON.contains(player.getName())) {
-                smokeLegsON.add(player.getName());
+        if (!logiaBodyON){
+            if (!smokeLegsON) {
+                smokeLegsON = true;
                 player.addPotionEffect(new PotionEffect(PotionEffectType.SPEED, 9999999, 4, false, false));
+                runParticles(player);
             } else {
-                smokeLegsON.remove(player.getName());
+                smokeLegsON = false;
                 player.removePotionEffect(PotionEffectType.SPEED);
             }
             toggleFly(player);
         }
 
-        return (logiaBodyON.contains(player.getName()) || smokeLegsON.contains(player.getName())) ;
+        return (logiaBodyON || smokeLegsON) ;
     }
     
     public void setTarget(Vex entity, Player player){

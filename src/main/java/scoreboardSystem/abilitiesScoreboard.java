@@ -71,6 +71,8 @@ public class abilitiesScoreboard {
 
     public boolean updateScoreboard(Scoreboard scoreboard , Player player, List<String> names, int index,int Ab1CD, int Ab2CD, int Ab3CD, int Ab4CD){
 
+
+
         Objective objctive = scoreboard.registerNewObjective("abilitiesScoreboard","dummy");
 
         ItemStack caster = player.getInventory().getItemInMainHand();

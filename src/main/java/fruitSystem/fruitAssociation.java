@@ -14,19 +14,31 @@ import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import org.bukkit.block.Biome;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import abilitieSystem.*;
 
 public class fruitAssociation implements Listener {
     private final OPhabs plugin;
-    public static List<Player> dfPlayers = new ArrayList<>();
+    public static Map<String, devilFruitUser> dfPlayers = new HashMap<>();
+    public static Map<String, abilities> abilities = new HashMap<>();
 
-    public fruitAssociation(OPhabs plugin){
+    public fruitAssociation(OPhabs plugin, yami_yami yamiClass, mera_mera meraClass, gura_gura guraClass, moku_moku mokuClass, neko_neko_reoparudo nekoReoparudoClass, magu_magu maguClass){
         this.plugin = plugin;
+        abilities.put(fruitIdentification.fruitItemNameGura,guraClass);
+        abilities.put(fruitIdentification.fruitItemNameMera,meraClass);
+        abilities.put(fruitIdentification.fruitItemNameYami,yamiClass);
+        abilities.put(fruitIdentification.fruitItemNameMoku,mokuClass);
+        abilities.put(fruitIdentification.fruitItemNameNekoReoparudo,nekoReoparudoClass);
+        abilities.put(fruitIdentification.fruitItemNameMagu,maguClass);
+
     }
 
     @EventHandler(ignoreCancelled = true)
     public void onPlayerItemConsume(PlayerItemConsumeEvent event){
 
+       
         ItemStack fruit = event.getItem();
 
         String
@@ -102,13 +114,14 @@ public class fruitAssociation implements Listener {
         casterItemMeta.setDisplayName(casterItemName);
         caster.setItemMeta(casterItemMeta);
         event.getPlayer().getInventory().addItem(caster);
-
-        if(dfPlayers.contains(event.getPlayer())){
+        if(dfPlayers.containsKey(event.getPlayer().getName())){
             event.getPlayer().getWorld().strikeLightningEffect(event.getPlayer().getLocation());
             event.getPlayer().setHealth(0);
-        } else
-            dfPlayers.add(event.getPlayer());
-
+        } else{
+            abilities ability = abilities.get(fruit.getItemMeta().getDisplayName());
+            devilFruitUser dfUser = new devilFruitUser(event.getPlayer(), new devilFruit(fruit.getItemMeta().getDisplayName()), ability);
+            dfPlayers.put(event.getPlayer().getName(), dfUser);
+        }
     }
 
     public Boolean consumedFruit(String value, PlayerItemConsumeEvent event){
@@ -134,7 +147,7 @@ public class fruitAssociation implements Listener {
     }
     @EventHandler
     public void playerOnWater(PlayerMoveEvent event) {
-        if (dfPlayers.contains(event.getPlayer())) {
+        if (dfPlayers.containsKey(event.getPlayer().getName())) {
             if(isInSeaWater(event.getPlayer())) {
                 Player player = event.getPlayer();
                 player.addPotionEffect(new PotionEffect(PotionEffectType.SLOW, 100, 100));

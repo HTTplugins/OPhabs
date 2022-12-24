@@ -12,27 +12,36 @@ import org.bukkit.event.entity.EntityChangeBlockEvent;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.scheduler.BukkitTask;
 import org.bukkit.util.Vector;
-
 import java.util.ArrayList;
 import java.util.List;
+import static java.lang.Math.*;
 
-public class yami_yami implements Listener {
-    private OPhabs plugin;
-     private final int
-             radius = 3,
-             maxRadiusAmplification = 9,
-             voidExpansionDelay = 6,
-             voidExpansionSpeed = 5, //less is faster
-             damageAmount = 1,
-             damageDelay = 0,
-             damageSpeed = 15,
-             dissappearVoidBlocksDelay = 90,
-             maxHeight = 10;
+public class yami_yami extends logia {
+    private int repealAnimationCounter = 0;
+    public static Particle.DustOptions yamiDO = new Particle.DustOptions(Color.BLACK,1.0F);
+    public static Particle yamiParticle = Particle.REDSTONE;
+
+    private final int
+             radius = 3;
+    private final int maxRadiusAmplification = 9;
+    private final int damageAmount = 1;
 
     private final Material voidMaterial= Material.BLACK_CONCRETE;
 
     private List<Block> convertedToVoidBlocks = new ArrayList<>();
-    public yami_yami(OPhabs plugin){this.plugin = plugin;}
+    public yami_yami(OPhabs plugin){
+        super(plugin, yamiParticle);
+
+        abilitiesNames.add("BlackVoid");
+        abilitiesNames.add("LivingVoid");
+    }
+
+    public void ability1(){
+        blackVoid(user.getPlayer());
+    }
+    public void ability2(){
+        livingVoid(user.getPlayer());
+    }
 
     public void blackVoid(Player player) {
         player.getWorld().playSound(player, Sound.AMBIENT_CRIMSON_FOREST_MOOD, 10, 2);
@@ -40,6 +49,9 @@ public class yami_yami implements Listener {
 
         bresenham(radius, playerLocation, true);
 
+        int voidExpansionDelay = 6;
+
+        int voidExpansionSpeed = 5; //less is faster
         BukkitTask circle = new BukkitRunnable() {
                 int radiusCounter = radius;
 
@@ -48,37 +60,38 @@ public class yami_yami implements Listener {
 
                     bresenham(radiusCounter, playerLocation, true);
                     if (radiusCounter == radius + maxRadiusAmplification)
-                        cancelTask();
-                }
-
-                public void cancelTask() {
-                    Bukkit.getScheduler().cancelTask(this.getTaskId());
+                        this.cancel();
                 }
             }.runTaskTimer(plugin, voidExpansionDelay, voidExpansionSpeed);
 
-            BukkitTask damage = new BukkitRunnable() {
-                LivingEntity livEnt;
-
+        int damageDelay = 0;
+        int damageSpeed = 15;
+        BukkitTask damageAndParticles = new BukkitRunnable() {
                 public void run() {
-                    List<LivingEntity> livingEntities = player.getWorld().getLivingEntities();
+                    for(LivingEntity livEnt : player.getWorld().getLivingEntities())
+                        if (livEnt != player && livEnt.getLocation().getBlock().getRelative(0,-1,0).getType().equals(voidMaterial))
+                            livEnt.damage(damageAmount);
 
-                    for(LivingEntity livEnt : player.getWorld().getLivingEntities()){
-                        if (livEnt != player) {
-                            Location downBlock = livEnt.getLocation();
-                            downBlock.setY(downBlock.getBlockY() - 1);
 
-                            if (downBlock.getBlock().getType().equals(voidMaterial))
-                                    livEnt.damage(damageAmount);
+                    for(double x = playerLocation.getX() - maxRadiusAmplification; x < playerLocation.getX() + maxRadiusAmplification; x++ ){
+                        for(double z = playerLocation.getZ() - maxRadiusAmplification; z < playerLocation.getZ() + maxRadiusAmplification; z++ ){
+                            boolean foundY=false;
+                            for(double y = playerLocation.getBlockY() - 1;  y > playerLocation.getBlockY() - 3 && !foundY; y--){
+                                Block block = new Location(player.getWorld(), x,y,z).getBlock();
+                                if(block.getType().equals(voidMaterial))
+                                    player.getWorld().spawnParticle(abilitiesIdentification.yamiParticle,block.getRelative(0,1,0).getLocation(),0,0,1,0,abilitiesIdentification.yamiDO);
+                            }
                         }
                     }
                 }
             }.runTaskTimer(plugin, damageDelay, damageSpeed);
 
-            new BukkitRunnable() {
+        int dissappearVoidBlocksDelay = 90;
+        new BukkitRunnable() {
                 @Override
                 public void run() {
                     dissappearVoidBlocks();
-                    damage.cancel();
+                    damageAndParticles.cancel();
                     player.getWorld().playSound(player, Sound.ENTITY_ENDERMAN_TELEPORT, 10, 2);
                 }
             }.runTaskLater(plugin, dissappearVoidBlocksDelay);
@@ -86,9 +99,7 @@ public class yami_yami implements Listener {
 
     @EventHandler(ignoreCancelled = true)
     public void onEntityChangeBlock(EntityChangeBlockEvent event) {
-        Location downBlockLocation = new Location(event.getBlock().getWorld(), event.getBlock().getX(), event.getBlock().getY() - 1, event.getBlock().getZ());
-
-        if(downBlockLocation.getBlock().getType().equals(voidMaterial) )
+        if(event.getBlock().getRelative(0,-1,0).getType().equals(voidMaterial))
             event.setCancelled(true);
     }
 
@@ -163,17 +174,14 @@ public class yami_yami implements Listener {
     }
 
     public void setBlockAndLineUP(Location perimeterPixel){
-        World world = perimeterPixel.getWorld();
-
-            Location downBlockLocation;
             boolean found = false;
             for(int i=0; i < 3 && !found; i++){
-                downBlockLocation = new Location(perimeterPixel.getWorld(), perimeterPixel.getBlockX(),perimeterPixel.getBlockY() - i,perimeterPixel.getBlockZ());
-                if( !downBlockLocation.getBlock().getType().equals(Material.AIR)){
+
+
+                if( !perimeterPixel.getBlock().getRelative(0,-i,0).getType().equals(Material.AIR)){
                     found = true;
-                    world.spawnParticle(Particle.SMOKE_NORMAL,downBlockLocation.getBlock().getRelative(0,-1,0).getLocation(),5);
-                    downBlockLocation.getBlock().setType(voidMaterial);
-                    convertedToVoidBlocks.add(downBlockLocation.getBlock());
+                    perimeterPixel.getBlock().getRelative(0,-i,0).setType(voidMaterial);
+                    convertedToVoidBlocks.add(perimeterPixel.getBlock().getRelative(0,-i,0));
 
                 }
             }
@@ -182,7 +190,8 @@ public class yami_yami implements Listener {
 
 
         Location upBlockLocation = new Location(perimeterPixel.getWorld(), perimeterPixel.getBlockX(),perimeterPixel.getBlockY(),perimeterPixel.getBlockZ());
-        for(int i=1; i<maxHeight; i++){
+        int maxHeight = 10;
+        for(int i = 1; i< maxHeight; i++){
             upBlockLocation.setY(perimeterPixel.getBlockY() + i );
 
             if(!upBlockLocation.getBlock().getType().equals(Material.AIR)){
@@ -196,81 +205,148 @@ public class yami_yami implements Listener {
     }
 
     public void dissappearVoidBlocks(){
-        for(int i=0; i<convertedToVoidBlocks.size(); i++){
-            convertedToVoidBlocks.get(i).setType(Material.AIR);
-        }
-    }
-
-
-
-    public void ab2(Player player){
-        World world = player.getWorld();
-
-        //world.spawnParticle(Particle.SMOKE_NORMAL,player.getEyeLocation(),10,1,0,0);
-       // world.spawnParticle(Particle.SMOKE_NORMAL,player.getLocation(),0,1,0,0);
-
-        for(Entity ent : player.getNearbyEntities(10,10,10)){
-            if(ent instanceof LivingEntity)
-                attractEntity(ent,player);
-
-
-        }
-
-
-
-
-
+        for(Block convertedTVblock : convertedToVoidBlocks)
+            convertedTVblock.setType(Material.AIR);
 
     }
 
-    public void attractEntity(Entity ent, Player player){
+    public void livingVoid(Player player){
+
+        player.playSound(player.getLocation(),Sound.BLOCK_REDSTONE_TORCH_BURNOUT,10,0);
         World world = player.getWorld();
-        Vector FirstVector;
-        boolean fV = false;
 
         new BukkitRunnable(){
+            double angle = -player.getLocation().getYaw();
+
+            double start = 2* PI*5;
+            double finish = 2* PI*5 - 2* PI*5/10;
             @Override
             public void run() {
 
-                double vx,vy,vz;
-                Location loc_aux ;
+                for(double i=start; i>finish ; i-=0.05) {
+
+                    double x = i * sin(i) / 5;
+                    double y = i * cos(i) / 5;
+                    double z = i;
+
+                    double xr = player.getLocation().getX() + cos(toRadians(angle))*x + sin(toRadians(angle))*z;
+                    double yr = 1 + player.getLocation().getY() + y;
+                    double zr = player.getLocation().getZ() + -sin(toRadians(angle))*x + cos(toRadians(angle))*z;
+
+                    Location rotation = new Location(player.getWorld(), xr,yr,zr);
 
 
 
-                loc_aux = ent.getLocation().clone().add(0,1,0);
-                vx =  player.getLocation().getX() - ent.getLocation().getX() ;
-                vy =  player.getLocation().getY()-ent.getLocation().getY() ;
-                vz =  player.getLocation().getZ()-ent.getLocation().getZ() ;
-
-
-                for(int i=0; i<10; i++) {
-                    world.spawnParticle(Particle.ASH,loc_aux.add(vx/10,vy/10,vz/10),0,0,0,0);
+                    world.spawnParticle(abilitiesIdentification.yamiParticle,rotation,0,0,0,0,abilitiesIdentification.yamiDO);
 
                 }
+                start = finish;
 
+                finish = finish -  2* PI*5/10;
+
+
+                if(finish < 0) this.cancel();
+
+            }
+        }.runTaskTimer(plugin,0,1);
+
+        for(Entity ent : player.getNearbyEntities(10,10,10))
+            if(ent instanceof LivingEntity && !player.equals(ent))
+                livingVoidForEntity(ent,player);
+
+        repealAnimationCounter = 0;
+    }
+
+    public void livingVoidForEntity(Entity ent, Player player){
+
+        BukkitTask attract = new BukkitRunnable(){
+            Vector FirstVector;
+            boolean fV = false;
+            boolean entityInHand = false;
+            double vx,vy,vz;
+            @Override
+            public void run() {
+                if(ent.isDead() || player.isDead())
+                    this.cancel();
+
+                vx =  player.getLocation().getX() - ent.getLocation().getX();
+                vy =  player.getLocation().getY()-ent.getLocation().getY();
+                vz =  player.getLocation().getZ()-ent.getLocation().getZ();
 
                 Vector movement = player.getLocation().toVector().subtract(ent.getLocation().toVector()).normalize();
 
                 if(!fV){
-                    //FirstVector = movement.clone();
+                    FirstVector = movement.clone();
+                    fV = true;
+
                 }
+
+                //Para levantar al mob si hay desnivel
+                if(player.getLocation().getY() >= ent.getLocation().getY() && !entityInHand)
+                    movement.setY(movement.getY() + (player.getLocation().getY() - ent.getLocation().getY()) + 3);
+
+
                 ent.setVelocity(movement);
 
-                if(Math.sqrt(Math.pow(vx,2) + Math.pow(vy,2) +  Math.pow(vz,2)) < 2){
-                    this.cancel();
+                if(Math.sqrt(Math.pow(vx,2) + Math.pow(vy,2) +  Math.pow(vz,2)) <= 1){
+                    entityInHand = true;
+                    if(player.isSneaking()){
+                        this.cancel();
+                        repealEntity(ent,player);
+                    }
                 }
-
-
-            }
-
-            void cancelRun(){
-                this.cancel();
             }
         }.runTaskTimer(plugin,0,1);
-
     }
 
-    public void repealEntity(){
+    public void repealEntity(Entity ent, Player player ){
+        repealAnimationCounter++;
+        World world = player.getWorld();
+
+        if(repealAnimationCounter == 1){
+            new BukkitRunnable(){
+                final double angle = -player.getLocation().getYaw();
+
+                double start = 0;
+                double finish = 0 + 2* PI*5/10;
+                @Override
+                public void run() {
+
+                    for(double i=start; i<finish ; i+=0.05) {
+
+                        double x = i * sin(i) / 5;
+                        double y = i * cos(i) / 5;
+                        double z = i;
+
+                        double xr = player.getLocation().getX() + cos(toRadians(angle))*x + sin(toRadians(angle))*z;
+                        double yr = 1 + player.getLocation().getY() + y;
+                        double zr = player.getLocation().getZ() + -sin(toRadians(angle))*x + cos(toRadians(angle))*z;
+
+                        Location rotation = new Location(player.getWorld(), xr,yr,zr);
+
+
+
+                        world.spawnParticle(abilitiesIdentification.yamiParticle,rotation,0,0,0,0,abilitiesIdentification.yamiDO);
+
+                    }
+                    start = finish;
+
+                    finish = finish +  2* PI*5/10;
+
+
+                    if(finish < 0) this.cancel();
+
+                }
+            }.runTaskTimer(plugin,0,1);
+        }
+
+        ent.getWorld().playSound(ent.getLocation(),Sound.BLOCK_REDSTONE_TORCH_BURNOUT,10,2);
+
+        Vector dir = player.getLocation().getDirection();
+        dir.setY(1);
+        dir.setX(dir.getX() % 5);
+        dir.setZ(dir.getZ() % 5);
+        ent.setVelocity(dir);
 
     }
 
