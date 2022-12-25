@@ -87,7 +87,7 @@ public class yami_yami extends logia {
                             for(double y = playerLocation.getBlockY() - 1;  y > playerLocation.getBlockY() - 3 && !foundY; y--){
                                 Block block = new Location(player.getWorld(), x,y,z).getBlock();
                                 if(block.getType().equals(voidMaterial))
-                                    player.getWorld().spawnParticle(abilitiesIdentification.yamiParticle,block.getRelative(0,1,0).getLocation(),0,0,1,0,abilitiesIdentification.yamiDO);
+                                    player.getWorld().spawnParticle(element,block.getRelative(0,1,0).getLocation(),0,0,1,0,yamiDO);
                             }
                         }
                     }
@@ -245,7 +245,7 @@ public class yami_yami extends logia {
 
 
 
-                    world.spawnParticle(abilitiesIdentification.yamiParticle,rotation,0,0,0,0,abilitiesIdentification.yamiDO);
+                    world.spawnParticle(element,rotation,0,0,0,0,yamiDO);
 
                 }
                 start = finish;
@@ -334,7 +334,7 @@ public class yami_yami extends logia {
 
 
 
-                        world.spawnParticle(abilitiesIdentification.yamiParticle,rotation,0,0,0,0,abilitiesIdentification.yamiDO);
+                        world.spawnParticle(element,rotation,0,0,0,0,yamiDO);
 
                     }
                     start = finish;

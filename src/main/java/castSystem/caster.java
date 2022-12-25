@@ -256,13 +256,13 @@ public class caster implements Listener {
             user.onFall(event);
         }
     }
-    @EventHandler
-    public void onPlayerDeath(PlayerDeathEvent event){
-        if(dfPlayers.containsKey(event.getEntity().getName())) {
-            devilFruitUser user = dfPlayers.get(event.getEntity().getName());
-            user.onPlayerDeath(event);
-        }
-    }
+    // @EventHandler
+    // public void onPlayerDeath(PlayerDeathEvent event){
+    //     if(dfPlayers.containsKey(event.getEntity().getName())) {
+    //         devilFruitUser user = dfPlayers.get(event.getEntity().getName());
+    //         user.onPlayerDeath(event);
+    //     }
+    // }
 /*
     @EventHandler
     public void playerOnWater(PlayerMoveEvent event){

@@ -154,6 +154,17 @@ public class mera_mera extends logia {
                 RADIO_PARTICULAS, RADIO_PARTICULAS, RADIO_PARTICULAS);
     }
 
+
+//  @EventHandler
+    //public void onEntityDamage(EntityDamageEvent event) {
+    //    if (event.getEntity() instanceof Player) {
+    //        Player player = (Player) event.getEntity();
+    //        if (event.getFinalDamage() >= player.getHealth()) {
+    //            //Aqui seria la el método como tal
+    //        }
+    //    }
+    //}
+
     public void onPlayerDeath(PlayerDeathEvent event) {
         String nombre_user = plugin.getConfig().getString("FruitAssociations.mera_mera");
         System.out.println(nombre_user);

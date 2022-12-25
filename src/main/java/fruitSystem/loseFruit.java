@@ -30,6 +30,7 @@ public class loseFruit implements Listener {
                 maguValue = plugin.getConfig().getString("FruitAssociations.magu_magu");;
 
         if(fruitAssociation.dfPlayers.containsKey(player.getName())){
+            fruitAssociation.dfPlayers.get(player.getName()).onPlayerDeath(event);
             fruitAssociation.dfPlayers.remove(player.getName());
 
             if(yamiValue.equals(event.getEntity().getName())) yamiValue = "none";

@@ -50,9 +50,7 @@ public class abilities {
 	public void ability5(){}
 	public void ability6(){}
     public void onEntityDamage(EntityDamageEvent event){}
-    public void onPlayerDeath(PlayerDeathEvent event){
-        user=null;
-    }
+    public void onPlayerDeath(PlayerDeathEvent event){}
     public void playerOnWater(PlayerMoveEvent event){}
     public void onPlayerToggleSneak(PlayerToggleSneakEvent e){}
     public void onFall(EntityDamageEvent e){}
@@ -61,11 +59,4 @@ public class abilities {
     public void onPlayerEggThrow(PlayerEggThrowEvent event){}
     public void onEntityShootBow(EntityShootBowEvent event){}
     public void onEntityChangeBlock(EntityChangeBlockEvent event){}
-
-
-
-
-
-    
-
 }
