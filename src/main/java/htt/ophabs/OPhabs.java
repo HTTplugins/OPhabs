@@ -38,13 +38,13 @@ public final class OPhabs extends JavaPlugin {
         //--------------
         //FruitSystem
         fruitAssociation association = new fruitAssociation(this, yamiClass, meraClass, guraClass, mokuClass, nekoReoparudoClass, maguClass);
+        loseFruit lFruit = new loseFruit(this, association.dfPlayers);
         getServer().getPluginManager().registerEvents(association, this);
-        getServer().getPluginManager().registerEvents(new loseFruit(this, association.dfPlayers), this);
+        getServer().getPluginManager().registerEvents(lFruit, this);
 
         //--------------
         //CasterSystem
-        coolDown cooldown = new coolDown(this);
-        cooldown.runCoolDownSystem();
+        coolDown cooldown = new coolDown(this, association.dfPlayers);
 
         getServer().getPluginManager().registerEvents(new caster(cooldown,association.dfPlayers), this);
         getServer().getPluginManager().registerEvents(new noDropCaster(), this);
@@ -52,13 +52,10 @@ public final class OPhabs extends JavaPlugin {
         //--------------
         //ScoreBoards
 
-        ArrayList<abilitiesScoreboard> scoreboards = new ArrayList<>();
-        for(int i = 0; i < association.dfPlayers.size(); i++){
-            scoreboards.add(new abilitiesScoreboard(this, cooldown, association.dfPlayers.get(i)));
-            scoreboards.get(i).ini();
-        }
-
-
+        abilitiesScoreboard scoreboard = new abilitiesScoreboard(this, association.dfPlayers);
+        scoreboard.ini();
+        association.setScoreboard(scoreboard);
+        lFruit.setScoreboard(scoreboard);
 
         //--------------
         Bukkit.getConsoleSender().sendMessage(ChatColor.GREEN + "" + ChatColor.BOLD +  "OPhabs started correctly.");

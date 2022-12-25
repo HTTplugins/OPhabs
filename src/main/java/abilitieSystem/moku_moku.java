@@ -67,7 +67,7 @@ public class moku_moku extends logia {
         new BukkitRunnable() {
             @Override
             public void run() {
-                if (!(logiaBodyON || smokeLegsON || player.isDead()))
+                if (!(logiaBodyON || smokeLegsON) || user.getPlayer().isDead())
                     cancelTask();
                 player.getWorld().spawnParticle(element, player.getLocation(), 10, 0.5, 0.5, 0.5, 0);
             }
@@ -173,9 +173,7 @@ public class moku_moku extends logia {
                 public void cancelTask() {
                     Bukkit.getScheduler().cancelTask(this.getTaskId());
                 }
-            }.runTaskTimer(plugin, 0, 3);
-                
-                
+            }.runTaskTimer(plugin, 0, 3); 
         }
     }
 }

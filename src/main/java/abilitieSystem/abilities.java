@@ -3,6 +3,7 @@ package abilitieSystem;
 
 import htt.ophabs.OPhabs;
 import fruitSystem.devilFruitUser;
+import castSystem.coolDown;
 
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.EntityChangeBlockEvent;
@@ -14,6 +15,7 @@ import org.bukkit.event.player.PlayerEggThrowEvent;
 import org.bukkit.event.player.PlayerToggleSneakEvent;
 import org.bukkit.event.player.PlayerItemConsumeEvent;
 
+
 import java.util.ArrayList;
 import java.util.Map;
 
@@ -23,7 +25,7 @@ public class abilities {
     protected Integer actual;
     public ArrayList<String> abilitiesNames = new ArrayList<>();
     public ArrayList<Integer> abilitiesCD = new ArrayList<>();
-
+    protected coolDown cd; 
     public abilities(OPhabs plugin, devilFruitUser user){
         this.plugin = plugin;
         this.user = user;

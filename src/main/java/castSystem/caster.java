@@ -25,11 +25,9 @@ import java.util.Map;
 
 
 public class caster implements Listener {
-    private coolDown cooldown;
     private Map<String, devilFruitUser> dfPlayers = new HashMap<>();
 
     public caster(coolDown cooldown, Map<String, devilFruitUser> dfPlayers){
-        this.cooldown = cooldown;
         this.dfPlayers = dfPlayers;
     }
 

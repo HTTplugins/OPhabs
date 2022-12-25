@@ -54,7 +54,7 @@ public class logia extends abilities {
         new BukkitRunnable() {
             @Override
             public void run() {
-                if (!(logiaBodyON || player.isDead()))
+                if (!(logiaBodyON) || user.getPlayer().isDead())
                     cancelTask();
 
                 player.getWorld().spawnParticle(element, player.getLocation(), 10, 0.5, 0.5, 0.5, 0);

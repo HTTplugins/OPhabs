@@ -8,12 +8,13 @@ import org.bukkit.inventory.meta.ItemMeta;
 public class devilFruit{
     private ItemStack devilFruit;
     private boolean inUse;
+    private String commandFruitName;
 
     public devilFruit(String fruitCommandName){
         Material devilFruitForm = null;
         String fruitItemName = null;
         ItemMeta metaDataDevilFruit = (new ItemStack(Material.APPLE)).getItemMeta().clone();
-
+        commandFruitName = fruitCommandName;
         switch (fruitCommandName){
             case fruitIdentification.fruitCommandNameYami:
                 devilFruitForm = Material.APPLE;

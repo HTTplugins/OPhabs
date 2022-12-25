@@ -4,6 +4,7 @@ import org.bukkit.entity.Player;
 import abilitieSystem.abilities;
 import castSystem.coolDown;
 
+import org.bukkit.Bukkit;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.EntityChangeBlockEvent;
 import org.bukkit.event.entity.PlayerDeathEvent;
@@ -17,26 +18,28 @@ import org.bukkit.event.player.PlayerItemConsumeEvent;
 import java.util.ArrayList;
 
 public class devilFruitUser{
-    private Player player;
-    private devilFruit Fruit;
+    private String playerName;
     public int actual;
+    public devilFruit fruit;
     protected abilities ability;
-    protected coolDown cooldown;
-
     private boolean awakened;
 
 
-    public devilFruitUser(Player player, devilFruit Fruit, abilities ability){
-        this.player = player;
-        this.Fruit=Fruit;
+    public devilFruitUser(String playerName, devilFruit fruit, abilities ability){
+        this.playerName = playerName;
         this.ability = ability;
         this.ability.setUser(this);
+        this.fruit = fruit;
         actual = 0;
         awakened=false;
     }
 
     public Player getPlayer(){
-        return player;
+        return Bukkit.getPlayerExact(playerName);
+    }
+    
+    public String getPlayerName(){
+        return playerName;
     }
 
     public void playerAwakens(){
@@ -47,7 +50,7 @@ public class devilFruitUser{
         return awakened;
     }
     public devilFruit getFruit(){
-        return Fruit;
+        return fruit;
     }
     public void switchAbility(){
         actual++;
