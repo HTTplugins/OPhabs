@@ -15,13 +15,11 @@ import org.bukkit.potion.PotionEffectType;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.util.Vector;
 
-
 public class mera_mera extends logia {
     final float ExplosionRadius = 4;
     final int Abilitie1Radius = 4;
     final Material FIRE = Material.FIRE, OBSIDIANA = Material.OBSIDIAN, BEDROCK = Material.BEDROCK, AIR = Material.AIR;
     final Particle PARTICULA_FUEGO = Particle.FLAME;
-    final Sound RESPAWN_SOUND = Sound.ENTITY_DRAGON_FIREBALL_EXPLODE;
     final int N_PARTICULAS = 20, RADIO_PARTICULAS = 0, RESPAWN_HEALTH = 10, RESPAWN_FOOD = 10, BERSERK_DURATION = 3600,
               BERSERK_AMPLIFIER = 2;
     boolean BERSERK = true;
@@ -31,7 +29,7 @@ public class mera_mera extends logia {
     public mera_mera(OPhabs plugin){
         super(plugin, Particle.FLAME);
         //
-        //Nombres de las habilidades: 
+        //Nombres de las habilidades:
         abilitiesNames.add("Fire Pool");
         abilitiesCD.add(0);
         abilitiesNames.add("Fireball Storm");

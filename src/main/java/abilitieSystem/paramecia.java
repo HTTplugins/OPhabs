@@ -19,8 +19,7 @@ import org.bukkit.scheduler.BukkitRunnable;
 import fruitSystem.devilFruitUser;
 
 
-public class paramecia extends abilities{
-    
+public class paramecia extends abilities {
     public paramecia(OPhabs plugin){
         super(plugin);
     }
