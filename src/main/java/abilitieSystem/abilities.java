@@ -58,5 +58,5 @@ public class abilities {
     public void onEntityPickupItem(EntityPickupItemEvent event){}
     public void onPlayerEggThrow(PlayerEggThrowEvent event){}
     public void onEntityShootBow(EntityShootBowEvent event){}
-    public void onEntityChangeBlock(EntityChangeBlockEvent event){}
+
 }

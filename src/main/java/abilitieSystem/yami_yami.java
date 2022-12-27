@@ -4,6 +4,7 @@ import htt.ophabs.OPhabs;
 import org.bukkit.*;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Entity;
+import org.bukkit.entity.FallingBlock;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -14,40 +15,63 @@ import org.bukkit.scheduler.BukkitTask;
 import org.bukkit.util.Vector;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
+import java.util.Stack;
+
 import static java.lang.Math.*;
 
-public class yami_yami extends logia {
-    private int repealAnimationCounter = 0;
+
+public class yami_yami extends logia{
     public static Particle.DustOptions yamiDO = new Particle.DustOptions(Color.BLACK,1.0F);
-    public static Particle yamiParticle = Particle.REDSTONE;
+    private int repealAnimationCounter = 0;
 
     private final int
-             radius = 3;
+            radius = 3;
     private final int maxRadiusAmplification = 9;
     private final int damageAmount = 1;
 
-    private final Material voidMaterial= Material.BLACK_CONCRETE;
+    private static final Material voidMaterial= Material.BLACK_CONCRETE;
+
+    private Stack<Material> absorbedMaterials = new Stack<>();
 
     private List<Block> convertedToVoidBlocks = new ArrayList<>();
     public yami_yami(OPhabs plugin){
-        super(plugin, yamiParticle);
-
+        super(plugin, Particle.REDSTONE);
         abilitiesNames.add("BlackVoid");
         abilitiesCD.add(0);
+        abilitiesNames.add("LiberateVoid");
+        abilitiesCD.add(0);
         abilitiesNames.add("LivingVoid");
+        abilitiesCD.add(0);
+        abilitiesNames.add("voidMeteore");
         abilitiesCD.add(0);
     }
 
     public void ability1(){
         if(abilitiesCD.get(0) == 0){
             blackVoid(user.getPlayer());
-            abilitiesCD.set(0, 30);
+            abilitiesCD.set(0, 20); // Pon el cooldown en segundos
         }
     }
+
     public void ability2(){
         if(abilitiesCD.get(1) == 0){
+            liberateAbsorptions(user.getPlayer());
+            abilitiesCD.set(1, 20); // Pon el cooldown en segundos
+        }
+    }
+
+    public void ability3(){
+        if(abilitiesCD.get(2) == 0){
             livingVoid(user.getPlayer());
-            abilitiesCD.set(1, 3);
+            abilitiesCD.set(2, 20); // Pon el cooldown en segundos
+        }
+    }
+
+    public void ability4(){
+        if(abilitiesCD.get(3) == 0){
+            voidMeteore(user.getPlayer());
+            abilitiesCD.set(3, 20); // Pon el cooldown en segundos
         }
     }
 
@@ -61,54 +85,56 @@ public class yami_yami extends logia {
 
         int voidExpansionSpeed = 5; //less is faster
         BukkitTask circle = new BukkitRunnable() {
-                int radiusCounter = radius;
+            int radiusCounter = radius;
 
-                public void run() {
-                    radiusCounter++;
+            public void run() {
+                radiusCounter++;
 
-                    bresenham(radiusCounter, playerLocation, true);
-                    if (radiusCounter == radius + maxRadiusAmplification)
-                        this.cancel();
-                }
-            }.runTaskTimer(plugin, voidExpansionDelay, voidExpansionSpeed);
+                bresenham(radiusCounter, playerLocation, true);
+                if (radiusCounter == radius + maxRadiusAmplification)
+                    this.cancel();
+            }
+        }.runTaskTimer(plugin, voidExpansionDelay, voidExpansionSpeed);
 
         int damageDelay = 0;
         int damageSpeed = 15;
         BukkitTask damageAndParticles = new BukkitRunnable() {
-                public void run() {
-                    for(LivingEntity livEnt : player.getWorld().getLivingEntities())
-                        if (livEnt != player && livEnt.getLocation().getBlock().getRelative(0,-1,0).getType().equals(voidMaterial))
-                            livEnt.damage(damageAmount);
+            public void run() {
+                for(LivingEntity livEnt : player.getWorld().getLivingEntities())
+                    if (livEnt != player && livEnt.getLocation().getBlock().getRelative(0,-1,0).getType().equals(voidMaterial))
+                        livEnt.damage(damageAmount);
 
 
-                    for(double x = playerLocation.getX() - maxRadiusAmplification; x < playerLocation.getX() + maxRadiusAmplification; x++ ){
-                        for(double z = playerLocation.getZ() - maxRadiusAmplification; z < playerLocation.getZ() + maxRadiusAmplification; z++ ){
-                            boolean foundY=false;
-                            for(double y = playerLocation.getBlockY() - 1;  y > playerLocation.getBlockY() - 3 && !foundY; y--){
-                                Block block = new Location(player.getWorld(), x,y,z).getBlock();
-                                if(block.getType().equals(voidMaterial))
-                                    player.getWorld().spawnParticle(element,block.getRelative(0,1,0).getLocation(),0,0,1,0,yamiDO);
-                            }
+                for(double x = playerLocation.getX() - maxRadiusAmplification; x < playerLocation.getX() + maxRadiusAmplification; x++ ){
+                    for(double z = playerLocation.getZ() - maxRadiusAmplification; z < playerLocation.getZ() + maxRadiusAmplification; z++ ){
+                        boolean foundY=false;
+                        for(double y = playerLocation.getBlockY() - 1;  y > playerLocation.getBlockY() - 3 && !foundY; y--){
+                            Block block = new Location(player.getWorld(), x,y,z).getBlock();
+                            if(block.getType().equals(voidMaterial))
+                                player.getWorld().spawnParticle(element,block.getRelative(0,1,0).getLocation(),0,0,1,0,yamiDO);
                         }
                     }
                 }
-            }.runTaskTimer(plugin, damageDelay, damageSpeed);
+            }
+        }.runTaskTimer(plugin, damageDelay, damageSpeed);
 
         int dissappearVoidBlocksDelay = 90;
         new BukkitRunnable() {
-                @Override
-                public void run() {
-                    dissappearVoidBlocks();
-                    damageAndParticles.cancel();
-                    player.getWorld().playSound(player, Sound.ENTITY_ENDERMAN_TELEPORT, 10, 2);
-                }
-            }.runTaskLater(plugin, dissappearVoidBlocksDelay);
+            @Override
+            public void run() {
+                dissappearVoidBlocks();
+                damageAndParticles.cancel();
+                player.getWorld().playSound(player, Sound.ENTITY_ENDERMAN_TELEPORT, 10, 2);
+            }
+        }.runTaskLater(plugin, dissappearVoidBlocksDelay);
     }
 
-    @EventHandler(ignoreCancelled = true)
-    public void onEntityChangeBlock(EntityChangeBlockEvent event) {
-        if(event.getBlock().getRelative(0,-1,0).getType().equals(voidMaterial))
+
+    public static void onEntityChangeBlock(EntityChangeBlockEvent event) {
+
+        if(event.getBlock().getRelative(0,-1,0).getType().equals(voidMaterial)) {
             event.setCancelled(true);
+        }
     }
 
     public void bresenham(int radius, Location playerLocation, boolean fill){
@@ -182,20 +208,17 @@ public class yami_yami extends logia {
     }
 
     public void setBlockAndLineUP(Location perimeterPixel){
-            boolean found = false;
-            for(int i=0; i < 3 && !found; i++){
+        boolean found = false;
+        for(int i=0; i < 3 && !found; i++){
 
 
-                if( !perimeterPixel.getBlock().getRelative(0,-i,0).getType().equals(Material.AIR)){
-                    found = true;
-                    perimeterPixel.getBlock().getRelative(0,-i,0).setType(voidMaterial);
-                    convertedToVoidBlocks.add(perimeterPixel.getBlock().getRelative(0,-i,0));
+            if( !perimeterPixel.getBlock().getRelative(0,-i,0).getType().equals(Material.AIR)){
+                found = true;
+                perimeterPixel.getBlock().getRelative(0,-i,0).setType(voidMaterial);
+                convertedToVoidBlocks.add(perimeterPixel.getBlock().getRelative(0,-i,0));
 
-                }
             }
-
-
-
+        }
 
         Location upBlockLocation = new Location(perimeterPixel.getWorld(), perimeterPixel.getBlockX(),perimeterPixel.getBlockY(),perimeterPixel.getBlockZ());
         int maxHeight = 10;
@@ -204,6 +227,7 @@ public class yami_yami extends logia {
 
             if(!upBlockLocation.getBlock().getType().equals(Material.AIR)){
                 Material matFallingBlock = upBlockLocation.getBlock().getType();
+                absorbedMaterials.add(matFallingBlock);
                 upBlockLocation.getBlock().setType(Material.AIR);
                 upBlockLocation.getWorld().spawnFallingBlock(upBlockLocation,matFallingBlock,(byte) 9);
             }
@@ -215,7 +239,6 @@ public class yami_yami extends logia {
     public void dissappearVoidBlocks(){
         for(Block convertedTVblock : convertedToVoidBlocks)
             convertedTVblock.setType(Material.AIR);
-
     }
 
     public void livingVoid(Player player){
@@ -223,8 +246,19 @@ public class yami_yami extends logia {
         player.playSound(player.getLocation(),Sound.BLOCK_REDSTONE_TORCH_BURNOUT,10,0);
         World world = player.getWorld();
 
+        absorbAnimation(player);
+
+        for(Entity ent : player.getNearbyEntities(10,10,10))
+            if(ent instanceof LivingEntity && !player.equals(ent))
+                livingVoidForEntity(ent,player);
+
+        repealAnimationCounter = 0;
+    }
+
+    public void absorbAnimation(Player player){
         new BukkitRunnable(){
             double angle = -player.getLocation().getYaw();
+            World world = player.getWorld();
 
             double start = 2* PI*5;
             double finish = 2* PI*5 - 2* PI*5/10;
@@ -243,8 +277,6 @@ public class yami_yami extends logia {
 
                     Location rotation = new Location(player.getWorld(), xr,yr,zr);
 
-
-
                     world.spawnParticle(element,rotation,0,0,0,0,yamiDO);
 
                 }
@@ -257,14 +289,46 @@ public class yami_yami extends logia {
 
             }
         }.runTaskTimer(plugin,0,1);
-
-        for(Entity ent : player.getNearbyEntities(10,10,10))
-            if(ent instanceof LivingEntity && !player.equals(ent))
-                livingVoidForEntity(ent,player);
-
-        repealAnimationCounter = 0;
     }
 
+    public void repealAnimation(Player player){
+
+        new BukkitRunnable(){
+            final double angle = -player.getLocation().getYaw();
+            World world = player.getWorld();
+
+            double start = 0;
+            double finish = 0 + 2* PI*5/10;
+            @Override
+            public void run() {
+
+                for(double i=start; i<finish ; i+=0.05) {
+
+                    double x = i * sin(i) / 5;
+                    double y = i * cos(i) / 5;
+                    double z = i;
+
+                    double xr = player.getLocation().getX() + cos(toRadians(angle))*x + sin(toRadians(angle))*z;
+                    double yr = 1 + player.getLocation().getY() + y;
+                    double zr = player.getLocation().getZ() + -sin(toRadians(angle))*x + cos(toRadians(angle))*z;
+
+                    Location rotation = new Location(player.getWorld(), xr,yr,zr);
+
+
+
+                    world.spawnParticle(element,rotation,0,0,0,0,yamiDO);
+
+                }
+                start = finish;
+
+                finish = finish +  2* PI*5/10;
+
+                if(finish < 0) this.cancel();
+
+            }
+        }.runTaskTimer(plugin,0,1);
+
+    }
     public void livingVoidForEntity(Entity ent, Player player){
 
         BukkitTask attract = new BukkitRunnable(){
@@ -278,15 +342,14 @@ public class yami_yami extends logia {
                     this.cancel();
 
                 vx =  player.getLocation().getX() - ent.getLocation().getX();
-                vy =  player.getLocation().getY()-ent.getLocation().getY();
-                vz =  player.getLocation().getZ()-ent.getLocation().getZ();
+                vy =  player.getLocation().getY() - ent.getLocation().getY();
+                vz =  player.getLocation().getZ() - ent.getLocation().getZ();
 
                 Vector movement = player.getLocation().toVector().subtract(ent.getLocation().toVector()).normalize();
 
                 if(!fV){
                     FirstVector = movement.clone();
                     fV = true;
-
                 }
 
                 //Para levantar al mob si hay desnivel
@@ -312,40 +375,7 @@ public class yami_yami extends logia {
         World world = player.getWorld();
 
         if(repealAnimationCounter == 1){
-            new BukkitRunnable(){
-                final double angle = -player.getLocation().getYaw();
-
-                double start = 0;
-                double finish = 0 + 2* PI*5/10;
-                @Override
-                public void run() {
-
-                    for(double i=start; i<finish ; i+=0.05) {
-
-                        double x = i * sin(i) / 5;
-                        double y = i * cos(i) / 5;
-                        double z = i;
-
-                        double xr = player.getLocation().getX() + cos(toRadians(angle))*x + sin(toRadians(angle))*z;
-                        double yr = 1 + player.getLocation().getY() + y;
-                        double zr = player.getLocation().getZ() + -sin(toRadians(angle))*x + cos(toRadians(angle))*z;
-
-                        Location rotation = new Location(player.getWorld(), xr,yr,zr);
-
-
-
-                        world.spawnParticle(element,rotation,0,0,0,0,yamiDO);
-
-                    }
-                    start = finish;
-
-                    finish = finish +  2* PI*5/10;
-
-
-                    if(finish < 0) this.cancel();
-
-                }
-            }.runTaskTimer(plugin,0,1);
+            repealAnimation(player);
         }
 
         ent.getWorld().playSound(ent.getLocation(),Sound.BLOCK_REDSTONE_TORCH_BURNOUT,10,2);
@@ -355,6 +385,135 @@ public class yami_yami extends logia {
         dir.setX(dir.getX() % 5);
         dir.setZ(dir.getZ() % 5);
         ent.setVelocity(dir);
+
+    }
+    public void liberateAbsorptions(Player player){
+
+        World world = player.getWorld();
+        Random random = new Random();
+
+        BukkitTask particles = new BukkitRunnable(){
+            int tickTime = 0;
+            @Override
+            public void run() {
+                tickTime++;
+                for(int i=0; i<100; i++){
+
+                    double xdecimals = random.nextDouble();
+                    double ydecimals = random.nextDouble();
+                    double zdecimals = random.nextDouble();
+
+                    double x = random.nextInt(4 + 4 ) - 4 + xdecimals;
+                    double y = random.nextInt(4 + 4 ) - 4 + xdecimals;
+                    double z = random.nextInt(4 + 4 ) - 4 + zdecimals;
+                    player.getWorld().spawnParticle(element,player.getLocation().getBlock().getRelative(0,2,0).getLocation().add(x,y,z),0,0,1,0,yamiDO);
+
+                }
+
+            }
+
+        }.runTaskTimer(plugin,0,4);
+
+
+
+        new BukkitRunnable(){
+            int i = 0;
+
+            World world = player.getWorld();
+
+            Material usedMAterial;
+            @Override
+            public void run() {
+
+                if(!absorbedMaterials.empty()){
+                    usedMAterial = absorbedMaterials.pop();
+
+                    FallingBlock block = world.spawnFallingBlock(player.getLocation().getBlock().getRelative(0,2,0).getLocation(),usedMAterial.createBlockData());
+
+                    Random random = new Random();
+
+                    double xdecimals = random.nextDouble();
+                    double zdecimals = random.nextDouble();
+
+                    double x = random.nextInt(1 + 1 ) - 1 + xdecimals;
+                    double z = random.nextInt(1 + 1 ) - 1 + zdecimals;
+
+                    block.setVelocity(new Vector(x,0.5,z));
+                }
+
+                i++;
+
+                if(i == 85){
+                    particles.cancel();
+                    this.cancel();
+                }
+            }
+        }.runTaskTimer(plugin,0,4);
+    }
+
+    public void voidMeteore(Player player){
+        World world = player.getWorld();
+
+
+        new BukkitRunnable(){
+            double x,y,z, xr,yr,zr;
+
+            Location startPosition = player.getLocation().add(0,3,0);
+
+            Vector direction = new Vector(0,0,0);
+
+            Vector facingDirection = player.getLocation().getDirection();
+            double sumX = facingDirection.getX();
+            double sumY = facingDirection.getY();
+            double sumZ = facingDirection.getZ();
+
+            int ticks = 0;
+
+            int numplarticles = 0;
+
+            Location spawnBallPos;
+            @Override
+            public void run() {
+                ticks++;
+                numplarticles = 0;
+
+                for (double i = 0; i < 2*PI*4; i+=0.05){
+                    x = sin(i/10*PI);
+                    y = sin((i%10)*PI) * cos(i/10*PI);
+                    z =cos((i%10)*PI)*cos(i/10*PI);
+
+                    xr = startPosition.getX() + x ;
+                    yr = startPosition.getY() + y ;
+                    zr = startPosition.getZ() + z ;
+
+                    spawnBallPos = new Location(player.getWorld(), xr,yr,zr);
+
+                    spawnBallPos.add(direction);
+                    if(spawnBallPos.getBlock().getType().equals(Material.AIR)) {
+                        world.spawnParticle(element, spawnBallPos, 0, 0, 0, 0, yamiDO);
+                        numplarticles++;
+                    }
+
+                }
+
+                for(Entity ent : world.getNearbyEntities(spawnBallPos,2,2,2))
+                    if(ent instanceof LivingEntity && !player.equals(ent))
+                        ((LivingEntity)ent).damage(10);
+
+                direction.add(new Vector(sumX,sumY,sumZ));
+
+                if(numplarticles < 25 || ticks > 50){
+                    this.cancel();
+                }
+
+            }
+        }.runTaskTimer(plugin,0,1);
+
+
+
+
+
+
 
     }
 

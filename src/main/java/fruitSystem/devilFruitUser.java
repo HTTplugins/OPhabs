@@ -114,7 +114,7 @@ public class devilFruitUser{
     public void onEntityShootBow(EntityShootBowEvent event){
         ability.onEntityShootBow(event);
     }
-    public void onEntityChangeBlock(EntityChangeBlockEvent event){
-        ability.onEntityChangeBlock(event);
+    public static void onEntityChangeBlock(EntityChangeBlockEvent event){
+
     }
 }
