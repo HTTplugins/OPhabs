@@ -26,7 +26,7 @@ public class fruitAssociation implements Listener {
     public static Map<String, abilities> abilities = new HashMap<>();
     public abilitiesScoreboard scoreboard = null;
 
-    public fruitAssociation(OPhabs plugin, yami_yami yamiClass, mera_mera meraClass, gura_gura guraClass, moku_moku mokuClass, neko_neko_reoparudo nekoReoparudoClass, magu_magu maguClass){
+    public fruitAssociation(OPhabs plugin, yami_yami yamiClass, mera_mera meraClass, gura_gura guraClass, moku_moku mokuClass, neko_neko_reoparudo nekoReoparudoClass, magu_magu maguClass, goro_goro goroClass){
         this.plugin = plugin;
         abilities.put(fruitIdentification.fruitItemNameGura,guraClass);
         abilities.put(fruitIdentification.fruitItemNameMera,meraClass);
@@ -34,6 +34,8 @@ public class fruitAssociation implements Listener {
         abilities.put(fruitIdentification.fruitItemNameMoku,mokuClass);
         abilities.put(fruitIdentification.fruitItemNameNekoReoparudo,nekoReoparudoClass);
         abilities.put(fruitIdentification.fruitItemNameMagu,maguClass);
+        abilities.put(fruitIdentification.fruitItemNameGoro,goroClass);
+
 
     String
             yamiValue = plugin.getConfig().getString("FruitAssociations.yami_yami"),
@@ -41,7 +43,9 @@ public class fruitAssociation implements Listener {
             guraValue = plugin.getConfig().getString("FruitAssociations.gura_gura"),
             mokuValue = plugin.getConfig().getString("FruitAssociations.moku_moku"),
             nekoReoparudoValue = plugin.getConfig().getString("FruitAssociations.neko_neko_reoparudo"),
-            maguValue = plugin.getConfig().getString("FruitAssociations.magu_magu");
+            maguValue = plugin.getConfig().getString("FruitAssociations.magu_magu"),
+            goroValue = plugin.getConfig().getString("FruitAssociations.goro_goro");
+
 
         if(!yamiValue.equals("none")){
            dfPlayers.put(yamiValue, new devilFruitUser(yamiValue, new devilFruit(fruitIdentification.fruitCommandNameYami), yamiClass));
@@ -61,6 +65,10 @@ public class fruitAssociation implements Listener {
         if(!maguValue.equals("none")){
             dfPlayers.put(maguValue, new devilFruitUser(maguValue, new devilFruit(fruitIdentification.fruitCommandNameMagu), maguClass));
         }
+
+        if(!goroValue.equals("none")){
+            dfPlayers.put(goroValue,new devilFruitUser(goroValue, new devilFruit(fruitIdentification.fruitCommandNameGoro), goroClass));
+        }
     }
 
     public void setScoreboard(abilitiesScoreboard scoreboard){
@@ -77,7 +85,8 @@ public class fruitAssociation implements Listener {
                 guraValue = plugin.getConfig().getString("FruitAssociations.gura_gura"),
                 mokuValue = plugin.getConfig().getString("FruitAssociations.moku_moku"),
                 nekoReoparudoValue = plugin.getConfig().getString("FruitAssociations.neko_neko_reoparudo"),
-                maguValue = plugin.getConfig().getString("FruitAssociations.magu_magu");
+                maguValue = plugin.getConfig().getString("FruitAssociations.magu_magu"),
+                goroValue = plugin.getConfig().getString("FruitAssociations.goro_goro");
 
         String casterItemName = null;
         Material castMaterial = null;
@@ -120,11 +129,18 @@ public class fruitAssociation implements Listener {
                 castMaterial = castIdentification.castMaterialNekoReoparudo;
                 break;
 
-            case fruitIdentification.fruitCommandNameMagu:
+            case fruitIdentification.fruitItemNameMagu:
                 consumedFruit = consumedFruit(maguValue, event);
                 maguValue = event.getPlayer().getName();
                 casterItemName = castIdentification.castItemNameMagu;
                 castMaterial = castIdentification.castMaterialMagu;
+                break;
+            case fruitIdentification.fruitItemNameGoro:
+                consumedFruit = consumedFruit(goroValue,event);
+                goroValue = event.getPlayer().getName();
+                casterItemName = castIdentification.castItemNameGoro;
+                castMaterial = castIdentification.castMaterialGoro;
+                break;
 
             default:
                 break;
@@ -136,6 +152,7 @@ public class fruitAssociation implements Listener {
             plugin.getConfig().set("FruitAssociations.gura_gura",guraValue);
             plugin.getConfig().set("FruitAssociations.moku_moku",mokuValue);
             plugin.getConfig().set("FruitAssociations.neko_neko_reoparudo",nekoReoparudoValue);
+            plugin.getConfig().set("FruitAssociations.goro_goro",goroValue);
             plugin.saveConfig();
         }
 

@@ -11,24 +11,22 @@ public class castIdentification {
                             castMaterialGura = Material.QUARTZ,
                             castMaterialMoku = Material.FEATHER,
                             castMaterialNekoReoparudo = Material.YELLOW_DYE,
-                            castMaterialMagu = Material.MAGMA_CREAM;
+                            castMaterialMagu = Material.MAGMA_CREAM,
+                            castMaterialGoro = Material.IRON_INGOT;
 
     public static String castItemNameYami = "Yami Yami caster",
                          castItemNameMera = "Mera Mera caster",
                          castItemNameGura = "Gura Gura caster",
                          castItemNameMoku = "Moku Moku caster",
                          castItemNameNekoReoparudo = "Neko Neko Reoparudo caster",
-                         castItemNameMagu = "Magu Magu caster";
+                         castItemNameMagu = "Magu Magu caster",
+                         castItemNameGoro = "Goro Goro caster";
 
     public static boolean itemIsCaster(ItemStack item) {
         if (item.getType() == Material.AIR){
 
-
             return false;
         }
-
-
-
 
         String itemName = item.getItemMeta().getDisplayName();
         Material itemMaterial = item.getType();
@@ -38,7 +36,8 @@ public class castIdentification {
                 || (itemName.equals(castIdentification.castItemNameGura) && itemMaterial.equals(castIdentification.castMaterialGura))
                 || (itemName.equals(castIdentification.castItemNameMoku) && itemMaterial.equals(castIdentification.castMaterialMoku))
                 || (itemName.equals(castIdentification.castItemNameNekoReoparudo) && itemMaterial.equals(castIdentification.castMaterialNekoReoparudo))
-                || (itemName.equals(castIdentification.castItemNameMagu) && itemMaterial.equals(castIdentification.castMaterialMagu)))
+                || (itemName.equals(castIdentification.castItemNameMagu) && itemMaterial.equals(castIdentification.castMaterialMagu))
+                || (itemName.equals(castIdentification.castItemNameGoro) && itemMaterial.equals(castIdentification.castMaterialGoro)))
             return true;
         else
             return false;

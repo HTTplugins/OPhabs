@@ -10,14 +10,16 @@ public class fruitIdentification {
             fruitItemNameGura = "gura gura no mi",
             fruitItemNameMoku = "moku moku no mi",
             fruitItemNameNekoReoparudo = "neko neko reoparudo no mi",
-            fruitItemNameMagu = "magu magu no mi";
+            fruitItemNameMagu = "magu magu no mi",
+            fruitItemNameGoro = "goro goro no mi";
     public final static String
             fruitCommandNameYami = "yami_yami",
             fruitCommandNameMera = "mera_mera",
             fruitCommandNameGura = "gura_gura",
             fruitCommandNameMoku = "moku_moku",
             fruitCommandNameNekoReoparudo = "neko_neko_reoparudo",
-            fruitCommandNameMagu = "magu_magu";
+            fruitCommandNameMagu = "magu_magu",
+            fruitCommandNameGoro = "goro_goro";
 
     public String getItemName(String fruitCommandName){
         switch (fruitCommandName){
@@ -33,6 +35,8 @@ public class fruitIdentification {
                 return fruitItemNameNekoReoparudo;
             case fruitCommandNameMagu:
                 return fruitItemNameMagu;
+            case fruitCommandNameGoro:
+                return fruitItemNameGoro;
             default:
                 return null;
         }
@@ -52,6 +56,8 @@ public class fruitIdentification {
                 return fruitCommandNameNekoReoparudo;
             case fruitItemNameMagu:
                 return fruitCommandNameMagu;
+            case fruitItemNameGoro:
+                return fruitCommandNameGoro;
             default:
                 return null;
         }
