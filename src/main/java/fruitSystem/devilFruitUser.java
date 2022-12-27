@@ -2,7 +2,9 @@ package fruitSystem;
 
 import org.bukkit.entity.Player;
 import abilitieSystem.abilities;
+import castSystem.coolDown;
 
+import org.bukkit.Bukkit;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.EntityChangeBlockEvent;
 import org.bukkit.event.entity.PlayerDeathEvent;
@@ -13,26 +15,31 @@ import org.bukkit.event.player.PlayerEggThrowEvent;
 import org.bukkit.event.player.PlayerToggleSneakEvent;
 import org.bukkit.event.player.PlayerItemConsumeEvent;
 
-public class devilFruitUser{
-    private Player player;
-    private devilFruit Fruit;
-    private Integer actual;
-    protected abilities ability;
+import java.util.ArrayList;
 
+public class devilFruitUser{
+    private String playerName;
+    public int actual;
+    public devilFruit fruit;
+    protected abilities ability;
     private boolean awakened;
 
 
-    public devilFruitUser(Player player, devilFruit Fruit, abilities ability){
-        this.player = player;
-        this.Fruit=Fruit;
+    public devilFruitUser(String playerName, devilFruit fruit, abilities ability){
+        this.playerName = playerName;
         this.ability = ability;
         this.ability.setUser(this);
+        this.fruit = fruit;
         actual = 0;
         awakened=false;
     }
 
     public Player getPlayer(){
-        return player;
+        return Bukkit.getPlayerExact(playerName);
+    }
+    
+    public String getPlayerName(){
+        return playerName;
     }
 
     public void playerAwakens(){
@@ -43,13 +50,13 @@ public class devilFruitUser{
         return awakened;
     }
     public devilFruit getFruit(){
-        return Fruit;
+        return fruit;
     }
     public void switchAbility(){
         actual++;
         actual = actual % ability.getAbilitiesNames().size();
     }
-    public void abilityActive(){
+    public int abilityActive(){
         switch (actual){
             case 0:
                 ability.ability1();
@@ -70,6 +77,14 @@ public class devilFruitUser{
                 ability.ability6();
                 break;
         }
+        return ability.abilitiesCD.get(actual);
+    }
+
+    public ArrayList<Integer> getAbilitiesCD(){
+        return ability.abilitiesCD;
+    }
+    public ArrayList<String> getAbilitiesNames(){
+        return ability.getAbilitiesNames();
     }
 
     public void onEntityDamage(EntityDamageEvent event){
@@ -99,7 +114,7 @@ public class devilFruitUser{
     public void onEntityShootBow(EntityShootBowEvent event){
         ability.onEntityShootBow(event);
     }
-    public void onEntityChangeBlock(EntityChangeBlockEvent event){
-        ability.onEntityChangeBlock(event);
+    public static void onEntityChangeBlock(EntityChangeBlockEvent event){
+
     }
 }

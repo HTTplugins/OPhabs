@@ -3,6 +3,7 @@ package abilitieSystem;
 
 import htt.ophabs.OPhabs;
 import fruitSystem.devilFruitUser;
+import castSystem.coolDown;
 
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.EntityChangeBlockEvent;
@@ -14,6 +15,7 @@ import org.bukkit.event.player.PlayerEggThrowEvent;
 import org.bukkit.event.player.PlayerToggleSneakEvent;
 import org.bukkit.event.player.PlayerItemConsumeEvent;
 
+
 import java.util.ArrayList;
 import java.util.Map;
 
@@ -22,7 +24,8 @@ public class abilities {
     protected devilFruitUser user=null;
     protected Integer actual;
     public ArrayList<String> abilitiesNames = new ArrayList<>();
-
+    public ArrayList<Integer> abilitiesCD = new ArrayList<>();
+    protected coolDown cd; 
     public abilities(OPhabs plugin, devilFruitUser user){
         this.plugin = plugin;
         this.user = user;
@@ -47,9 +50,7 @@ public class abilities {
 	public void ability5(){}
 	public void ability6(){}
     public void onEntityDamage(EntityDamageEvent event){}
-    public void onPlayerDeath(PlayerDeathEvent event){
-        user=null;
-    }
+    public void onPlayerDeath(PlayerDeathEvent event){}
     public void playerOnWater(PlayerMoveEvent event){}
     public void onPlayerToggleSneak(PlayerToggleSneakEvent e){}
     public void onFall(EntityDamageEvent e){}
@@ -57,12 +58,5 @@ public class abilities {
     public void onEntityPickupItem(EntityPickupItemEvent event){}
     public void onPlayerEggThrow(PlayerEggThrowEvent event){}
     public void onEntityShootBow(EntityShootBowEvent event){}
-    public void onEntityChangeBlock(EntityChangeBlockEvent event){}
-
-
-
-
-
-    
 
 }

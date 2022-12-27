@@ -21,6 +21,7 @@ public class mera_mera extends logia {
     final int Abilitie1Radius = 4;
     final Material FIRE = Material.FIRE, OBSIDIANA = Material.OBSIDIAN, BEDROCK = Material.BEDROCK, AIR = Material.AIR;
     final Particle PARTICULA_FUEGO = Particle.FLAME;
+    final Sound RESPAWN_SOUND = Sound.ENTITY_DRAGON_FIREBALL_EXPLODE;
     final int N_PARTICULAS = 20, RADIO_PARTICULAS = 0, RESPAWN_HEALTH = 10, RESPAWN_FOOD = 10, BERSERK_DURATION = 3600,
               BERSERK_AMPLIFIER = 2;
     boolean BERSERK = true;
@@ -30,14 +31,27 @@ public class mera_mera extends logia {
     public mera_mera(OPhabs plugin){
         super(plugin, Particle.FLAME);
         //
-        //Nombres de las habilidades:
-        //abilitiesNames.add("Fire Pool");
-        //abilitiesNames.add("Fireball Storm");
+        //Nombres de las habilidades: 
+        abilitiesNames.add("Fire Pool");
+        abilitiesCD.add(0);
+        abilitiesNames.add("Fireball Storm");
+        abilitiesCD.add(0);
     }
 
     //Habilidades activas:
-    //public void ability1(){ firePool(user.getPlayer()); }
-    //public void ability2(){ fireballStorm(user.getPlayer()); }
+    public void ability1(){
+        if(abilitiesCD.get(0) == 0){
+            FirePool(user.getPlayer());
+            abilitiesCD.set(0, 20); // Pon el cooldown en segundos
+        }
+    }
+
+    public void ability2(){
+        if(abilitiesCD.get(1) == 0){
+            FireballStorm(user.getPlayer());
+            abilitiesCD.set(1, 20); // Pon el cooldown en segundos
+        }
+    }
 
     public boolean comprobarUser(Player jugador){
         String nombre_user = plugin.getConfig().getString("FruitAssociations.mera_mera");
@@ -123,6 +137,17 @@ public class mera_mera extends logia {
             event.getPlayer().getWorld().spawnParticle(PARTICULA_FUEGO, event.getPlayer().getLocation(), N_PARTICULAS,
                     RADIO_PARTICULAS, RADIO_PARTICULAS, RADIO_PARTICULAS);
     }
+
+
+//  @EventHandler
+    //public void onEntityDamage(EntityDamageEvent event) {
+    //    if (event.getEntity() instanceof Player) {
+    //        Player player = (Player) event.getEntity();
+    //        if (event.getFinalDamage() >= player.getHealth()) {
+    //            //Aqui seria la el método como tal
+    //        }
+    //    }
+    //}
 
     public void onPlayerDeath(PlayerDeathEvent event) {
         Player jugador = event.getEntity();

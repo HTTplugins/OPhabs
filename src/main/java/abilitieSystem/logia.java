@@ -22,7 +22,7 @@ import org.bukkit.entity.Vex;
 import java.util.ArrayList;
 
 public class logia extends abilities {
-    Particle element;
+    protected Particle element;
     boolean logiaBodyON = false;
 
     public logia(OPhabs plugin, Particle element){
@@ -54,8 +54,10 @@ public class logia extends abilities {
         new BukkitRunnable() {
             @Override
             public void run() {
-                if (!(logiaBodyON || player.isDead()))
+                if (!(logiaBodyON) || user.getPlayer().isDead()){
                     cancelTask();
+                    logiaBodyON = false;
+                }
 
                 player.getWorld().spawnParticle(element, player.getLocation(), 10, 0.5, 0.5, 0.5, 0);
             }
@@ -75,13 +77,6 @@ public class logia extends abilities {
                 event.setCancelled(true);
             }
         }
-    }
-
-//    @EventHandler(ignoreCancelled = true)
-    public void onPlayerDeath(PlayerDeathEvent event) {
-        Player player = event.getEntity();
-        if (logiaBodyON)
-            logiaBody(player);
     }
 
     public boolean logiaBody(Player player) {

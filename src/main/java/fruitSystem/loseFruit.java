@@ -5,11 +5,14 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.PlayerDeathEvent;
+import scoreboardSystem.abilitiesScoreboard;
+
 import java.util.Map;
 
 public class loseFruit implements Listener {
     private final OPhabs plugin;
     public Map<String, devilFruitUser> dfPlayers;
+    public abilitiesScoreboard scoreboard = null;
 
     public loseFruit(OPhabs plugin, Map<String, devilFruitUser> dfPlayers) {
         this.plugin = plugin;
@@ -27,6 +30,7 @@ public class loseFruit implements Listener {
                 maguValue = plugin.getConfig().getString("FruitAssociations.magu_magu");;
 
         if(fruitAssociation.dfPlayers.containsKey(player.getName())){
+            fruitAssociation.dfPlayers.get(player.getName()).onPlayerDeath(event);
             fruitAssociation.dfPlayers.remove(player.getName());
 
             if(yamiValue.equals(event.getEntity().getName())) yamiValue = "none";
@@ -43,6 +47,12 @@ public class loseFruit implements Listener {
             plugin.getConfig().set("FruitAssociations.neko_neko_reoparudo",nekoReoparudoValue);
             plugin.getConfig().set("FruitAssociations.magu_magu", maguValue);
             plugin.saveConfig();
+
+            scoreboard.removeScoreboard(player);
         }
+    }
+
+    public void setScoreboard(abilitiesScoreboard scoreboard){
+        this.scoreboard = scoreboard;
     }
 }

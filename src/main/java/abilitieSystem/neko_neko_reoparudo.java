@@ -22,7 +22,17 @@ public class neko_neko_reoparudo extends zoan {
         super(plugin);
         super.skinUrl = "https://s.namemc.com/i/18525c829f6918fe.png";
         abilitiesNames.add("FrontalAttack");
+        abilitiesCD.add(0);
     }
+
+    public void ability2(){
+        if(abilitiesCD.get(1) == 0){
+            frontAttack();
+            abilitiesCD.set(1, 3);
+        }
+    }
+
+
     public void transformation(){
         super.transformation();
 
@@ -111,11 +121,6 @@ public class neko_neko_reoparudo extends zoan {
             }.runTaskTimer(plugin, 0, 3);
         }
     }
-
-    public void ability2(){
-        frontAttack();
-    }
-
-    
+   
 }
 
