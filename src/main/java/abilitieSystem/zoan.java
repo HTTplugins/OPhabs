@@ -2,53 +2,54 @@ package abilitieSystem;
 
 import htt.ophabs.OPhabs;
 import org.bukkit.*;
-import org.bukkit.entity.Entity;
-import org.bukkit.entity.LivingEntity;
-import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
-import org.bukkit.event.EventHandler;
-import org.bukkit.event.Listener;
-import org.bukkit.event.entity.EntityDamageEvent;
-import org.bukkit.event.entity.EntityToggleSwimEvent;
-import org.bukkit.event.entity.PlayerDeathEvent;
-import org.bukkit.event.player.PlayerAnimationEvent;
-import org.bukkit.event.player.PlayerMoveEvent;
-import org.bukkit.potion.PotionEffect;
-import org.bukkit.potion.PotionEffectType;
 import org.bukkit.scheduler.BukkitRunnable;
+import org.bukkit.event.entity.PlayerDeathEvent;
 import skin.changer.skinsChanger;
+import fruitSystem.devilFruitUser;
 
 
-public class zoan {
-    protected OPhabs plugin;
+public class zoan extends abilities{
     public boolean transformed = false;
     skinsChanger skinC = new skinsChanger();
-    Player user = null; 
-    String skinUrl="";
+    String skinUrl="", skinAwakenUrl="";
+
     public zoan(OPhabs plugin){
-        this.plugin = plugin;
+        super(plugin);
+        abilitiesNames.add("Transform");
+        abilitiesCD.add(0);
     }
 
-    public void transformation(Player player){
+    public zoan(OPhabs plugin, devilFruitUser user){
+        super(plugin, user);
+        abilitiesNames.add("Transform");
+        abilitiesCD.add(0);
+    }
+
+
+    public void transformation(){
+        Player player = user.getPlayer();
         if(!transformed){
             skinC.changeSkin(player, skinUrl);
             transformed = true;
-            new BukkitRunnable() {
-                @Override
-                public void run() {
-                    if (player.isDead() || !transformed) {
-                        skinC.resetSkin(player);
-                        cancelTask();
-                    }
-                }
-
-                public void cancelTask() {
-                    Bukkit.getScheduler().cancelTask(this.getTaskId());
-                }
-            }.runTaskTimer(plugin, 0, 10);
         }
-        else
-            transformed = !transformed;    
+        else{
+            transformed = !transformed;
+            skinC.resetSkin(player);
+        }
+    }
+
+    public void ability1(){
+        transformation();
+    }
+    public void playerOnDeath(PlayerDeathEvent event){
+        if(event.getEntity().getName().equals(user.getPlayer().getName())){
+            if(transformed){
+                transformed = false;
+                skinC.resetSkin(user.getPlayer());
+                super.user = null;
+            }
+        }
     }
 }
 

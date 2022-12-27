@@ -18,4 +18,42 @@ public class fruitIdentification {
             fruitCommandNameMoku = "moku_moku",
             fruitCommandNameNekoReoparudo = "neko_neko_reoparudo",
             fruitCommandNameMagu = "magu_magu";
+
+    public String getItemName(String fruitCommandName){
+        switch (fruitCommandName){
+            case fruitCommandNameYami:
+                return fruitItemNameYami;
+            case fruitCommandNameMera:
+                return fruitItemNameMera;
+            case fruitCommandNameGura:
+                return fruitItemNameGura;
+            case fruitCommandNameMoku:
+                return fruitItemNameMoku;
+            case fruitCommandNameNekoReoparudo:
+                return fruitItemNameNekoReoparudo;
+            case fruitCommandNameMagu:
+                return fruitItemNameMagu;
+            default:
+                return null;
+        }
+    }
+
+    public String getCommandName(String fruitItemName){
+        switch (fruitItemName){
+            case fruitItemNameYami:
+                return fruitCommandNameYami;
+            case fruitItemNameMera:
+                return fruitCommandNameMera;
+            case fruitItemNameGura:
+                return fruitCommandNameGura;
+            case fruitItemNameMoku:
+                return fruitCommandNameMoku;
+            case fruitItemNameNekoReoparudo:
+                return fruitCommandNameNekoReoparudo;
+            case fruitItemNameMagu:
+                return fruitCommandNameMagu;
+            default:
+                return null;
+        }
+    }
 }

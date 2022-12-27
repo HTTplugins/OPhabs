@@ -11,6 +11,7 @@ import org.bukkit.ChatColor;
 import scoreboardSystem.*;
 
 import java.util.Objects;
+import java.util.ArrayList;
 
 public final class OPhabs extends JavaPlugin {
 
@@ -19,21 +20,10 @@ public final class OPhabs extends JavaPlugin {
         registerCommands();
 
         //---------------
-        //Initializations:
-
-        abilitiesIdentification.initialiceNames();
-
-        //---------------
         //Files
 
         getConfig().options().copyDefaults();
         saveDefaultConfig();
-
-        //--------------
-        //FruitSystem
-
-        getServer().getPluginManager().registerEvents(new fruitAssociation(this), this);
-        getServer().getPluginManager().registerEvents(new loseFruit(this), this);
 
         //--------------
         //abilitieSystem
@@ -45,25 +35,27 @@ public final class OPhabs extends JavaPlugin {
         neko_neko_reoparudo nekoReoparudoClass = new neko_neko_reoparudo(this);
         magu_magu maguClass = new magu_magu(this);
 
-        getServer().getPluginManager().registerEvents(yamiClass, this);
-        getServer().getPluginManager().registerEvents(nekoReoparudoClass,this);
-        getServer().getPluginManager().registerEvents(meraClass,this);
+        //--------------
+        //FruitSystem
+        fruitAssociation association = new fruitAssociation(this, yamiClass, meraClass, guraClass, mokuClass, nekoReoparudoClass, maguClass);
+        loseFruit lFruit = new loseFruit(this, association.dfPlayers);
+        getServer().getPluginManager().registerEvents(association, this);
+        getServer().getPluginManager().registerEvents(lFruit, this);
 
         //--------------
         //CasterSystem
-        coolDown cooldown = new coolDown(this);
-        cooldown.runCoolDownSystem();
+        coolDown cooldown = new coolDown(this, association.dfPlayers);
 
-        getServer().getPluginManager().registerEvents(new caster(cooldown, mokuClass, yamiClass, meraClass, guraClass, nekoReoparudoClass, maguClass), this);
+        getServer().getPluginManager().registerEvents(new caster(cooldown,association.dfPlayers), this);
         getServer().getPluginManager().registerEvents(new noDropCaster(), this);
 
         //--------------
         //ScoreBoards
 
-        abilitiesScoreboard scoreboards = new abilitiesScoreboard(this,cooldown);
-        scoreboards.ini();
-
-
+        abilitiesScoreboard scoreboard = new abilitiesScoreboard(this, association.dfPlayers);
+        scoreboard.ini();
+        association.setScoreboard(scoreboard);
+        lFruit.setScoreboard(scoreboard);
 
         //--------------
         Bukkit.getConsoleSender().sendMessage(ChatColor.GREEN + "" + ChatColor.BOLD +  "OPhabs started correctly.");

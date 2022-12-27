@@ -21,17 +21,16 @@ import org.bukkit.block.Biome;
 import org.bukkit.entity.Vex;
 import java.util.ArrayList;
 
-public class logia {
-    final Material AIR = Material.AIR;
-    Particle element = null;
-    protected OPhabs plugin;
-    ArrayList<String> logiaBodyON = new ArrayList<>();
+public class logia extends abilities {
+    protected Particle element;
+    boolean logiaBodyON = false;
 
-    public logia(OPhabs plugin){
-        this.plugin = plugin;
+    public logia(OPhabs plugin, Particle element){
+        super(plugin);
+        this.element = element;
     }
 
-/*    @EventHandler
+/*@EventHandler
     public void playerOnWater(PlayerMoveEvent event) {
         if (event.getPlayer().getLocation().getBlock().isLiquid() && event.getPlayer().getLocation().getBlock().getType() != Material.LAVA) {
             Player player = event.getPlayer();
@@ -55,8 +54,10 @@ public class logia {
         new BukkitRunnable() {
             @Override
             public void run() {
-                if (!(logiaBodyON.contains(player.getName()) || player.isDead()))
+                if (!(logiaBodyON) || user.getPlayer().isDead()){
                     cancelTask();
+                    logiaBodyON = false;
+                }
 
                 player.getWorld().spawnParticle(element, player.getLocation(), 10, 0.5, 0.5, 0.5, 0);
             }
@@ -72,27 +73,20 @@ public class logia {
         Player player;
         if (event.getEntity() instanceof Player) {
             player = (Player) event.getEntity();
-            if (logiaBodyON.contains(player.getName()) && !(player.getLocation().getBlock().isLiquid() && player.getLocation().getBlock().getType() != Material.LAVA)) {
+            if (logiaBodyON && !(player.getLocation().getBlock().isLiquid() && player.getLocation().getBlock().getType() != Material.LAVA)) {
                 event.setCancelled(true);
             }
         }
     }
 
-//    @EventHandler(ignoreCancelled = true)
-    public void onPlayerDeath(PlayerDeathEvent event) {
-        Player player = event.getEntity();
-        if (logiaBodyON.contains(player.getName()))
-            logiaBody(player);
-    }
-
     public boolean logiaBody(Player player) {
-            if (!logiaBodyON.contains(player.getName())) {
-                logiaBodyON.add(player.getName());
+            if (!logiaBodyON) {
+                logiaBodyON = true;
             } else {
-                logiaBodyON.remove(player.getName());
+                logiaBodyON = false;
             }
-            player.sendMessage("Logia Body: " + logiaBodyON.contains(player.getName()));
-            return (logiaBodyON.contains(player.getName()));
+            player.sendMessage("Logia Body: " + logiaBodyON);
+            return (logiaBodyON);
     }
 
 }

@@ -2,11 +2,12 @@ package abilitieSystem;
 
 import htt.ophabs.OPhabs;
 import org.bukkit.event.Listener;
+import org.bukkit.Particle;
 
-public class magu_magu implements Listener {
-    private OPhabs plugin;
+public class magu_magu extends logia {
+
     public magu_magu(OPhabs plugin){
-        this.plugin = plugin;
+        super(plugin, Particle.FLAME);
     }
 
 }

@@ -5,17 +5,22 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.PlayerDeathEvent;
+import scoreboardSystem.abilitiesScoreboard;
+
+import java.util.Map;
 
 public class loseFruit implements Listener {
     private final OPhabs plugin;
+    public Map<String, devilFruitUser> dfPlayers;
+    public abilitiesScoreboard scoreboard = null;
 
-    public loseFruit(OPhabs plugin){
+    public loseFruit(OPhabs plugin, Map<String, devilFruitUser> dfPlayers) {
         this.plugin = plugin;
+        this.dfPlayers = dfPlayers;
     }
     @EventHandler(ignoreCancelled = true)
     public void onPlayerDeath(PlayerDeathEvent event) {
         Player player = event.getEntity();
-
         String
                 yamiValue = plugin.getConfig().getString("FruitAssociations.yami_yami"),
                 meraValue = plugin.getConfig().getString("FruitAssociations.mera_mera"),
@@ -24,8 +29,9 @@ public class loseFruit implements Listener {
                 nekoReoparudoValue = plugin.getConfig().getString("FruitAssociations.neko_neko_reoparudo"),
                 maguValue = plugin.getConfig().getString("FruitAssociations.magu_magu");;
 
-        if(fruitAssociation.dfPlayers.contains(player)){
-            fruitAssociation.dfPlayers.remove(player);
+        if(fruitAssociation.dfPlayers.containsKey(player.getName())){
+            fruitAssociation.dfPlayers.get(player.getName()).onPlayerDeath(event);
+            fruitAssociation.dfPlayers.remove(player.getName());
 
             if(yamiValue.equals(event.getEntity().getName())) yamiValue = "none";
             if(meraValue.equals(event.getEntity().getName())) meraValue = "none";
@@ -41,6 +47,12 @@ public class loseFruit implements Listener {
             plugin.getConfig().set("FruitAssociations.neko_neko_reoparudo",nekoReoparudoValue);
             plugin.getConfig().set("FruitAssociations.magu_magu", maguValue);
             plugin.saveConfig();
-        }
+
+            scoreboard.removeScoreboard(player);
+        }	
+    }
+
+    public void setScoreboard(abilitiesScoreboard scoreboard){
+        this.scoreboard = scoreboard;
     }
 }

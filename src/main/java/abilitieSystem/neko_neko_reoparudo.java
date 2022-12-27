@@ -1,6 +1,7 @@
 package abilitieSystem;
 
 import htt.ophabs.OPhabs;
+import fruitSystem.devilFruitUser;
 import org.bukkit.*;
 import org.bukkit.entity.Player;
 import org.bukkit.potion.PotionEffect;
@@ -15,31 +16,40 @@ import org.bukkit.scheduler.BukkitTask;
 import org.bukkit.entity.LivingEntity;
 import java.util.ArrayList;
 
-public class neko_neko_reoparudo extends zoan implements Listener {
+public class neko_neko_reoparudo extends zoan {
 
     public neko_neko_reoparudo(OPhabs plugin){
         super(plugin);
         super.skinUrl = "https://s.namemc.com/i/18525c829f6918fe.png";
+        abilitiesNames.add("FrontalAttack");
+        abilitiesCD.add(0);
     }
-    public void transformation(Player player){
-        super.transformation(player);
-        if(super.user == null)
-            super.user = player;
+
+    public void ability2(){
+        if(abilitiesCD.get(1) == 0){
+            frontAttack();
+            abilitiesCD.set(1, 3);
+        }
+    }
+
+
+    public void transformation(){
+        super.transformation();
 
         new BukkitRunnable() {
             @Override
             public void run() {
                 if(transformed){
-                    player.addPotionEffect(new PotionEffect(PotionEffectType.SPEED, 999999, 5, false, false));
-                    player.addPotionEffect(new PotionEffect(PotionEffectType.JUMP, 999999, 3, false, false));
-                    player.addPotionEffect(new PotionEffect(PotionEffectType.INCREASE_DAMAGE, 999999, 1, false, false));
-                    player.addPotionEffect(new PotionEffect(PotionEffectType.DAMAGE_RESISTANCE, 999999, 1, false, false));
+                    user.getPlayer().addPotionEffect(new PotionEffect(PotionEffectType.SPEED, 999999, 5, false, false));
+                    user.getPlayer().addPotionEffect(new PotionEffect(PotionEffectType.JUMP, 999999, 3, false, false));
+                    user.getPlayer().addPotionEffect(new PotionEffect(PotionEffectType.INCREASE_DAMAGE, 999999, 1, false, false));
+                    user.getPlayer().addPotionEffect(new PotionEffect(PotionEffectType.DAMAGE_RESISTANCE, 999999, 1, false, false));
                 }
                 else{
-                    player.removePotionEffect(PotionEffectType.SPEED);
-                    player.removePotionEffect(PotionEffectType.JUMP);
-                    player.removePotionEffect(PotionEffectType.INCREASE_DAMAGE);
-                    player.removePotionEffect(PotionEffectType.DAMAGE_RESISTANCE);
+                    user.getPlayer().removePotionEffect(PotionEffectType.SPEED);
+                    user.getPlayer().removePotionEffect(PotionEffectType.JUMP);
+                    user.getPlayer().removePotionEffect(PotionEffectType.INCREASE_DAMAGE);
+                    user.getPlayer().removePotionEffect(PotionEffectType.DAMAGE_RESISTANCE);
                 }
             }
         }.runTaskLater(plugin, 20);
@@ -47,7 +57,8 @@ public class neko_neko_reoparudo extends zoan implements Listener {
     }
 
     //launch player in the lookin direction
-    public void frontAttack(Player player){
+    public void frontAttack(){
+        Player player = user.getPlayer();
         if(player.getLocation().getBlock().getRelative(0,-1,0).getType() != Material.AIR){
             player.setVelocity(player.getLocation().getDirection().multiply(2));
             new BukkitRunnable() {
@@ -72,7 +83,8 @@ public class neko_neko_reoparudo extends zoan implements Listener {
     }
 
 
-    public Location climbWall(Player player){
+    public Location climbWall(){
+        Player player = user.getPlayer();
         Location loc = player.getLocation();
         if(transformed && player.getEyeLocation().add(player.getLocation().getDirection()).getBlock().getType() != Material.AIR){
             loc.getBlock().setType(Material.VINE);
@@ -81,32 +93,23 @@ public class neko_neko_reoparudo extends zoan implements Listener {
         return loc;
     }
 
-    @EventHandler
     public void onFall(EntityDamageEvent e) {
-        if (super.user != null && e.getCause() == EntityDamageEvent.DamageCause.FALL && e.getEntity().getName() == super.user.getName()) {
+        if (super.user != null && e.getCause() == EntityDamageEvent.DamageCause.FALL && e.getEntity().getName() == super.user.getPlayer().getName()){
             e.setCancelled(true);
         }
     }
 
-    @EventHandler
-    public void onDeath(PlayerDeathEvent e) {
-        if (super.user != null && e.getEntity() == super.user) {
-            super.transformed = false;
-            super.user = null;
-        }
-    }
 
-    @EventHandler
-     public void onPlayerToggleSneak(PlayerToggleSneakEvent e) {
+    public void onPlayerToggleSneak(PlayerToggleSneakEvent e) {
         Player player = e.getPlayer();
-        if(player == super.user){
+        if(player.getName() == user.getPlayer().getName()){
             new BukkitRunnable() {
-                Location loc =climbWall(player);
+                Location loc =climbWall();
                 @Override
                 public void run() {
                 if (player.isSneaking()) {
                     if(transformed && player.getEyeLocation().add(player.getLocation().getDirection()).getBlock().getType() != Material.AIR)
-                        loc = climbWall(player);
+                        loc = climbWall();
                 }
                 else
                     cancelTask();
@@ -116,18 +119,8 @@ public class neko_neko_reoparudo extends zoan implements Listener {
                     Bukkit.getScheduler().cancelTask(this.getTaskId());
                 }
             }.runTaskTimer(plugin, 0, 3);
-
-
-        /*if (!player.isSneaking()){
-            if (super.user != null && e.getPlayer().getName() == super.user.getName()) {
-                if (player.getLocation().getBlock().getRelative(0, -1, 0).getType() == Material.AIR) {
-
-                    player.sendMessage("You are now climbing");
-                }
-            }
-        }*/
         }
     }
-    
+   
 }
 

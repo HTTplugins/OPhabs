@@ -1,6 +1,7 @@
 package abilitieSystem;
 
 import htt.ophabs.OPhabs;
+import fruitSystem.devilFruitUser;
 import java.util.ArrayList;
 import java.util.Random;
 import org.bukkit.*;
@@ -16,25 +17,66 @@ import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.util.Vector;
 import org.bukkit.block.Block;
 
-public class gura_gura {
-  final int waveDistance = 8, radiusFloor = 4, radiusWall = 3;
-  final Material AIR = Material.AIR;
-  final int earthquakeDelay = 5;
-  final int earthquakeSpeed = 10;
-  final int earthquakeDamage = 2;
-  final int earthquakeDuration = 5;
-  int numberOfWaves = 0;
-  final int numberOfWavesMax = 5;
-  private OPhabs plugin;
-    boolean  enabledVH = true;
-  public gura_gura(OPhabs plugin) {
-    this.plugin = plugin;
-  }
-    
+public class gura_gura extends paramecia {
+    final int waveDistance = 8, radiusFloor = 4, radiusWall = 3;
+    final Material AIR = Material.AIR;
+    final int earthquakeDelay = 5;
+    final int earthquakeSpeed = 10;
+    final int earthquakeDamage = 2;
+    final int earthquakeDuration = 5;
+    int numberOfWaves = 0;
+    final int numberOfWavesMax = 5;
+    public gura_gura(OPhabs plugin) {
+        super(plugin);
+        abilitiesNames.add("Earthquake");
+        abilitiesCD.add(0);
+        abilitiesNames.add("CreateWave");
+        abilitiesCD.add(0);
+        abilitiesNames.add("HandVibration");
+        abilitiesCD.add(0);
+        abilitiesNames.add("ExpansionWave");
+        abilitiesCD.add(0);
+    }
+    public gura_gura(OPhabs plugin, devilFruitUser user) {
+        super(plugin, user);
+        abilitiesNames.add("Earthquake");
+        abilitiesCD.add(0);
+        abilitiesNames.add("CreateWave");
+        abilitiesCD.add(0);
+        abilitiesNames.add("HandVibration");
+        abilitiesCD.add(0);
+        abilitiesNames.add("ExpansionWave");
+        abilitiesCD.add(0);
+    }
+   
+    public void ability1(){
+        if(abilitiesCD.get(0) == 0){
+            earthquake(user.getPlayer());
+            abilitiesCD.set(0, 30);
+        }
+    }
+    public void ability2(){
+        if(abilitiesCD.get(1) == 0){
+            createWave(user.getPlayer());
+            abilitiesCD.set(1, 10);
+        }
+    }
+
+    public void ability3(){
+        if(abilitiesCD.get(2) == 0){
+            handVibration(user.getPlayer());
+            abilitiesCD.set(2, 10);
+        }
+    }
+    public void ability4(){
+        if(abilitiesCD.get(3) == 0){
+            expansionWaveBlocks(user.getPlayer());
+            abilitiesCD.set(3, 10);
+        }
+    }
+
     public void handVibration(Player player){
-        if(enabledVH){
-            enabledVH = false;
-            player.addPotionEffect(new PotionEffect(PotionEffectType.INCREASE_DAMAGE, 100, 10, false, false));
+        player.addPotionEffect(new PotionEffect(PotionEffectType.INCREASE_DAMAGE, 100, 10, false, false));
             //Particles following player hand
             Location loc = player.getEyeLocation();
             loc.add(player.getLocation().getDirection());
@@ -44,7 +86,6 @@ public class gura_gura {
                 @Override
                 public void run(){
                     if(player.isDead() || i > 3){ 
-                        player.sendMessage("Hability cooldown 20 seconds");
                         cancelTask();
                     }
                     Vector sideWayOffset = player.getLocation().getDirection().crossProduct(new Vector(0,1,0)).normalize().multiply(0.4);
@@ -56,24 +97,8 @@ public class gura_gura {
                     Bukkit.getScheduler().cancelTask(this.getTaskId());
                 } 
             }.runTaskTimer(plugin, 0, 20);
-
-            new BukkitRunnable() {
-                int i = 0;
-                @Override
-                public void run(){
-                    if(player.isDead() || i > 25){
-                        enabledVH = true;
-                        player.sendMessage("Hability is now available");
-                        cancelTask();
-                    }
-                    i++;
-                }
-                public void cancelTask(){
-                    Bukkit.getScheduler().cancelTask(this.getTaskId());
-                } 
-            }.runTaskTimer(plugin, 0, 20);
-        }
     }
+
 
     public Boolean isSolidBlock(Block block){
         return !(block.getType().getHardness() <= Material.TORCH.getHardness() || block.getType() == Material.AIR || block.getType() == Material.WATER || block.getType() == Material.LAVA);

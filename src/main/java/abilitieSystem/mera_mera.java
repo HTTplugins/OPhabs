@@ -16,8 +16,7 @@ import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.util.Vector;
 
 
-public class mera_mera implements Listener {
-    private OPhabs plugin;
+public class mera_mera extends logia {
     final float ExplosionRadius = 4;
     final int BerserkFireRadius = 5, Hability1Radius = 4;
     final Material NETHERRACK = Material.NETHERRACK, FIRE = Material.FIRE, DIRT = Material.DIRT, GREEN_DIRT = Material.GRASS_BLOCK,
@@ -31,7 +30,28 @@ public class mera_mera implements Listener {
     private int FIRE_POOL_DURATION = 15, FIREBALL_STORM_COOLDOWN = 20;
 
     public mera_mera(OPhabs plugin){
-        this.plugin = plugin;
+        super(plugin, Particle.FLAME);
+        //
+        //Nombres de las habilidades: 
+        abilitiesNames.add("Fire Pool");
+        abilitiesCD.add(0);
+        abilitiesNames.add("Fireball Storm");
+        abilitiesCD.add(0);
+    }
+
+    //Habilidades activas:
+    public void ability1(){ 
+        if(abilitiesCD.get(0) == 0){
+            FirePool(user.getPlayer());
+            abilitiesCD.set(0, 20); // Pon el cooldown en segundos
+        }
+    }
+
+    public void ability2(){
+        if(abilitiesCD.get(1) == 0){
+            FireballStorm(user.getPlayer());
+            abilitiesCD.set(1, 20); // Pon el cooldown en segundos
+        }
     }
 
     public boolean isDirt(Block bloque) {
@@ -107,7 +127,6 @@ public class mera_mera implements Listener {
         }
     }
 
-    @EventHandler(ignoreCancelled = true)
     public void onEntityShootBow(EntityShootBowEvent event) {
         Entity flecha = event.getProjectile();
         Location loc_flecha = flecha.getLocation();
@@ -130,13 +149,22 @@ public class mera_mera implements Listener {
         }
     }
 
-    @EventHandler(ignoreCancelled = true)
     public void onPlayerItemConsume(PlayerItemConsumeEvent event) {
         event.getPlayer().getWorld().spawnParticle(PARTICULA_FUEGO, event.getPlayer().getLocation(), N_PARTICULAS,
                 RADIO_PARTICULAS, RADIO_PARTICULAS, RADIO_PARTICULAS);
     }
 
-    @EventHandler(ignoreCancelled = true)
+
+//  @EventHandler
+    //public void onEntityDamage(EntityDamageEvent event) {
+    //    if (event.getEntity() instanceof Player) {
+    //        Player player = (Player) event.getEntity();
+    //        if (event.getFinalDamage() >= player.getHealth()) {
+    //            //Aqui seria la el método como tal
+    //        }
+    //    }
+    //}
+
     public void onPlayerDeath(PlayerDeathEvent event) {
         String nombre_user = plugin.getConfig().getString("FruitAssociations.mera_mera");
         System.out.println(nombre_user);
@@ -185,7 +213,6 @@ public class mera_mera implements Listener {
         }
     }
 
-    @EventHandler(ignoreCancelled = true)
     public void onEntityPickupItem(EntityPickupItemEvent event) {
         String nombre_user = plugin.getConfig().getString("FruitAssociations.mera_mera");
         Player p = Bukkit.getPlayerExact(nombre_user);
@@ -228,7 +255,6 @@ public class mera_mera implements Listener {
         mundo.spawnEntity(player.getLocation().clone().add(-3, 5, 0), EntityType.FIREBALL);
     }
 
-    @EventHandler(ignoreCancelled = true)
     public void onPlayerEggThrow(PlayerEggThrowEvent event) {                   // HABILIDAD 2
         Location loc = event.getEgg().getLocation();
         World mundo = event.getEgg().getWorld();
