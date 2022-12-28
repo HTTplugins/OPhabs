@@ -41,7 +41,7 @@ public class devilFruit{
                 break;
 
             case fruitIdentification.fruitCommandNameMagu :
-                devilFruitForm = Material.GOLDEN_APPLE;
+                devilFruitForm = Material.APPLE;
                 fruitItemName = fruitIdentification.fruitItemNameMagu;
                 break;
 

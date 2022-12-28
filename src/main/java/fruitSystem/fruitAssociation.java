@@ -152,6 +152,7 @@ public class fruitAssociation implements Listener {
             plugin.getConfig().set("FruitAssociations.gura_gura",guraValue);
             plugin.getConfig().set("FruitAssociations.moku_moku",mokuValue);
             plugin.getConfig().set("FruitAssociations.neko_neko_reoparudo",nekoReoparudoValue);
+            plugin.getConfig().set("FruitAssociations.magu_magu",maguValue);
             plugin.getConfig().set("FruitAssociations.goro_goro",goroValue);
             plugin.saveConfig();
         }

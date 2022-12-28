@@ -32,6 +32,7 @@ public class oph implements CommandExecutor, TabCompleter {
                         ||fruitCommandName.equalsIgnoreCase(fruitIdentification.fruitCommandNameGura)
                         || fruitCommandName.equalsIgnoreCase(fruitIdentification.fruitCommandNameMoku)
                         || fruitCommandName.equalsIgnoreCase(fruitIdentification.fruitCommandNameNekoReoparudo)
+                        || fruitCommandName.equals(fruitIdentification.fruitCommandNameMagu)
                         || fruitCommandName.equalsIgnoreCase(fruitIdentification.fruitCommandNameGoro))
                     if( targetPlayer != null) {
                         if(plugin.getConfig().getString("FruitAssociations."+fruitCommandName).equals("none")){
@@ -79,6 +80,7 @@ public class oph implements CommandExecutor, TabCompleter {
             list.add(fruitIdentification.fruitCommandNameGura);
             list.add(fruitIdentification.fruitCommandNameMoku);
             list.add(fruitIdentification.fruitCommandNameNekoReoparudo);
+            list.add(fruitIdentification.fruitCommandNameMagu);
             list.add(fruitIdentification.fruitCommandNameGoro);
         }
         if(args.length == 3){

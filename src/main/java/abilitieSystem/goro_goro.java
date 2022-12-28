@@ -9,16 +9,19 @@ import org.bukkit.entity.Entity;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
+import org.bukkit.util.Vector;
 
 import static java.lang.Math.*;
 
 public class goro_goro extends logia {
 
     public goro_goro(OPhabs plugin){
-        super(plugin, Particle.REDSTONE);
+        super(plugin, Particle.ELECTRIC_SPARK);
         abilitiesNames.add("El THOR");
         abilitiesCD.add(0);
         abilitiesNames.add("ThunderStorm");
+        abilitiesCD.add(0);
+        abilitiesNames.add("LightStep");
         abilitiesCD.add(0);
 
     }
@@ -33,6 +36,13 @@ public class goro_goro extends logia {
     public void ability2(){
         if(abilitiesCD.get(1) == 0){
             thund(user.getPlayer());
+            abilitiesCD.set(1, 20); // Pon el cooldown en segundos
+        }
+    }
+
+    public void ability3(){
+        if(abilitiesCD.get(2) == 0){
+            lightStep(user.getPlayer());
             abilitiesCD.set(1, 20); // Pon el cooldown en segundos
         }
     }
@@ -108,7 +118,7 @@ public class goro_goro extends logia {
 
 
 
-                    world.spawnParticle(Particle.ELECTRIC_SPARK,partLoc,0,0,0,0);
+                    world.spawnParticle(element,partLoc,0,0,0,0);
                 }
 
             }
@@ -153,5 +163,36 @@ public class goro_goro extends logia {
 
     }
 
+    public void lightStep(Player player){
+        World world = player.getWorld();
+
+        Location iniLoc = player.getLocation();
+
+        Location finLoc = player.getLocation();
+
+        Vector sumVec = finLoc.getDirection().normalize().multiply(15);
+        finLoc = finLoc.add(sumVec);
+
+        Location finalFinLoc = finLoc;
+        new BukkitRunnable(){
+            Vector vec = finalFinLoc.toVector().subtract(iniLoc.toVector());
+
+
+            @Override
+            public void run() {
+                System.out.println(vec);
+
+
+            }
+        }.runTaskTimer(plugin,0,1);
+
+
+        player.teleport(finLoc);
+        world.playSound(player.getLocation(),Sound.ENTITY_LIGHTNING_BOLT_THUNDER,1,1);
+
+
+
+
+    }
 
 }
