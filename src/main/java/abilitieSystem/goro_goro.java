@@ -209,4 +209,8 @@ public class goro_goro extends logia {
 
     }
 
+    @Override
+    public void runParticles() {
+
+    }
 }

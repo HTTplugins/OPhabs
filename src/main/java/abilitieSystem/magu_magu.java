@@ -28,4 +28,8 @@ public class magu_magu extends logia {
         }
     }
 
+    @Override
+    public void runParticles() {
+
+    }
 }

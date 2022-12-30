@@ -21,52 +21,20 @@ import org.bukkit.block.Biome;
 import org.bukkit.entity.Vex;
 import java.util.ArrayList;
 
-public class logia extends abilities {
+public abstract class logia extends abilities {
     protected Particle element;
     boolean logiaBodyON = false;
+
+    boolean pbON = false;
 
     public logia(OPhabs plugin, Particle element){
         super(plugin);
         this.element = element;
     }
 
-/*@EventHandler
-    public void playerOnWater(PlayerMoveEvent event) {
-        if (event.getPlayer().getLocation().getBlock().isLiquid() && event.getPlayer().getLocation().getBlock().getType() != Material.LAVA) {
-            Player player = event.getPlayer();
-            if(particlesON) {
-                player.damage(2);
-            }
-            if(isInSeaWater(event.getPlayer())){
-                    if(smokeBodyON.contains(player.getName())){
-                        smokeBody(player);
-                    }
-                    if(smokeLegsON.contains(player.getName())){
-                        smokeLegs(player);
-                    }
-                particlesON = false;                    
-            }
-        }
-    }
-*/
 
-     public void runParticles(Player player, boolean oldP){
-        new BukkitRunnable() {
-            @Override
-            public void run() {
-                if (!(logiaBodyON) || user.getPlayer().isDead()){
-                    cancelTask();
-                    logiaBodyON = false;
-                }
 
-                player.getWorld().spawnParticle(element, player.getLocation(), 10, 0.5, 0.5, 0.5, 0);
-            }
-
-            public void cancelTask() {
-                Bukkit.getScheduler().cancelTask(this.getTaskId());
-            }
-        }.runTaskTimer(plugin, 0, 3);
-    }
+     public abstract void runParticles();
 
 //    @EventHandler(ignoreCancelled = true)
     public void onEntityDamage(EntityDamageEvent event) {

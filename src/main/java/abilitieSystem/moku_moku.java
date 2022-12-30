@@ -78,6 +78,11 @@ public class moku_moku extends logia {
         }.runTaskTimer(plugin, 5, 3);
     }
 
+    @Override
+    public void runParticles() {
+
+    }
+
     public void onEntityDamage(EntityDamageEvent event) {
         Player player;
         if (event.getEntity() instanceof Player) {

@@ -266,4 +266,9 @@ public class mera_mera extends logia {
 
         event.getPlayer().addPotionEffect(new PotionEffect(PotionEffectType.FIRE_RESISTANCE, BERSERK_DURATION, BERSERK_AMPLIFIER));
     }
+
+    @Override
+    public void runParticles() {
+
+    }
 }
