@@ -529,7 +529,7 @@ public class yami_yami extends logia {
 
                 if(user != null)
                     if(user.getPlayer() != null){
-                        System.out.println("BBBBBB");
+
                         player = user.getPlayer();
 
                         ItemStack caster = null;
@@ -537,7 +537,7 @@ public class yami_yami extends logia {
                         if(player != null)
                             caster = player.getInventory().getItemInMainHand();
 
-                        if(castIdentification.itemIsCaster(caster,player)){
+                        if(castIdentification.itemIsCaster(caster,player) && caster.getItemMeta().getDisplayName().equals(castIdentification.castItemNameYami)){
 
                             double yaw = player.getLocation().getYaw();
                             double y = player.getLocation().getY();
