@@ -36,28 +36,27 @@ public class abilitiesScoreboard {
             nekoReoparudoValue = plugin.getConfig().getString("FruitAssociations.neko_neko_reoparudo"),
             maguValue = plugin.getConfig().getString("FruitAssociations.magu_magu"),
             goroValue = plugin.getConfig().getString("FruitAssociations.goro_goro");
-            if(!yamiValue.equals("none")){
-                addScoreboard(Bukkit.getPlayerExact(yamiValue));
-            }
-            if(!meraValue.equals("none")){
-                addScoreboard(Bukkit.getPlayerExact(meraValue));
-            }
-            if(!guraValue.equals("none")){
-                addScoreboard(Bukkit.getPlayerExact(guraValue));
-            }
-            if(!mokuValue.equals("none")){
-                addScoreboard(Bukkit.getPlayerExact(mokuValue));
-            }
-            if(!nekoReoparudoValue.equals("none")){
-                addScoreboard(Bukkit.getPlayerExact(nekoReoparudoValue));
-            }
-            if(!maguValue.equals("none")){
-                addScoreboard(Bukkit.getPlayerExact(maguValue));
-            }
 
-            if(!goroValue.equals("none")){
-                addScoreboard(Bukkit.getPlayerExact(goroValue));
-            }
+            if(dfPlayers.get(yamiValue) != null)
+                addScoreboard(dfPlayers.get(yamiValue).getPlayer());
+
+            if(dfPlayers.get(meraValue) != null)
+                addScoreboard(dfPlayers.get(meraValue).getPlayer());
+
+            if(dfPlayers.get(guraValue) != null)
+                addScoreboard(dfPlayers.get(guraValue).getPlayer());
+
+            if(dfPlayers.get(mokuValue) != null)
+                addScoreboard(dfPlayers.get(mokuValue).getPlayer());
+
+            if(dfPlayers.get(nekoReoparudoValue) != null)
+                addScoreboard(dfPlayers.get(nekoReoparudoValue).getPlayer());
+
+            if(dfPlayers.get(maguValue) != null)
+                addScoreboard(dfPlayers.get(maguValue).getPlayer());
+
+            if(dfPlayers.get(goroValue) != null)
+                addScoreboard(dfPlayers.get(goroValue).getPlayer());
 
     }
 
@@ -87,17 +86,35 @@ public class abilitiesScoreboard {
             String playerName = userScoreboard.getKey();
             Scoreboard scoreboard = manager.getNewScoreboard();
             devilFruitUser user = dfPlayers.get(playerName);
-            Player player = Bukkit.getPlayerExact(playerName);
+
+            Player player = null;
+
+            if( Bukkit.getPlayerExact(playerName) != null)
+                player = Bukkit.getPlayerExact(playerName);
+            else
+                player = null;
+
             Objective objective = scoreboard.registerNewObjective("abilitiesScoreboard","dummy");
-            ItemStack caster = player.getInventory().getItemInMainHand();
+
+            ItemStack caster = null;
+
+            if(player != null)
+                caster = player.getInventory().getItemInMainHand();
+
             ArrayList<String> abNames = new ArrayList<>(user.getAbilitiesNames());
             String active = ChatColor.RED + "" + ChatColor.BOLD + "" + abNames.get(user.actual);
 
             abNames.set(user.actual, active);
 
-            player.setScoreboard(Bukkit.getScoreboardManager().getNewScoreboard());
+            if( Bukkit.getPlayerExact(playerName) != null)
+                player = Bukkit.getPlayerExact(playerName);
+            else
+                player = null;
 
-            if(castIdentification.itemIsCaster(caster)){
+            if(player != null)
+                player.setScoreboard(Bukkit.getScoreboardManager().getNewScoreboard());
+
+            if(castIdentification.itemIsCaster(caster,player)){
                 objective.setDisplaySlot(DisplaySlot.SIDEBAR);
 
                 objective.setDisplayName(user.getFruit().getFruitName());
@@ -108,9 +125,20 @@ public class abilitiesScoreboard {
                     score.setScore(user.getAbilitiesCD().get(i));
                 }
 
-                player.setScoreboard(scoreboard);
-            } else
-            player.setScoreboard(Bukkit.getScoreboardManager().getNewScoreboard());
+                if( Bukkit.getPlayerExact(playerName) != null)
+                    player = Bukkit.getPlayerExact(playerName);
+                else
+                    player = null;
+
+                if(player != null){
+                    player.setScoreboard(scoreboard);
+                }
+
+            } else {
+                if(player != null)
+                    player.setScoreboard(Bukkit.getScoreboardManager().getNewScoreboard());
+
+            }
             userScoreboard.setValue(scoreboard);
         }
 

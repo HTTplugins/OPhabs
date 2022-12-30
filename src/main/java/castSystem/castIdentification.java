@@ -1,6 +1,7 @@
 package castSystem;
 
 import org.bukkit.Material;
+import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
 import java.util.Objects;
@@ -22,7 +23,10 @@ public class castIdentification {
                          castItemNameMagu = "Magu Magu caster",
                          castItemNameGoro = "Goro Goro caster";
 
-    public static boolean itemIsCaster(ItemStack item) {
+    public static boolean itemIsCaster(ItemStack item , Player player) {
+
+        if(player == null || !player.isOnline())
+            return false;
         if (item.getType() == Material.AIR){
 
             return false;

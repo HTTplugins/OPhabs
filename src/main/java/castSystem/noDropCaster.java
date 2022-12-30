@@ -14,13 +14,13 @@ public class noDropCaster implements Listener {
         event.getEntity().setScoreboard(Bukkit.getScoreboardManager().getNewScoreboard());
 
         for(ItemStack drop : event.getDrops())
-            if(castIdentification.itemIsCaster(drop))
+            if(castIdentification.itemIsCaster(drop,event.getEntity()))
                     drop.setAmount(0);
     }
 
     @EventHandler(ignoreCancelled = true)
     public void onPlayerDropItem(PlayerDropItemEvent event) {
-        if(castIdentification.itemIsCaster(event.getItemDrop().getItemStack()))
+        if(castIdentification.itemIsCaster(event.getItemDrop().getItemStack(), event.getPlayer()))
             event.setCancelled(true);
     }
 }
