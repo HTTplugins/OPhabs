@@ -1,8 +1,16 @@
 package abilitieSystem;
 
+import castSystem.castIdentification;
 import htt.ophabs.OPhabs;
+import org.bukkit.Location;
+import org.bukkit.entity.Player;
 import org.bukkit.event.Listener;
 import org.bukkit.Particle;
+import org.bukkit.inventory.ItemStack;
+import org.bukkit.scheduler.BukkitRunnable;
+
+import static java.lang.Math.*;
+import static java.lang.Math.toRadians;
 
 public class magu_magu extends logia {
 
@@ -12,6 +20,7 @@ public class magu_magu extends logia {
         abilitiesCD.add(0);
         abilitiesNames.add("AB2");
         abilitiesCD.add(0);
+
     }
 
     public void ability1(){
@@ -30,6 +39,9 @@ public class magu_magu extends logia {
 
     @Override
     public void runParticles() {
+
+
+
 
     }
 }

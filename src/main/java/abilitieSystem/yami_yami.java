@@ -527,31 +527,33 @@ public class yami_yami extends logia {
 
                 Player player = null;
 
-                if(user.getPlayer() != null){
-                    player = user.getPlayer();
+                if(user != null)
+                    if(user.getPlayer() != null){
+                        System.out.println("BBBBBB");
+                        player = user.getPlayer();
 
-                    ItemStack caster = null;
+                        ItemStack caster = null;
 
-                    if(player != null)
-                        caster = player.getInventory().getItemInMainHand();
+                        if(player != null)
+                            caster = player.getInventory().getItemInMainHand();
 
-                    if(castIdentification.itemIsCaster(caster,player)){
+                        if(castIdentification.itemIsCaster(caster,player)){
 
-                        double yaw = player.getLocation().getYaw();
-                        double y = player.getLocation().getY();
+                            double yaw = player.getLocation().getYaw();
+                            double y = player.getLocation().getY();
 
-                        spawnBackParticle(player,yaw - 90,y+0.5);
-                        spawnBackParticle(player, yaw - 45,y+0.5);
-                        spawnBackParticle(player, yaw - 135,y+0.5);
+                            spawnBackParticle(player,yaw - 90,y+0.5);
+                            spawnBackParticle(player, yaw - 45,y+0.5);
+                            spawnBackParticle(player, yaw - 135,y+0.5);
 
-                        spawnBackParticle(player,yaw - 90,y+1);
-                        spawnBackParticle(player, yaw - 45,y+1);
-                        spawnBackParticle(player, yaw - 135,y+1);
+                            spawnBackParticle(player,yaw - 90,y+1);
+                            spawnBackParticle(player, yaw - 45,y+1);
+                            spawnBackParticle(player, yaw - 135,y+1);
 
 
-                    }else {
+                        }else {
+                        }
                     }
-                }
             }
 
             public void spawnBackParticle(Player player, double yaw, double y){

@@ -35,6 +35,10 @@ public class devilFruitUser{
     }
 
     public Player getPlayer(){
+
+        if(Bukkit.getPlayerExact(playerName) == null)
+            return null;
+
         return Bukkit.getPlayerExact(playerName);
     }
     
