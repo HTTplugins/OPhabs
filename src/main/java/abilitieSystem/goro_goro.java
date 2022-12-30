@@ -28,8 +28,8 @@ public class goro_goro extends logia {
 
     public void ability1(){
         if(abilitiesCD.get(0) == 0){
-            abSpark(user.getPlayer());
-            abilitiesCD.set(0, 20); // Pon el cooldown en segundos
+            elThor(user.getPlayer());
+            abilitiesCD.set(0, 0); // Pon el cooldown en segundos
         }
     }
 
@@ -48,7 +48,7 @@ public class goro_goro extends logia {
     }
 
 
-    public void abSpark(Player player){
+    public void elThor(Player player){
 
         player.playSound(player.getLocation(), Sound.ENTITY_LIGHTNING_BOLT_THUNDER,1,2);
 
@@ -56,14 +56,17 @@ public class goro_goro extends logia {
         new BukkitRunnable() {
 
             final Location playerLoc = player.getLocation();
-            final double angle = -player.getLocation().getYaw();
+            final double yaw = -player.getLocation().getYaw();
+             double pitch = player.getLocation().getPitch();
             final World world = player.getWorld();
 
             int tick = 0;
             double fin = 10;
 
 
-            double x,y, z = 0,xr,yr,zr;
+            double x,y, z = 0, xY, yY, zY, xX, yX, zX,xL,yL,zL;
+
+            boolean changedPitch = false;
 
 
 
@@ -72,27 +75,19 @@ public class goro_goro extends logia {
 
                 for(double prof = 0.5; prof < fin; prof+=0.5){
                     harmingCircle(prof,1);
-
                     harmingCircle(prof,0.8);
-
                     harmingCircle(prof,0.6);
-
                     harmingCircle(prof,0.4);
-
                     harmingCircle(prof,0.2);
-
                 }
 
                 tick++;
 
-                if(fin <= 20){
+                if(fin <= 20)
                     fin +=0.5;
-
-                }
 
                 if(tick == 20)
                     this.cancel();
-
 
             }
 
@@ -103,11 +98,30 @@ public class goro_goro extends logia {
                     x = factor*sin(i);
                     y = factor*cos(i);
 
-                    xr = playerLoc.getX() + cos(toRadians(angle))*x + sin(toRadians(angle))*z;
-                    yr = 1 + playerLoc.getY() + y;
-                    zr = playerLoc.getZ() + -sin(toRadians(angle))*x + cos(toRadians(angle))*z;
+                    //horizontally (Arround Y)
+                    xY = cos(toRadians(yaw))*x + sin(toRadians(yaw))*z;
+                    yY =  y;
+                    zY = -sin(toRadians(yaw))*x + cos(toRadians(yaw))*z;
 
-                    Location partLoc = new Location(world,xr,yr,zr);
+                    if(((yaw < -90 && yaw > -180) || ( yaw < 180 && yaw > 90)) && !changedPitch){
+                        changedPitch = true;
+                        pitch = pitch * -1;
+                    }
+
+                    //Vertically (Arround X)
+                    xX = xY;
+                    yX = cos(toRadians(pitch))* yY - sin(toRadians(pitch))* zY;
+                    zX = sin(toRadians(pitch))* yY + cos(toRadians(pitch))* zY;
+
+                    System.out.println(yaw);
+                    System.out.println(pitch);
+
+                    //Final (sum of player position.)
+                    xL = playerLoc.getX() + xX;
+                    yL = 1 + playerLoc.getY() + yX;
+                    zL = playerLoc.getZ() + zX;
+
+                    Location partLoc = new Location(world, xL, yL, zL);
 
                     if(!partLoc.getBlock().getType().equals(Material.AIR))
                         partLoc.getBlock().setType(Material.AIR);
