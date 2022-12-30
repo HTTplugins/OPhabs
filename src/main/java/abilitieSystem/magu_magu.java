@@ -95,16 +95,18 @@ public class magu_magu extends logia {
                                     player.playSound(player.getLocation(), Sound.BLOCK_LAVA_POP,100,1);
                             }
 
-                            if(ticks == 80){
-                                lavaAmbiance = false;
-                                ticks = 0;
-                            }
+
 
                         }else {
                             lavaAmbiance = false;
 
                         }
                     }
+
+                if(ticks == 80){
+                    lavaAmbiance = false;
+                    ticks = 0;
+                }
 
                 ticks++;
 
