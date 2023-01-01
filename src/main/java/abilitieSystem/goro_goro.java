@@ -1,5 +1,6 @@
 package abilitieSystem;
 
+import castSystem.castIdentification;
 import htt.ophabs.OPhabs;
 import org.bukkit.*;
 
@@ -8,6 +9,7 @@ import java.util.Random;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.ItemStack;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.util.Vector;
 
@@ -23,7 +25,7 @@ public class goro_goro extends logia {
         abilitiesCD.add(0);
         abilitiesNames.add("LightStep");
         abilitiesCD.add(0);
-
+        this.runParticles();
     }
 
     public void ability1(){
@@ -210,7 +212,59 @@ public class goro_goro extends logia {
     }
 
     @Override
-    public void runParticles() {
+    public void runParticles(){
+        new BukkitRunnable(){
+
+            @Override
+            public void run() {
+
+                Player player = null;
+
+                if(user != null)
+                    if(user.getPlayer() != null){
+
+                        player = user.getPlayer();
+
+                        ItemStack caster = null;
+
+                        if(player != null)
+                            caster = player.getInventory().getItemInMainHand();
+
+
+                        if(castIdentification.itemIsCaster(caster,player) && caster.getItemMeta().getDisplayName().equals(castIdentification.castItemNameGoro)){
+
+
+                            double angle = toRadians(-player.getLocation().getYaw());
+
+                            for(double i=0; i < 2*PI; i+=0.05){
+                                double x = cos(i);
+                                double y = sin(i);
+                                double z = 0;
+
+                                double xr = cos(angle)*x + sin(angle)*z;
+                                double yr = y;
+                                double zr = -sin(angle)*x + cos(angle)*z;
+
+                                double xF = player.getLocation().getX() + xr-0.25*sin(angle);
+                                double yF = player.getLocation().getY() + yr + 2;
+                                double zF = player.getLocation().getZ() + zr-0.25*cos(angle);
+
+                                Location loc = new Location(player.getWorld(),xF,yF,zF);
+                                player.getWorld().spawnParticle(Particle.ELECTRIC_SPARK,loc,0,0,0,0);
+
+                                for(Entity ent : player.getWorld().getNearbyEntities(loc,0.5,0.5,0.5))
+                                    if (ent instanceof LivingEntity)
+                                            ((LivingEntity) ent).damage(1);
+
+                            }
+
+                        }else {
+                        }
+                    }
+            }
+
+
+        }.runTaskTimer(plugin,0,2);
 
     }
 }
