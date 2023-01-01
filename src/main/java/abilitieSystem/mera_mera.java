@@ -1,5 +1,6 @@
 package abilitieSystem;
 
+import castSystem.castIdentification;
 import htt.ophabs.OPhabs;
 import org.bukkit.*;
 import org.bukkit.block.Block;
@@ -14,6 +15,10 @@ import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.util.Vector;
+
+import java.util.Random;
+
+import static java.lang.Math.*;
 
 
 public class mera_mera extends logia {
@@ -37,6 +42,7 @@ public class mera_mera extends logia {
         abilitiesCD.add(0);
         abilitiesNames.add("Fireball Storm");
         abilitiesCD.add(0);
+        this.runParticles();
     }
 
     //Habilidades activas:
@@ -269,6 +275,78 @@ public class mera_mera extends logia {
 
     @Override
     public void runParticles() {
+        new BukkitRunnable(){
+            int ticks = 0;
+            double i = 0;
+            double y = 0;
+
+            Random random = new Random();
+            @Override
+            public void run() {
+
+                Player player = null;
+                if(user != null)
+                    if(user.getPlayer() != null){
+                        player = user.getPlayer();
+
+                        ItemStack caster = null;
+
+                        if(player != null)
+                            caster = player.getInventory().getItemInMainHand();
+
+                        if(castIdentification.itemIsCaster(caster,player) && caster.getItemMeta().getDisplayName().equals(castIdentification.castItemNameMera)){
+
+                            double x = sin(i)/2;
+                            double z = cos(i)/2;
+
+                            double xr = player.getLocation().getX() + x;
+                            double yr = player.getLocation().getY() + y;
+                            double zr = player.getLocation().getZ() + z;
+
+                            Location partLoc = new Location(player.getWorld(),xr,yr,zr);
+                            player.spawnParticle(element,partLoc, 0,0,0,0);
+
+                            summonParticle(player);
+                            summonParticle(player);
+
+
+                        }else {
+
+                        }
+                    }
+                i+= 0.5;
+                y += 0.05;
+
+                if(y > 2)
+                    y = 0;
+
+
+            }
+
+            public void summonParticle(Player player){
+
+                double xdecimals;
+                double ydecimals;
+                double zdecimals;
+
+                double x,y,z;
+
+
+                xdecimals = random.nextDouble();
+                ydecimals = random.nextDouble();
+                zdecimals = random.nextDouble();
+
+                x = random.nextInt(1 + 1 ) - 1 + xdecimals;
+                y = random.nextInt(2 )  + ydecimals ;
+                z = random.nextInt(1 + 1 ) - 1 + zdecimals;
+
+                player.getWorld().spawnParticle(element,player.getLocation().add(x,y,z),0,0,0,0);
+
+            }
+
+
+
+        }.runTaskTimer(plugin,0,1);
 
     }
 }

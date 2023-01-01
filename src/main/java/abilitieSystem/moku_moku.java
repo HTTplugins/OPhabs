@@ -121,6 +121,7 @@ public class moku_moku extends logia {
                             summonParticle(0.5,player);
                             //summonParticle(0.5,player);
 
+
                         }else {
 
                         }
