@@ -290,11 +290,21 @@ public class mera_mera extends logia {
                         player = user.getPlayer();
 
                         ItemStack caster = null;
+                        boolean isCaster = false;
+                        if(player != null){
+                            if(castIdentification.itemIsCaster(player.getInventory().getItemInMainHand(), player)){
+                                caster = player.getInventory().getItemInMainHand();
+                                isCaster = true;
+                            }
+                            else{
+                                if(castIdentification.itemIsCaster(player.getInventory().getItemInOffHand(), player)){
+                                    caster = player.getInventory().getItemInOffHand();
+                                    isCaster = true;
+                                }
+                            }
+                        }
 
-                        if(player != null)
-                            caster = player.getInventory().getItemInMainHand();
-
-                        if(castIdentification.itemIsCaster(caster,player) && caster.getItemMeta().getDisplayName().equals(castIdentification.castItemNameMera)){
+                        if(isCaster && caster.getItemMeta().getDisplayName().equals(castIdentification.castItemNameMera)){
 
                             double x = sin(i)/2;
                             double z = cos(i)/2;
@@ -308,9 +318,11 @@ public class mera_mera extends logia {
 
                             summonParticle(player);
                             summonParticle(player);
-
+                            player.setAllowFlight(true);
 
                         }else {
+                            player.setAllowFlight(false);
+                            player.setFlying(false);
 
                         }
                     }

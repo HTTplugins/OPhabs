@@ -61,12 +61,21 @@ public class magu_magu extends logia {
                         player = user.getPlayer();
 
                         ItemStack caster = null;
+                        boolean isCaster = false;
+                        if(player != null){
+                            if(castIdentification.itemIsCaster(player.getInventory().getItemInMainHand(), player)){
+                                caster = player.getInventory().getItemInMainHand();
+                                isCaster = true;
+                            }
+                            else{
+                                if(castIdentification.itemIsCaster(player.getInventory().getItemInOffHand(), player)){
+                                    caster = player.getInventory().getItemInOffHand();
+                                    isCaster = true;
+                                }
+                            }
+                        }
 
-                        if(player != null)
-                            caster = player.getInventory().getItemInMainHand();
-
-                        if(castIdentification.itemIsCaster(caster,player) && caster.getItemMeta().getDisplayName().equals(castIdentification.castItemNameMagu)){
-
+                        if(isCaster && caster.getItemMeta().getDisplayName().equals(castIdentification.castItemNameMagu)){
                             double xdecimals = random.nextDouble();
                             double zdecimals = random.nextDouble();
 
@@ -95,11 +104,14 @@ public class magu_magu extends logia {
                                     player.playSound(player.getLocation(), Sound.BLOCK_LAVA_POP,100,1);
                             }
 
+                            player.setAllowFlight(true);
 
 
                         }else {
                             lavaAmbiance = false;
 
+                            player.setAllowFlight(false);
+                            player.setFlying(false);
                         }
                     }
 

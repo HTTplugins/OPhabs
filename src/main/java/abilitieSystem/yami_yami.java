@@ -529,15 +529,24 @@ public class yami_yami extends logia {
 
                 if(user != null)
                     if(user.getPlayer() != null){
-
                         player = user.getPlayer();
 
                         ItemStack caster = null;
+                        boolean isCaster = false;
+                        if(player != null){
+                            if(castIdentification.itemIsCaster(player.getInventory().getItemInMainHand(), player)){
+                                caster = player.getInventory().getItemInMainHand();
+                                isCaster = true;
+                            }
+                            else{
+                                if(castIdentification.itemIsCaster(player.getInventory().getItemInOffHand(), player)){
+                                    caster = player.getInventory().getItemInOffHand();
+                                    isCaster = true;
+                                }
+                            }
+                        }
 
-                        if(player != null)
-                            caster = player.getInventory().getItemInMainHand();
-
-                        if(castIdentification.itemIsCaster(caster,player) && caster.getItemMeta().getDisplayName().equals(castIdentification.castItemNameYami)){
+                        if(isCaster && caster.getItemMeta().getDisplayName().equals(castIdentification.castItemNameYami)){
 
                             double yaw = player.getLocation().getYaw();
                             double y = player.getLocation().getY();
@@ -550,8 +559,11 @@ public class yami_yami extends logia {
                             spawnBackParticle(player, yaw - 45,y+1);
                             spawnBackParticle(player, yaw - 135,y+1);
 
+                            player.setAllowFlight(true);
 
                         }else {
+                            player.setAllowFlight(false);
+                            player.setFlying(false);
                         }
                     }
             }

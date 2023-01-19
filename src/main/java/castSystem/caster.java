@@ -31,8 +31,7 @@ public class caster implements Listener {
     public void onInteract(PlayerInteractEvent event){
         if(dfPlayers.containsKey(event.getPlayer().getName())) {
             devilFruitUser user = dfPlayers.get(event.getPlayer().getName());
-            if (event.getHand().equals(EquipmentSlot.HAND))
-                if (castIdentification.itemIsCaster(event.getItem(), event.getPlayer())) {
+                if (event.getItem() != null && castIdentification.itemIsCaster(event.getItem(), event.getPlayer())) {
 
                     String casterItemName = event.getItem().getItemMeta().getDisplayName();
                     Material casterMaterial = event.getMaterial();

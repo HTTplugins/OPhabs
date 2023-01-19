@@ -114,7 +114,7 @@ public class abilitiesScoreboard {
             if(player != null)
                 player.setScoreboard(Bukkit.getScoreboardManager().getNewScoreboard());
 
-            if(castIdentification.itemIsCaster(caster,player)){
+            if( (castIdentification.itemIsCaster(player.getInventory().getItemInMainHand(), player)) || castIdentification.itemIsCaster(player.getInventory().getItemInOffHand(), player)){
                 objective.setDisplaySlot(DisplaySlot.SIDEBAR);
 
                 objective.setDisplayName(user.getFruit().getFruitName());

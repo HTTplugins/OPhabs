@@ -226,14 +226,21 @@ public class goro_goro extends logia {
                         player = user.getPlayer();
 
                         ItemStack caster = null;
+                        boolean isCaster = false;
+                        if(player != null){
+                            if(castIdentification.itemIsCaster(player.getInventory().getItemInMainHand(), player)){
+                                caster = player.getInventory().getItemInMainHand();
+                                isCaster = true;
+                            }
+                            else{
+                                if(castIdentification.itemIsCaster(player.getInventory().getItemInOffHand(), player)){
+                                    caster = player.getInventory().getItemInOffHand();
+                                    isCaster = true;
+                                }
+                            }
+                        }
 
-                        if(player != null)
-                            caster = player.getInventory().getItemInMainHand();
-
-
-                        if(castIdentification.itemIsCaster(caster,player) && caster.getItemMeta().getDisplayName().equals(castIdentification.castItemNameGoro)){
-
-
+                        if(isCaster && caster.getItemMeta().getDisplayName().equals(castIdentification.castItemNameGoro)){
                             double angle = toRadians(-player.getLocation().getYaw());
 
                             for(double i=0; i < 2*PI; i+=0.05){
@@ -257,8 +264,10 @@ public class goro_goro extends logia {
                                             ((LivingEntity) ent).damage(1);
 
                             }
-
+                            player.setAllowFlight(true);
                         }else {
+                            player.setAllowFlight(false);
+                            player.setFlying(false);
                         }
                     }
             }

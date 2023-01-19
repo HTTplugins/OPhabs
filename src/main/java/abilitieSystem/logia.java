@@ -2,6 +2,7 @@ package abilitieSystem;
 
 
 import htt.ophabs.OPhabs;
+import castSystem.castIdentification;
 import org.bukkit.*;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.LivingEntity;
@@ -34,15 +35,17 @@ public abstract class logia extends abilities {
 
 
 
-     public abstract void runParticles();
+    public abstract void runParticles();
 
 //    @EventHandler(ignoreCancelled = true)
     public void onEntityDamage(EntityDamageEvent event) {
         Player player;
         if (event.getEntity() instanceof Player) {
             player = (Player) event.getEntity();
-            if (logiaBodyON && !(player.getLocation().getBlock().isLiquid() && player.getLocation().getBlock().getType() != Material.LAVA)) {
+            if (!(player.getLocation().getBlock().isLiquid()) && (castIdentification.itemIsCaster(player.getInventory().getItemInMainHand(), player)) || castIdentification.itemIsCaster(player.getInventory().getItemInOffHand(), player)) {
                 event.setCancelled(true);
+                player.getWorld().spawnParticle(element,player.getLocation(), 10, 0, 1, 0, 0.1);
+
             }
         }
     }

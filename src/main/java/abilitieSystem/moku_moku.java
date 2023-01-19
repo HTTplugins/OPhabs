@@ -27,43 +27,31 @@ import static java.lang.Math.toRadians;
 public class moku_moku extends logia {
     final int numMaxSmokers=4;
     public int numSmokers=0;
-    boolean smokeLegsON = false;
 
     public moku_moku(OPhabs plugin){
-        super(plugin, Particle.CAMPFIRE_COSY_SMOKE);
-        abilitiesNames.add("SmokeLegs");
-        abilitiesCD.add(0);
+        super(plugin, Particle.CLOUD);
         abilitiesNames.add("SmokeBody");
         abilitiesCD.add(0);
         abilitiesNames.add("SummonSmoker");
         abilitiesCD.add(0);
-        this.runParticles();
+        runParticles();
     }
 
     public void ability1(){
         if(abilitiesCD.get(0)==0){
-            smokeLegs(user.getPlayer());
+            logiaBody(user.getPlayer());
             abilitiesCD.set(0, 0);
         }
     }
-
     public void ability2(){
         if(abilitiesCD.get(1)==0){
-            logiaBody(user.getPlayer());
-            abilitiesCD.set(1, 0);
-        }
-    }
-    public void ability3(){
-        if(abilitiesCD.get(2)==0){
             summonSmoker(user.getPlayer());
-            abilitiesCD.set(2, 3);
+            abilitiesCD.set(1, 3);
         }
     }
 
     public void toggleFly(Player player){
-        if (smokeLegsON || logiaBodyON){
-            player.setAllowFlight(true);
-            player.setFlying(true);
+        if (logiaBodyON){
         } else {
             player.setAllowFlight(false);
             player.setFlying(false);
@@ -74,7 +62,7 @@ public class moku_moku extends logia {
         new BukkitRunnable() {
             @Override
             public void run() {
-                if (!(logiaBodyON || smokeLegsON) || user.getPlayer().isDead())
+                if (!(logiaBodyON || user.getPlayer().isDead()))
                     cancelTask();
                 player.getWorld().spawnParticle(element, player.getLocation(), 10, 0.5, 0.5, 0.5, 0);
             }
@@ -102,12 +90,21 @@ public class moku_moku extends logia {
                         player = user.getPlayer();
 
                         ItemStack caster = null;
+                        boolean isCaster = false;
+                        if(player != null){
+                            if(castIdentification.itemIsCaster(player.getInventory().getItemInMainHand(), player)){
+                                caster = player.getInventory().getItemInMainHand();
+                                isCaster = true;
+                            }
+                            else{
+                                if(castIdentification.itemIsCaster(player.getInventory().getItemInOffHand(), player)){
+                                    caster = player.getInventory().getItemInOffHand();
+                                    isCaster = true;
+                                }
+                            }
+                        }
 
-                        if(player != null)
-                            caster = player.getInventory().getItemInMainHand();
-
-                        if(castIdentification.itemIsCaster(caster,player) && caster.getItemMeta().getDisplayName().equals(castIdentification.castItemNameMoku)){
-
+                        if(isCaster && caster.getItemMeta().getDisplayName().equals(castIdentification.castItemNameMoku)){
                             double x = sin(i)/2;
                             double z = cos(i)/2;
 
@@ -119,11 +116,12 @@ public class moku_moku extends logia {
                             player.spawnParticle(Particle.CLOUD,partLoc, 0,0,0,0);
 
                             summonParticle(0.5,player);
-                            //summonParticle(0.5,player);
-
+                            
+                            player.setAllowFlight(true);
 
                         }else {
-
+                            player.setAllowFlight(false);
+                            player.setFlying(false);
                         }
                     }
 
@@ -154,7 +152,7 @@ public class moku_moku extends logia {
                 y += random.nextInt(1 + 1 ) - 1 + ydecimals ;
                 z = random.nextInt(1 + 1 ) - 1 + zdecimals;
 
-                player.getWorld().spawnParticle(Particle.CLOUD,player.getLocation().add(x,y,z),0,0,0,0);
+                player.getWorld().spawnParticle(element,player.getLocation().add(x,y,z),0,0,0,0);
 
             }
 
@@ -162,31 +160,18 @@ public class moku_moku extends logia {
         }.runTaskTimer(plugin,0,1);
 
     }
-
-    public void onEntityDamage(EntityDamageEvent event) {
-        Player player;
-        if (event.getEntity() instanceof Player) {
-            player = (Player) event.getEntity();
-            if (logiaBodyON && !(player.getLocation().getBlock().isLiquid() && player.getLocation().getBlock().getType() != Material.LAVA)) {
-                event.setCancelled(true);
-            }
-        }
-    }
 //    @EventHandler(ignoreCancelled = true)
     public void onPlayerDeath(PlayerDeathEvent event) {
+        super.onPlayerDeath(event);
         Player player = event.getEntity();
-        if(smokeLegsON)
-            smokeLegs(player);
         if (logiaBodyON)
             logiaBody(player);
     }
 
     public boolean logiaBody(Player player) {
             if (!logiaBodyON) {
-                if (smokeLegsON)
-                    smokeLegs(player);
                 logiaBodyON = true;
-                player.addPotionEffect(new PotionEffect(PotionEffectType.SPEED, 9999999, 2, false, false));
+                player.addPotionEffect(new PotionEffect(PotionEffectType.SPEED, 9999999, 4, false, false));
                 player.addPotionEffect(new PotionEffect(PotionEffectType.REGENERATION, 9999999, 1, false, false));
                 player.addPotionEffect(new PotionEffect(PotionEffectType.INCREASE_DAMAGE, 999999, 3, false, false));
                 runParticles(player);
@@ -196,26 +181,9 @@ public class moku_moku extends logia {
                 player.removePotionEffect(PotionEffectType.REGENERATION);
                 player.removePotionEffect(PotionEffectType.INCREASE_DAMAGE);
             }
-            toggleFly(player);
-            return (logiaBodyON|| smokeLegsON);
+            return logiaBodyON;
     }
 
-    public boolean smokeLegs(Player player){
-        if (!logiaBodyON){
-            if (!smokeLegsON) {
-                smokeLegsON = true;
-                player.addPotionEffect(new PotionEffect(PotionEffectType.SPEED, 9999999, 4, false, false));
-                runParticles(player);
-            } else {
-                smokeLegsON = false;
-                player.removePotionEffect(PotionEffectType.SPEED);
-            }
-            toggleFly(player);
-        }
-
-        return (logiaBodyON || smokeLegsON) ;
-    }
-    
     public void setTarget(Vex entity, Player player){
         Location loc = entity.getLocation();
         boolean found = false;
