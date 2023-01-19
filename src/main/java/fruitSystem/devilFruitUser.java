@@ -14,6 +14,7 @@ import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.event.player.PlayerEggThrowEvent;
 import org.bukkit.event.player.PlayerToggleSneakEvent;
 import org.bukkit.event.player.PlayerItemConsumeEvent;
+import org.bukkit.event.inventory.InventoryClickEvent;
 
 import java.util.ArrayList;
 
@@ -120,5 +121,9 @@ public class devilFruitUser{
     }
     public static void onEntityChangeBlock(EntityChangeBlockEvent event){
 
+    }
+
+    public void onInventoryClick(InventoryClickEvent event){
+        ability.onInventoryClick(event);
     }
 }

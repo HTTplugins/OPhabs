@@ -14,7 +14,7 @@ import org.bukkit.event.entity.EntityChangeBlockEvent;
 import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.event.entity.EntityShootBowEvent;
 import org.bukkit.event.entity.EntityPickupItemEvent;
-
+import org.bukkit.event.inventory.InventoryClickEvent;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -95,5 +95,12 @@ public class caster implements Listener {
     @EventHandler
     public void onEntityChangeBlock(EntityChangeBlockEvent event){
         yami_yami.onEntityChangeBlock(event);
+    }
+    @EventHandler
+    public void onInventoryClick(InventoryClickEvent event){
+        if(dfPlayers.containsKey(event.getWhoClicked().getName())) {
+            devilFruitUser user = dfPlayers.get(event.getWhoClicked().getName());
+            user.onInventoryClick(event);
+        }
     }
 }

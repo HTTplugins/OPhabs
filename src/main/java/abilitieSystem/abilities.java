@@ -14,7 +14,7 @@ import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.event.player.PlayerEggThrowEvent;
 import org.bukkit.event.player.PlayerToggleSneakEvent;
 import org.bukkit.event.player.PlayerItemConsumeEvent;
-
+import org.bukkit.event.inventory.InventoryClickEvent;
 
 import java.util.ArrayList;
 import java.util.Map;
@@ -60,5 +60,6 @@ public class abilities {
     public void onEntityPickupItem(EntityPickupItemEvent event){}
     public void onPlayerEggThrow(PlayerEggThrowEvent event){}
     public void onEntityShootBow(EntityShootBowEvent event){}
+    public void onInventoryClick(InventoryClickEvent event){}
 
 }

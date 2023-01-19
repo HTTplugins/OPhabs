@@ -26,7 +26,7 @@ public class fruitAssociation implements Listener {
     public static Map<String, abilities> abilities = new HashMap<>();
     public abilitiesScoreboard scoreboard = null;
 
-    public fruitAssociation(OPhabs plugin, yami_yami yamiClass, mera_mera meraClass, gura_gura guraClass, moku_moku mokuClass, neko_neko_reoparudo nekoReoparudoClass, magu_magu maguClass, goro_goro goroClass){
+    public fruitAssociation(OPhabs plugin, yami_yami yamiClass, mera_mera meraClass, gura_gura guraClass, moku_moku mokuClass, neko_neko_reoparudo nekoReoparudoClass, magu_magu maguClass, goro_goro goroClass, ishi_ishi ishiClass){
         this.plugin = plugin;
         abilities.put(fruitIdentification.fruitItemNameGura,guraClass);
         abilities.put(fruitIdentification.fruitItemNameMera,meraClass);
@@ -35,6 +35,7 @@ public class fruitAssociation implements Listener {
         abilities.put(fruitIdentification.fruitItemNameNekoReoparudo,nekoReoparudoClass);
         abilities.put(fruitIdentification.fruitItemNameMagu,maguClass);
         abilities.put(fruitIdentification.fruitItemNameGoro,goroClass);
+        abilities.put(fruitIdentification.fruitItemNameIshi,ishiClass);
 
 
     String
@@ -44,7 +45,8 @@ public class fruitAssociation implements Listener {
             mokuValue = plugin.getConfig().getString("FruitAssociations.moku_moku"),
             nekoReoparudoValue = plugin.getConfig().getString("FruitAssociations.neko_neko_reoparudo"),
             maguValue = plugin.getConfig().getString("FruitAssociations.magu_magu"),
-            goroValue = plugin.getConfig().getString("FruitAssociations.goro_goro");
+            goroValue = plugin.getConfig().getString("FruitAssociations.goro_goro"),
+            ishiValue = plugin.getConfig().getString("FruitAssociations.ishi_ishi");
 
 
         if(!yamiValue.equals("none")){
@@ -69,6 +71,10 @@ public class fruitAssociation implements Listener {
         if(!goroValue.equals("none")){
             dfPlayers.put(goroValue,new devilFruitUser(goroValue, new devilFruit(fruitIdentification.fruitCommandNameGoro), goroClass));
         }
+
+        if(!ishiValue.equals("none")){
+            dfPlayers.put(ishiValue,new devilFruitUser(ishiValue, new devilFruit(fruitIdentification.fruitCommandNameIshi), ishiClass));
+        }
     }
 
     public void setScoreboard(abilitiesScoreboard scoreboard){
@@ -86,7 +92,8 @@ public class fruitAssociation implements Listener {
                 mokuValue = plugin.getConfig().getString("FruitAssociations.moku_moku"),
                 nekoReoparudoValue = plugin.getConfig().getString("FruitAssociations.neko_neko_reoparudo"),
                 maguValue = plugin.getConfig().getString("FruitAssociations.magu_magu"),
-                goroValue = plugin.getConfig().getString("FruitAssociations.goro_goro");
+                goroValue = plugin.getConfig().getString("FruitAssociations.goro_goro"),
+                ishiValue = plugin.getConfig().getString("FruitAssociations.ishi_ishi");
 
         String casterItemName = null;
         Material castMaterial = null;
@@ -141,6 +148,12 @@ public class fruitAssociation implements Listener {
                 casterItemName = castIdentification.castItemNameGoro;
                 castMaterial = castIdentification.castMaterialGoro;
                 break;
+            case fruitIdentification.fruitItemNameIshi:
+                consumedFruit = consumedFruit(ishiValue,event);
+                ishiValue = event.getPlayer().getName();
+                casterItemName = castIdentification.castItemNameIshi;
+                castMaterial = castIdentification.castMaterialIshi;
+                break;
 
             default:
                 break;
@@ -154,6 +167,7 @@ public class fruitAssociation implements Listener {
             plugin.getConfig().set("FruitAssociations.neko_neko_reoparudo",nekoReoparudoValue);
             plugin.getConfig().set("FruitAssociations.magu_magu",maguValue);
             plugin.getConfig().set("FruitAssociations.goro_goro",goroValue);
+            plugin.getConfig().set("FruitAssociations.ishi_ishi",ishiValue);
             plugin.saveConfig();
         }
 
