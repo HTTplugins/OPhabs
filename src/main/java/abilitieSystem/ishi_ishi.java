@@ -46,7 +46,7 @@ public class ishi_ishi extends paramecia {
         abilitiesCD.add(0);
         abilitiesNames.add("Stone Creation");
         abilitiesCD.add(0);
-        abilitiesNames.add("Generate Stone");
+        abilitiesNames.add("Control Stone");
         abilitiesCD.add(0);
         // abilitiesNames.add("Stone Rise");
         // abilitiesCD.add(0);
@@ -179,11 +179,22 @@ public class ishi_ishi extends paramecia {
     }
 
   public void absorb(Player player) {
-    Location currentPL = player.getLocation(),
-    loc = currentPL.clone().add(-radiusFloor, -radiusFloor, -radiusFloor);
+    Location currentPL = player.getLocation(), loc;
+    if(player.isSneaking())
+        loc = currentPL.clone().add(-radiusFloor, -radiusFloor, -radiusFloor);
+    else
+        loc = currentPL.clone().add(-radiusFloor, 0, -radiusFloor);
     ArrayList<Location> blocks = new ArrayList<>();
-    Location pos1 = currentPL.clone().add(-radiusFloor, -radiusFloor, -radiusFloor),
+    Location pos1, pos2;
+
+    if(player.isSneaking()){
+        pos1 = currentPL.clone().add(-radiusFloor, -radiusFloor, -radiusFloor);
+    }
+    else{
+        pos1 = currentPL.clone().add(-radiusFloor, 0, -radiusFloor);
+    }
     pos2 = currentPL.clone().add(radiusFloor, radiusFloor, radiusFloor);
+   
 
     int x1 = Math.min(pos1.getBlockX(), pos2.getBlockX());
     int y1 = Math.min(pos1.getBlockY(), pos2.getBlockY());
