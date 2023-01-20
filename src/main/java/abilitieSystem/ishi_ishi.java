@@ -18,6 +18,7 @@ import org.bukkit.potion.PotionEffect;;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.scheduler.BukkitRunnable;
+import org.bukkit.scheduler.BukkitTask;
 import org.bukkit.util.Vector;
 import org.bukkit.block.Block;
 import org.bukkit.inventory.Inventory;
@@ -34,6 +35,7 @@ public class ishi_ishi extends paramecia {
     int storaged, maxStoraged;
     String nameAbility1 = "Absorb Stone";
     boolean opened;
+    private int repealAnimationCounter = 0;
 
     public ishi_ishi(OPhabs plugin) {
         super(plugin);
@@ -48,8 +50,8 @@ public class ishi_ishi extends paramecia {
         abilitiesCD.add(0);
         abilitiesNames.add("Control Stone");
         abilitiesCD.add(0);
-        // abilitiesNames.add("Stone Rise");
-        // abilitiesCD.add(0);
+        abilitiesNames.add("Stone Rise");
+        abilitiesCD.add(0);
     }
 
     public ishi_ishi(OPhabs plugin, devilFruitUser user) {
@@ -105,15 +107,14 @@ public class ishi_ishi extends paramecia {
 
     public void ability3(){
         if(abilitiesCD.get(2) == 0){
-            generateStone(user.getPlayer());
-            abilitiesCD.set(2, 0);
+            controlStone(user.getPlayer());
         }
         abilitiesNames.set(0, nameAbility1 + " (" + storaged + ")");
     }
     public void ability4(){
         if(abilitiesCD.get(3) == 0){
-            //stoneRise(user.getPlayer());
-            abilitiesCD.set(3, 10);
+            stoneRise(user.getPlayer());
+            abilitiesCD.set(3, 0);
         }
         abilitiesNames.set(0, nameAbility1 + " (" + storaged + ")");
     }
@@ -163,11 +164,11 @@ public class ishi_ishi extends paramecia {
         } 
     }
 
-    public void generateStone(Player player){
+    public void controlStone(Player player){
         Location currentPL = player.getLocation();
         Vector direction = player.getEyeLocation().getDirection();
         currentPL.setY(currentPL.getY() + 1);
-        currentPL.add(direction.multiply(2));
+        currentPL.add(direction.multiply(1.5));
         if(player.isSneaking())
             absorbBlock(currentPL);
         else{
@@ -177,45 +178,163 @@ public class ishi_ishi extends paramecia {
             }
         }
     }
+    
+    public void stoneRise(Player player){
+        Location currentPL = player.getLocation(), currentPL1, currentPL2;
+        int xDir = 1, zDir= 1;
+        Vector direction = player.getEyeLocation().getDirection();
+        
+        if(!user.getPlayer().isSneaking()){
+            direction.setY(0);
+            currentPL.add(direction);
 
-  public void absorb(Player player) {
-    Location currentPL = player.getLocation(), loc;
-    if(player.isSneaking())
-        loc = currentPL.clone().add(-radiusFloor, -radiusFloor, -radiusFloor);
-    else
-        loc = currentPL.clone().add(-radiusFloor, 0, -radiusFloor);
-    ArrayList<Location> blocks = new ArrayList<>();
-    Location pos1, pos2;
+            if(direction.getX() > 0.1 || direction.getX() < -0.1){
+                currentPL1 = currentPL.clone().add(0, 0, 1);
+                currentPL2 = currentPL.clone().add(0, 0, -1);
+            }else{
+                currentPL1 = currentPL.clone().add(1, 0, 0);
+                currentPL2 = currentPL.clone().add(-1, 0, 0);
+            }
+            if(direction.getY() <= 0.5 && direction.getY() >= -0.5){
+                new BukkitRunnable() {
+                    Material type = Material.POINTED_DRIPSTONE;
+                    int i = 0;
+                    @Override
+                    public void run() {
+                        currentPL.add(direction);
+                        currentPL1.add(direction);
+                        currentPL2.add(direction);
+                        if(i>6 || storaged < 3){
+                            if(storaged>=3){
+                                currentPL.getBlock().setType(Material.POINTED_DRIPSTONE);
+                                currentPL1.getBlock().setType(Material.POINTED_DRIPSTONE);
+                                currentPL2.getBlock().setType(Material.POINTED_DRIPSTONE);
+                                storaged -= 3;
+                            }
+                            
+                            if(storaged >= 3){
+                                currentPL.add(0,1,0).getBlock().setType(Material.POINTED_DRIPSTONE);
+                                currentPL1.add(0,1,0).getBlock().setType(Material.POINTED_DRIPSTONE);
+                                currentPL2.add(0,1,0).getBlock().setType(Material.POINTED_DRIPSTONE);
+                                storaged -= 3;
+                            }
+                            
+                            if(storaged >= 3){
+                                currentPL.add(0,1,0).getBlock().setType(Material.POINTED_DRIPSTONE);
+                                currentPL1.add(0,1,0).getBlock().setType(Material.POINTED_DRIPSTONE);
+                                currentPL2.add(0,1,0).getBlock().setType(Material.POINTED_DRIPSTONE);
+                                storaged -= 3;
+                            }
+                            cancelTask();
+                        }
+                        if(storaged > 3){
+                            if(currentPL.getBlock().getType() == Material.AIR || currentPL.getBlock().getType() == Material.WATER || currentPL.getBlock().getType() == Material.LAVA){
+                                if(currentPL.clone().add(0,-1,0).getBlock().getType() != Material.AIR && currentPL.clone().add(0,-1,0).getBlock().getType() != Material.WATER && currentPL.clone().add(0,-1,0).getBlock().getType() != Material.LAVA){
+                                    currentPL.getBlock().setType(Material.POINTED_DRIPSTONE);
+                                    currentPL.getWorld().getNearbyEntities(currentPL,1,1,1).forEach(entity -> {
+                                        if(entity instanceof LivingEntity){
+                                            ((LivingEntity) entity).damage(5);
+                                        }
+                                    });
+                                }
+                            }
 
-    if(player.isSneaking()){
-        pos1 = currentPL.clone().add(-radiusFloor, -radiusFloor, -radiusFloor);
+                            if(currentPL1.getBlock().getType() == Material.AIR || currentPL1.getBlock().getType() == Material.WATER || currentPL1.getBlock().getType() == Material.LAVA){
+                                if(currentPL1.clone().add(0,-1,0).getBlock().getType() != Material.AIR && currentPL1.clone().add(0,-1,0).getBlock().getType() != Material.WATER && currentPL1.clone().add(0,-1,0).getBlock().getType() != Material.LAVA){
+                                    currentPL1.getBlock().setType(Material.POINTED_DRIPSTONE);
+                                    currentPL1.getWorld().getNearbyEntities(currentPL1,1,1,1).forEach(entity -> {
+                                        if(entity instanceof LivingEntity){
+                                            ((LivingEntity) entity).damage(5);
+                                        }
+                                    });
+                                }
+                            }
+
+                            if(currentPL2.getBlock().getType() == Material.AIR || currentPL2.getBlock().getType() == Material.WATER || currentPL2.getBlock().getType() == Material.LAVA){
+                                if(currentPL2.clone().add(0,-1,0).getBlock().getType() != Material.AIR && currentPL2.clone().add(0,-1,0).getBlock().getType() != Material.WATER && currentPL2.clone().add(0,-1,0).getBlock().getType() != Material.LAVA){
+                                    currentPL2.getBlock().setType(Material.POINTED_DRIPSTONE);
+                                    currentPL2.getWorld().getNearbyEntities(currentPL2,1,1,1).forEach(entity -> {
+                                        if(entity instanceof LivingEntity){
+                                            ((LivingEntity) entity).damage(5);
+                                        }
+                                    });
+                                }
+                            }
+                            
+                        storaged-=3;
+                        i++;
+                        }
+                    }
+
+                    public void cancelTask() {
+                        Bukkit.getScheduler().cancelTask(this.getTaskId());
+                    }
+                }.runTaskTimer(plugin, 0, 4);
+            }
+
+        }else{
+                currentPL.setY(currentPL.getY()+1);
+                new BukkitRunnable() {
+                    Location current = currentPL.clone();
+                    Material type = current.getBlock().getType();
+                    int i = 0;
+                    @Override
+                    public void run() {
+                        if (isStone(current.add(direction).getBlock()) || i > 8){
+                            Entity floatingBlock = currentPL.getWorld().spawnFallingBlock(current, current.getBlock().getBlockData());
+                            current.getBlock().setType(Material.AIR);
+                            catchEntity(floatingBlock, player);
+                            cancelTask();
+                        }
+                        current.add(direction);
+                        i++;
+                    }
+
+                    public void cancelTask() {
+                        Bukkit.getScheduler().cancelTask(this.getTaskId());
+                    }
+                }.runTaskTimer(plugin, 5, 3);
+            }
+
     }
-    else{
-        pos1 = currentPL.clone().add(-radiusFloor, 0, -radiusFloor);
-    }
-    pos2 = currentPL.clone().add(radiusFloor, radiusFloor, radiusFloor);
-   
+     
+    public void absorb(Player player) {
+        Location currentPL = player.getLocation(), loc;
+        if(player.isSneaking())
+            loc = currentPL.clone().add(-radiusFloor, -radiusFloor, -radiusFloor);
+        else
+            loc = currentPL.clone().add(-radiusFloor, 0, -radiusFloor);
+        ArrayList<Location> blocks = new ArrayList<>();
+        Location pos1, pos2;
 
-    int x1 = Math.min(pos1.getBlockX(), pos2.getBlockX());
-    int y1 = Math.min(pos1.getBlockY(), pos2.getBlockY());
-    int z1 = Math.min(pos1.getBlockZ(), pos2.getBlockZ());
-    int x2 = Math.max(pos1.getBlockX(), pos2.getBlockX());
-    int y2 = Math.max(pos1.getBlockY(), pos2.getBlockY());
-    int z2 = Math.max(pos1.getBlockZ(), pos2.getBlockZ());
-
-    for (int x = x1; x <= x2; x++) {
-      for (int y = y1; y <= y2; y++) {
-        for (int z = z1; z <= z2; z++) {
-            Location block = new Location(player.getWorld(), x, y, z);
-            if(isStone(block.getBlock()) && storaged < maxStoraged){
-                absorbBlock(block);
-          }
+        if(player.isSneaking()){
+            pos1 = currentPL.clone().add(-radiusFloor, -radiusFloor, -radiusFloor);
         }
-      }
-    }
-  }
+        else{
+            pos1 = currentPL.clone().add(-radiusFloor, 0, -radiusFloor);
+        }
+        pos2 = currentPL.clone().add(radiusFloor, radiusFloor, radiusFloor);
+       
 
-    //If is stone or the name contains stone absorb it and sum to the storaged, else if the block gives iron, gold, cobber, diamond, redstone, lapislazuly or carbon ore return the raw item
+        int x1 = Math.min(pos1.getBlockX(), pos2.getBlockX());
+        int y1 = Math.min(pos1.getBlockY(), pos2.getBlockY());
+        int z1 = Math.min(pos1.getBlockZ(), pos2.getBlockZ());
+        int x2 = Math.max(pos1.getBlockX(), pos2.getBlockX());
+        int y2 = Math.max(pos1.getBlockY(), pos2.getBlockY());
+        int z2 = Math.max(pos1.getBlockZ(), pos2.getBlockZ());
+
+        for (int x = x1; x <= x2; x++) {
+            for (int y = y1; y <= y2; y++) {
+                for (int z = z1; z <= z2; z++) {
+                    Location block = new Location(player.getWorld(), x, y, z);
+                    if(isStone(block.getBlock()) && storaged < maxStoraged){
+                        absorbBlock(block);
+                    }
+                }
+            }
+        }
+    }
+
     public void absorbBlock(Location block){
         switch(block.getBlock().getType()){
             case STONE:
@@ -273,7 +392,6 @@ public class ishi_ishi extends paramecia {
         }
     }
 
-//Open inventory and can buy items with the stored stone, for example stone tools, stone blocks, and things made of stone
     public void stoneCreation(Player player){
         Inventory inv = Bukkit.createInventory(null, 45, ("Stone Creation" + " (" + storaged + ")"));
         ItemStack stone = new ItemStack(Material.STONE, 1);
@@ -674,6 +792,96 @@ public class ishi_ishi extends paramecia {
     return blocks;
   }
 
+    //From Yami, modified forLivingVoidEntity
+    public void catchEntity(Entity ent, Player player){
+
+        BukkitTask attract = new BukkitRunnable(){
+            Vector FirstVector;
+            boolean fV = false;
+            boolean entityInHand = false;
+            double vx,vy,vz;
+            Location loc = player.getLocation().add(0,1,0);
+            @Override
+            public void run() {
+                if(player.isDead())
+                    this.cancel();
+
+                vx =  loc.getX() - ent.getLocation().getX();
+                vy =  loc.getY() - ent.getLocation().getY();
+                vz =  loc.getZ() - ent.getLocation().getZ();
+
+                Vector movement = loc.toVector().subtract(ent.getLocation().toVector()).normalize();
+
+                if(!fV){
+                    FirstVector = movement.clone();
+                    fV = true;
+                }
+
+                //Para levantar al mob si hay desnivel
+                if(loc.getY() >= ent.getLocation().getY() && !entityInHand)
+                    movement.setY(movement.getY() + (player.getLocation().getY() - ent.getLocation().getY()) + 3);
+
+
+                ent.setVelocity(movement);
+
+                if(Math.sqrt(Math.pow(vx,2) + Math.pow(vy,2) +  Math.pow(vz,2)) <= 1){
+                    entityInHand = true;
+                    if(!player.isSneaking()){
+                        this.cancel();
+                        repealEntity(ent,player);
+                    }
+                }
+            }
+        }.runTaskTimer(plugin,0,1);
+    }
+
+    //From Yami
+    public void repealEntity(Entity ent, Player player ){
+        repealAnimationCounter++;
+        World world = player.getWorld();
+
+        ent.getWorld().playSound(ent.getLocation(),Sound.BLOCK_REDSTONE_TORCH_BURNOUT,10,2);
+
+        Vector dir = player.getLocation().getDirection();
+        ent.setVelocity(dir.multiply(3));
+
+        //timer
+        new BukkitRunnable(){
+
+            Vector aux = dir;
+
+            Location loc = ent.getLocation();
+            int i = 0;
+            @Override
+            public void run() {
+
+
+                if(ent.getVelocity().getX() != aux.getX() || ent.getVelocity().getZ() != aux.getZ()){
+                    aux = ent.getVelocity();
+
+                    ent.getWorld().getNearbyEntities(ent.getLocation(), 2,2,2).forEach(entity -> {
+                        if(entity instanceof LivingEntity && entity != player && entity != ent){
+                            ((LivingEntity) entity).damage(9);
+                        }
+                    });
+                    player.sendMessage("You hit " + ent.getType().toString());
+                }
+
+                if(ent.isOnGround()){
+                    cancelTask();
+                }
+                i++;
+            }
+            public void cancelTask(){
+                Bukkit.getScheduler().cancelTask(this.getTaskId());
+            }
+        }.runTaskTimer(plugin, 0, 2);
+
+    }
+
+
+
+
 /*
     public void runParticles() {
         new BukkitRunnable(){
@@ -747,9 +955,9 @@ class ReinforcedStoneSword extends ItemStack {
         super(Material.STONE_SWORD);
         ItemMeta meta = this.getItemMeta();
         meta.setDisplayName("Reinforced Stone Sword");
-        AttributeModifier modifier = new AttributeModifier(UUID.randomUUID(), "generic.attackDamage", 8, AttributeModifier.Operation.ADD_NUMBER, EquipmentSlot.HAND);
+        AttributeModifier modifier = new AttributeModifier(UUID.randomUUID(), "generic.attackDamage", 9, AttributeModifier.Operation.ADD_NUMBER, EquipmentSlot.HAND);
         meta.addAttributeModifier(Attribute.GENERIC_ATTACK_DAMAGE, modifier);
-        AttributeModifier modifier2 = new AttributeModifier(UUID.randomUUID(), "generic.attackSpeed", 0.8, AttributeModifier.Operation.ADD_NUMBER, EquipmentSlot.HAND);
+        AttributeModifier modifier2 = new AttributeModifier(UUID.randomUUID(), "generic.attackSpeed", 1.8, AttributeModifier.Operation.ADD_NUMBER, EquipmentSlot.HAND);
         meta.addAttributeModifier(Attribute.GENERIC_ATTACK_SPEED, modifier2);
         this.setItemMeta(meta);
     }
@@ -761,9 +969,9 @@ class ReinforcedStoneAxe extends ItemStack {
         super(Material.STONE_AXE);
         ItemMeta meta = this.getItemMeta();
         meta.setDisplayName("Reinforced Stone Axe");
-        AttributeModifier modifier = new AttributeModifier(UUID.randomUUID(), "generic.attackDamage", 10, AttributeModifier.Operation.ADD_NUMBER, EquipmentSlot.HAND);
+        AttributeModifier modifier = new AttributeModifier(UUID.randomUUID(), "generic.attackDamage", 11, AttributeModifier.Operation.ADD_NUMBER, EquipmentSlot.HAND);
         meta.addAttributeModifier(Attribute.GENERIC_ATTACK_DAMAGE, modifier);
-        AttributeModifier modifier2 = new AttributeModifier(UUID.randomUUID(), "generic.attackSpeed", 0.9, AttributeModifier.Operation.ADD_NUMBER, EquipmentSlot.HAND);
+        AttributeModifier modifier2 = new AttributeModifier(UUID.randomUUID(), "generic.attackSpeed", 1.4, AttributeModifier.Operation.ADD_NUMBER, EquipmentSlot.HAND);
         meta.addAttributeModifier(Attribute.GENERIC_ATTACK_SPEED, modifier2);
         this.setItemMeta(meta);
     }
