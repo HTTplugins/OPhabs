@@ -45,7 +45,7 @@ public class goro_goro extends logia {
     public void ability3(){
         if(abilitiesCD.get(2) == 0){
             lightStep(user.getPlayer());
-            abilitiesCD.set(1, 20); // Pon el cooldown en segundos
+            abilitiesCD.set(2, 20); // Pon el cooldown en segundos
         }
     }
 
@@ -115,8 +115,6 @@ public class goro_goro extends logia {
                     yX = cos(toRadians(pitch))* yY - sin(toRadians(pitch))* zY;
                     zX = sin(toRadians(pitch))* yY + cos(toRadians(pitch))* zY;
 
-                    System.out.println(yaw);
-                    System.out.println(pitch);
 
                     //Final (sum of player position.)
                     xL = playerLoc.getX() + xX;
@@ -190,17 +188,17 @@ public class goro_goro extends logia {
         finLoc = finLoc.add(sumVec);
 
         Location finalFinLoc = finLoc;
-        new BukkitRunnable(){
-            Vector vec = finalFinLoc.toVector().subtract(iniLoc.toVector());
+        // new BukkitRunnable(){
+        //     Vector vec = finalFinLoc.toVector().subtract(iniLoc.toVector());
 
 
-            @Override
-            public void run() {
-                System.out.println(vec);
+            // @Override
+            // public void run() {
+            //     System.out.println(vec);
 
 
-            }
-        }.runTaskTimer(plugin,0,1);
+            // }
+        // }.runTaskTimer(plugin,0,1);
 
 
         player.teleport(finLoc);
