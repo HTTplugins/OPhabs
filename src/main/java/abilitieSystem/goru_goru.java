@@ -887,13 +887,11 @@ public class goru_goru extends paramecia {
                 if(!entityInHand){
                     ent.setVelocity(movement);
                     i++;
-                    player.sendMessage("i: " + i);
                 }
                 else{
                     ent.teleport(player.getLocation().add(0,2,0));
                     ent.setVelocity(new Vector(0,0.042,0));
                     j++;
-                    player.sendMessage("j: " + j);
                 }
 
                 if(Math.sqrt(Math.pow(vx,2) + Math.pow(vy,2) +  Math.pow(vz,2)) <= 1){

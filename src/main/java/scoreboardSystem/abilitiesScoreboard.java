@@ -129,8 +129,11 @@ public class abilitiesScoreboard {
                 
 
                 for(int i = 0; i < abNames.size(); i++){
-                    Score score = objective.getScore(abNames.get(i));
-                    score.setScore(user.getAbilitiesCD().get(i));
+                    String name = abNames.get(i);
+                    if(user.getAbilitiesCD().get(i) > 0)
+                        name += " (" + user.getAbilitiesCD().get(i) + ")";
+                    Score score = objective.getScore(name);
+                    score.setScore(i);
                 }
 
                 if( Bukkit.getPlayerExact(playerName) != null)
