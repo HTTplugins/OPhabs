@@ -1,5 +1,6 @@
 package scoreboardSystem;
 
+import fruitSystem.fruitIdentification;
 import castSystem.castIdentification;
 import htt.ophabs.OPhabs;
 import org.bukkit.Bukkit;
@@ -28,32 +29,17 @@ public class abilitiesScoreboard {
         this.plugin = plugin;
         this.dfPlayers = dfPlayers;
 
-        String
-            yamiValue = plugin.getConfig().getString("FruitAssociations.yami_yami"),
-            meraValue = plugin.getConfig().getString("FruitAssociations.mera_mera"),
-            guraValue = plugin.getConfig().getString("FruitAssociations.gura_gura"),
-            mokuValue = plugin.getConfig().getString("FruitAssociations.moku_moku"),
-            nekoReoparudoValue = plugin.getConfig().getString("FruitAssociations.neko_neko_reoparudo"),
-            maguValue = plugin.getConfig().getString("FruitAssociations.magu_magu"),
-            goroValue = plugin.getConfig().getString("FruitAssociations.goro_goro"),
-            ishiValue = plugin.getConfig().getString("FruitAssociations.ishi_ishi"),
-            goruValue = plugin.getConfig().getString("FruitAssociations.goru_goru");
-
         ArrayList<String> values = new ArrayList<>();
         for(devilFruitUser dfUser : dfPlayers.values()) {
             if(!plugin.getConfig().getString("FruitAssociations." + dfUser.ability.getName()).equals("none")){
                 values.add(plugin.getConfig().getString("FruitAssociations." + dfUser.ability.getName()));
-                System.out.println("Player: " + dfUser.ability.getName());
             }
         }
         
         for(String value : values) {
-            System.out.println(value);
-
             addScoreboard(value);
         }
 
-        System.out.println(values.size());
     }
 
 
@@ -76,11 +62,12 @@ public class abilitiesScoreboard {
         scoreboards.remove(player.getName());
     }
 
-    public boolean updateScoreboards(){ 
+    public boolean updateScoreboards(){
         for (Map.Entry<String, Scoreboard> userScoreboard : scoreboards.entrySet()) {
 
             String playerName = userScoreboard.getKey();
-            if(Bukkit.getPlayer(playerName) == null) {
+            if(Bukkit.getPlayer(playerName) != null) {
+
                 Scoreboard scoreboard = manager.getNewScoreboard();
                 devilFruitUser user = dfPlayers.get(playerName);
 
@@ -114,7 +101,7 @@ public class abilitiesScoreboard {
                 if( (castIdentification.itemIsCaster(player.getInventory().getItemInMainHand(), player)) || castIdentification.itemIsCaster(player.getInventory().getItemInOffHand(), player)){
                     objective.setDisplaySlot(DisplaySlot.SIDEBAR);
 
-                    objective.setDisplayName(user.getFruit().getFruitName());
+                    objective.setDisplayName(fruitIdentification.getItemName(user.ability.getName()));
                     
 
                     for(int i = 0; i < abNames.size(); i++){
