@@ -864,7 +864,6 @@ public class ishi_ishi extends paramecia {
                             ((LivingEntity) entity).damage(9);
                         }
                     });
-                    player.sendMessage("You hit " + ent.getType().toString());
                 }
 
                 if(ent.isOnGround()){

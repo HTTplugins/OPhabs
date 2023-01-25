@@ -29,7 +29,8 @@ public class loseFruit implements Listener {
                 nekoReoparudoValue = plugin.getConfig().getString("FruitAssociations.neko_neko_reoparudo"),
                 maguValue = plugin.getConfig().getString("FruitAssociations.magu_magu"),
                 goroValue = plugin.getConfig().getString("FruitAssociations.goro_goro"),
-                ishiValue = plugin.getConfig().getString("FruitAssociations.ishi_ishi");
+                ishiValue = plugin.getConfig().getString("FruitAssociations.ishi_ishi"),
+                goruValue = plugin.getConfig().getString("FruitAssociations.goru_goru");
 
         if(fruitAssociation.dfPlayers.containsKey(player.getName())){
             fruitAssociation.dfPlayers.get(player.getName()).onPlayerDeath(event);
@@ -43,6 +44,7 @@ public class loseFruit implements Listener {
             if(nekoReoparudoValue.equals(event.getEntity().getName())) nekoReoparudoValue = "none";
             if(goroValue.equals(event.getEntity().getName())) goroValue = "none";
             if(ishiValue.equals(event.getEntity().getName())) ishiValue = "none";
+            if(goruValue.equals(event.getEntity().getName())) goruValue = "none";
 
             plugin.getConfig().set("FruitAssociations.yami_yami",yamiValue);
             plugin.getConfig().set("FruitAssociations.mera_mera",meraValue);
@@ -52,6 +54,7 @@ public class loseFruit implements Listener {
             plugin.getConfig().set("FruitAssociations.magu_magu", maguValue);
             plugin.getConfig().set("FruitAssociations.goro_goro", goroValue);
             plugin.getConfig().set("FruitAssociations.ishi_ishi", ishiValue);
+            plugin.getConfig().set("FruitAssociations.goru_goru", goruValue);
             plugin.saveConfig();
 
             scoreboard.removeScoreboard(player);

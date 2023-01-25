@@ -26,7 +26,7 @@ public class fruitAssociation implements Listener {
     public static Map<String, abilities> abilities = new HashMap<>();
     public abilitiesScoreboard scoreboard = null;
 
-    public fruitAssociation(OPhabs plugin, yami_yami yamiClass, mera_mera meraClass, gura_gura guraClass, moku_moku mokuClass, neko_neko_reoparudo nekoReoparudoClass, magu_magu maguClass, goro_goro goroClass, ishi_ishi ishiClass){
+    public fruitAssociation(OPhabs plugin, yami_yami yamiClass, mera_mera meraClass, gura_gura guraClass, moku_moku mokuClass, neko_neko_reoparudo nekoReoparudoClass, magu_magu maguClass, goro_goro goroClass, ishi_ishi ishiClass, goru_goru goruClass){
         this.plugin = plugin;
         abilities.put(fruitIdentification.fruitItemNameGura,guraClass);
         abilities.put(fruitIdentification.fruitItemNameMera,meraClass);
@@ -36,7 +36,7 @@ public class fruitAssociation implements Listener {
         abilities.put(fruitIdentification.fruitItemNameMagu,maguClass);
         abilities.put(fruitIdentification.fruitItemNameGoro,goroClass);
         abilities.put(fruitIdentification.fruitItemNameIshi,ishiClass);
-
+        abilities.put(fruitIdentification.fruitItemNameGoru,goruClass);
 
     String
             yamiValue = plugin.getConfig().getString("FruitAssociations.yami_yami"),
@@ -46,7 +46,9 @@ public class fruitAssociation implements Listener {
             nekoReoparudoValue = plugin.getConfig().getString("FruitAssociations.neko_neko_reoparudo"),
             maguValue = plugin.getConfig().getString("FruitAssociations.magu_magu"),
             goroValue = plugin.getConfig().getString("FruitAssociations.goro_goro"),
-            ishiValue = plugin.getConfig().getString("FruitAssociations.ishi_ishi");
+            ishiValue = plugin.getConfig().getString("FruitAssociations.ishi_ishi"),
+            goruValue = plugin.getConfig().getString("FruitAssociations.goru_goru");
+
 
 
         if(!yamiValue.equals("none")){
@@ -75,6 +77,10 @@ public class fruitAssociation implements Listener {
         if(!ishiValue.equals("none")){
             dfPlayers.put(ishiValue,new devilFruitUser(ishiValue, new devilFruit(fruitIdentification.fruitCommandNameIshi), ishiClass));
         }
+
+        if(!goruValue.equals("none")){
+            dfPlayers.put(goruValue,new devilFruitUser(goruValue, new devilFruit(fruitIdentification.fruitCommandNameGoru), goruClass));
+        }
     }
 
     public void setScoreboard(abilitiesScoreboard scoreboard){
@@ -93,7 +99,8 @@ public class fruitAssociation implements Listener {
                 nekoReoparudoValue = plugin.getConfig().getString("FruitAssociations.neko_neko_reoparudo"),
                 maguValue = plugin.getConfig().getString("FruitAssociations.magu_magu"),
                 goroValue = plugin.getConfig().getString("FruitAssociations.goro_goro"),
-                ishiValue = plugin.getConfig().getString("FruitAssociations.ishi_ishi");
+                ishiValue = plugin.getConfig().getString("FruitAssociations.ishi_ishi"),
+                goruValue = plugin.getConfig().getString("FruitAssociations.goru_goru");
 
         String casterItemName = null;
         Material castMaterial = null;
@@ -154,6 +161,12 @@ public class fruitAssociation implements Listener {
                 casterItemName = castIdentification.castItemNameIshi;
                 castMaterial = castIdentification.castMaterialIshi;
                 break;
+            case fruitIdentification.fruitItemNameGoru:
+                consumedFruit = consumedFruit(goruValue,event);
+                goruValue = event.getPlayer().getName();
+                casterItemName = castIdentification.castItemNameGoru;
+                castMaterial = castIdentification.castMaterialGoru;
+                break;
 
             default:
                 break;
@@ -168,6 +181,7 @@ public class fruitAssociation implements Listener {
             plugin.getConfig().set("FruitAssociations.magu_magu",maguValue);
             plugin.getConfig().set("FruitAssociations.goro_goro",goroValue);
             plugin.getConfig().set("FruitAssociations.ishi_ishi",ishiValue);
+            plugin.getConfig().set("FruitAssociations.goru_goru",goruValue);
             plugin.saveConfig();
         }
 

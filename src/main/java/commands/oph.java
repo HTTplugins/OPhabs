@@ -34,7 +34,8 @@ public class oph implements CommandExecutor, TabCompleter {
                         || fruitCommandName.equalsIgnoreCase(fruitIdentification.fruitCommandNameNekoReoparudo)
                         || fruitCommandName.equals(fruitIdentification.fruitCommandNameMagu)
                         || fruitCommandName.equalsIgnoreCase(fruitIdentification.fruitCommandNameGoro)
-                        || fruitCommandName.equalsIgnoreCase(fruitIdentification.fruitCommandNameIshi))
+                        || fruitCommandName.equalsIgnoreCase(fruitIdentification.fruitCommandNameIshi)
+                        || fruitCommandName.equalsIgnoreCase(fruitIdentification.fruitCommandNameGoru))
                     if( targetPlayer != null) {
                         if(plugin.getConfig().getString("FruitAssociations."+fruitCommandName).equals("none")){
                             devilFruit devFruit = new devilFruit(fruitCommandName);
@@ -84,6 +85,7 @@ public class oph implements CommandExecutor, TabCompleter {
             list.add(fruitIdentification.fruitCommandNameMagu);
             list.add(fruitIdentification.fruitCommandNameGoro);
             list.add(fruitIdentification.fruitCommandNameIshi);
+            list.add(fruitIdentification.fruitCommandNameGoru);
         }
         if(args.length == 3){
             for (Player player : Bukkit.getServer().getOnlinePlayers() ) {

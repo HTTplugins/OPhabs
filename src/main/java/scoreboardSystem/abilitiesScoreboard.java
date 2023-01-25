@@ -36,7 +36,8 @@ public class abilitiesScoreboard {
             nekoReoparudoValue = plugin.getConfig().getString("FruitAssociations.neko_neko_reoparudo"),
             maguValue = plugin.getConfig().getString("FruitAssociations.magu_magu"),
             goroValue = plugin.getConfig().getString("FruitAssociations.goro_goro"),
-            ishiValue = plugin.getConfig().getString("FruitAssociations.ishi_ishi");
+            ishiValue = plugin.getConfig().getString("FruitAssociations.ishi_ishi"),
+            goruValue = plugin.getConfig().getString("FruitAssociations.goru_goru");
 
             if(dfPlayers.get(yamiValue) != null)
                 addScoreboard(dfPlayers.get(yamiValue).getPlayer());
@@ -61,6 +62,9 @@ public class abilitiesScoreboard {
 
             if(dfPlayers.get(ishiValue) != null)
                 addScoreboard(dfPlayers.get(ishiValue).getPlayer());
+
+            if(dfPlayers.get(goruValue) != null)
+                addScoreboard(dfPlayers.get(goruValue).getPlayer());
 
     }
 

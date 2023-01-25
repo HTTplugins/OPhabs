@@ -36,10 +36,11 @@ public final class OPhabs extends JavaPlugin {
         magu_magu maguClass = new magu_magu(this);
         goro_goro goroClass = new goro_goro(this);
         ishi_ishi ishiClass = new ishi_ishi(this);
+        goru_goru goruClass = new goru_goru(this);
 
         //--------------
         //FruitSystem
-        fruitAssociation association = new fruitAssociation(this, yamiClass, meraClass, guraClass, mokuClass, nekoReoparudoClass, maguClass, goroClass, ishiClass);
+        fruitAssociation association = new fruitAssociation(this, yamiClass, meraClass, guraClass, mokuClass, nekoReoparudoClass, maguClass, goroClass, ishiClass, goruClass);
         loseFruit lFruit = new loseFruit(this, association.dfPlayers);
         getServer().getPluginManager().registerEvents(association, this);
         getServer().getPluginManager().registerEvents(lFruit, this);

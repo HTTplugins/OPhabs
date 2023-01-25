@@ -14,7 +14,8 @@ public class castIdentification {
                             castMaterialNekoReoparudo = Material.YELLOW_DYE,
                             castMaterialMagu = Material.MAGMA_CREAM,
                             castMaterialGoro = Material.IRON_INGOT,
-                            castMaterialIshi = Material.FLINT;
+                            castMaterialIshi = Material.FLINT,
+                            castMaterialGoru = Material.GOLD_INGOT;
 
     public static String castItemNameYami = "Yami Yami caster",
                          castItemNameMera = "Mera Mera caster",
@@ -23,7 +24,8 @@ public class castIdentification {
                          castItemNameNekoReoparudo = "Neko Neko Reoparudo caster",
                          castItemNameMagu = "Magu Magu caster",
                          castItemNameGoro = "Goro Goro caster",
-                         castItemNameIshi = "Ishi Ishi caster";
+                         castItemNameIshi = "Ishi Ishi caster",
+                         castItemNameGoru = "Goru Goru caster";
 
     public static boolean itemIsCaster(ItemStack item , Player player) {
 
@@ -44,7 +46,8 @@ public class castIdentification {
                 || (itemName.equals(castIdentification.castItemNameNekoReoparudo) && itemMaterial.equals(castIdentification.castMaterialNekoReoparudo))
                 || (itemName.equals(castIdentification.castItemNameMagu) && itemMaterial.equals(castIdentification.castMaterialMagu))
                 || (itemName.equals(castIdentification.castItemNameGoro) && itemMaterial.equals(castIdentification.castMaterialGoro))
-                || (itemName.equals(castIdentification.castItemNameIshi) && itemMaterial.equals(castIdentification.castMaterialIshi)))
+                || (itemName.equals(castIdentification.castItemNameIshi) && itemMaterial.equals(castIdentification.castMaterialIshi))
+                || (itemName.equals(castIdentification.castItemNameGoru) && itemMaterial.equals(castIdentification.castMaterialGoru)))
             return true;
         else
             return false;
