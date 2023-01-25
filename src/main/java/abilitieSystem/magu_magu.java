@@ -1,6 +1,7 @@
 package abilitieSystem;
 
 import castSystem.castIdentification;
+import fruitSystem.fruitIdentification;
 import htt.ophabs.OPhabs;
 import org.bukkit.Location;
 import org.bukkit.Sound;
@@ -18,7 +19,7 @@ import static java.lang.Math.toRadians;
 public class magu_magu extends logia {
 
     public magu_magu(OPhabs plugin){
-        super(plugin, Particle.FLAME);
+        super(plugin, Particle.FLAME, castIdentification.castMaterialMagu, castIdentification.castItemNameMagu, fruitIdentification.fruitCommandNameMagu); 
         abilitiesNames.add("AB1");
         abilitiesCD.add(0);
         abilitiesNames.add("AB2");

@@ -1,7 +1,9 @@
 package abilitieSystem;
 
 import htt.ophabs.OPhabs;
+
 import castSystem.castIdentification;
+import fruitSystem.fruitIdentification;
 import fruitSystem.devilFruitUser;
 import java.util.ArrayList;
 import java.util.Random;
@@ -41,7 +43,7 @@ public class goru_goru extends paramecia {
     private int repealAnimationCounter = 0;
 
     public goru_goru(OPhabs plugin) {
-        super(plugin);
+        super(plugin, castIdentification.castMaterialGoru, castIdentification.castItemNameGoru, fruitIdentification.fruitCommandNameGoru);
         storaged = 0;
         maxStoraged = 1024;
         opened = false;
@@ -58,7 +60,7 @@ public class goru_goru extends paramecia {
     }
 
     public goru_goru(OPhabs plugin, devilFruitUser user) {
-        super(plugin, user);
+        super(plugin, user, castIdentification.castMaterialGoru, castIdentification.castItemNameGoru, fruitIdentification.fruitCommandNameGoru);
         storaged = 5;
         abilitiesNames.add(nameAbility1 + " (" + storaged + ")");
         abilitiesCD.add(0);

@@ -14,14 +14,14 @@ public class zoan extends abilities{
     skinsChanger skinC = new skinsChanger();
     String skinUrl="", skinAwakenUrl="";
 
-    public zoan(OPhabs plugin){
-        super(plugin);
+    public zoan(OPhabs plugin, Material castMaterial, String castName, String commandName) {
+        super(plugin, castMaterial, castName, commandName);
         abilitiesNames.add("Transform");
         abilitiesCD.add(0);
     }
 
-    public zoan(OPhabs plugin, devilFruitUser user){
-        super(plugin, user);
+    public zoan(OPhabs plugin, devilFruitUser user, Material castMaterial, String castName, String commandName) {
+        super(plugin, user, castMaterial, castName, commandName);
         abilitiesNames.add("Transform");
         abilitiesCD.add(0);
     }

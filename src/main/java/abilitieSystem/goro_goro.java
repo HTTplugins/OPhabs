@@ -12,13 +12,15 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.util.Vector;
+import castSystem.castIdentification;
+import fruitSystem.fruitIdentification;
 
 import static java.lang.Math.*;
 
 public class goro_goro extends logia {
 
     public goro_goro(OPhabs plugin){
-        super(plugin, Particle.ELECTRIC_SPARK);
+        super(plugin, Particle.ELECTRIC_SPARK, castIdentification.castMaterialGoro, castIdentification.castItemNameGoro, fruitIdentification.fruitCommandNameGoro);
         abilitiesNames.add("El THOR");
         abilitiesCD.add(0);
         abilitiesNames.add("ThunderStorm");

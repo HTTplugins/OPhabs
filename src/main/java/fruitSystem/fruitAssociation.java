@@ -1,6 +1,7 @@
 package fruitSystem;
 
 import htt.ophabs.OPhabs;
+import fruitSystem.fruitIdentification;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -23,64 +24,30 @@ import scoreboardSystem.abilitiesScoreboard;
 public class fruitAssociation implements Listener {
     private final OPhabs plugin;
     public static Map<String, devilFruitUser> dfPlayers = new HashMap<>();
-    public static Map<String, abilities> abilities = new HashMap<>();
+    public static Map<String, abilities> abilitiesM = new HashMap<>();
     public abilitiesScoreboard scoreboard = null;
-
-    public fruitAssociation(OPhabs plugin, yami_yami yamiClass, mera_mera meraClass, gura_gura guraClass, moku_moku mokuClass, neko_neko_reoparudo nekoReoparudoClass, magu_magu maguClass, goro_goro goroClass, ishi_ishi ishiClass, goru_goru goruClass){
+    public ArrayList<String> Names = new ArrayList<>();
+    public ArrayList<abilities> abilityList = new ArrayList<>();
+    public fruitAssociation(OPhabs plugin, ArrayList<abilities> abilitiesList) {
         this.plugin = plugin;
-        abilities.put(fruitIdentification.fruitItemNameGura,guraClass);
-        abilities.put(fruitIdentification.fruitItemNameMera,meraClass);
-        abilities.put(fruitIdentification.fruitItemNameYami,yamiClass);
-        abilities.put(fruitIdentification.fruitItemNameMoku,mokuClass);
-        abilities.put(fruitIdentification.fruitItemNameNekoReoparudo,nekoReoparudoClass);
-        abilities.put(fruitIdentification.fruitItemNameMagu,maguClass);
-        abilities.put(fruitIdentification.fruitItemNameGoro,goroClass);
-        abilities.put(fruitIdentification.fruitItemNameIshi,ishiClass);
-        abilities.put(fruitIdentification.fruitItemNameGoru,goruClass);
 
-    String
-            yamiValue = plugin.getConfig().getString("FruitAssociations.yami_yami"),
-            meraValue = plugin.getConfig().getString("FruitAssociations.mera_mera"),
-            guraValue = plugin.getConfig().getString("FruitAssociations.gura_gura"),
-            mokuValue = plugin.getConfig().getString("FruitAssociations.moku_moku"),
-            nekoReoparudoValue = plugin.getConfig().getString("FruitAssociations.neko_neko_reoparudo"),
-            maguValue = plugin.getConfig().getString("FruitAssociations.magu_magu"),
-            goroValue = plugin.getConfig().getString("FruitAssociations.goro_goro"),
-            ishiValue = plugin.getConfig().getString("FruitAssociations.ishi_ishi"),
-            goruValue = plugin.getConfig().getString("FruitAssociations.goru_goru");
-
-
-
-        if(!yamiValue.equals("none")){
-           dfPlayers.put(yamiValue, new devilFruitUser(yamiValue, new devilFruit(fruitIdentification.fruitCommandNameYami), yamiClass));
-        }
-        if(!meraValue.equals("none")){
-            dfPlayers.put(meraValue, new devilFruitUser(meraValue, new devilFruit(fruitIdentification.fruitCommandNameMera), meraClass));
-        }
-        if(!guraValue.equals("none")){
-            dfPlayers.put(guraValue, new devilFruitUser(guraValue, new devilFruit(fruitIdentification.fruitCommandNameGura), guraClass));
-        }
-        if(!mokuValue.equals("none")){
-            dfPlayers.put(mokuValue, new devilFruitUser(mokuValue, new devilFruit(fruitIdentification.fruitCommandNameMoku), mokuClass));
-        }
-        if(!nekoReoparudoValue.equals("none")){
-            dfPlayers.put(nekoReoparudoValue, new devilFruitUser(nekoReoparudoValue, new devilFruit(fruitIdentification.fruitCommandNameNekoReoparudo), nekoReoparudoClass));
-        }
-        if(!maguValue.equals("none")){
-            dfPlayers.put(maguValue, new devilFruitUser(maguValue, new devilFruit(fruitIdentification.fruitCommandNameMagu), maguClass));
+        for (abilities ability : abilitiesList) {
+            abilitiesM.put(fruitIdentification.getItemName(ability.getName()), ability);
         }
 
-        if(!goroValue.equals("none")){
-            dfPlayers.put(goroValue,new devilFruitUser(goroValue, new devilFruit(fruitIdentification.fruitCommandNameGoro), goroClass));
+        ArrayList<String> values = new ArrayList<>();
+        for(int i = 0; i < abilitiesList.size(); i++) {
+            values.add(plugin.getConfig().getString("FruitAssociations." + abilitiesList.get(i).getName()));
+            Names.add(fruitIdentification.getItemName(abilitiesList.get(i).getName()));
         }
-
-        if(!ishiValue.equals("none")){
-            dfPlayers.put(ishiValue,new devilFruitUser(ishiValue, new devilFruit(fruitIdentification.fruitCommandNameIshi), ishiClass));
+        
+        for (int i = 0; i < values.size(); i++) {
+            String value = values.get(i);
+            if(!values.equals("none")) {
+               dfPlayers.put(value, new devilFruitUser(value, new devilFruit(value), abilitiesList.get(i)));
+            }
         }
-
-        if(!goruValue.equals("none")){
-            dfPlayers.put(goruValue,new devilFruitUser(goruValue, new devilFruit(fruitIdentification.fruitCommandNameGoru), goruClass));
-        }
+        abilityList = abilitiesList;
     }
 
     public void setScoreboard(abilitiesScoreboard scoreboard){
@@ -91,98 +58,23 @@ public class fruitAssociation implements Listener {
     public void onPlayerItemConsume(PlayerItemConsumeEvent event){
         ItemStack fruit = event.getItem();
 
-        String
-                yamiValue = plugin.getConfig().getString("FruitAssociations.yami_yami"),
-                meraValue = plugin.getConfig().getString("FruitAssociations.mera_mera"),
-                guraValue = plugin.getConfig().getString("FruitAssociations.gura_gura"),
-                mokuValue = plugin.getConfig().getString("FruitAssociations.moku_moku"),
-                nekoReoparudoValue = plugin.getConfig().getString("FruitAssociations.neko_neko_reoparudo"),
-                maguValue = plugin.getConfig().getString("FruitAssociations.magu_magu"),
-                goroValue = plugin.getConfig().getString("FruitAssociations.goro_goro"),
-                ishiValue = plugin.getConfig().getString("FruitAssociations.ishi_ishi"),
-                goruValue = plugin.getConfig().getString("FruitAssociations.goru_goru");
-
-        String casterItemName = null;
-        Material castMaterial = null;
-        Boolean consumedFruit = false;
-
-        switch (fruit.getItemMeta().getDisplayName()){
-
-            case fruitIdentification.fruitItemNameYami:
-                consumedFruit = consumedFruit(yamiValue,event);
-                yamiValue = event.getPlayer().getName();
-                casterItemName = castIdentification.castItemNameYami;
-                castMaterial = castIdentification.castMaterialYami;
-                break;
-
-            case fruitIdentification.fruitItemNameMera:
-                consumedFruit = consumedFruit(meraValue,event);
-                meraValue = event.getPlayer().getName();
-                casterItemName = castIdentification.castItemNameMera;
-                castMaterial = castIdentification.castMaterialMera;
-                break;
-
-            case fruitIdentification.fruitItemNameGura:
-                consumedFruit= consumedFruit(guraValue,event);
-                guraValue = event.getPlayer().getName();
-                casterItemName = castIdentification.castItemNameGura;
-                castMaterial = castIdentification.castMaterialGura;
-                break;
-
-            case fruitIdentification.fruitItemNameMoku:
-                consumedFruit = consumedFruit(mokuValue,event);
-                mokuValue = event.getPlayer().getName();
-                casterItemName = castIdentification.castItemNameMoku;
-                castMaterial = castIdentification.castMaterialMoku;
-                break;
-
-            case fruitIdentification.fruitItemNameNekoReoparudo:
-                consumedFruit = consumedFruit(nekoReoparudoValue,event);
-                nekoReoparudoValue = event.getPlayer().getName();
-                casterItemName = castIdentification.castItemNameNekoReoparudo;
-                castMaterial = castIdentification.castMaterialNekoReoparudo;
-                break;
-
-            case fruitIdentification.fruitItemNameMagu:
-                consumedFruit = consumedFruit(maguValue, event);
-                maguValue = event.getPlayer().getName();
-                casterItemName = castIdentification.castItemNameMagu;
-                castMaterial = castIdentification.castMaterialMagu;
-                break;
-            case fruitIdentification.fruitItemNameGoro:
-                consumedFruit = consumedFruit(goroValue,event);
-                goroValue = event.getPlayer().getName();
-                casterItemName = castIdentification.castItemNameGoro;
-                castMaterial = castIdentification.castMaterialGoro;
-                break;
-            case fruitIdentification.fruitItemNameIshi:
-                consumedFruit = consumedFruit(ishiValue,event);
-                ishiValue = event.getPlayer().getName();
-                casterItemName = castIdentification.castItemNameIshi;
-                castMaterial = castIdentification.castMaterialIshi;
-                break;
-            case fruitIdentification.fruitItemNameGoru:
-                consumedFruit = consumedFruit(goruValue,event);
-                goruValue = event.getPlayer().getName();
-                casterItemName = castIdentification.castItemNameGoru;
-                castMaterial = castIdentification.castMaterialGoru;
-                break;
-
-            default:
-                break;
+        ArrayList<String> values = new ArrayList<>();
+        for(abilities ability : abilitiesM.values()) {
+            values.add(ability.getName());
         }
-
-        if(!consumedFruit){
-            plugin.getConfig().set("FruitAssociations.yami_yami",yamiValue);
-            plugin.getConfig().set("FruitAssociations.mera_mera",meraValue);
-            plugin.getConfig().set("FruitAssociations.gura_gura",guraValue);
-            plugin.getConfig().set("FruitAssociations.moku_moku",mokuValue);
-            plugin.getConfig().set("FruitAssociations.neko_neko_reoparudo",nekoReoparudoValue);
-            plugin.getConfig().set("FruitAssociations.magu_magu",maguValue);
-            plugin.getConfig().set("FruitAssociations.goro_goro",goroValue);
-            plugin.getConfig().set("FruitAssociations.ishi_ishi",ishiValue);
-            plugin.getConfig().set("FruitAssociations.goru_goru",goruValue);
-            plugin.saveConfig();
+        String casterItemName = null;
+        Material castMaterial = Material.STICK;
+        Boolean consumedFruit = false;
+        abilities a = null;
+        //iterate in all Names
+        for(int i = 0; i < Names.size(); i++) {
+            if(fruit.getItemMeta().getDisplayName().equals(Names.get(i))) {
+                consumedFruit = consumedFruit(values.get(i),event);
+                values.set(i,event.getPlayer().getName());
+                casterItemName = abilityList.get(i).getItemName();
+                castMaterial = abilityList.get(i).getMaterial();
+                a = abilityList.get(i);
+            }
         }
 
         ItemStack caster = new ItemStack(castMaterial);
@@ -194,11 +86,13 @@ public class fruitAssociation implements Listener {
             event.getPlayer().getWorld().strikeLightningEffect(event.getPlayer().getLocation());
             event.getPlayer().setHealth(0);
         } else{
-            abilities ability = abilities.get(fruit.getItemMeta().getDisplayName());
+            abilities ability = abilitiesM.get(fruit.getItemMeta().getDisplayName());
             fruitIdentification fruitID = new fruitIdentification();
             devilFruitUser dfUser = new devilFruitUser(event.getPlayer().getName(), new devilFruit(fruitID.getCommandName(fruit.getItemMeta().getDisplayName())), ability);
             dfPlayers.put(event.getPlayer().getName(), dfUser);
-            scoreboard.addScoreboard(event.getPlayer());
+            plugin.getConfig().set("FruitAssociations." + a.getName(), event.getPlayer().getName());
+            plugin.saveConfig();
+            scoreboard.addScoreboard(event.getPlayer().getName());
         }
     }
 

@@ -2,7 +2,9 @@ package abilitieSystem;
 
 import htt.ophabs.OPhabs;
 import castSystem.castIdentification;
+import fruitSystem.fruitIdentification;
 import fruitSystem.devilFruitUser;
+
 import java.util.ArrayList;
 import java.util.Random;
 import org.bukkit.*;
@@ -38,7 +40,8 @@ public class ishi_ishi extends paramecia {
     private int repealAnimationCounter = 0;
 
     public ishi_ishi(OPhabs plugin) {
-        super(plugin);
+        super(plugin, castIdentification.castMaterialIshi, castIdentification.castItemNameIshi, fruitIdentification.fruitCommandNameIshi);
+
         storaged = 0;
         maxStoraged = 1024;
         opened = false;
@@ -55,7 +58,7 @@ public class ishi_ishi extends paramecia {
     }
 
     public ishi_ishi(OPhabs plugin, devilFruitUser user) {
-        super(plugin, user);
+        super(plugin, user, castIdentification.castMaterialIshi, castIdentification.castItemNameIshi, fruitIdentification.fruitCommandNameIshi);
         storaged = 5;
         abilitiesNames.add(nameAbility1 + " (" + storaged + ")");
         abilitiesCD.add(0);

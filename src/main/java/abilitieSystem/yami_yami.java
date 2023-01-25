@@ -1,6 +1,9 @@
 package abilitieSystem;
 
 import htt.ophabs.OPhabs;
+import fruitSystem.fruitIdentification;
+import castSystem.castIdentification;
+
 import org.bukkit.*;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Entity;
@@ -38,7 +41,7 @@ public class yami_yami extends logia {
 
     private List<Block> convertedToVoidBlocks = new ArrayList<>();
     public yami_yami(OPhabs plugin){
-        super(plugin, Particle.REDSTONE);
+        super(plugin, Particle.REDSTONE, castIdentification.castMaterialYami, castIdentification.castItemNameYami, fruitIdentification.fruitCommandNameYami);
         abilitiesNames.add("BlackVoid");
         abilitiesCD.add(0);
         abilitiesNames.add("LiberateVoid");

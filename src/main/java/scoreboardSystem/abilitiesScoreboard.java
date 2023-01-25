@@ -39,33 +39,21 @@ public class abilitiesScoreboard {
             ishiValue = plugin.getConfig().getString("FruitAssociations.ishi_ishi"),
             goruValue = plugin.getConfig().getString("FruitAssociations.goru_goru");
 
-            if(dfPlayers.get(yamiValue) != null)
-                addScoreboard(dfPlayers.get(yamiValue).getPlayer());
+        ArrayList<String> values = new ArrayList<>();
+        for(devilFruitUser dfUser : dfPlayers.values()) {
+            if(!plugin.getConfig().getString("FruitAssociations." + dfUser.ability.getName()).equals("none")){
+                values.add(plugin.getConfig().getString("FruitAssociations." + dfUser.ability.getName()));
+                System.out.println("Player: " + dfUser.ability.getName());
+            }
+        }
+        
+        for(String value : values) {
+            System.out.println(value);
 
-            if(dfPlayers.get(meraValue) != null)
-                addScoreboard(dfPlayers.get(meraValue).getPlayer());
+            addScoreboard(value);
+        }
 
-            if(dfPlayers.get(guraValue) != null)
-                addScoreboard(dfPlayers.get(guraValue).getPlayer());
-
-            if(dfPlayers.get(mokuValue) != null)
-                addScoreboard(dfPlayers.get(mokuValue).getPlayer());
-
-            if(dfPlayers.get(nekoReoparudoValue) != null)
-                addScoreboard(dfPlayers.get(nekoReoparudoValue).getPlayer());
-
-            if(dfPlayers.get(maguValue) != null)
-                addScoreboard(dfPlayers.get(maguValue).getPlayer());
-
-            if(dfPlayers.get(goroValue) != null)
-                addScoreboard(dfPlayers.get(goroValue).getPlayer());
-
-            if(dfPlayers.get(ishiValue) != null)
-                addScoreboard(dfPlayers.get(ishiValue).getPlayer());
-
-            if(dfPlayers.get(goruValue) != null)
-                addScoreboard(dfPlayers.get(goruValue).getPlayer());
-
+        System.out.println(values.size());
     }
 
 
@@ -79,9 +67,9 @@ public class abilitiesScoreboard {
 
     }
 
-    public void addScoreboard(Player player){
+    public void addScoreboard(String playerName){
         Scoreboard scoreboard = manager.getNewScoreboard();
-        scoreboards.put(player.getName(),scoreboard);
+        scoreboards.put(playerName,scoreboard);
     }
 
     public void removeScoreboard(Player player){
@@ -92,49 +80,28 @@ public class abilitiesScoreboard {
         for (Map.Entry<String, Scoreboard> userScoreboard : scoreboards.entrySet()) {
 
             String playerName = userScoreboard.getKey();
-            Scoreboard scoreboard = manager.getNewScoreboard();
-            devilFruitUser user = dfPlayers.get(playerName);
+            if(Bukkit.getPlayer(playerName) == null) {
+                Scoreboard scoreboard = manager.getNewScoreboard();
+                devilFruitUser user = dfPlayers.get(playerName);
 
-            Player player = null;
+                Player player = null;
 
-            if( Bukkit.getPlayerExact(playerName) != null)
-                player = Bukkit.getPlayerExact(playerName);
-            else
-                player = null;
+                if( Bukkit.getPlayerExact(playerName) != null)
+                    player = Bukkit.getPlayerExact(playerName);
+                else
+                    player = null;
 
-            Objective objective = scoreboard.registerNewObjective("abilitiesScoreboard","dummy");
+                Objective objective = scoreboard.registerNewObjective("abilitiesScoreboard","dummy");
 
-            ItemStack caster = null;
+                ItemStack caster = null;
 
-            if(player != null)
-                caster = player.getInventory().getItemInMainHand();
+                if(player != null)
+                    caster = player.getInventory().getItemInMainHand();
 
-            ArrayList<String> abNames = new ArrayList<>(user.getAbilitiesNames());
-            String active = ChatColor.RED + "" + ChatColor.BOLD + "" + abNames.get(user.actual);
+                ArrayList<String> abNames = new ArrayList<>(user.getAbilitiesNames());
+                String active = ChatColor.RED + "" + ChatColor.BOLD + "" + abNames.get(user.actual);
 
-            abNames.set(user.actual, active);
-
-            if( Bukkit.getPlayerExact(playerName) != null)
-                player = Bukkit.getPlayerExact(playerName);
-            else
-                player = null;
-
-            if(player != null)
-                player.setScoreboard(Bukkit.getScoreboardManager().getNewScoreboard());
-
-            if( (castIdentification.itemIsCaster(player.getInventory().getItemInMainHand(), player)) || castIdentification.itemIsCaster(player.getInventory().getItemInOffHand(), player)){
-                objective.setDisplaySlot(DisplaySlot.SIDEBAR);
-
-                objective.setDisplayName(user.getFruit().getFruitName());
-                
-
-                for(int i = 0; i < abNames.size(); i++){
-                    String name = abNames.get(i);
-                    if(user.getAbilitiesCD().get(i) > 0)
-                        name += " (" + user.getAbilitiesCD().get(i) + ")";
-                    Score score = objective.getScore(name);
-                    score.setScore(i);
-                }
+                abNames.set(user.actual, active);
 
                 if( Bukkit.getPlayerExact(playerName) != null)
                     player = Bukkit.getPlayerExact(playerName);
@@ -142,17 +109,42 @@ public class abilitiesScoreboard {
                     player = null;
 
                 if(player != null){
-                    player.setScoreboard(scoreboard);
-                }
-
-            } else {
-                if(player != null)
                     player.setScoreboard(Bukkit.getScoreboardManager().getNewScoreboard());
 
+                if( (castIdentification.itemIsCaster(player.getInventory().getItemInMainHand(), player)) || castIdentification.itemIsCaster(player.getInventory().getItemInOffHand(), player)){
+                    objective.setDisplaySlot(DisplaySlot.SIDEBAR);
+
+                    objective.setDisplayName(user.getFruit().getFruitName());
+                    
+
+                    for(int i = 0; i < abNames.size(); i++){
+                        String name = abNames.get(i);
+                        if(user.getAbilitiesCD().get(i) > 0)
+                            name += " (" + user.getAbilitiesCD().get(i) + ")";
+                        Score score = objective.getScore(name);
+                        score.setScore(i);
+                    }
+
+                    if( Bukkit.getPlayerExact(playerName) != null)
+                        player = Bukkit.getPlayerExact(playerName);
+                    else
+                        player = null;
+
+                    if(player != null){
+                        player.setScoreboard(scoreboard);
+                    }
+
+                } else {
+                    if(player != null)
+                        player.setScoreboard(Bukkit.getScoreboardManager().getNewScoreboard());
+
+                }
+                }
+                userScoreboard.setValue(scoreboard);
             }
-            userScoreboard.setValue(scoreboard);
+        
         }
 
-    return true;
+        return true;
     }
 }

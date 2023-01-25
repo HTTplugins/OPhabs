@@ -2,6 +2,9 @@ package abilitieSystem;
 
 import htt.ophabs.OPhabs;
 import fruitSystem.devilFruitUser;
+import castSystem.castIdentification;
+import fruitSystem.fruitIdentification;
+
 import org.bukkit.*;
 import org.bukkit.entity.Player;
 import org.bukkit.potion.PotionEffect;
@@ -19,7 +22,7 @@ import java.util.ArrayList;
 public class neko_neko_reoparudo extends zoan {
 
     public neko_neko_reoparudo(OPhabs plugin){
-        super(plugin);
+        super(plugin, castIdentification.castMaterialNekoReoparudo, castIdentification.castItemNameNekoReoparudo, fruitIdentification.fruitCommandNameNekoReoparudo);
         super.skinUrl = "https://s.namemc.com/i/18525c829f6918fe.png";
         abilitiesNames.add("FrontalAttack");
         abilitiesCD.add(0);

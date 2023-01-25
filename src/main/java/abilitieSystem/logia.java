@@ -28,8 +28,8 @@ public abstract class logia extends abilities {
 
     boolean pbON = false;
 
-    public logia(OPhabs plugin, Particle element){
-        super(plugin);
+    public logia(OPhabs plugin, Particle element, Material castMaterial, String castName, String commandName) {
+        super(plugin, castMaterial, castName, commandName);
         this.element = element;
     }
 

@@ -1,6 +1,7 @@
 package abilitieSystem;
 
 import castSystem.castIdentification;
+import fruitSystem.fruitIdentification;
 import htt.ophabs.OPhabs;
 import org.bukkit.*;
 import org.bukkit.block.Block;
@@ -35,7 +36,7 @@ public class mera_mera extends logia {
     private int FIRE_POOL_DURATION = 15, FIREBALL_STORM_COOLDOWN = 20;
 
     public mera_mera(OPhabs plugin){
-        super(plugin, Particle.FLAME);
+        super(plugin, Particle.FLAME, castIdentification.castMaterialMera, castIdentification.castItemNameMera, fruitIdentification.fruitCommandNameMera);
         //
         //Nombres de las habilidades: 
         abilitiesNames.add("Fire Pool");

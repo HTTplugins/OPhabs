@@ -2,7 +2,7 @@ package fruitSystem;
 
 public class fruitIdentification {
 
-    public final static int fruitsNumber = 5;
+    public final static int fruitsNumber = 9;
 
     public final static String
             fruitItemNameYami = "yami yami no mi",
@@ -26,7 +26,7 @@ public class fruitIdentification {
             fruitCommandNameIshi = "ishi_ishi",
             fruitCommandNameGoru = "goru_goru";
 
-    public String getItemName(String fruitCommandName){
+    public static String getItemName(String fruitCommandName){
         switch (fruitCommandName){
             case fruitCommandNameYami:
                 return fruitItemNameYami;

@@ -15,6 +15,7 @@ import org.bukkit.event.player.PlayerEggThrowEvent;
 import org.bukkit.event.player.PlayerToggleSneakEvent;
 import org.bukkit.event.player.PlayerItemConsumeEvent;
 import org.bukkit.event.inventory.InventoryClickEvent;
+import org.bukkit.Material;
 
 import java.util.ArrayList;
 import java.util.Map;
@@ -23,25 +24,46 @@ public class abilities {
     protected OPhabs plugin;
     protected devilFruitUser user=null;
     protected Integer actual;
+    protected String commandName;
     public ArrayList<String> abilitiesNames = new ArrayList<>();
     public ArrayList<Integer> abilitiesCD = new ArrayList<>();
-    protected coolDown cd; 
-    public abilities(OPhabs plugin, devilFruitUser user){
+    protected coolDown cd;
+    
+    public Material caster;
+    public String casterName;
+    public abilities(OPhabs plugin, devilFruitUser user, Material castMaterial, String castName, String commandName){
         this.plugin = plugin;
         this.user = user;
         this.actual = 0;
+        this.caster = castMaterial;
+        this.casterName = castName;
+        this.commandName = commandName;
     }
-    public abilities(OPhabs plugin){
+    public abilities(OPhabs plugin, Material castMaterial, String castName, String commandName){
         this.plugin = plugin;
         actual=0;
+        this.caster = castMaterial;
+        this.casterName = castName;
+        this.commandName = commandName;
     }
 
+
+    public String getItemName(){
+        return this.casterName;
+    }
+
+    public Material getMaterial(){
+        return this.caster;
+    }
     public ArrayList<String> getAbilitiesNames(){
         return abilitiesNames;
     }
     
     public void setUser(devilFruitUser user){
         this.user = user;
+    }
+    public String getName(){
+        return commandName;
     }
 	public void ability1(){}
     public void ability2(){}
