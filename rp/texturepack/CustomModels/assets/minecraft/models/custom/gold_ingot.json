@@ -1,0 +1,38 @@
+{
+	"credit": "Made with Blockbench",
+	"texture_size": [64, 64],
+	"textures": {
+		"0": "item/gold",
+		"particle": "item/gold"
+	},
+	"elements": [
+		{
+			"from": [7, -14, 9],
+			"to": [9, 27, 11],
+			"faces": {
+				"north": {"uv": [0, 0, 0.5, 10.25], "texture": "#0"},
+				"east": {"uv": [0.5, 0, 1, 10.25], "texture": "#0"},
+				"south": {"uv": [1, 0, 1.5, 10.25], "texture": "#0"},
+				"west": {"uv": [1.5, 0, 2, 10.25], "texture": "#0"},
+				"up": {"uv": [2.5, 0.5, 2, 0], "texture": "#0"},
+				"down": {"uv": [2.5, 0.5, 2, 1], "texture": "#0"}
+			}
+		}
+	],
+	"display": {
+		"ground": {
+			"rotation": [24.67, -20.09, -85.28],
+			"scale": [0.67578, 0.30469, 0.51953]
+		},
+		"gui": {
+			"rotation": [0, 0, -47],
+			"translation": [0, 0.25, 0],
+			"scale": [0.45, 0.46, 0.43]
+		},
+		"fixed": {
+			"rotation": [0, 0, 42.75],
+			"translation": [-1, 0.75, -1.5],
+			"scale": [1, 0.46289, 1]
+		}
+	}
+}

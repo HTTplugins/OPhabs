@@ -11,3 +11,9 @@ Primero tienes que hacerla y definir tanto una habilidad como un cast identifica
     
 Si veis que falta algo mas añadidlo, se puede optimizar mas para quitar algunos pasos pero lo dejamos para el siguiente refactor
 
+
+Se ha añadido todos los archivos necesarios para hacer custom models, el paquete de texturas que se usara en el server está descomprimido en rp/texturepack/CustomModels
+
+
+
+
