@@ -1,6 +1,7 @@
 package fruitSystem;
 
 import htt.ophabs.OPhabs;
+
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -13,6 +14,12 @@ import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import org.bukkit.block.Biome;
+//AttributeModifier
+import org.bukkit.attribute.AttributeModifier;
+import org.bukkit.attribute.Attribute;
+import org.bukkit.inventory.EquipmentSlot;
+
+import java.util.UUID;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -188,6 +195,13 @@ public class fruitAssociation implements Listener {
         ItemStack caster = new ItemStack(castMaterial);
         ItemMeta casterItemMeta = caster.getItemMeta();
         casterItemMeta.setDisplayName(casterItemName);
+//set custom model data
+        casterItemMeta.setCustomModelData(1);
+        AttributeModifier modifier = new AttributeModifier(UUID.randomUUID(), "generic.attackDamage", 9, AttributeModifier.Operation.ADD_NUMBER, EquipmentSlot.HAND);
+        casterItemMeta.addAttributeModifier(Attribute.GENERIC_ATTACK_DAMAGE, modifier);
+        AttributeModifier modifier2 = new AttributeModifier(UUID.randomUUID(), "generic.attackSpeed", 1.8, AttributeModifier.Operation.ADD_NUMBER, EquipmentSlot.HAND);
+        casterItemMeta.addAttributeModifier(Attribute.GENERIC_ATTACK_SPEED, modifier2);
+
         caster.setItemMeta(casterItemMeta);
         event.getPlayer().getInventory().addItem(caster);
         if(dfPlayers.containsKey(event.getPlayer().getName())){
