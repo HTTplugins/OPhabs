@@ -18,9 +18,9 @@ public class noDropCaster implements Listener {
                     drop.setAmount(0);
     }
 
-    @EventHandler(ignoreCancelled = true)
-    public void onPlayerDropItem(PlayerDropItemEvent event) {
-        if(castIdentification.itemIsCaster(event.getItemDrop().getItemStack(), event.getPlayer()))
-            event.setCancelled(true);
-    }
+    // @EventHandler(ignoreCancelled = true)
+    // public void onPlayerDropItem(PlayerDropItemEvent event) {
+    //     if(castIdentification.itemIsCaster(event.getItemDrop().getItemStack(), event.getPlayer()))
+    //         event.setCancelled(true);
+    // }
 }

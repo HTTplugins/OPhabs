@@ -22,7 +22,7 @@ public class devilFruitUser{
     private String playerName;
     public int actual;
     public devilFruit fruit;
-    protected abilities ability;
+    public abilities ability;
     private boolean awakened;
 
 

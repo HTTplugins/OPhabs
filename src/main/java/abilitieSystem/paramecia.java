@@ -21,11 +21,11 @@ import fruitSystem.devilFruitUser;
 
 public class paramecia extends abilities{
     
-    public paramecia(OPhabs plugin){
-        super(plugin);
+    public paramecia(OPhabs plugin, Material castMaterial, String castName, String commandName){
+        super(plugin, castMaterial, castName, commandName);
     }
-    public paramecia(OPhabs plugin, devilFruitUser user){
-        super(plugin, user);
+    public paramecia(OPhabs plugin, devilFruitUser user, Material castMaterial, String castName, String commandName){
+        super(plugin, user, castMaterial, castName, commandName);
     }
     
 }

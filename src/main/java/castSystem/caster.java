@@ -16,6 +16,7 @@ import org.bukkit.event.entity.EntityShootBowEvent;
 import org.bukkit.event.entity.EntityPickupItemEvent;
 import org.bukkit.event.inventory.InventoryClickEvent;
 
+
 import java.util.HashMap;
 import java.util.Map;
 
@@ -41,11 +42,24 @@ public class caster implements Listener {
                         user.abilityActive();
 
 
-                    else 
-                        user.switchAbility();
+                    //else 
+                        //user.switchAbility();
 
                 }
         }
+    }
+
+    @EventHandler(ignoreCancelled = true)
+    public void onPlayerDropItem(PlayerDropItemEvent event) {
+        if(castIdentification.itemIsCaster(event.getItemDrop().getItemStack(), event.getPlayer())){
+            event.setCancelled(true);
+
+            if(dfPlayers.containsKey(event.getPlayer().getName())) {
+                devilFruitUser user = dfPlayers.get(event.getPlayer().getName());
+                user.switchAbility();
+            }
+        }
+
     }
 
     @EventHandler

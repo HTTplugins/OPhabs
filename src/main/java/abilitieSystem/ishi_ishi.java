@@ -2,7 +2,9 @@ package abilitieSystem;
 
 import htt.ophabs.OPhabs;
 import castSystem.castIdentification;
+import fruitSystem.fruitIdentification;
 import fruitSystem.devilFruitUser;
+
 import java.util.ArrayList;
 import java.util.Random;
 import org.bukkit.*;
@@ -38,7 +40,8 @@ public class ishi_ishi extends paramecia {
     private int repealAnimationCounter = 0;
 
     public ishi_ishi(OPhabs plugin) {
-        super(plugin);
+        super(plugin, castIdentification.castMaterialIshi, castIdentification.castItemNameIshi, fruitIdentification.fruitCommandNameIshi);
+
         storaged = 0;
         maxStoraged = 1024;
         opened = false;
@@ -55,7 +58,7 @@ public class ishi_ishi extends paramecia {
     }
 
     public ishi_ishi(OPhabs plugin, devilFruitUser user) {
-        super(plugin, user);
+        super(plugin, user, castIdentification.castMaterialIshi, castIdentification.castItemNameIshi, fruitIdentification.fruitCommandNameIshi);
         storaged = 5;
         abilitiesNames.add(nameAbility1 + " (" + storaged + ")");
         abilitiesCD.add(0);
@@ -106,10 +109,12 @@ public class ishi_ishi extends paramecia {
     }
 
     public void ability3(){
+
         if(abilitiesCD.get(2) == 0){
             controlStone(user.getPlayer());
         }
         abilitiesNames.set(0, nameAbility1 + " (" + storaged + ")");
+
     }
     public void ability4(){
         if(abilitiesCD.get(3) == 0){
@@ -338,6 +343,7 @@ public class ishi_ishi extends paramecia {
     public void absorbBlock(Location block){
         switch(block.getBlock().getType()){
             case STONE:
+            case DEEPSLATE:
                 storaged += 1;
                 block.getBlock().setType(Material.AIR);
                 break;
@@ -346,21 +352,25 @@ public class ishi_ishi extends paramecia {
                 block.getBlock().setType(Material.AIR);
                 break;
             case IRON_ORE:
+            case DEEPSLATE_IRON_ORE:
                 storaged += 1;
                 block.getBlock().setType(Material.AIR);
                 block.getWorld().dropItemNaturally(block, new ItemStack(Material.RAW_IRON));
                 break;
             case GOLD_ORE:
+            case DEEPSLATE_GOLD_ORE:
                 storaged += 1;
                 block.getBlock().setType(Material.AIR);
                 block.getWorld().dropItemNaturally(block, new ItemStack(Material.RAW_GOLD));
                 break;
             case DIAMOND_ORE:
+            case DEEPSLATE_DIAMOND_ORE:
                 storaged += 1;
                 block.getBlock().setType(Material.AIR);
                 block.getWorld().dropItemNaturally(block, new ItemStack(Material.DIAMOND));
                 break;
             case REDSTONE_ORE:
+            case DEEPSLATE_REDSTONE_ORE:
                 storaged += 1;
                 block.getBlock().setType(Material.AIR);
                 block.getWorld().dropItemNaturally(block, new ItemStack(Material.REDSTONE));
@@ -369,11 +379,13 @@ public class ishi_ishi extends paramecia {
                 block.getWorld().dropItemNaturally(block, new ItemStack(Material.REDSTONE));
                 break;
             case LAPIS_ORE:
+            case DEEPSLATE_LAPIS_ORE:
                 storaged += 1;
                 block.getBlock().setType(Material.AIR);
                 block.getWorld().dropItemNaturally(block, new ItemStack(Material.LAPIS_LAZULI));
                 break;
             case COAL_ORE:
+            case DEEPSLATE_COAL_ORE:
                 storaged += 1;
                 block.getBlock().setType(Material.AIR);
                 block.getWorld().dropItemNaturally(block, new ItemStack(Material.COAL));
@@ -383,8 +395,18 @@ public class ishi_ishi extends paramecia {
                 block.getBlock().setType(Material.AIR);
                 block.getWorld().dropItemNaturally(block, new ItemStack(Material.RAW_COPPER));
                 break;
+            case EMERALD_ORE:
+            case DEEPSLATE_EMERALD_ORE:
+                storaged += 1;
+                block.getBlock().setType(Material.AIR);
+                block.getWorld().dropItemNaturally(block, new ItemStack(Material.EMERALD));
+                break;
+            case COBBLED_DEEPSLATE:
+                storaged += 1;
+                block.getBlock().setType(Material.AIR);
+                break;
             default:
-                if(block.getBlock().getType().name().contains("STONE") && !block.getBlock().getType().name().contains("REDSTONE")){
+                if( block.getBlock().getType().name().contains("DEEPSLATE") || (block.getBlock().getType().name().contains("STONE") && !block.getBlock().getType().name().contains("REDSTONE"))){
                     storaged += 1;
                     block.getBlock().setType(Material.AIR);
                 }
@@ -800,17 +822,20 @@ public class ishi_ishi extends paramecia {
             boolean fV = false;
             boolean entityInHand = false;
             double vx,vy,vz;
+            int i = 0, j = 0;
             Location loc = player.getLocation().add(0,1,0);
             @Override
             public void run() {
-                if(player.isDead())
+
+                Location loc = player.getLocation().add(0,2,0);
+                if(player.isDead() || ent.isOnGround())
                     this.cancel();
 
                 vx =  loc.getX() - ent.getLocation().getX();
                 vy =  loc.getY() - ent.getLocation().getY();
                 vz =  loc.getZ() - ent.getLocation().getZ();
 
-                Vector movement = loc.toVector().subtract(ent.getLocation().toVector()).normalize();
+                Vector movement = loc.clone().toVector().subtract(ent.getLocation().toVector()).normalize();
 
                 if(!fV){
                     FirstVector = movement.clone();
@@ -818,11 +843,18 @@ public class ishi_ishi extends paramecia {
                 }
 
                 //Para levantar al mob si hay desnivel
-                if(loc.getY() >= ent.getLocation().getY() && !entityInHand)
+                if(loc.getY() > ent.getLocation().getY() && !entityInHand)
                     movement.setY(movement.getY() + (player.getLocation().getY() - ent.getLocation().getY()) + 3);
 
-
-                ent.setVelocity(movement);
+                if(!entityInHand){
+                    ent.setVelocity(movement);
+                    i++;
+                }
+                else{
+                    ent.teleport(player.getLocation().add(0,2,0));
+                    ent.setVelocity(new Vector(0,0.042,0));
+                    j++;
+                }
 
                 if(Math.sqrt(Math.pow(vx,2) + Math.pow(vy,2) +  Math.pow(vz,2)) <= 1){
                     entityInHand = true;
@@ -830,6 +862,10 @@ public class ishi_ishi extends paramecia {
                         this.cancel();
                         repealEntity(ent,player);
                     }
+                }
+
+                if(!player.isSneaking()){
+                    this.cancel();
                 }
             }
         }.runTaskTimer(plugin,0,1);

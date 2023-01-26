@@ -2,7 +2,9 @@ package abilitieSystem;
 
 
 import castSystem.castIdentification;
+import fruitSystem.fruitIdentification;
 import htt.ophabs.OPhabs;
+
 import org.bukkit.*;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.LivingEntity;
@@ -29,7 +31,7 @@ public class moku_moku extends logia {
     public int numSmokers=0;
 
     public moku_moku(OPhabs plugin){
-        super(plugin, Particle.CLOUD);
+        super(plugin, Particle.CLOUD, castIdentification.castMaterialMoku, castIdentification.castItemNameMoku, fruitIdentification.fruitCommandNameMoku);
         abilitiesNames.add("SmokeBody");
         abilitiesCD.add(0);
         abilitiesNames.add("SummonSmoker");
