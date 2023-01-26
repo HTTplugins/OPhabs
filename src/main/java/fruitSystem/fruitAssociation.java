@@ -86,7 +86,7 @@ public class fruitAssociation implements Listener {
         ItemStack caster = new ItemStack(castMaterial);
         ItemMeta casterItemMeta = caster.getItemMeta();
         casterItemMeta.setDisplayName(casterItemName);
-//set custom model data
+//Dar el caster al jugador
         casterItemMeta.setCustomModelData(1);
         AttributeModifier modifier = new AttributeModifier(UUID.randomUUID(), "generic.attackDamage", 9, AttributeModifier.Operation.ADD_NUMBER, EquipmentSlot.HAND);
         casterItemMeta.addAttributeModifier(Attribute.GENERIC_ATTACK_DAMAGE, modifier);
