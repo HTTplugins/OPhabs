@@ -75,4 +75,29 @@ public class fruitIdentification {
                 return null;
         }
     }
+
+    public static boolean isFruit(String fruitItemName){
+        switch (fruitItemName){
+            case fruitItemNameYami:
+                return true;
+            case fruitItemNameMera:
+                return true;
+            case fruitItemNameGura:
+                return true;
+            case fruitItemNameMoku:
+                return true;
+            case fruitItemNameNekoReoparudo:
+                return true;
+            case fruitItemNameMagu:
+                return true;
+            case fruitItemNameGoro:
+                return true;
+            case fruitItemNameIshi:
+                return true;
+            case fruitItemNameGoru:
+                return true;
+            default:
+                return false;
+        }
+    }
 }
