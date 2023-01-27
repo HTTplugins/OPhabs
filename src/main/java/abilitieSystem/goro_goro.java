@@ -47,7 +47,7 @@ public class goro_goro extends logia {
     public void ability3(){
         if(abilitiesCD.get(2) == 0){
             lightStep(user.getPlayer());
-            abilitiesCD.set(2, 20); // Pon el cooldown en segundos
+            abilitiesCD.set(2, 0); // Pon el cooldown en segundos
         }
     }
 
@@ -158,34 +158,38 @@ public class goro_goro extends logia {
     }
 
     public void lightStep(Player player){
+
         World world = player.getWorld();
-
-        Location iniLoc = player.getLocation();
-
-        Location finLoc = player.getLocation();
-
-        Vector sumVec = finLoc.getDirection().normalize().multiply(15);
-        finLoc = finLoc.add(sumVec);
-
-        Location finalFinLoc = finLoc;
-        // new BukkitRunnable(){
-        //     Vector vec = finalFinLoc.toVector().subtract(iniLoc.toVector());
-
-
-            // @Override
-            // public void run() {
-            //     System.out.println(vec);
-
-
-            // }
-        // }.runTaskTimer(plugin,0,1);
-
-
-        player.teleport(finLoc);
-        world.playSound(player.getLocation(),Sound.ENTITY_LIGHTNING_BOLT_THUNDER,1,1);
+        Location playerLoc = player.getLocation();
 
 
 
+        world.playSound(playerLoc,Sound.ENTITY_LIGHTNING_BOLT_THUNDER,1,1);
+
+        Vector dir = player.getLocation().getDirection();
+        dir.setY(0.5);
+        dir.setX(dir.getX() * 5);
+        dir.setZ(dir.getZ() *5);
+        player.setVelocity(dir);
+
+        new BukkitRunnable(){
+
+            int tick = 0;
+
+            @Override
+            public void run() {
+                world.strikeLightning(player.getLocation());
+                tick++;
+
+                if(tick == 6)
+                    this.cancel();
+            }
+        }.runTaskTimer(plugin,0,2);
+
+       // System.out.println(direction);
+        //System.out.println(movement);
+
+        player.setVelocity(dir);
 
     }
 
