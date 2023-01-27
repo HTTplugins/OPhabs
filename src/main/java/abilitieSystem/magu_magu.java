@@ -196,10 +196,11 @@ public class magu_magu extends logia {
             int index = 2;
             double randomQuote = 1;
 
+
+
             Location playerLoc = player.getLocation();
             @Override
             public void run() {
-
                 int x = (int)(facingDirection.getX()*index);
                 int y = 0;
                 int z = (int)(facingDirection.getZ()*index);
@@ -241,6 +242,7 @@ public class magu_magu extends logia {
 
     public void lavaLake(Player player ){
 
+
         new BukkitRunnable(){
                 int index = 1;
 
@@ -250,7 +252,6 @@ public class magu_magu extends logia {
 
                 @Override
                 public void run() {
-
                     for(double i=-index; i <= index; i++ ){
                         putLavaBlock((int)i,0,-index,randomQuote,playerLoc);
                         putLavaBlock((int)i,0,index,randomQuote,playerLoc);
@@ -277,16 +278,37 @@ public class magu_magu extends logia {
         double aleatory = rand.nextDouble();
         double randMagmaBlock = rand.nextDouble();
 
-        Material putBlock = Material.LAVA;
+       boolean putBlock = false;
+       Location putBlockLocation = null;
 
-        if(randMagmaBlock < 0.1) putBlock = Material.MAGMA_BLOCK;
+        Material blockMaterial = Material.LAVA;
+
+        if(randMagmaBlock < 0.1) blockMaterial = Material.MAGMA_BLOCK;
 
         if(airOrSimilar(playerLoc.getBlock().getRelative(x,y,z).getType()) && aleatory < randomQuote) {
-            if (!playerLoc.getBlock().getRelative(x, y - 1, z).getType().equals(Material.AIR)) playerLoc.getBlock().getRelative(x, y - 1, z).setType(putBlock);
+
+            if (!playerLoc.getBlock().getRelative(x, y - 1, z).getType().equals(Material.AIR)){
+                putBlock = true;
+                putBlockLocation = playerLoc.getBlock().getRelative(x, y - 1, z).getLocation();
+                playerLoc.getBlock().getRelative(x, y - 1, z).setType(blockMaterial);
+            }
             else if(airOrSimilar(playerLoc.getBlock().getRelative(x,y-1,z).getType()) && aleatory < randomQuote)
-                if(!playerLoc.getBlock().getRelative(x,y-2,z).getType().equals(Material.AIR)) playerLoc.getBlock().getRelative(x,y-2,z).setType(putBlock);
+                if(!playerLoc.getBlock().getRelative(x,y-2,z).getType().equals(Material.AIR)) {
+                    putBlock = true;
+                    putBlockLocation = playerLoc.getBlock().getRelative(x, y - 2, z).getLocation();
+                    playerLoc.getBlock().getRelative(x, y - 2, z).setType(blockMaterial);
+                }
+
         } else if(airOrSimilar(playerLoc.getBlock().getRelative(x,y+1,z).getType()) && aleatory < randomQuote)
-            if(!playerLoc.getBlock().getRelative(x,y,z).getType().equals(Material.AIR)) playerLoc.getBlock().getRelative(x,y,z).setType(putBlock);
+            if(!playerLoc.getBlock().getRelative(x,y,z).getType().equals(Material.AIR)){
+                putBlock = true;
+                putBlockLocation = playerLoc.getBlock().getRelative(x,y,z).getLocation();
+                playerLoc.getBlock().getRelative(x,y,z).setType(blockMaterial);
+            }
+
+        if(putBlock)
+            playerLoc.getWorld().playSound(putBlockLocation,Sound.BLOCK_LAVA_EXTINGUISH,1,1);
+
     }
 
     public boolean airOrSimilar(Material mat){
