@@ -7,6 +7,7 @@ import org.bukkit.*;
 import org.bukkit.entity.*;
 import org.bukkit.event.Listener;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.RecipeChoice;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.util.Vector;
 
@@ -39,7 +40,7 @@ public class magu_magu extends logia {
     public void ability1(){
         if(abilitiesCD.get(0) == 0){
             lavaMeteorites(user.getPlayer());
-            abilitiesCD.set(0, 60); // Pon el cooldown en segundos
+            abilitiesCD.set(0, 0); // Pon el cooldown en segundos
         }
     }
 
@@ -145,11 +146,34 @@ public class magu_magu extends logia {
 
                 if(numplarticles < 25 || reachTarget){
                     world.createExplosion(ent.getLocation(),6);
+                    /*
                     ent.getLocation().getBlock().setType(Material.LAVA);
                     ent.getLocation().getBlock().getRelative(1,0,-1).setType(Material.LAVA);
                     ent.getLocation().getBlock().getRelative(1,0,-1).setType(Material.LAVA);
                     ent.getLocation().getBlock().getRelative(0,1,-1).setType(Material.LAVA);
-                    ent.getLocation().getBlock().getRelative(-2,-1,0).setType(Material.LAVA);
+                    ent.getLocation().getBlock().getRelative(-2,-1,0).setType(Material.LAVA)
+                    */
+
+                    for(int i=0; i< 15; i++){
+
+                        double randX = rand.nextDouble() - rand.nextDouble() ;
+                        double randY = rand.nextDouble() - rand.nextDouble();
+                        double randZ = rand.nextDouble() - rand.nextDouble();
+
+                        int option = rand.nextInt(3);
+
+                        Material randomMaterial = Material.AIR;
+
+                        switch (option){
+                            case 0: randomMaterial = Material.LAVA; break;
+                            case 1: randomMaterial = Material.MAGMA_BLOCK; break;
+                            case 2: randomMaterial = Material.COBBLESTONE; break;
+                        }
+
+                        (world.spawnFallingBlock(spawnBallPos,randomMaterial.createBlockData())).setVelocity(new Vector(randX,randY,randZ));
+
+                    }
+
                     this.cancel();
                 }
 
@@ -263,12 +287,6 @@ public class magu_magu extends logia {
                 if(!playerLoc.getBlock().getRelative(x,y-2,z).getType().equals(Material.AIR)) playerLoc.getBlock().getRelative(x,y-2,z).setType(putBlock);
         } else if(airOrSimilar(playerLoc.getBlock().getRelative(x,y+1,z).getType()) && aleatory < randomQuote)
             if(!playerLoc.getBlock().getRelative(x,y,z).getType().equals(Material.AIR)) playerLoc.getBlock().getRelative(x,y,z).setType(putBlock);
-
-
-
-            
-
-
     }
 
     public boolean airOrSimilar(Material mat){
@@ -311,7 +329,6 @@ public class magu_magu extends logia {
         )return true;
         else return false;
     }
-
 
     @Override
     public void runParticles() {

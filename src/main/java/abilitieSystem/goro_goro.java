@@ -102,37 +102,15 @@ public class goro_goro extends logia {
                     x = factor*sin(i);
                     y = factor*cos(i);
 
-                    //horizontally (Arround Y)
-                    xY = cos(toRadians(yaw))*x + sin(toRadians(yaw))*z;
-                    yY =  y;
-                    zY = -sin(toRadians(yaw))*x + cos(toRadians(yaw))*z;
-
-                    if(((yaw < -90 && yaw > -180) || ( yaw < 180 && yaw > 90)) && !changedPitch){
-                        changedPitch = true;
-                        pitch = pitch * -1;
-                    }
-
-                    //Vertically (Arround X)
-                    xX = xY;
-                    yX = cos(toRadians(pitch))* yY - sin(toRadians(pitch))* zY;
-                    zX = sin(toRadians(pitch))* yY + cos(toRadians(pitch))* zY;
+                    Vector looking = player.getLocation().getDirection();
 
 
-                    //Final (sum of player position.)
-                    xL = playerLoc.getX() + xX;
-                    yL = 1 + playerLoc.getY() + yX;
-                    zL = playerLoc.getZ() + zX;
 
-                    Location partLoc = new Location(world, xL, yL, zL);
+                    Location partLoc = new Location(world, x, y, 0);
 
-                    if(!partLoc.getBlock().getType().equals(Material.AIR))
-                        partLoc.getBlock().setType(Material.AIR);
-
-                    for(Entity ent : world.getNearbyEntities(partLoc,2,2,2))
-                        if(ent instanceof LivingEntity && !player.equals(ent))
-                            ((LivingEntity)ent).damage(100);
-
-
+                    partLoc.add(looking);
+                    partLoc.add(playerLoc);
+                    partLoc.add(new Vector(0,1.5,0));
 
                     world.spawnParticle(element,partLoc,0,0,0,0);
                 }
