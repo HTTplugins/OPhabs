@@ -4,6 +4,7 @@ import htt.ophabs.OPhabs;
 import castSystem.castIdentification;
 import fruitSystem.fruitIdentification;
 import fruitSystem.devilFruitUser;
+import weapons.weaponsItems;
 
 import java.util.ArrayList;
 import java.util.Random;
@@ -84,13 +85,13 @@ public class ishi_ishi extends paramecia {
         else{
             if(storaged > 0){
                 if(storaged >=30){
-                    user.getPlayer().getInventory().addItem(new ReinforcedStoneAxe());
+                    user.getPlayer().getInventory().addItem(weaponsItems.getReinforcedStoneAxe());
                     storaged -= 30;
                 }
                 else{
                     if(storaged > 20){
                         //ReinforcedStoneSword
-                        user.getPlayer().getInventory().addItem(new ReinforcedStoneSword());
+                        user.getPlayer().getInventory().addItem(weaponsItems.getReinforcedStoneSword());
                         storaged -= 20;
                     }
                     else{
@@ -437,8 +438,8 @@ public class ishi_ishi extends paramecia {
         ItemStack stonePressurePlate = new ItemStack(Material.STONE_PRESSURE_PLATE, 1);
         ItemStack furnace = new ItemStack(Material.FURNACE, 1);
 
-        ReinforcedStoneSword reinforcedStoneSword= new ReinforcedStoneSword();
-        ReinforcedStoneAxe reinforcedStoneAxe = new ReinforcedStoneAxe();
+        ItemStack reinforcedStoneSword= weaponsItems.getReinforcedStoneSword();
+        ItemStack reinforcedStoneAxe = weaponsItems.getReinforcedStoneAxe();
 
         inv.setItem(0, cobblestone);
         inv.setItem(1, cobblestoneStairs);
@@ -917,100 +918,6 @@ public class ishi_ishi extends paramecia {
     }
 
 
-
-
-/*
-    public void runParticles() {
-        new BukkitRunnable(){
-            int ticks = 0;
-            double i = 0;
-            double y = 0;
-
-            Random random = new Random();
-            @Override
-            public void run() {
-
-                Player player = null;
-                if(user != null)
-                    if(user.getPlayer() != null){
-                        player = user.getPlayer();
-
-                        ItemStack caster = null;
-                        boolean isCaster = false;
-                        if(player != null){
-                            if(castIdentification.itemIsCaster(player.getInventory().getItemInMainHand(), player)){
-                                caster = player.getInventory().getItemInMainHand();
-                                isCaster = true;
-                            }
-                            else{
-                                if(castIdentification.itemIsCaster(player.getInventory().getItemInOffHand(), player)){
-                                    caster = player.getInventory().getItemInOffHand();
-                                    isCaster = true;
-                                }
-                            }
-                        }
-
-                        if(isCaster && caster.getItemMeta().getDisplayName().equals(castIdentification.castItemNameIshi)){
-                            if(!player.isFlying())
-                                player.setAllowFlight(true);
-                            if(player.isFlying())
-                                summonParticles(player);
-
-
-                        }else {
-                            player.setAllowFlight(false);
-                            player.setFlying(false);
-
-                        }
-                    }
-            }
-        }.runTaskTimer(plugin, 0, 1);
-
-    }
-
-    public void summonParticles(Player player) {
-    Location loc = player.getLocation();
-        for (int radius = 1; radius >= 0; radius--) {
-            for (double x = -radius; x <= radius; x += 0.2) {
-                for (double z = -Math.sqrt(radius*radius - x*x); z <= Math.sqrt(radius*radius - x*x); z += 0.2) {
-                    loc.add(x, 0, z);
-                    for (int i = 0; i < 7; i++) {
-                       player.spawnParticle(Particle.REDSTONE, loc, 1, 0, 0, 0, piedra);
-                    }
-                    loc.subtract(x, 0, z);
-                }
-            }
-        }
-    }
-*/
 }
 
- 
-//Custom sword
-class ReinforcedStoneSword extends ItemStack {
-    public ReinforcedStoneSword() {
-        super(Material.STONE_SWORD);
-        ItemMeta meta = this.getItemMeta();
-        meta.setDisplayName("Reinforced Stone Sword");
-        AttributeModifier modifier = new AttributeModifier(UUID.randomUUID(), "generic.attackDamage", 9, AttributeModifier.Operation.ADD_NUMBER, EquipmentSlot.HAND);
-        meta.addAttributeModifier(Attribute.GENERIC_ATTACK_DAMAGE, modifier);
-        AttributeModifier modifier2 = new AttributeModifier(UUID.randomUUID(), "generic.attackSpeed", 1.8, AttributeModifier.Operation.ADD_NUMBER, EquipmentSlot.HAND);
-        meta.addAttributeModifier(Attribute.GENERIC_ATTACK_SPEED, modifier2);
 
-        this.setItemMeta(meta);
-    }
-}
-
-//Custom axe
-class ReinforcedStoneAxe extends ItemStack {
-    public ReinforcedStoneAxe() {
-        super(Material.STONE_AXE);
-        ItemMeta meta = this.getItemMeta();
-        meta.setDisplayName("Reinforced Stone Axe");
-        AttributeModifier modifier = new AttributeModifier(UUID.randomUUID(), "generic.attackDamage", 11, AttributeModifier.Operation.ADD_NUMBER, EquipmentSlot.HAND);
-        meta.addAttributeModifier(Attribute.GENERIC_ATTACK_DAMAGE, modifier);
-        AttributeModifier modifier2 = new AttributeModifier(UUID.randomUUID(), "generic.attackSpeed", 1.4, AttributeModifier.Operation.ADD_NUMBER, EquipmentSlot.HAND);
-        meta.addAttributeModifier(Attribute.GENERIC_ATTACK_SPEED, modifier2);
-        this.setItemMeta(meta);
-    }
-}
