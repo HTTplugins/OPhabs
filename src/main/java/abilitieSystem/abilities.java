@@ -6,6 +6,7 @@ import fruitSystem.devilFruitUser;
 import castSystem.coolDown;
 
 import org.bukkit.event.entity.EntityDamageEvent;
+import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityChangeBlockEvent;
 import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.event.entity.EntityShootBowEvent;
@@ -15,6 +16,11 @@ import org.bukkit.event.player.PlayerEggThrowEvent;
 import org.bukkit.event.player.PlayerToggleSneakEvent;
 import org.bukkit.event.player.PlayerItemConsumeEvent;
 import org.bukkit.event.inventory.InventoryClickEvent;
+import org.bukkit.entity.LivingEntity;
+import org.bukkit.entity.Player;
+import org.bukkit.potion.PotionEffect;
+import org.bukkit.potion.PotionEffectType;
+import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.Material;
 
 import java.util.ArrayList;
@@ -28,6 +34,7 @@ public class abilities {
     public ArrayList<String> abilitiesNames = new ArrayList<>();
     public ArrayList<Integer> abilitiesCD = new ArrayList<>();
     protected coolDown cd;
+    public boolean active;
     
     public Material caster;
     public String casterName;
@@ -38,6 +45,7 @@ public class abilities {
         this.caster = castMaterial;
         this.casterName = castName;
         this.commandName = commandName;
+        this.active = true;
     }
     public abilities(OPhabs plugin, Material castMaterial, String castName, String commandName){
         this.plugin = plugin;
@@ -45,6 +53,7 @@ public class abilities {
         this.caster = castMaterial;
         this.casterName = castName;
         this.commandName = commandName;
+        this.active = true;
     }
 
 
@@ -71,7 +80,31 @@ public class abilities {
 	public void ability4(){}
 	public void ability5(){}
 	public void ability6(){}
-    public void onEntityDamage(EntityDamageEvent event){}
+    public void onEntityDamage(EntityDamageEvent event){
+        if(event instanceof EntityDamageByEntityEvent){
+            if(((EntityDamageByEntityEvent)event).getDamager() instanceof LivingEntity){
+                LivingEntity damager = (LivingEntity) ((EntityDamageByEntityEvent)event).getDamager();
+                if(damager.getEquipment().getItemInMainHand().getItemMeta() != null && damager.getEquipment().getItemInMainHand().getItemMeta().getLore() != null && damager.getEquipment().getItemInMainHand().getItemMeta().getLore().contains("Material:Kairōseki")){
+                    active = false;
+                    new BukkitRunnable(){
+                        @Override
+                        public void run(){
+                            active = true;
+                        }
+                    }.runTaskLater(plugin, 20*8);
+                    Player player = user.getPlayer();
+
+                    player.addPotionEffect(new PotionEffect(PotionEffectType.SLOW, 20*8, 100));
+                    player.addPotionEffect(new PotionEffect(PotionEffectType.CONFUSION, 20*8, 1));
+                    player.addPotionEffect(new PotionEffect(PotionEffectType.WEAKNESS, 20*8, 1));
+                    player.addPotionEffect(new PotionEffect(PotionEffectType.SLOW_DIGGING, 20*8, 1));
+                    player.addPotionEffect(new PotionEffect(PotionEffectType.HUNGER, 20*8, 1));           
+                }
+            }
+        }
+
+
+    }
     public void onPlayerDeath(PlayerDeathEvent event){
         user = null;
     }

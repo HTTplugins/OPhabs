@@ -30,6 +30,7 @@ import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.material.MaterialData;
 import java.util.UUID;
 import java.lang.Math;
+import java.util.Arrays;
 
 public class ishi_ishi extends paramecia {
     final int radiusFloor = 3, radiusWall = 3;
@@ -506,6 +507,7 @@ public class ishi_ishi extends paramecia {
     }
     
     public void onEntityDamage(EntityDamageEvent event){
+        super.onEntityDamage(event);
         double damage = event.getDamage(), finalDamage;
         if(storaged > 0){
             finalDamage = damage - storaged;
@@ -994,6 +996,7 @@ class ReinforcedStoneSword extends ItemStack {
         meta.addAttributeModifier(Attribute.GENERIC_ATTACK_DAMAGE, modifier);
         AttributeModifier modifier2 = new AttributeModifier(UUID.randomUUID(), "generic.attackSpeed", 1.8, AttributeModifier.Operation.ADD_NUMBER, EquipmentSlot.HAND);
         meta.addAttributeModifier(Attribute.GENERIC_ATTACK_SPEED, modifier2);
+
         this.setItemMeta(meta);
     }
 }
@@ -1011,6 +1014,3 @@ class ReinforcedStoneAxe extends ItemStack {
         this.setItemMeta(meta);
     }
 }
-
-
-

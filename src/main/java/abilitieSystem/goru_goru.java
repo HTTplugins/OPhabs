@@ -1,13 +1,14 @@
 package abilitieSystem;
 
 import htt.ophabs.OPhabs;
-
+import weapons.weaponsItems;
 import castSystem.castIdentification;
 import fruitSystem.fruitIdentification;
 import fruitSystem.devilFruitUser;
+import weapons.weaponsItems;
+
 import java.util.ArrayList;
 import java.util.Random;
-import org.bukkit.*;
 import org.bukkit.entity.Entity;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.inventory.ItemStack;
@@ -16,7 +17,14 @@ import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.Projectile;
 import org.bukkit.potion.PotionEffectType;
-import org.bukkit.potion.PotionEffect;;
+import org.bukkit.potion.PotionEffect;
+import org.bukkit.Color;
+import org.bukkit.Particle;
+import org.bukkit.Material;
+import org.bukkit.Location;
+import org.bukkit.Sound;
+import org.bukkit.Bukkit;
+import org.bukkit.World;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.scheduler.BukkitRunnable;
@@ -85,13 +93,13 @@ public class goru_goru extends paramecia {
         else{
             if(storaged > 0){
                 if(storaged >=30){
-                    user.getPlayer().getInventory().addItem(new ReinforcedGoldAxe());
+                    user.getPlayer().getInventory().addItem(weaponsItems.getReinforcedGoldAxe());
                     storaged -= 30;
                 }
                 else{
                     if(storaged > 20){
                         //ReinforcedGoldSword
-                        user.getPlayer().getInventory().addItem(new ReinforcedGoldSword());
+                        user.getPlayer().getInventory().addItem(weaponsItems.getReinforcedGoldSword());
                         storaged -= 20;
                     }
                     else{
@@ -332,31 +340,28 @@ public class goru_goru extends paramecia {
                     hand.setAmount(0);
                     break;
                 case GOLDEN_SWORD:
-                    if(hand instanceof ReinforcedGoldSword){
-                        storaged += 18;
+                    if(hand.getItemMeta() == weaponsItems.getReinforcedGoldSword().getItemMeta()){
+                        storaged += 20;
                         hand.setAmount(0);
-                    }
-                    else{
+                    }else{
                         storaged += 2;
                         hand.setAmount(0);
                     }
                     break;
                 case GOLDEN_PICKAXE:
-                    if(hand instanceof ReinforcedGoldPickaxe){
-                        storaged += 27;
+                    if(hand.getItemMeta() == weaponsItems.getReinforcedGoldPickaxe().getItemMeta()){
+                        storaged += 30;
                         hand.setAmount(0);
-                    }
-                    else{
+                    }else{
                         storaged += 3;
                         hand.setAmount(0);
                     }
                     break;
                 case GOLDEN_AXE:
-                    if(hand instanceof ReinforcedGoldAxe){
-                        storaged += 27;
+                    if(hand.getItemMeta() == weaponsItems.getReinforcedGoldAxe().getItemMeta()){
+                        storaged += 30;
                         hand.setAmount(0);
-                    }
-                    else{
+                    }else{
                         storaged += 3;
                         hand.setAmount(0);
                     }
@@ -437,11 +442,10 @@ public class goru_goru extends paramecia {
         ItemStack horseArmor = new ItemStack(Material.GOLDEN_HORSE_ARMOR, 1);
         ItemStack goldCarrot = new ItemStack(GOLDEN_CARROT, 1);
         ItemStack goldApple = new ItemStack(GOLDEN_APPLE, 1);
-
-        ReinforcedGoldSword reinforcedGoldSword= new ReinforcedGoldSword();
-        ReinforcedGoldAxe reinforcedGoldAxe = new ReinforcedGoldAxe();
-        ReinforcedGoldPickaxe reinforcedGoldPickaxe = new ReinforcedGoldPickaxe();
-
+        ItemStack reinforcedGoldSword = weaponsItems.getReinforcedGoldSword();
+        ItemStack reinforcedGoldAxe = weaponsItems.getReinforcedGoldAxe();
+        ItemStack reinforcedGoldPickaxe = weaponsItems.getReinforcedGoldPickaxe();
+        
         ReinforcedGoldHelmet reinforcedGoldHelmet = new ReinforcedGoldHelmet();
         ReinforcedGoldChestplate reinforcedGoldChestplate = new ReinforcedGoldChestplate();
         ReinforcedGoldLeggings reinforcedGoldLeggings = new ReinforcedGoldLeggings();
@@ -515,6 +519,7 @@ public class goru_goru extends paramecia {
     }
     
     public void onEntityDamage(EntityDamageEvent event){
+        super.onEntityDamage(event);
         double damage = event.getDamage(), finalDamage;
         if(storaged > 0){
             finalDamage = damage/2 - storaged;
@@ -596,7 +601,7 @@ public class goru_goru extends paramecia {
                 }
             }
             if(clicked.getType() == Material.GOLDEN_PICKAXE){
-                if(clicked instanceof ReinforcedGoldPickaxe){
+                if(clicked.getItemMeta() == weaponsItems.getReinforcedGoldPickaxe().getItemMeta()){
                     if(storaged >= 27){
                         storaged -= 27;
                         player.getInventory().addItem(clicked);
@@ -620,7 +625,7 @@ public class goru_goru extends paramecia {
                 }
             }
             if(clicked.getType() == Material.GOLDEN_AXE){
-                if(clicked instanceof ReinforcedGoldAxe){
+                if(clicked.getItemMeta() == weaponsItems.getReinforcedGoldAxe().getItemMeta()){
                     if(storaged >= 27){
                         storaged -= 27;
                         player.getInventory().addItem(clicked);
@@ -655,7 +660,7 @@ public class goru_goru extends paramecia {
                 }
             }
             if(clicked.getType() == Material.GOLDEN_SWORD){
-                if(clicked instanceof ReinforcedGoldSword){
+                if(clicked.getItemMeta() == weaponsItems.getReinforcedGoldSword().getItemMeta()){
                     if(storaged >= 18){
                         storaged -= 18;
                         player.getInventory().addItem(clicked);
@@ -1015,51 +1020,6 @@ public class goru_goru extends paramecia {
                 }
             }
         }
-    }
-
-}
-
- 
-//Custom sword
-class ReinforcedGoldSword extends ItemStack {
-    public ReinforcedGoldSword() {
-        super(Material.GOLDEN_SWORD);
-        ItemMeta meta = this.getItemMeta();
-        meta.setDisplayName("Reinforced Gold Sword");
-        AttributeModifier modifier = new AttributeModifier(UUID.randomUUID(), "generic.attackDamage", 9, AttributeModifier.Operation.ADD_NUMBER, EquipmentSlot.HAND);
-        meta.addAttributeModifier(Attribute.GENERIC_ATTACK_DAMAGE, modifier);
-        AttributeModifier modifier2 = new AttributeModifier(UUID.randomUUID(), "generic.attackSpeed", 1.8, AttributeModifier.Operation.ADD_NUMBER, EquipmentSlot.HAND);
-        meta.addAttributeModifier(Attribute.GENERIC_ATTACK_SPEED, modifier2);
-        this.setItemMeta(meta);
-    }
-}
-
-//Custom axe
-class ReinforcedGoldAxe extends ItemStack {
-    public ReinforcedGoldAxe() {
-        super(Material.GOLDEN_AXE);
-        ItemMeta meta = this.getItemMeta();
-        meta.setDisplayName("Reinforced Gold Axe");
-        AttributeModifier modifier = new AttributeModifier(UUID.randomUUID(), "generic.attackDamage", 11, AttributeModifier.Operation.ADD_NUMBER, EquipmentSlot.HAND);
-        meta.addAttributeModifier(Attribute.GENERIC_ATTACK_DAMAGE, modifier);
-        AttributeModifier modifier2 = new AttributeModifier(UUID.randomUUID(), "generic.attackSpeed", 1.4, AttributeModifier.Operation.ADD_NUMBER, EquipmentSlot.HAND);
-        meta.addAttributeModifier(Attribute.GENERIC_ATTACK_SPEED, modifier2);
-        this.setItemMeta(meta);
-    }
-}
-
-//Custom pickaxe
-class ReinforcedGoldPickaxe extends ItemStack {
-    public ReinforcedGoldPickaxe() {
-        super(Material.GOLDEN_PICKAXE);
-        ItemMeta meta = this.getItemMeta();
-        meta.setDisplayName("Reinforced Gold Pickaxe");
-        AttributeModifier modifier = new AttributeModifier(UUID.randomUUID(), "generic.attackDamage", 5, AttributeModifier.Operation.ADD_NUMBER, EquipmentSlot.HAND);
-        meta.addAttributeModifier(Attribute.GENERIC_ATTACK_DAMAGE, modifier);
-        AttributeModifier modifier2 = new AttributeModifier(UUID.randomUUID(), "generic.attackSpeed", 1.2, AttributeModifier.Operation.ADD_NUMBER, EquipmentSlot.HAND);
-        meta.addAttributeModifier(Attribute.GENERIC_ATTACK_SPEED, modifier2);
-        meta.setUnbreakable(true);
-        this.setItemMeta(meta);
     }
 }
 

@@ -62,25 +62,27 @@ public class devilFruitUser{
         actual = actual % ability.getAbilitiesNames().size();
     }
     public int abilityActive(){
-        switch (actual){
-            case 0:
-                ability.ability1();
-                break;
-            case 1:
-                ability.ability2();
-                break;
-            case 2:
-                ability.ability3();
-                break;
-            case 3:
-                ability.ability4();
-                break;
-            case 4:
-                ability.ability5();
-                break;
-            case 5:
-                ability.ability6();
-                break;
+        if(ability.active){
+            switch (actual){
+                case 0:
+                    ability.ability1();
+                    break;
+                case 1:
+                    ability.ability2();
+                    break;
+                case 2:
+                    ability.ability3();
+                    break;
+                case 3:
+                    ability.ability4();
+                    break;
+                case 4:
+                    ability.ability5();
+                    break;
+                case 5:
+                    ability.ability6();
+                    break;
+            }
         }
         return ability.abilitiesCD.get(actual);
     }

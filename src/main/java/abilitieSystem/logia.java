@@ -39,13 +39,16 @@ public abstract class logia extends abilities {
 
 //    @EventHandler(ignoreCancelled = true)
     public void onEntityDamage(EntityDamageEvent event) {
+        super.onEntityDamage(event);
         Player player;
-        if (event.getEntity() instanceof Player) {
-            player = (Player) event.getEntity();
-            if (!(player.getLocation().getBlock().isLiquid()) && (castIdentification.itemIsCaster(player.getInventory().getItemInMainHand(), player)) || castIdentification.itemIsCaster(player.getInventory().getItemInOffHand(), player)) {
-                event.setCancelled(true);
-                player.getWorld().spawnParticle(element,player.getLocation(), 10, 0, 1, 0, 0.1);
+        if(active){
+            if (event.getEntity() instanceof Player) {
+                player = (Player) event.getEntity();
+                if (!(player.getLocation().getBlock().isLiquid()) && (castIdentification.itemIsCaster(player.getInventory().getItemInMainHand(), player)) || castIdentification.itemIsCaster(player.getInventory().getItemInOffHand(), player)) {
+                    event.setCancelled(true);
+                    player.getWorld().spawnParticle(element,player.getLocation(), 10, 0, 1, 0, 0.1);
 
+                }
             }
         }
     }

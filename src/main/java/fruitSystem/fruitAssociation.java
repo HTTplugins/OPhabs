@@ -141,7 +141,7 @@ public class fruitAssociation implements Listener {
                 player.addPotionEffect(new PotionEffect(PotionEffectType.BLINDNESS, 100, 1));
                 player.addPotionEffect(new PotionEffect(PotionEffectType.WEAKNESS, 100, 1));
                 player.addPotionEffect(new PotionEffect(PotionEffectType.SLOW_DIGGING, 100, 1));
-                player.addPotionEffect(new PotionEffect(PotionEffectType.HUNGER, 100, 1));           
+                player.addPotionEffect(new PotionEffect(PotionEffectType.HUNGER, 100, 1));
             }
         }
     }
