@@ -7,6 +7,7 @@ import org.bukkit.*;
 import org.bukkit.entity.*;
 import org.bukkit.event.Listener;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.RecipeChoice;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.util.Vector;
 
@@ -30,7 +31,7 @@ public class magu_magu extends logia {
         super(plugin, Particle.FLAME, castIdentification.castMaterialMagu, castIdentification.castItemNameMagu, fruitIdentification.fruitCommandNameMagu); 
         abilitiesNames.add("Lava Meteorites");
         abilitiesCD.add(0);
-        abilitiesNames.add("Lava Lake");
+        abilitiesNames.add("Lava Ground");
         abilitiesCD.add(0);
         this.runParticles();
 
@@ -39,13 +40,13 @@ public class magu_magu extends logia {
     public void ability1(){
         if(abilitiesCD.get(0) == 0){
             lavaMeteorites(user.getPlayer());
-            abilitiesCD.set(0, 60); // Pon el cooldown en segundos
+            abilitiesCD.set(0, 0); // Pon el cooldown en segundos
         }
     }
 
     public void ability2(){
         if(abilitiesCD.get(1) == 0){
-            lavaLake(user.getPlayer());
+            lavaGround(user.getPlayer());
             abilitiesCD.set(1, 0); // Pon el cooldown en segundos
         }
     }
@@ -145,11 +146,34 @@ public class magu_magu extends logia {
 
                 if(numplarticles < 25 || reachTarget){
                     world.createExplosion(ent.getLocation(),6);
+                    /*
                     ent.getLocation().getBlock().setType(Material.LAVA);
                     ent.getLocation().getBlock().getRelative(1,0,-1).setType(Material.LAVA);
                     ent.getLocation().getBlock().getRelative(1,0,-1).setType(Material.LAVA);
                     ent.getLocation().getBlock().getRelative(0,1,-1).setType(Material.LAVA);
-                    ent.getLocation().getBlock().getRelative(-2,-1,0).setType(Material.LAVA);
+                    ent.getLocation().getBlock().getRelative(-2,-1,0).setType(Material.LAVA)
+                    */
+
+                    for(int i=0; i< 15; i++){
+
+                        double randX = rand.nextDouble() - rand.nextDouble() ;
+                        double randY = rand.nextDouble() - rand.nextDouble();
+                        double randZ = rand.nextDouble() - rand.nextDouble();
+
+                        int option = rand.nextInt(3);
+
+                        Material randomMaterial = Material.AIR;
+
+                        switch (option){
+                            case 0: randomMaterial = Material.LAVA; break;
+                            case 1: randomMaterial = Material.MAGMA_BLOCK; break;
+                            case 2: randomMaterial = Material.COBBLESTONE; break;
+                        }
+
+                        (world.spawnFallingBlock(spawnBallPos,randomMaterial.createBlockData())).setVelocity(new Vector(randX,randY,randZ));
+
+                    }
+
                     this.cancel();
                 }
 
@@ -158,94 +182,175 @@ public class magu_magu extends logia {
 
     }
 
-    public void lavaLake(Player player ){
-        World world = player.getWorld();
+    public void lavaGround(Player player){
+        if(player.isSneaking()){
+            lavaRiver(player);
+        } else {
+            lavaLake(player);
+        }
+    }
+
+    public void lavaRiver(Player player){
         new BukkitRunnable(){
-            int index = 1;
-
-            final Location playerLoc = player.getLocation();
-
+            final Vector facingDirection = player.getLocation().getDirection();
+            int index = 2;
             double randomQuote = 1;
 
+
+
+            Location playerLoc = player.getLocation();
             @Override
             public void run() {
+                int x = (int)(facingDirection.getX()*index);
+                int y = 0;
+                int z = (int)(facingDirection.getZ()*index);
 
-                for(double i=-index; i <= index; i++ ){
-                    putLavaBlock((int)i,0,-index,randomQuote);
-                    putLavaBlock((int)i,0,index,randomQuote);
+                if(x == 0){
+                    putLavaBlock(x+1,y,z,randomQuote,playerLoc);
+                    putLavaBlock(x-1,y,z,randomQuote,playerLoc);
+                } else if( z == 0){
+                    putLavaBlock(x,y,z+1,randomQuote,playerLoc);
+                    putLavaBlock(x,y,z-1,randomQuote,playerLoc);
+                } else {
+                    if(x > 0 && z > 0){
+                        putLavaBlock(x+1,y,z,randomQuote,playerLoc);
+                        putLavaBlock(x,y,z+1,randomQuote,playerLoc);
+                    } else if(x > 0 && z < 0){
+
+                        putLavaBlock(x+1,y,z,randomQuote,playerLoc);
+                        putLavaBlock(x,y,z-1,randomQuote,playerLoc);
+                    } else if(x<0 && z > 0){
+                        putLavaBlock(x,y,z+1,randomQuote,playerLoc);
+                        putLavaBlock(x-1,y,z,randomQuote,playerLoc);
+
+                    } else if( x < 0 && z < 0) {
+                        putLavaBlock(x-1,y,z,randomQuote,playerLoc);
+                        putLavaBlock(x,y,z-1,randomQuote,playerLoc);
+                    }
                 }
 
-                for(double i=-index; i <= index; i++ ){
-                    putLavaBlock(-index,0,(int)i,randomQuote);
-                    putLavaBlock(index,0,(int)i,randomQuote);
-                }
-                randomQuote-=0.1;
+                putLavaBlock(x,y,z,randomQuote,playerLoc);
+
                 index++;
+                randomQuote-=0.02;
 
-                if(index == 5) this.cancel();
+                if(index==12) this.cancel();
+
             }
+        }.runTaskTimer(plugin,0,3);
+    }
 
-            public void putLavaBlock(int x,int y, int z, double randomQuote){
-                Random Rand = new Random();
-                double aleatory = rand.nextDouble();
-                double randMagmaBlock = rand.nextDouble();
+    public void lavaLake(Player player ){
 
-                Material putBlock = Material.LAVA;
 
-                if(randMagmaBlock < 0.1) putBlock = Material.MAGMA_BLOCK;
+        new BukkitRunnable(){
+                int index = 1;
 
-                if(airOrSimilar(playerLoc.getBlock().getRelative(x,y,z).getType()) && aleatory < randomQuote){
-                    if(!playerLoc.getBlock().getRelative(x,y-1,z).getType().equals(Material.AIR)) playerLoc.getBlock().getRelative(x,y-1,z).setType(putBlock);
-                } else if(airOrSimilar(playerLoc.getBlock().getRelative(x,y+1,z).getType()) && aleatory < randomQuote){
-                    if(!playerLoc.getBlock().getRelative(x,y,z).getType().equals(Material.AIR)) playerLoc.getBlock().getRelative(x,y,z).setType(putBlock);
+                final Location playerLoc = player.getLocation();
+
+                double randomQuote = 1;
+
+                @Override
+                public void run() {
+                    for(double i=-index; i <= index; i++ ){
+                        putLavaBlock((int)i,0,-index,randomQuote,playerLoc);
+                        putLavaBlock((int)i,0,index,randomQuote,playerLoc);
+                    }
+
+                    for(double i=-index; i <= index; i++ ){
+                        putLavaBlock(-index,0,(int)i,randomQuote,playerLoc);
+                        putLavaBlock(index,0,(int)i,randomQuote,playerLoc);
+                    }
+                    randomQuote-=0.1;
+                    index++;
+
+                    if(index == 5) this.cancel();
                 }
-            }
 
-            public boolean airOrSimilar(Material mat){
-                if(mat.equals(Material.AIR)
-                        || mat.equals(Material.DEAD_BUSH)
-                        || mat.equals(Material.POTTED_AZALEA_BUSH)
-                        || mat.equals(Material.ROSE_BUSH)
-                        || mat.equals(Material.SWEET_BERRY_BUSH)
-                        || mat.equals(Material.POTTED_DEAD_BUSH)
-                        || mat.equals(Material.POTTED_FLOWERING_AZALEA_BUSH)
-                        || mat.equals(Material.BROWN_MUSHROOM)
-                        || mat.equals(Material.RED_MUSHROOM)
-                        || mat.equals(Material.DANDELION)
-                        || mat.equals(Material.POPPY)
-                        || mat.equals(Material.BLUE_ORCHID)
-                        || mat.equals(Material.ALLIUM)
-                        || mat.equals(Material.AZURE_BLUET)
-                        || mat.equals(Material.RED_TULIP)
-                        || mat.equals(Material.ORANGE_TULIP)
-                        || mat.equals(Material.WHITE_TULIP)
-                        || mat.equals(Material.PINK_TULIP)
-                        || mat.equals(Material.OXEYE_DAISY)
-                        || mat.equals(Material.SUNFLOWER)
-                        || mat.equals(Material.LILAC)
-                        || mat.equals(Material.PEONY)
-                        || mat.equals(Material.TALL_GRASS)
-                        || mat.equals(Material.GRASS)
-                        || mat.equals(Material.LARGE_FERN)
-                        || mat.equals(Material.CORNFLOWER)
-                        || mat.equals(Material.LILY_OF_THE_VALLEY)
-                        || mat.equals(Material.WITHER_ROSE)
-                        || mat.equals(Material.CRIMSON_FUNGUS)
-                        || mat.equals(Material.WARPED_FUNGUS)
-                        || mat.equals(Material.CRIMSON_ROOTS)
-                        || mat.equals(Material.WARPED_ROOTS)
-                        || mat.equals(Material.NETHER_SPROUTS)
-                        || mat.equals(Material.AZALEA)
-                        || mat.equals(Material.FLOWERING_AZALEA)
-                        || mat.equals(Material.SPORE_BLOSSOM)
-                )return true;
-                else return false;
-            }
-        }.runTaskTimer(plugin,0,5);
+
+            }.runTaskTimer(plugin,0,5);
+
 
     }
 
+    public void putLavaBlock(int x,int y, int z, double randomQuote, Location playerLoc){
+        Random Rand = new Random();
+        double aleatory = rand.nextDouble();
+        double randMagmaBlock = rand.nextDouble();
 
+       boolean putBlock = false;
+       Location putBlockLocation = null;
+
+        Material blockMaterial = Material.LAVA;
+
+        if(randMagmaBlock < 0.1) blockMaterial = Material.MAGMA_BLOCK;
+
+        if(airOrSimilar(playerLoc.getBlock().getRelative(x,y,z).getType()) && aleatory < randomQuote) {
+
+            if (!playerLoc.getBlock().getRelative(x, y - 1, z).getType().equals(Material.AIR)){
+                putBlock = true;
+                putBlockLocation = playerLoc.getBlock().getRelative(x, y - 1, z).getLocation();
+                playerLoc.getBlock().getRelative(x, y - 1, z).setType(blockMaterial);
+            }
+            else if(airOrSimilar(playerLoc.getBlock().getRelative(x,y-1,z).getType()) && aleatory < randomQuote)
+                if(!playerLoc.getBlock().getRelative(x,y-2,z).getType().equals(Material.AIR)) {
+                    putBlock = true;
+                    putBlockLocation = playerLoc.getBlock().getRelative(x, y - 2, z).getLocation();
+                    playerLoc.getBlock().getRelative(x, y - 2, z).setType(blockMaterial);
+                }
+
+        } else if(airOrSimilar(playerLoc.getBlock().getRelative(x,y+1,z).getType()) && aleatory < randomQuote)
+            if(!playerLoc.getBlock().getRelative(x,y,z).getType().equals(Material.AIR)){
+                putBlock = true;
+                putBlockLocation = playerLoc.getBlock().getRelative(x,y,z).getLocation();
+                playerLoc.getBlock().getRelative(x,y,z).setType(blockMaterial);
+            }
+
+        if(putBlock)
+            playerLoc.getWorld().playSound(putBlockLocation,Sound.BLOCK_LAVA_EXTINGUISH,1,1);
+
+    }
+
+    public boolean airOrSimilar(Material mat){
+        if(mat.equals(Material.AIR)
+                || mat.equals(Material.DEAD_BUSH)
+                || mat.equals(Material.POTTED_AZALEA_BUSH)
+                || mat.equals(Material.ROSE_BUSH)
+                || mat.equals(Material.SWEET_BERRY_BUSH)
+                || mat.equals(Material.POTTED_DEAD_BUSH)
+                || mat.equals(Material.POTTED_FLOWERING_AZALEA_BUSH)
+                || mat.equals(Material.BROWN_MUSHROOM)
+                || mat.equals(Material.RED_MUSHROOM)
+                || mat.equals(Material.DANDELION)
+                || mat.equals(Material.POPPY)
+                || mat.equals(Material.BLUE_ORCHID)
+                || mat.equals(Material.ALLIUM)
+                || mat.equals(Material.AZURE_BLUET)
+                || mat.equals(Material.RED_TULIP)
+                || mat.equals(Material.ORANGE_TULIP)
+                || mat.equals(Material.WHITE_TULIP)
+                || mat.equals(Material.PINK_TULIP)
+                || mat.equals(Material.OXEYE_DAISY)
+                || mat.equals(Material.SUNFLOWER)
+                || mat.equals(Material.LILAC)
+                || mat.equals(Material.PEONY)
+                || mat.equals(Material.TALL_GRASS)
+                || mat.equals(Material.GRASS)
+                || mat.equals(Material.LARGE_FERN)
+                || mat.equals(Material.CORNFLOWER)
+                || mat.equals(Material.LILY_OF_THE_VALLEY)
+                || mat.equals(Material.WITHER_ROSE)
+                || mat.equals(Material.CRIMSON_FUNGUS)
+                || mat.equals(Material.WARPED_FUNGUS)
+                || mat.equals(Material.CRIMSON_ROOTS)
+                || mat.equals(Material.WARPED_ROOTS)
+                || mat.equals(Material.NETHER_SPROUTS)
+                || mat.equals(Material.AZALEA)
+                || mat.equals(Material.FLOWERING_AZALEA)
+                || mat.equals(Material.SPORE_BLOSSOM)
+        )return true;
+        else return false;
+    }
 
     @Override
     public void runParticles() {

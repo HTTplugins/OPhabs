@@ -47,7 +47,7 @@ public class goro_goro extends logia {
     public void ability3(){
         if(abilitiesCD.get(2) == 0){
             lightStep(user.getPlayer());
-            abilitiesCD.set(2, 20); // Pon el cooldown en segundos
+            abilitiesCD.set(2, 0); // Pon el cooldown en segundos
         }
     }
 
@@ -102,37 +102,15 @@ public class goro_goro extends logia {
                     x = factor*sin(i);
                     y = factor*cos(i);
 
-                    //horizontally (Arround Y)
-                    xY = cos(toRadians(yaw))*x + sin(toRadians(yaw))*z;
-                    yY =  y;
-                    zY = -sin(toRadians(yaw))*x + cos(toRadians(yaw))*z;
-
-                    if(((yaw < -90 && yaw > -180) || ( yaw < 180 && yaw > 90)) && !changedPitch){
-                        changedPitch = true;
-                        pitch = pitch * -1;
-                    }
-
-                    //Vertically (Arround X)
-                    xX = xY;
-                    yX = cos(toRadians(pitch))* yY - sin(toRadians(pitch))* zY;
-                    zX = sin(toRadians(pitch))* yY + cos(toRadians(pitch))* zY;
+                    Vector looking = player.getLocation().getDirection();
 
 
-                    //Final (sum of player position.)
-                    xL = playerLoc.getX() + xX;
-                    yL = 1 + playerLoc.getY() + yX;
-                    zL = playerLoc.getZ() + zX;
 
-                    Location partLoc = new Location(world, xL, yL, zL);
+                    Location partLoc = new Location(world, x, y, 0);
 
-                    if(!partLoc.getBlock().getType().equals(Material.AIR))
-                        partLoc.getBlock().setType(Material.AIR);
-
-                    for(Entity ent : world.getNearbyEntities(partLoc,2,2,2))
-                        if(ent instanceof LivingEntity && !player.equals(ent))
-                            ((LivingEntity)ent).damage(100);
-
-
+                    partLoc.add(looking);
+                    partLoc.add(playerLoc);
+                    partLoc.add(new Vector(0,1.5,0));
 
                     world.spawnParticle(element,partLoc,0,0,0,0);
                 }
@@ -180,34 +158,38 @@ public class goro_goro extends logia {
     }
 
     public void lightStep(Player player){
+
         World world = player.getWorld();
-
-        Location iniLoc = player.getLocation();
-
-        Location finLoc = player.getLocation();
-
-        Vector sumVec = finLoc.getDirection().normalize().multiply(15);
-        finLoc = finLoc.add(sumVec);
-
-        Location finalFinLoc = finLoc;
-        // new BukkitRunnable(){
-        //     Vector vec = finalFinLoc.toVector().subtract(iniLoc.toVector());
-
-
-            // @Override
-            // public void run() {
-            //     System.out.println(vec);
-
-
-            // }
-        // }.runTaskTimer(plugin,0,1);
-
-
-        player.teleport(finLoc);
-        world.playSound(player.getLocation(),Sound.ENTITY_LIGHTNING_BOLT_THUNDER,1,1);
+        Location playerLoc = player.getLocation();
 
 
 
+        world.playSound(playerLoc,Sound.ENTITY_LIGHTNING_BOLT_THUNDER,1,1);
+
+        Vector dir = player.getLocation().getDirection();
+        dir.setY(0.5);
+        dir.setX(dir.getX() * 5);
+        dir.setZ(dir.getZ() *5);
+        player.setVelocity(dir);
+
+        new BukkitRunnable(){
+
+            int tick = 0;
+
+            @Override
+            public void run() {
+                world.strikeLightning(player.getLocation());
+                tick++;
+
+                if(tick == 6)
+                    this.cancel();
+            }
+        }.runTaskTimer(plugin,0,2);
+
+       // System.out.println(direction);
+        //System.out.println(movement);
+
+        player.setVelocity(dir);
 
     }
 
