@@ -180,40 +180,29 @@ public class magu_magu extends logia {
                 int y = 0;
                 int z = (int)(facingDirection.getZ()*index);
 
-                System.out.println(x + " " + y + " "+ z);
-
                 if(x == 0){
-                    System.out.println("A");
                     putLavaBlock(x+1,y,z,randomQuote,playerLoc);
                     putLavaBlock(x-1,y,z,randomQuote,playerLoc);
                 } else if( z == 0){
-                    System.out.println("B");
                     putLavaBlock(x,y,z+1,randomQuote,playerLoc);
                     putLavaBlock(x,y,z-1,randomQuote,playerLoc);
                 } else {
                     if(x > 0 && z > 0){
-                        System.out.println("C");
                         putLavaBlock(x+1,y,z,randomQuote,playerLoc);
                         putLavaBlock(x,y,z+1,randomQuote,playerLoc);
                     } else if(x > 0 && z < 0){
-                        System.out.println("D");
+
                         putLavaBlock(x+1,y,z,randomQuote,playerLoc);
                         putLavaBlock(x,y,z-1,randomQuote,playerLoc);
                     } else if(x<0 && z > 0){
-                        System.out.println("E");
                         putLavaBlock(x,y,z+1,randomQuote,playerLoc);
                         putLavaBlock(x-1,y,z,randomQuote,playerLoc);
 
                     } else if( x < 0 && z < 0) {
-                        System.out.println("F");
                         putLavaBlock(x-1,y,z,randomQuote,playerLoc);
                         putLavaBlock(x,y,z-1,randomQuote,playerLoc);
                     }
-
                 }
-
-
-
 
                 putLavaBlock(x,y,z,randomQuote,playerLoc);
 
@@ -268,11 +257,18 @@ public class magu_magu extends logia {
 
         if(randMagmaBlock < 0.1) putBlock = Material.MAGMA_BLOCK;
 
-        if(airOrSimilar(playerLoc.getBlock().getRelative(x,y,z).getType()) && aleatory < randomQuote){
-            if(!playerLoc.getBlock().getRelative(x,y-1,z).getType().equals(Material.AIR)) playerLoc.getBlock().getRelative(x,y-1,z).setType(putBlock);
-        } else if(airOrSimilar(playerLoc.getBlock().getRelative(x,y+1,z).getType()) && aleatory < randomQuote){
+        if(airOrSimilar(playerLoc.getBlock().getRelative(x,y,z).getType()) && aleatory < randomQuote) {
+            if (!playerLoc.getBlock().getRelative(x, y - 1, z).getType().equals(Material.AIR)) playerLoc.getBlock().getRelative(x, y - 1, z).setType(putBlock);
+            else if(airOrSimilar(playerLoc.getBlock().getRelative(x,y-1,z).getType()) && aleatory < randomQuote)
+                if(!playerLoc.getBlock().getRelative(x,y-2,z).getType().equals(Material.AIR)) playerLoc.getBlock().getRelative(x,y-2,z).setType(putBlock);
+        } else if(airOrSimilar(playerLoc.getBlock().getRelative(x,y+1,z).getType()) && aleatory < randomQuote)
             if(!playerLoc.getBlock().getRelative(x,y,z).getType().equals(Material.AIR)) playerLoc.getBlock().getRelative(x,y,z).setType(putBlock);
-        }
+
+
+
+            
+
+
     }
 
     public boolean airOrSimilar(Material mat){
