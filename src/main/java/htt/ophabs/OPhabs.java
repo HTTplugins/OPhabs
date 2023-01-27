@@ -73,6 +73,7 @@ public final class OPhabs extends JavaPlugin {
 
     public void registerCommands(){
         Objects.requireNonNull(this.getCommand("oph")).setExecutor(new oph(this));
+        Objects.requireNonNull(this.getCommand("oph")).setTabCompleter(new oph(this));
         Objects.requireNonNull(this.getCommand("weaponShop")).setExecutor(new weaponShop(this));
     }
 }
