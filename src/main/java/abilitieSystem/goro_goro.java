@@ -2,8 +2,11 @@ package abilitieSystem;
 
 import castSystem.castIdentification;
 import htt.ophabs.OPhabs;
+import jdk.internal.vm.compiler.collections.Pair;
 import org.bukkit.*;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Random;
 
 import org.bukkit.entity.Entity;
@@ -27,6 +30,8 @@ public class goro_goro extends logia {
         abilitiesCD.add(0);
         abilitiesNames.add("LightStep");
         abilitiesCD.add(0);
+        abilitiesNames.add("Discharge");
+        abilitiesCD.add(0);
         this.runParticles();
     }
 
@@ -48,6 +53,13 @@ public class goro_goro extends logia {
         if(abilitiesCD.get(2) == 0){
             lightStep(user.getPlayer());
             abilitiesCD.set(2, 0); // Pon el cooldown en segundos
+        }
+    }
+
+    public void ability4(){
+        if(abilitiesCD.get(3) == 0){
+            discharge(user.getPlayer());
+            abilitiesCD.set(3, 0); // Pon el cooldown en segundos
         }
     }
 
@@ -192,6 +204,82 @@ public class goro_goro extends logia {
         player.setVelocity(dir);
 
     }
+
+    public void discharge(Player player){
+
+        final int Maximum = 3;
+        int index = 0;
+
+        List<Entity> entityList = player.getNearbyEntities(15,10,15);
+
+        List<LivingEntity> Players = new ArrayList<>();
+        List<LivingEntity> livingEntities = new ArrayList<>();
+
+        for(Entity ent : entityList){
+            if(ent instanceof Player)
+                Players.add((LivingEntity) ent);
+            else if(ent instanceof LivingEntity)
+                livingEntities.add((LivingEntity) ent);
+        }
+
+        for(int i=0; i<Players.size() && index < Maximum; i++){
+            sendStrike(Players.get(i));
+            index++;
+        }
+
+        for(int i=0; i<livingEntities.size() && index < Maximum; i++){
+            sendStrike(livingEntities.get(i));
+            index++;
+        }
+    }
+
+    public void sendStrike(LivingEntity ent){
+        Location location = ent.getLocation();
+        World world = ent.getWorld();
+
+
+        world.playSound(ent.getLocation(),"discharge",1,1);
+        new BukkitRunnable(){
+            double y = 5;
+
+            @Override
+            public void run() {
+
+                for (double i = 0; i < 2*PI; i += 0.05) {
+                    double x = Math.cos(i);
+                    double z = Math.sin(i);
+
+                    for(double radius = 0.6; radius < 1.4; radius+=0.2){
+                        location.add(x*radius, y, z*radius);
+
+                        //Note: with a loop doesn't work.
+                        location.getWorld().spawnParticle(Particle.ELECTRIC_SPARK, location.add(0,0.8,0), 0,0,0,0);
+                        location.getWorld().spawnParticle(Particle.ELECTRIC_SPARK, location.add(0,0.6,0), 0,0,0,0);
+                        location.getWorld().spawnParticle(Particle.ELECTRIC_SPARK, location.add(0,0.4,0), 0,0,0,0);
+                        location.getWorld().spawnParticle(Particle.ELECTRIC_SPARK, location.add(0,0.2,0), 0,0,0,0);
+                        location.getWorld().spawnParticle(Particle.ELECTRIC_SPARK, location, 0,0,0,0);
+                        location.getWorld().spawnParticle(Particle.ELECTRIC_SPARK, location.add(0,-0.2,0), 0,0,0,0);
+                        location.getWorld().spawnParticle(Particle.ELECTRIC_SPARK, location.add(0,-0.4,0), 0,0,0,0);
+                        location.getWorld().spawnParticle(Particle.ELECTRIC_SPARK, location.add(0,-0.6,0), 0,0,0,0);
+                        location.getWorld().spawnParticle(Particle.ELECTRIC_SPARK, location.add(0,-0.8,0), 0,0,0,0);
+
+                        if(location.getBlock().getType() != Material.AIR)  location.getBlock().setType(Material.AIR);
+
+                        ent.damage(0.5);
+
+                        location.subtract(x*radius, y, z*radius);
+                    }
+
+                }
+                y-=0.5;
+
+                if(y==-3) this.cancel();
+            }
+        }.runTaskTimer(plugin,0,1);
+
+    }
+
+
 
     @Override
     public void runParticles(){
