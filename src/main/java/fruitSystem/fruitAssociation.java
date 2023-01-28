@@ -107,7 +107,7 @@ public class fruitAssociation implements Listener {
                 dfPlayers.put(event.getPlayer().getName(), dfUser);
                 plugin.getConfig().set("FruitAssociations." + a.getName(), event.getPlayer().getName());
                 plugin.saveConfig();
-                scoreboard.addScoreboard(event.getPlayer());
+                scoreboard.addScoreboard(event.getPlayer().getName());
             }
         }
     }
@@ -148,3 +148,4 @@ public class fruitAssociation implements Listener {
         }
     }
 }
+
