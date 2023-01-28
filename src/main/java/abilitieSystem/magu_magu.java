@@ -73,10 +73,9 @@ public class magu_magu extends logia {
         }
 
         for(int i=0; i<livingEntities.size() && index < Maximum; i++){
-            sendMeteorite(player,livingEntities.get(i));
+            sendMeteorite(player, livingEntities.get(i));
             index++;
         }
-
     }
 
     public void sendMeteorite(Player player, LivingEntity ent){
@@ -164,7 +163,7 @@ public class magu_magu extends logia {
 
                         Material randomMaterial = Material.AIR;
 
-                        switch (option){
+                        switch (option) {
                             case 0: randomMaterial = Material.LAVA; break;
                             case 1: randomMaterial = Material.MAGMA_BLOCK; break;
                             case 2: randomMaterial = Material.COBBLESTONE; break;
