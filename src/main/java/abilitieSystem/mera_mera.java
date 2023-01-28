@@ -61,7 +61,7 @@ public class mera_mera extends logia {
 
     public void ability3() {
         if(abilitiesCD.get(2) == 0) {
-            a3(user.getPlayer());
+            Faiyabu(user.getPlayer());
             abilitiesCD.set(2, FAIYABU_COOLDOWN);
         }
     }
@@ -255,7 +255,7 @@ public class mera_mera extends logia {
         bola5.setVelocity(bola5.getLocation().getDirection().multiply(2));
     }
 
-    public void a3(Player player) {
+    public void Faiyabu(Player player) {
         Location loc = player.getEyeLocation().clone();
         Vector direccion = loc.getDirection();
         World mundo = player.getWorld();
