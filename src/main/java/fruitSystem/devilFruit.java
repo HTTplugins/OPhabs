@@ -67,6 +67,10 @@ public class devilFruit{
                 devilFruitForm = Material.CARROT;
                 fruitItemName = fruitIdentification.fruitItemNameRyuAllosaurs;
                 break;
+            case fruitIdentification.fruitCommandNameOpe:
+                devilFruitForm = Material.CARROT;
+                fruitItemName = fruitIdentification.fruitItemNameOpe;
+                break;
 
             default:
                 devilFruitForm = Material.ACACIA_BOAT;

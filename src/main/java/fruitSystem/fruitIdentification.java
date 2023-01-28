@@ -2,7 +2,7 @@ package fruitSystem;
 
 public class fruitIdentification {
 
-    public final static int fruitsNumber = 11;
+    public final static int fruitsNumber = 12;
 
     public final static String
             fruitItemNameYami = "yami yami no mi",
@@ -15,7 +15,8 @@ public class fruitIdentification {
             fruitItemNameIshi = "ishi ishi no mi",
             fruitItemNameGoru = "goru goru no mi",
             fruitItemNameInuOkuchi = "inu inu okuchi no makami",
-            fruitItemNameRyuAllosaurs = "ryu ryu allosaurs no mi";
+            fruitItemNameRyuAllosaurs = "ryu ryu allosaurs no mi",
+            fruitItemNameOpe = "ope ope no mi";
 
 
     public final static String
@@ -29,7 +30,8 @@ public class fruitIdentification {
             fruitCommandNameIshi = "ishi_ishi",
             fruitCommandNameGoru = "goru_goru",
             fruitCommandNameInuOkuchi = "inu_inu_okuchi",
-            fruitCommandNameRyuAllosaurs = "ryu_ryu_allosaurs";
+            fruitCommandNameRyuAllosaurs = "ryu_ryu_allosaurs",
+            fruitCommandNameOpe = "ope_ope";
 
     public static String getItemName(String fruitCommandName){
         switch (fruitCommandName){
@@ -55,6 +57,8 @@ public class fruitIdentification {
                 return fruitItemNameInuOkuchi;
             case fruitCommandNameRyuAllosaurs:
                 return fruitItemNameRyuAllosaurs;
+            case fruitCommandNameOpe:
+                return fruitItemNameOpe;
             default:
                 return null;
         }
@@ -84,6 +88,8 @@ public class fruitIdentification {
                 return fruitCommandNameInuOkuchi;
             case fruitItemNameRyuAllosaurs:
                 return fruitCommandNameRyuAllosaurs;
+            case fruitItemNameOpe:
+                return fruitCommandNameOpe;
             default:
                 return null;
         }
@@ -112,6 +118,8 @@ public class fruitIdentification {
             case fruitItemNameInuOkuchi:
                 return true;
             case fruitItemNameRyuAllosaurs:
+                return true;
+            case fruitItemNameOpe:
                 return true;
             default:
                 return false;

@@ -8,28 +8,30 @@ import java.util.Objects;
 
 public class castIdentification {
     public static Material castMaterialYami = Material.BLACK_DYE,
-                            castMaterialMera = Material.BLAZE_ROD,
-                            castMaterialGura = Material.QUARTZ,
-                            castMaterialMoku = Material.FEATHER,
-                            castMaterialNekoReoparudo = Material.YELLOW_DYE,
-                            castMaterialMagu = Material.MAGMA_CREAM,
-                            castMaterialGoro = Material.IRON_INGOT,
-                            castMaterialIshi = Material.FLINT,
-                            castMaterialGoru = Material.GOLD_INGOT,
-                            castMaterialInuOkuchi = Material.YELLOW_DYE,
-                            castMaterialRyuAllosaurs = Material.YELLOW_DYE;
+            castMaterialMera = Material.BLAZE_ROD,
+            castMaterialGura = Material.QUARTZ,
+            castMaterialMoku = Material.FEATHER,
+            castMaterialNekoReoparudo = Material.YELLOW_DYE,
+            castMaterialMagu = Material.MAGMA_CREAM,
+            castMaterialGoro = Material.IRON_INGOT,
+            castMaterialIshi = Material.FLINT,
+            castMaterialGoru = Material.GOLD_INGOT,
+            castMaterialInuOkuchi = Material.YELLOW_DYE,
+            castMaterialRyuAllosaurs = Material.YELLOW_DYE,
+            castMaterialOpe = Material.BRICK;
 
     public static String castItemNameYami = "Yami Yami caster",
-                         castItemNameMera = "Mera Mera caster",
-                         castItemNameGura = "Gura Gura caster",
-                         castItemNameMoku = "Moku Moku caster",
-                         castItemNameNekoReoparudo = "Neko Neko Reoparudo caster",
-                         castItemNameMagu = "Magu Magu caster",
-                         castItemNameGoro = "Goro Goro caster",
-                         castItemNameIshi = "Ishi Ishi caster",
-                         castItemNameGoru = "Goru Goru caster",
-                         castItemNameInuOkuchi = "Inu Inu Okuchi caster",
-                         castItemNameRyuAllosaurs = "Ryu Ryu Allosaurs caster";
+            castItemNameMera = "Mera Mera caster",
+            castItemNameGura = "Gura Gura caster",
+            castItemNameMoku = "Moku Moku caster",
+            castItemNameNekoReoparudo = "Neko Neko Reoparudo caster",
+            castItemNameMagu = "Magu Magu caster",
+            castItemNameGoro = "Goro Goro caster",
+            castItemNameIshi = "Ishi Ishi caster",
+            castItemNameGoru = "Goru Goru caster",
+            castItemNameInuOkuchi = "Inu Inu Okuchi caster",
+            castItemNameRyuAllosaurs = "Ryu Ryu Allosaurs caster",
+            castItemNameOpe = "Ope Ope caster";
 
     public static boolean itemIsCaster(ItemStack item , Player player) {
 
@@ -53,7 +55,8 @@ public class castIdentification {
                 || (itemName.equals(castIdentification.castItemNameIshi) && itemMaterial.equals(castIdentification.castMaterialIshi))
                 || (itemName.equals(castIdentification.castItemNameGoru) && itemMaterial.equals(castIdentification.castMaterialGoru))
                 || (itemName.equals(castIdentification.castItemNameInuOkuchi) && itemMaterial.equals(castIdentification.castMaterialInuOkuchi))
-                || (itemName.equals(castIdentification.castItemNameRyuAllosaurs) && itemMaterial.equals(castIdentification.castMaterialRyuAllosaurs))){
+                || (itemName.equals(castIdentification.castItemNameRyuAllosaurs) && itemMaterial.equals(castIdentification.castMaterialRyuAllosaurs))
+                ||(itemName.equals(castIdentification.castItemNameOpe) && itemMaterial.equals(castIdentification.castMaterialOpe))){
             return true;
         }
         else
