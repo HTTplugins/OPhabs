@@ -93,7 +93,7 @@ public class mera_mera extends logia {
         return esIndestructible;
     }
 
-    private void BerserkEffects(Player jugador){
+    private void BerserkEffects(Player jugador) {
         jugador.addPotionEffect(new PotionEffect(PotionEffectType.FIRE_RESISTANCE, BERSERK_DURATION, BERSERK_AMPLIFIER));
         jugador.addPotionEffect(new PotionEffect(PotionEffectType.DAMAGE_RESISTANCE, BERSERK_DURATION, BERSERK_AMPLIFIER));
         jugador.addPotionEffect(new PotionEffect(PotionEffectType.INCREASE_DAMAGE, BERSERK_DURATION, BERSERK_AMPLIFIER));
@@ -115,7 +115,7 @@ public class mera_mera extends logia {
         }
     }
 
-    public void onEntityShootBow(EntityShootBowEvent event) {
+    /*public void onEntityShootBow(EntityShootBowEvent event) {
         Entity flecha = event.getProjectile();
 
         if(event.getEntity() instanceof Player) {
@@ -128,7 +128,7 @@ public class mera_mera extends logia {
                 }
             }
         }
-    }
+    }*/
 
     public void onPlayerItemConsume(PlayerItemConsumeEvent event) {
         if(comprobarUser(event.getPlayer()))
@@ -224,7 +224,7 @@ public class mera_mera extends logia {
     public void FireballStorm(Player player) {
         World mundo = player.getWorld();
 
-        mundo.playSound(player, Sound.ITEM_FIRECHARGE_USE, 100, 10);
+        mundo.playSound(player, Sound.MUSIC_NETHER_NETHER_WASTES, 100, 10);
         mundo.spawnEntity(player.getLocation().clone().add(0, 5, 0), EntityType.FIREBALL);
         mundo.spawnEntity(player.getLocation().clone().add(0, 5, 3), EntityType.FIREBALL);
         mundo.spawnEntity(player.getLocation().clone().add(0, 5, -3), EntityType.FIREBALL);
@@ -232,7 +232,11 @@ public class mera_mera extends logia {
         mundo.spawnEntity(player.getLocation().clone().add(-3, 5, 0), EntityType.FIREBALL);
     }
 
-    public void onPlayerEggThrow(PlayerEggThrowEvent event) {                   // HABILIDAD 2
+    public void a3(Player player) {
+
+    }
+
+    public void onPlayerEggThrow(PlayerEggThrowEvent event) {
         Location loc = event.getEgg().getLocation();
         World mundo = event.getEgg().getWorld();
 
