@@ -26,6 +26,8 @@ import org.bukkit.util.Vector;
 
 public class inu_inu_okuchi extends zoan {
     private final ItemStack iceBlock = new ItemStack(Material.PACKED_ICE);
+    public double iceArmor = 0.0;
+    public boolean creatingIceArmor = false;
     public inu_inu_okuchi(OPhabs plugin){
         super(plugin, castIdentification.castMaterialInuOkuchi, castIdentification.castItemNameInuOkuchi, fruitIdentification.fruitCommandNameInuOkuchi,"http://novask.in/4672583547.png","white_wolf");
 
@@ -33,6 +35,8 @@ public class inu_inu_okuchi extends zoan {
         abilitiesCD.add(0);
         abilitiesNames.add("Namuji hyoga");
         abilitiesCD.add(0);
+
+        runIceArmor();
     }
 
     public void ability2(){
@@ -60,13 +64,11 @@ public class inu_inu_okuchi extends zoan {
                     user.getPlayer().addPotionEffect(new PotionEffect(PotionEffectType.SPEED, 999999, 5, false, false));
                     user.getPlayer().addPotionEffect(new PotionEffect(PotionEffectType.JUMP, 999999, 3, false, false));
                     user.getPlayer().addPotionEffect(new PotionEffect(PotionEffectType.INCREASE_DAMAGE, 999999, 5, false, false));
-                    user.getPlayer().addPotionEffect(new PotionEffect(PotionEffectType.DAMAGE_RESISTANCE, 999999, 4, false, false));
                 }
                 else{
                     user.getPlayer().removePotionEffect(PotionEffectType.SPEED);
                     user.getPlayer().removePotionEffect(PotionEffectType.JUMP);
                     user.getPlayer().removePotionEffect(PotionEffectType.INCREASE_DAMAGE);
-                    user.getPlayer().removePotionEffect(PotionEffectType.DAMAGE_RESISTANCE);
                 }
             }
         }.runTaskLater(plugin, 20);
@@ -144,7 +146,7 @@ public class inu_inu_okuchi extends zoan {
                     location.add(direction);
                     player.getWorld().spawnParticle(Particle.BLOCK_CRACK, location, 100, 0.5, 0.5, 0.5, 0.1*j, Material.PACKED_ICE.createBlockData());
                     location.getWorld().getNearbyEntities(location, 0.5, 0.5, 0.5).forEach(entity -> {
-                        if(entity instanceof LivingEntity){
+                        if(entity instanceof LivingEntity && entity != player){
                             LivingEntity livingEntity = (LivingEntity) entity;
                             livingEntity.damage(10, player);
                         }
@@ -158,5 +160,77 @@ public class inu_inu_okuchi extends zoan {
             }
         }.runTaskTimer(plugin, 0, 4);
     }
+
+    public void createIceArmor(){
+        if(!active){
+            new BukkitRunnable() {
+                @Override
+                public void run() {
+                    createIceArmor();
+                }
+            }.runTaskLater(plugin, 100);
+        }else{
+            iceArmor = 14;
+            creatingIceArmor = false;
+        }
+    }
+
+    public void onEntityDamage(EntityDamageEvent event){
+        if(event.getEntity() == user.getPlayer()){
+            if(iceArmor > 0){
+                double damage = event.getDamage();
+                iceArmor -= damage;
+                if(iceArmor < 0){
+                    iceArmor = 0;
+                    event.setDamage(damage - iceArmor);
+                }else{
+                    event.setDamage(0);
+                }
+
+                event.getEntity().getWorld().spawnParticle(Particle.BLOCK_CRACK, event.getEntity().getLocation(), 10, 0.5, 0.5, 0.5, 0.1, Material.PACKED_ICE.createBlockData());
+            }
+        }
+    }
+
+
+    public void runIceArmor() {
+        new BukkitRunnable(){
+
+            @Override
+            public void run() {
+                Player player = null;
+                if(user != null)
+                    if(user.getPlayer() != null){
+                        player = user.getPlayer();
+
+                        ItemStack caster = null;
+                        boolean isCaster = false;
+                        if(player != null){
+                            if(castIdentification.itemIsCaster(player.getInventory().getItemInMainHand(), player)){
+                                caster = player.getInventory().getItemInMainHand();
+                                isCaster = true;
+                            }
+                            else{
+                                if(castIdentification.itemIsCaster(player.getInventory().getItemInOffHand(), player)){
+                                    caster = player.getInventory().getItemInOffHand();
+                                    isCaster = true;
+                                }
+                            }
+                        }
+
+                        if(isCaster && caster.getItemMeta().getDisplayName().equals(castIdentification.castItemNameInuOkuchi)){
+                            if(!creatingIceArmor && iceArmor < 14 && transformed){
+                                creatingIceArmor = true;
+                                createIceArmor();
+                            }
+                        }
+            }
+            }
+
+
+        }.runTaskTimer(plugin, 0, 1);
+
+    }
+
 }
 

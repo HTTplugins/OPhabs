@@ -101,7 +101,10 @@ public class abilitiesScoreboard {
                 if( (castIdentification.itemIsCaster(player.getInventory().getItemInMainHand(), player)) || castIdentification.itemIsCaster(player.getInventory().getItemInOffHand(), player)){
                     objective.setDisplaySlot(DisplaySlot.SIDEBAR);
 
-                    objective.setDisplayName(fruitIdentification.getItemName(user.ability.getName()));
+                    String fruit = fruitIdentification.getItemName(user.ability.getName());
+                    fruit = fruit.substring(0,1).toUpperCase() + fruit.substring(1);
+                    
+                    objective.setDisplayName(ChatColor.BOLD + "" + fruit);
                     
 
                     for(int i = 0; i < abNames.size(); i++){

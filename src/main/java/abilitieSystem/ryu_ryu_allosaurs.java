@@ -55,7 +55,7 @@ public class ryu_ryu_allosaurs extends zoan {
                 if(transformed){
                     user.getPlayer().addPotionEffect(new PotionEffect(PotionEffectType.SLOW, 999999, 1, false, false));
                     user.getPlayer().addPotionEffect(new PotionEffect(PotionEffectType.INCREASE_DAMAGE, 999999, 4, false, false));
-                    user.getPlayer().addPotionEffect(new PotionEffect(PotionEffectType.DAMAGE_RESISTANCE, 999999, 7, false, false));
+                    user.getPlayer().addPotionEffect(new PotionEffect(PotionEffectType.DAMAGE_RESISTANCE, 999999, 2, false, false));
                 }
                 else{
                     user.getPlayer().removePotionEffect(PotionEffectType.SLOW);
@@ -103,26 +103,28 @@ public class ryu_ryu_allosaurs extends zoan {
                         ((LivingEntity) entity).damage(15);
                 });
 
-        new BukkitRunnable() {
-            int i = 0, radius = 3, particleAmount = 5;
+        int radius = 3, particleAmount = 3;
+        World world = player.getWorld();
+        for (double angle = 0; angle < particleAmount; angle += 0.01) {
+            double x = radius * Math.cos(angle);
+            double z = radius * Math.sin(angle);
+            double y = Math.log(angle);
+                    
+            Location particleLoc = player.getLocation().add(x, y, z);
+            world.spawnParticle(Particle.REDSTONE, particleLoc, 1, 0, 0, 0, 0, new Particle.DustOptions(Color.GREEN, 1));
+        }
 
+
+        new BukkitRunnable() {
+            int i = 0;
             @Override
             public void run() {
                 if(i>16)
                     cancelTask();
 
-                World world = player.getWorld();
-                for (double angle = 0; angle < particleAmount; angle += 0.01) {
-                    double x = radius * Math.cos(angle);
-                    double z = radius * Math.sin(angle);
-                    double y = Math.log(angle);
-                    
-                    Location particleLoc = player.getLocation().add(x, y, z);
-                    world.spawnParticle(Particle.REDSTONE, particleLoc, 1, 0, 0, 0, 0, new Particle.DustOptions(Color.GREEN, 1));
-                }
 
                 Location loc = player.getLocation();
-                loc.setYaw(loc.getYaw()+20);
+                loc.setYaw(loc.getYaw()-20);
 
                 player.teleport(loc);
 
