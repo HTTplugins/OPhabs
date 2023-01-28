@@ -86,7 +86,6 @@ public class ryu_ryu_allosaurs extends zoan {
                 player.getWorld().spawnParticle(Particle.CRIT, player.getEyeLocation(), 10, 0, 0, 0, 0);
                 i++;
             }
-
             public void cancelTask(){
                 Bukkit.getScheduler().cancelTask(this.getTaskId());
             }
@@ -103,8 +102,6 @@ public class ryu_ryu_allosaurs extends zoan {
                     if(entity.getName() != player.getName() && entity instanceof LivingEntity)
                         ((LivingEntity) entity).damage(15);
                 });
-
-
 
         new BukkitRunnable() {
             int i = 0, radius = 3, particleAmount = 5;

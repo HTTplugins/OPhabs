@@ -286,8 +286,8 @@ public class yami_yami extends logia {
         }.runTaskTimer(plugin,0,1);
     }
 
-    public void repealAnimation(Player player){
-        new BukkitRunnable(){
+    public void repealAnimation(Player player) {
+        new BukkitRunnable() {
             final double angle = -player.getLocation().getYaw();
             World world = player.getWorld();
             double start = 0;

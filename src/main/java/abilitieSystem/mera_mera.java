@@ -22,7 +22,6 @@ import java.util.Random;
 import static java.lang.Math.*;
 
 public class mera_mera extends logia {
-    public static Particle.DustOptions meraDO = new Particle.DustOptions(Color.ORANGE,2.0F);
     final float ExplosionRadius = 4;
     final int Abilitie1Radius = 4;
     final Material FIRE = Material.FIRE, OBSIDIANA = Material.OBSIDIAN, BEDROCK = Material.BEDROCK, AIR = Material.AIR;
@@ -30,10 +29,9 @@ public class mera_mera extends logia {
     final int N_PARTICULAS = 20, RADIO_PARTICULAS = 0, RESPAWN_HEALTH = 10, RESPAWN_FOOD = 10, BERSERK_DURATION = 3600,
               BERSERK_AMPLIFIER = 2;
     boolean BERSERK = true;
+    private int FIRE_POOL_DURATION = 3, FIREBALL_STORM_COOLDOWN = 5, FIRE_POOL_COOLDOWN = 15, FAIYABU_COOLDOWN = 5;
 
-    private int FIRE_POOL_DURATION = 2, FIREBALL_STORM_COOLDOWN = 20, FIRE_POOL_COOLDOWN = 15;
-
-    public mera_mera(OPhabs plugin){
+    public mera_mera(OPhabs plugin) {
         super(plugin, Particle.FLAME, castIdentification.castMaterialMera, castIdentification.castItemNameMera, fruitIdentification.fruitCommandNameMera);
         //
         //Nombres de las habilidades:
@@ -41,34 +39,34 @@ public class mera_mera extends logia {
         abilitiesCD.add(0);
         abilitiesNames.add("Fireball Storm");
         abilitiesCD.add(0);
-        abilitiesNames.add("a3");
+        abilitiesNames.add("Faiyābū");
         abilitiesCD.add(0);
         this.runParticles();
     }
 
-    //Habilidades activas:
-    public void ability1(){
+    // Habilidades activas:
+    public void ability1() {
         if(abilitiesCD.get(0) == 0) {
             FirePool(user.getPlayer());
             abilitiesCD.set(0, FIRE_POOL_COOLDOWN);
         }
     }
 
-    public void ability2(){
+    public void ability2() {
         if(abilitiesCD.get(1) == 0) {
             FireballStorm(user.getPlayer());
             abilitiesCD.set(1, FIREBALL_STORM_COOLDOWN);
         }
     }
 
-    public void ability3(){
+    public void ability3() {
         if(abilitiesCD.get(2) == 0) {
             a3(user.getPlayer());
-            abilitiesCD.set(2, FIREBALL_STORM_COOLDOWN);
+            abilitiesCD.set(2, FAIYABU_COOLDOWN);
         }
     }
 
-    public boolean comprobarUser(Player jugador){
+    public boolean comprobarUser(Player jugador) {
         String nombre_user = plugin.getConfig().getString("FruitAssociations.mera_mera");
         boolean es_user = false;
         Player user = Bukkit.getPlayerExact(nombre_user);
@@ -79,7 +77,7 @@ public class mera_mera extends logia {
         return es_user;
     }
 
-    private void CookFood(ItemStack comida){
+    private void CookFood(ItemStack comida) {
         final Material material = comida.getType();
 
         if(material == Material.BEEF)
@@ -119,7 +117,7 @@ public class mera_mera extends logia {
         jugador.addPotionEffect(new PotionEffect(PotionEffectType.SLOW_FALLING, BERSERK_DURATION, BERSERK_AMPLIFIER));
     }
 
-    public void createAbilitie1Effect(Location loc){
+    public void createAbilitie1Effect(Location loc) {
         Location loc_aux = loc.clone();
 
         for(int i = -Abilitie1Radius; i <= Abilitie1Radius; i++) {
@@ -224,7 +222,7 @@ public class mera_mera extends logia {
             public void run() {
                 if(i >= FIRE_POOL_DURATION) cancelTask();
 
-                player.getWorld().playSound(player, Sound.MUSIC_DRAGON, 100, 10);
+                player.getWorld().playSound(player, Sound.ENTITY_ENDER_DRAGON_AMBIENT, 100, 10);
 
                 player.addPotionEffect(new PotionEffect(PotionEffectType.FIRE_RESISTANCE, BERSERK_DURATION, BERSERK_AMPLIFIER));
 
@@ -233,44 +231,82 @@ public class mera_mera extends logia {
                 i++;
             }
             public void cancelTask() { Bukkit.getScheduler().cancelTask(this.getTaskId()); }
-        }.runTaskTimer(plugin, 0, FIRE_POOL_DURATION);
+        }.runTaskTimer(plugin, 0, 1);
     }
 
     public void FireballStorm(Player player) {
         World mundo = player.getWorld();
 
-        mundo.playSound(player, Sound.MUSIC_NETHER_NETHER_WASTES, 100, 10);
-        mundo.spawnEntity(player.getLocation().clone().add(0, 5, 0), EntityType.FIREBALL);
-        mundo.spawnEntity(player.getLocation().clone().add(0, 5, 3), EntityType.FIREBALL);
-        mundo.spawnEntity(player.getLocation().clone().add(0, 5, -3), EntityType.FIREBALL);
-        mundo.spawnEntity(player.getLocation().clone().add(3, 5, 0), EntityType.FIREBALL);
-        mundo.spawnEntity(player.getLocation().clone().add(-3, 5, 0), EntityType.FIREBALL);
+        mundo.playSound(player, Sound.AMBIENT_NETHER_WASTES_LOOP, 100, 10);
+        spawnBolas(mundo, player.getLocation());
+    }
+
+    public void spawnBolas(World mundo, Location loc) {
+        Entity bola1 = mundo.spawnEntity(loc.clone().add(0, 3, 0), EntityType.FIREBALL);
+        Entity bola2 = mundo.spawnEntity(loc.clone().add(0, 3, 3), EntityType.FIREBALL);
+        Entity bola3 = mundo.spawnEntity(loc.clone().add(0, 3, -3), EntityType.FIREBALL);
+        Entity bola4 = mundo.spawnEntity(loc.clone().add(3, 3, 0), EntityType.FIREBALL);
+        Entity bola5 = mundo.spawnEntity(loc.clone().add(-3, 3, 0), EntityType.FIREBALL);
+
+        bola1.setVelocity(bola1.getLocation().getDirection().multiply(4));
+        bola2.setVelocity(bola2.getLocation().getDirection().multiply(2));
+        bola3.setVelocity(bola3.getLocation().getDirection().multiply(2));
+        bola4.setVelocity(bola4.getLocation().getDirection().multiply(2));
+        bola5.setVelocity(bola5.getLocation().getDirection().multiply(2));
     }
 
     public void a3(Player player) {
-        new BukkitRunnable(){
-            double angle = -player.getLocation().getYaw();
-            World world = player.getWorld();
-            double start = 2* PI*5;
-            double finish = 2* PI*5 - 2* PI*5/10;
+        Location loc = player.getEyeLocation().clone();
+        Vector direccion = loc.getDirection();
+        World mundo = player.getWorld();
+
+        loc.add(0, -0.5, 0);
+        animacionAbilitie3(mundo, loc.clone(), direccion);
+
+        efectoAbilitie3(mundo, loc, direccion, player);
+    }
+
+    void efectoAbilitie3(World mundo, Location loc, Vector direccion, Player player) {
+        new BukkitRunnable() {
+            int k = 0;
             @Override
             public void run() {
-                for(double i=start; i>finish ; i-=0.05) {
-                    double x = i * sin(i) / 5;
-                    double y = i * cos(i) / 5;
-                    double z = i;
-                    double xr = player.getLocation().getX() + cos(toRadians(angle))*x + sin(toRadians(angle))*z;
-                    double yr = 1 + player.getLocation().getY() + y;
-                    double zr = player.getLocation().getZ() + -sin(toRadians(angle))*x + cos(toRadians(angle))*z;
+                loc.add(direccion);
 
-                    Location rotation = new Location(player.getWorld(), xr, yr, zr);
-                    world.spawnParticle(element, rotation,0,0,0,0);
-                }
-                start = finish;
-                finish = finish -  2* PI*5/10;
-                if(finish < 0) this.cancel();
+                mundo.getNearbyEntities(loc, 1, 1, 1).forEach(entity -> {
+                    if(entity.getName() != player.getName() && entity instanceof LivingEntity) {
+                        ((LivingEntity) entity).damage(10);
+                        entity.setFireTicks(100);
+                        mundo.spawnEntity(entity.getLocation(), EntityType.FIREBALL);
+                        mundo.playSound(entity.getLocation(), Sound.ENTITY_DRAGON_FIREBALL_EXPLODE, 100, 10);
+                    }
+                });
+
+                k++;
             }
-        }.runTaskTimer(plugin,0,1);
+        }.runTaskTimer(plugin,0,0);
+    }
+    public void animacionAbilitie3(World mundo, Location loc, Vector direccion) {
+        new BukkitRunnable() {
+            int k = 0;
+            @Override
+            public void run() {
+                if(k > 30)
+                    this.cancel();
+
+                loc.add(direccion);
+
+                for(double i = -2*PI; i < 2*PI; i+=0.2) {
+                    double  x = sin(i)/5,
+                            y = cos(i)/5,
+                            z = 0;
+
+                    mundo.spawnParticle(Particle.FLAME, loc.add(x, y, z), 0, 0, 0, 0);
+                }
+
+                k++;
+            }
+        }.runTaskTimer(plugin,0,0);
     }
 
     public void onPlayerEggThrow(PlayerEggThrowEvent event) {
