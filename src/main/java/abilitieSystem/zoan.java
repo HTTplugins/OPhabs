@@ -5,23 +5,27 @@ import org.bukkit.*;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.event.entity.PlayerDeathEvent;
-import skin.changer.skinsChanger;
+import skin.skinsChanger;
 import fruitSystem.devilFruitUser;
 
 
 public class zoan extends abilities{
     public boolean transformed = false;
     skinsChanger skinC = new skinsChanger();
-    String skinUrl="", skinAwakenUrl="";
+    String skinUrl="", skinAwakenUrl="", skinName="", skinAwakenName="";
 
-    public zoan(OPhabs plugin){
-        super(plugin);
+    public zoan(OPhabs plugin, Material castMaterial, String castName, String commandName, String skinUrl, String skinName){
+        super(plugin, castMaterial, castName, commandName);
+        skinC.setSkin(skinName, skinUrl);
+        this.skinUrl = skinUrl;
+        this.skinName = skinName;
+
         abilitiesNames.add("Transform");
         abilitiesCD.add(0);
     }
 
-    public zoan(OPhabs plugin, devilFruitUser user){
-        super(plugin, user);
+    public zoan(OPhabs plugin, devilFruitUser user, Material castMaterial, String castName, String commandName) {
+        super(plugin, user, castMaterial, castName, commandName);
         abilitiesNames.add("Transform");
         abilitiesCD.add(0);
     }
@@ -30,7 +34,7 @@ public class zoan extends abilities{
     public void transformation(){
         Player player = user.getPlayer();
         if(!transformed){
-            skinC.changeSkin(player, skinUrl);
+            skinC.changeSkin(player, skinName);
             transformed = true;
         }
         else{
@@ -51,5 +55,7 @@ public class zoan extends abilities{
             }
         }
     }
+
+
 }
 

@@ -1,6 +1,9 @@
 package abilitieSystem;
 
 import htt.ophabs.OPhabs;
+import fruitSystem.fruitIdentification;
+import castSystem.castIdentification;
+
 import org.bukkit.*;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Entity;
@@ -10,6 +13,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityChangeBlockEvent;
+import org.bukkit.inventory.ItemStack;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.scheduler.BukkitTask;
 import org.bukkit.util.Vector;
@@ -17,11 +21,12 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 import java.util.Stack;
+import castSystem.castIdentification;
 
 import static java.lang.Math.*;
 
 
-public class yami_yami extends logia{
+public class yami_yami extends logia {
     public static Particle.DustOptions yamiDO = new Particle.DustOptions(Color.BLACK,1.0F);
     private int repealAnimationCounter = 0;
 
@@ -36,7 +41,7 @@ public class yami_yami extends logia{
 
     private List<Block> convertedToVoidBlocks = new ArrayList<>();
     public yami_yami(OPhabs plugin){
-        super(plugin, Particle.REDSTONE);
+        super(plugin, Particle.REDSTONE, castIdentification.castMaterialYami, castIdentification.castItemNameYami, fruitIdentification.fruitCommandNameYami);
         abilitiesNames.add("BlackVoid");
         abilitiesCD.add(0);
         abilitiesNames.add("LiberateVoid");
@@ -45,6 +50,7 @@ public class yami_yami extends logia{
         abilitiesCD.add(0);
         abilitiesNames.add("voidMeteore");
         abilitiesCD.add(0);
+        this.runParticles();
     }
 
     public void ability1(){
@@ -514,6 +520,67 @@ public class yami_yami extends logia{
 
 
 
+
+    }
+
+    public void runParticles(){
+        new BukkitRunnable(){
+            @Override
+            public void run() {
+
+                Player player = null;
+
+                if(user != null)
+                    if(user.getPlayer() != null){
+                        player = user.getPlayer();
+
+                        ItemStack caster = null;
+                        boolean isCaster = false;
+                        if(player != null){
+                            if(castIdentification.itemIsCaster(player.getInventory().getItemInMainHand(), player)){
+                                caster = player.getInventory().getItemInMainHand();
+                                isCaster = true;
+                            }
+                            else{
+                                if(castIdentification.itemIsCaster(player.getInventory().getItemInOffHand(), player)){
+                                    caster = player.getInventory().getItemInOffHand();
+                                    isCaster = true;
+                                }
+                            }
+                        }
+
+                        if(isCaster && caster.getItemMeta().getDisplayName().equals(castIdentification.castItemNameYami)){
+
+                            double yaw = player.getLocation().getYaw();
+                            double y = player.getLocation().getY();
+
+                            spawnBackParticle(player,yaw - 90,y+0.5);
+                            spawnBackParticle(player, yaw - 45,y+0.5);
+                            spawnBackParticle(player, yaw - 135,y+0.5);
+
+                            spawnBackParticle(player,yaw - 90,y+1);
+                            spawnBackParticle(player, yaw - 45,y+1);
+                            spawnBackParticle(player, yaw - 135,y+1);
+
+                            player.setAllowFlight(true);
+
+                        }else {
+                            player.setAllowFlight(false);
+                            player.setFlying(false);
+                        }
+                    }
+            }
+
+            public void spawnBackParticle(Player player, double yaw, double y){
+                double x = cos(toRadians(yaw)) / 2;
+                double z = sin(toRadians(yaw)) / 2;
+                //Behind
+                double xBehind = player.getLocation().getX() + x;
+                double zBehind = player.getLocation().getZ() + z;
+                Location pBehind = new Location(player.getWorld(),xBehind,y,zBehind);
+                player.getWorld().spawnParticle(Particle.SMOKE_LARGE,pBehind,0,0,0,0);
+            }
+        }.runTaskTimer(plugin,0,1);
 
     }
 

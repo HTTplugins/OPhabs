@@ -4,6 +4,8 @@ main: htt.ophabs.OPhabs
 commands:
   oph:
     description: Main command
+  weaponShop:
+    description: Easy access to all created weapons
 api-version: 1.19
-authors: [ RedRiotTank ]
+authors: [ RedRiotTank, MiixZ, Vaelico786 ]
 website: https://github.com/RedRiotTank/OPhabs

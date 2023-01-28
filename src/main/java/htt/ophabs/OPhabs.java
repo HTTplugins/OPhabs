@@ -9,6 +9,7 @@ import abilitieSystem.*;
 import castSystem.*;
 import org.bukkit.ChatColor;
 import scoreboardSystem.*;
+import weapons.*;
 
 import java.util.Objects;
 import java.util.ArrayList;
@@ -27,18 +28,21 @@ public final class OPhabs extends JavaPlugin {
 
         //--------------
         //abilitieSystem
+        ArrayList<abilities> abilitiesList = new ArrayList<>();
 
-        yami_yami yamiClass = new yami_yami(this);
-        mera_mera meraClass = new mera_mera(this);
-        gura_gura guraClass = new gura_gura(this);
-        moku_moku mokuClass = new moku_moku(this);
-        neko_neko_reoparudo nekoReoparudoClass = new neko_neko_reoparudo(this);
-        magu_magu maguClass = new magu_magu(this);
-        goro_goro goroClass = new goro_goro(this);
+        abilitiesList.add(new yami_yami(this));
+        abilitiesList.add(new mera_mera(this));
+        abilitiesList.add(new gura_gura(this));
+        abilitiesList.add(new moku_moku(this));
+        abilitiesList.add(new neko_neko_reoparudo(this));
+        abilitiesList.add(new magu_magu(this));
+        abilitiesList.add(new goro_goro(this));
+        abilitiesList.add(new ishi_ishi(this));
+        abilitiesList.add(new goru_goru(this));
 
         //--------------
         //FruitSystem
-        fruitAssociation association = new fruitAssociation(this, yamiClass, meraClass, guraClass, mokuClass, nekoReoparudoClass, maguClass, goroClass);
+        fruitAssociation association = new fruitAssociation(this, abilitiesList);
         loseFruit lFruit = new loseFruit(this, association.dfPlayers);
         getServer().getPluginManager().registerEvents(association, this);
         getServer().getPluginManager().registerEvents(lFruit, this);
@@ -69,5 +73,7 @@ public final class OPhabs extends JavaPlugin {
 
     public void registerCommands(){
         Objects.requireNonNull(this.getCommand("oph")).setExecutor(new oph(this));
+        Objects.requireNonNull(this.getCommand("oph")).setTabCompleter(new oph(this));
+        Objects.requireNonNull(this.getCommand("weaponShop")).setExecutor(new weaponShop(this));
     }
 }

@@ -2,7 +2,7 @@ package fruitSystem;
 
 public class fruitIdentification {
 
-    public final static int fruitsNumber = 5;
+    public final static int fruitsNumber = 9;
 
     public final static String
             fruitItemNameYami = "yami yami no mi",
@@ -11,7 +11,10 @@ public class fruitIdentification {
             fruitItemNameMoku = "moku moku no mi",
             fruitItemNameNekoReoparudo = "neko neko reoparudo no mi",
             fruitItemNameMagu = "magu magu no mi",
-            fruitItemNameGoro = "goro goro no mi";
+            fruitItemNameGoro = "goro goro no mi",
+            fruitItemNameIshi = "ishi ishi no mi",
+            fruitItemNameGoru = "goru goru no mi";
+
     public final static String
             fruitCommandNameYami = "yami_yami",
             fruitCommandNameMera = "mera_mera",
@@ -19,9 +22,11 @@ public class fruitIdentification {
             fruitCommandNameMoku = "moku_moku",
             fruitCommandNameNekoReoparudo = "neko_neko_reoparudo",
             fruitCommandNameMagu = "magu_magu",
-            fruitCommandNameGoro = "goro_goro";
+            fruitCommandNameGoro = "goro_goro",
+            fruitCommandNameIshi = "ishi_ishi",
+            fruitCommandNameGoru = "goru_goru";
 
-    public String getItemName(String fruitCommandName){
+    public static String getItemName(String fruitCommandName){
         switch (fruitCommandName){
             case fruitCommandNameYami:
                 return fruitItemNameYami;
@@ -37,6 +42,10 @@ public class fruitIdentification {
                 return fruitItemNameMagu;
             case fruitCommandNameGoro:
                 return fruitItemNameGoro;
+            case fruitCommandNameIshi:
+                return fruitItemNameIshi;
+            case fruitCommandNameGoru:
+                return fruitItemNameGoru;
             default:
                 return null;
         }
@@ -58,8 +67,37 @@ public class fruitIdentification {
                 return fruitCommandNameMagu;
             case fruitItemNameGoro:
                 return fruitCommandNameGoro;
+            case fruitItemNameIshi:
+                return fruitCommandNameIshi;
+            case fruitItemNameGoru:
+                return fruitCommandNameGoru;
             default:
                 return null;
+        }
+    }
+
+    public static boolean isFruit(String fruitItemName){
+        switch (fruitItemName){
+            case fruitItemNameYami:
+                return true;
+            case fruitItemNameMera:
+                return true;
+            case fruitItemNameGura:
+                return true;
+            case fruitItemNameMoku:
+                return true;
+            case fruitItemNameNekoReoparudo:
+                return true;
+            case fruitItemNameMagu:
+                return true;
+            case fruitItemNameGoro:
+                return true;
+            case fruitItemNameIshi:
+                return true;
+            case fruitItemNameGoru:
+                return true;
+            default:
+                return false;
         }
     }
 }

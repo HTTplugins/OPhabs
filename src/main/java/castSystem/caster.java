@@ -5,7 +5,7 @@ import org.bukkit.Material;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
-import org.bukkit.event.player.PlayerInteractEvent;
+import org.bukkit.event.player.*;
 import org.bukkit.inventory.EquipmentSlot;
 import abilitieSystem.*;
 
@@ -14,10 +14,7 @@ import org.bukkit.event.entity.EntityChangeBlockEvent;
 import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.event.entity.EntityShootBowEvent;
 import org.bukkit.event.entity.EntityPickupItemEvent;
-import org.bukkit.event.player.PlayerMoveEvent;
-import org.bukkit.event.player.PlayerEggThrowEvent;
-import org.bukkit.event.player.PlayerToggleSneakEvent;
-import org.bukkit.event.player.PlayerItemConsumeEvent;
+import org.bukkit.event.inventory.InventoryClickEvent;
 
 
 import java.util.HashMap;
@@ -35,8 +32,7 @@ public class caster implements Listener {
     public void onInteract(PlayerInteractEvent event){
         if(dfPlayers.containsKey(event.getPlayer().getName())) {
             devilFruitUser user = dfPlayers.get(event.getPlayer().getName());
-            if (event.getHand().equals(EquipmentSlot.HAND))
-                if (castIdentification.itemIsCaster(event.getItem())) {
+                if (event.getItem() != null && castIdentification.itemIsCaster(event.getItem(), event.getPlayer())) {
 
                     String casterItemName = event.getItem().getItemMeta().getDisplayName();
                     Material casterMaterial = event.getMaterial();
@@ -46,11 +42,24 @@ public class caster implements Listener {
                         user.abilityActive();
 
 
-                    else 
-                        user.switchAbility();
+                    //else 
+                        //user.switchAbility();
 
                 }
         }
+    }
+
+    @EventHandler(ignoreCancelled = true)
+    public void onPlayerDropItem(PlayerDropItemEvent event) {
+        if(castIdentification.itemIsCaster(event.getItemDrop().getItemStack(), event.getPlayer())){
+            event.setCancelled(true);
+
+            if(dfPlayers.containsKey(event.getPlayer().getName())) {
+                devilFruitUser user = dfPlayers.get(event.getPlayer().getName());
+                user.switchAbility();
+            }
+        }
+
     }
 
     @EventHandler
@@ -101,5 +110,11 @@ public class caster implements Listener {
     public void onEntityChangeBlock(EntityChangeBlockEvent event){
         yami_yami.onEntityChangeBlock(event);
     }
-
+    @EventHandler
+    public void onInventoryClick(InventoryClickEvent event){
+        if(dfPlayers.containsKey(event.getWhoClicked().getName())) {
+            devilFruitUser user = dfPlayers.get(event.getWhoClicked().getName());
+            user.onInventoryClick(event);
+        }
+    }
 }

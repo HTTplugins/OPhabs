@@ -14,6 +14,7 @@ import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.event.player.PlayerEggThrowEvent;
 import org.bukkit.event.player.PlayerToggleSneakEvent;
 import org.bukkit.event.player.PlayerItemConsumeEvent;
+import org.bukkit.event.inventory.InventoryClickEvent;
 
 import java.util.ArrayList;
 
@@ -21,7 +22,7 @@ public class devilFruitUser{
     private String playerName;
     public int actual;
     public devilFruit fruit;
-    protected abilities ability;
+    public abilities ability;
     private boolean awakened;
 
 
@@ -35,6 +36,10 @@ public class devilFruitUser{
     }
 
     public Player getPlayer(){
+
+        if(Bukkit.getPlayerExact(playerName) == null)
+            return null;
+
         return Bukkit.getPlayerExact(playerName);
     }
     
@@ -57,25 +62,27 @@ public class devilFruitUser{
         actual = actual % ability.getAbilitiesNames().size();
     }
     public int abilityActive(){
-        switch (actual){
-            case 0:
-                ability.ability1();
-                break;
-            case 1:
-                ability.ability2();
-                break;
-            case 2:
-                ability.ability3();
-                break;
-            case 3:
-                ability.ability4();
-                break;
-            case 4:
-                ability.ability5();
-                break;
-            case 5:
-                ability.ability6();
-                break;
+        if(ability.active){
+            switch (actual){
+                case 0:
+                    ability.ability1();
+                    break;
+                case 1:
+                    ability.ability2();
+                    break;
+                case 2:
+                    ability.ability3();
+                    break;
+                case 3:
+                    ability.ability4();
+                    break;
+                case 4:
+                    ability.ability5();
+                    break;
+                case 5:
+                    ability.ability6();
+                    break;
+            }
         }
         return ability.abilitiesCD.get(actual);
     }
@@ -116,5 +123,9 @@ public class devilFruitUser{
     }
     public static void onEntityChangeBlock(EntityChangeBlockEvent event){
 
+    }
+
+    public void onInventoryClick(InventoryClickEvent event){
+        ability.onInventoryClick(event);
     }
 }

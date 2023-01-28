@@ -1,6 +1,7 @@
 package castSystem;
 
 import org.bukkit.Material;
+import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
 import java.util.Objects;
@@ -12,7 +13,9 @@ public class castIdentification {
                             castMaterialMoku = Material.FEATHER,
                             castMaterialNekoReoparudo = Material.YELLOW_DYE,
                             castMaterialMagu = Material.MAGMA_CREAM,
-                            castMaterialGoro = Material.IRON_INGOT;
+                            castMaterialGoro = Material.IRON_INGOT,
+                            castMaterialIshi = Material.FLINT,
+                            castMaterialGoru = Material.GOLD_INGOT;
 
     public static String castItemNameYami = "Yami Yami caster",
                          castItemNameMera = "Mera Mera caster",
@@ -20,9 +23,14 @@ public class castIdentification {
                          castItemNameMoku = "Moku Moku caster",
                          castItemNameNekoReoparudo = "Neko Neko Reoparudo caster",
                          castItemNameMagu = "Magu Magu caster",
-                         castItemNameGoro = "Goro Goro caster";
+                         castItemNameGoro = "Goro Goro caster",
+                         castItemNameIshi = "Ishi Ishi caster",
+                         castItemNameGoru = "Goru Goru caster";
 
-    public static boolean itemIsCaster(ItemStack item) {
+    public static boolean itemIsCaster(ItemStack item , Player player) {
+
+        if(player == null || !player.isOnline())
+            return false;
         if (item.getType() == Material.AIR){
 
             return false;
@@ -37,7 +45,9 @@ public class castIdentification {
                 || (itemName.equals(castIdentification.castItemNameMoku) && itemMaterial.equals(castIdentification.castMaterialMoku))
                 || (itemName.equals(castIdentification.castItemNameNekoReoparudo) && itemMaterial.equals(castIdentification.castMaterialNekoReoparudo))
                 || (itemName.equals(castIdentification.castItemNameMagu) && itemMaterial.equals(castIdentification.castMaterialMagu))
-                || (itemName.equals(castIdentification.castItemNameGoro) && itemMaterial.equals(castIdentification.castMaterialGoro)))
+                || (itemName.equals(castIdentification.castItemNameGoro) && itemMaterial.equals(castIdentification.castMaterialGoro))
+                || (itemName.equals(castIdentification.castItemNameIshi) && itemMaterial.equals(castIdentification.castMaterialIshi))
+                || (itemName.equals(castIdentification.castItemNameGoru) && itemMaterial.equals(castIdentification.castMaterialGoru)))
             return true;
         else
             return false;

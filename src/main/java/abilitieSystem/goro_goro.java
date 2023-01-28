@@ -1,5 +1,6 @@
 package abilitieSystem;
 
+import castSystem.castIdentification;
 import htt.ophabs.OPhabs;
 import org.bukkit.*;
 
@@ -8,25 +9,31 @@ import java.util.Random;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.ItemStack;
 import org.bukkit.scheduler.BukkitRunnable;
+import org.bukkit.util.Vector;
+import castSystem.castIdentification;
+import fruitSystem.fruitIdentification;
 
 import static java.lang.Math.*;
 
 public class goro_goro extends logia {
 
     public goro_goro(OPhabs plugin){
-        super(plugin, Particle.REDSTONE);
+        super(plugin, Particle.ELECTRIC_SPARK, castIdentification.castMaterialGoro, castIdentification.castItemNameGoro, fruitIdentification.fruitCommandNameGoro);
         abilitiesNames.add("El THOR");
         abilitiesCD.add(0);
         abilitiesNames.add("ThunderStorm");
         abilitiesCD.add(0);
-
+        abilitiesNames.add("LightStep");
+        abilitiesCD.add(0);
+        this.runParticles();
     }
 
     public void ability1(){
         if(abilitiesCD.get(0) == 0){
-            abSpark(user.getPlayer());
-            abilitiesCD.set(0, 20); // Pon el cooldown en segundos
+            elThor(user.getPlayer());
+            abilitiesCD.set(0, 0); // Pon el cooldown en segundos
         }
     }
 
@@ -37,8 +44,15 @@ public class goro_goro extends logia {
         }
     }
 
+    public void ability3(){
+        if(abilitiesCD.get(2) == 0){
+            lightStep(user.getPlayer());
+            abilitiesCD.set(2, 0); // Pon el cooldown en segundos
+        }
+    }
 
-    public void abSpark(Player player){
+
+    public void elThor(Player player){
 
         player.playSound(player.getLocation(), Sound.ENTITY_LIGHTNING_BOLT_THUNDER,1,2);
 
@@ -46,14 +60,17 @@ public class goro_goro extends logia {
         new BukkitRunnable() {
 
             final Location playerLoc = player.getLocation();
-            final double angle = -player.getLocation().getYaw();
+            final double yaw = -player.getLocation().getYaw();
+             double pitch = player.getLocation().getPitch();
             final World world = player.getWorld();
 
             int tick = 0;
             double fin = 10;
 
 
-            double x,y, z = 0,xr,yr,zr;
+            double x,y, z = 0, xY, yY, zY, xX, yX, zX,xL,yL,zL;
+
+            boolean changedPitch = false;
 
 
 
@@ -62,27 +79,19 @@ public class goro_goro extends logia {
 
                 for(double prof = 0.5; prof < fin; prof+=0.5){
                     harmingCircle(prof,1);
-
                     harmingCircle(prof,0.8);
-
                     harmingCircle(prof,0.6);
-
                     harmingCircle(prof,0.4);
-
                     harmingCircle(prof,0.2);
-
                 }
 
                 tick++;
 
-                if(fin <= 20){
+                if(fin <= 20)
                     fin +=0.5;
-
-                }
 
                 if(tick == 20)
                     this.cancel();
-
 
             }
 
@@ -93,22 +102,17 @@ public class goro_goro extends logia {
                     x = factor*sin(i);
                     y = factor*cos(i);
 
-                    xr = playerLoc.getX() + cos(toRadians(angle))*x + sin(toRadians(angle))*z;
-                    yr = 1 + playerLoc.getY() + y;
-                    zr = playerLoc.getZ() + -sin(toRadians(angle))*x + cos(toRadians(angle))*z;
-
-                    Location partLoc = new Location(world,xr,yr,zr);
-
-                    if(!partLoc.getBlock().getType().equals(Material.AIR))
-                        partLoc.getBlock().setType(Material.AIR);
-
-                    for(Entity ent : world.getNearbyEntities(partLoc,2,2,2))
-                        if(ent instanceof LivingEntity && !player.equals(ent))
-                            ((LivingEntity)ent).damage(100);
+                    Vector looking = player.getLocation().getDirection();
 
 
 
-                    world.spawnParticle(Particle.ELECTRIC_SPARK,partLoc,0,0,0,0);
+                    Location partLoc = new Location(world, x, y, 0);
+
+                    partLoc.add(looking);
+                    partLoc.add(playerLoc);
+                    partLoc.add(new Vector(0,1.5,0));
+
+                    world.spawnParticle(element,partLoc,0,0,0,0);
                 }
 
             }
@@ -153,5 +157,105 @@ public class goro_goro extends logia {
 
     }
 
+    public void lightStep(Player player){
 
+        World world = player.getWorld();
+        Location playerLoc = player.getLocation();
+
+
+
+        world.playSound(playerLoc,Sound.ENTITY_LIGHTNING_BOLT_THUNDER,1,1);
+
+        Vector dir = player.getLocation().getDirection();
+        dir.setY(0.5);
+        dir.setX(dir.getX() * 5);
+        dir.setZ(dir.getZ() *5);
+        player.setVelocity(dir);
+
+        new BukkitRunnable(){
+
+            int tick = 0;
+
+            @Override
+            public void run() {
+                world.strikeLightning(player.getLocation());
+                tick++;
+
+                if(tick == 6)
+                    this.cancel();
+            }
+        }.runTaskTimer(plugin,0,2);
+
+       // System.out.println(direction);
+        //System.out.println(movement);
+
+        player.setVelocity(dir);
+
+    }
+
+    @Override
+    public void runParticles(){
+        new BukkitRunnable(){
+
+            @Override
+            public void run() {
+
+                Player player = null;
+
+                if(user != null)
+                    if(user.getPlayer() != null){
+
+                        player = user.getPlayer();
+
+                        ItemStack caster = null;
+                        boolean isCaster = false;
+                        if(player != null){
+                            if(castIdentification.itemIsCaster(player.getInventory().getItemInMainHand(), player)){
+                                caster = player.getInventory().getItemInMainHand();
+                                isCaster = true;
+                            }
+                            else{
+                                if(castIdentification.itemIsCaster(player.getInventory().getItemInOffHand(), player)){
+                                    caster = player.getInventory().getItemInOffHand();
+                                    isCaster = true;
+                                }
+                            }
+                        }
+
+                        if(isCaster && caster.getItemMeta().getDisplayName().equals(castIdentification.castItemNameGoro)){
+                            double angle = toRadians(-player.getLocation().getYaw());
+
+                            for(double i=0; i < 2*PI; i+=0.05){
+                                double x = cos(i);
+                                double y = sin(i);
+                                double z = 0;
+
+                                double xr = cos(angle)*x + sin(angle)*z;
+                                double yr = y;
+                                double zr = -sin(angle)*x + cos(angle)*z;
+
+                                double xF = player.getLocation().getX() + xr-0.25*sin(angle);
+                                double yF = player.getLocation().getY() + yr + 2;
+                                double zF = player.getLocation().getZ() + zr-0.25*cos(angle);
+
+                                Location loc = new Location(player.getWorld(),xF,yF,zF);
+                                player.getWorld().spawnParticle(Particle.ELECTRIC_SPARK,loc,0,0,0,0);
+
+                                for(Entity ent : player.getWorld().getNearbyEntities(loc,0.5,0.5,0.5))
+                                    if (ent instanceof LivingEntity)
+                                            ((LivingEntity) ent).damage(1);
+
+                            }
+                            player.setAllowFlight(true);
+                        }else {
+                            player.setAllowFlight(false);
+                            player.setFlying(false);
+                        }
+                    }
+            }
+
+
+        }.runTaskTimer(plugin,0,2);
+
+    }
 }

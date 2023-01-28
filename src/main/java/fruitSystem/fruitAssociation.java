@@ -1,6 +1,7 @@
 package fruitSystem;
 
 import htt.ophabs.OPhabs;
+
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -13,6 +14,12 @@ import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import org.bukkit.block.Biome;
+//AttributeModifier
+import org.bukkit.attribute.AttributeModifier;
+import org.bukkit.attribute.Attribute;
+import org.bukkit.inventory.EquipmentSlot;
+
+import java.util.UUID;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -23,52 +30,30 @@ import scoreboardSystem.abilitiesScoreboard;
 public class fruitAssociation implements Listener {
     private final OPhabs plugin;
     public static Map<String, devilFruitUser> dfPlayers = new HashMap<>();
-    public static Map<String, abilities> abilities = new HashMap<>();
+    public static Map<String, abilities> abilitiesM = new HashMap<>();
     public abilitiesScoreboard scoreboard = null;
-
-    public fruitAssociation(OPhabs plugin, yami_yami yamiClass, mera_mera meraClass, gura_gura guraClass, moku_moku mokuClass, neko_neko_reoparudo nekoReoparudoClass, magu_magu maguClass, goro_goro goroClass){
+    public ArrayList<String> Names = new ArrayList<>();
+    public ArrayList<abilities> abilityList = new ArrayList<>();
+    public fruitAssociation(OPhabs plugin, ArrayList<abilities> abilitiesList) {
         this.plugin = plugin;
-        abilities.put(fruitIdentification.fruitItemNameGura,guraClass);
-        abilities.put(fruitIdentification.fruitItemNameMera,meraClass);
-        abilities.put(fruitIdentification.fruitItemNameYami,yamiClass);
-        abilities.put(fruitIdentification.fruitItemNameMoku,mokuClass);
-        abilities.put(fruitIdentification.fruitItemNameNekoReoparudo,nekoReoparudoClass);
-        abilities.put(fruitIdentification.fruitItemNameMagu,maguClass);
-        abilities.put(fruitIdentification.fruitItemNameGoro,goroClass);
 
-
-    String
-            yamiValue = plugin.getConfig().getString("FruitAssociations.yami_yami"),
-            meraValue = plugin.getConfig().getString("FruitAssociations.mera_mera"),
-            guraValue = plugin.getConfig().getString("FruitAssociations.gura_gura"),
-            mokuValue = plugin.getConfig().getString("FruitAssociations.moku_moku"),
-            nekoReoparudoValue = plugin.getConfig().getString("FruitAssociations.neko_neko_reoparudo"),
-            maguValue = plugin.getConfig().getString("FruitAssociations.magu_magu"),
-            goroValue = plugin.getConfig().getString("FruitAssociations.goro_goro");
-
-
-        if(!yamiValue.equals("none")){
-           dfPlayers.put(yamiValue, new devilFruitUser(yamiValue, new devilFruit(fruitIdentification.fruitCommandNameYami), yamiClass));
-        }
-        if(!meraValue.equals("none")){
-            dfPlayers.put(meraValue, new devilFruitUser(meraValue, new devilFruit(fruitIdentification.fruitCommandNameMera), meraClass));
-        }
-        if(!guraValue.equals("none")){
-            dfPlayers.put(guraValue, new devilFruitUser(guraValue, new devilFruit(fruitIdentification.fruitCommandNameGura), guraClass));
-        }
-        if(!mokuValue.equals("none")){
-            dfPlayers.put(mokuValue, new devilFruitUser(mokuValue, new devilFruit(fruitIdentification.fruitCommandNameMoku), mokuClass));
-        }
-        if(!nekoReoparudoValue.equals("none")){
-            dfPlayers.put(nekoReoparudoValue, new devilFruitUser(nekoReoparudoValue, new devilFruit(fruitIdentification.fruitCommandNameNekoReoparudo), nekoReoparudoClass));
-        }
-        if(!maguValue.equals("none")){
-            dfPlayers.put(maguValue, new devilFruitUser(maguValue, new devilFruit(fruitIdentification.fruitCommandNameMagu), maguClass));
+        for (abilities ability : abilitiesList) {
+            abilitiesM.put(fruitIdentification.getItemName(ability.getName()), ability);
         }
 
-        if(!goroValue.equals("none")){
-            dfPlayers.put(goroValue,new devilFruitUser(goroValue, new devilFruit(fruitIdentification.fruitCommandNameGoro), goroClass));
+        ArrayList<String> values = new ArrayList<>();
+        for(int i = 0; i < abilitiesList.size(); i++) {
+            values.add(plugin.getConfig().getString("FruitAssociations." + abilitiesList.get(i).getName()));
+            Names.add(fruitIdentification.getItemName(abilitiesList.get(i).getName()));
         }
+        
+        for (int i = 0; i < values.size(); i++) {
+            String value = values.get(i);
+            if(!values.equals("none")) {
+               dfPlayers.put(value, new devilFruitUser(value, new devilFruit(value), abilitiesList.get(i)));
+            }
+        }
+        abilityList = abilitiesList;
     }
 
     public void setScoreboard(abilitiesScoreboard scoreboard){
@@ -78,98 +63,50 @@ public class fruitAssociation implements Listener {
     @EventHandler(ignoreCancelled = true)
     public void onPlayerItemConsume(PlayerItemConsumeEvent event){
         ItemStack fruit = event.getItem();
+        if(fruitIdentification.isFruit(fruit.getItemMeta().getDisplayName())){
+            ArrayList<String> values = new ArrayList<>();
+            for(abilities ability : abilitiesM.values()) {
+                values.add(ability.getName());
+            }
+            String casterItemName = null;
+            Material castMaterial = Material.STICK;
+            Boolean consumedFruit = false;
+            abilities a = null;
+            //iterate in all Names
+            for(int i = 0; i < Names.size(); i++) {
+                if(fruit.getItemMeta().getDisplayName().equals(Names.get(i))) {
+                    consumedFruit = consumedFruit(values.get(i),event);
+                    values.set(i,event.getPlayer().getName());
+                    casterItemName = abilityList.get(i).getItemName();
+                    castMaterial = abilityList.get(i).getMaterial();
+                    a = abilityList.get(i);
+                }
+            }
 
-        String
-                yamiValue = plugin.getConfig().getString("FruitAssociations.yami_yami"),
-                meraValue = plugin.getConfig().getString("FruitAssociations.mera_mera"),
-                guraValue = plugin.getConfig().getString("FruitAssociations.gura_gura"),
-                mokuValue = plugin.getConfig().getString("FruitAssociations.moku_moku"),
-                nekoReoparudoValue = plugin.getConfig().getString("FruitAssociations.neko_neko_reoparudo"),
-                maguValue = plugin.getConfig().getString("FruitAssociations.magu_magu"),
-                goroValue = plugin.getConfig().getString("FruitAssociations.goro_goro");
+            ItemStack caster = new ItemStack(castMaterial);
+            ItemMeta casterItemMeta = caster.getItemMeta();
+            casterItemMeta.setDisplayName(casterItemName);
+    //give caster to player with attribute
+            casterItemMeta.setCustomModelData(1);
+            AttributeModifier modifier = new AttributeModifier(UUID.randomUUID(), "generic.attackDamage", 6, AttributeModifier.Operation.ADD_NUMBER, EquipmentSlot.HAND);
+            casterItemMeta.addAttributeModifier(Attribute.GENERIC_ATTACK_DAMAGE, modifier);
+            AttributeModifier modifier2 = new AttributeModifier(UUID.randomUUID(), "generic.attackSpeed", 1.8, AttributeModifier.Operation.ADD_NUMBER, EquipmentSlot.HAND);
+            casterItemMeta.addAttributeModifier(Attribute.GENERIC_ATTACK_SPEED, modifier2);
 
-        String casterItemName = null;
-        Material castMaterial = null;
-        Boolean consumedFruit = false;
-
-        switch (fruit.getItemMeta().getDisplayName()){
-
-            case fruitIdentification.fruitItemNameYami:
-                consumedFruit = consumedFruit(yamiValue,event);
-                yamiValue = event.getPlayer().getName();
-                casterItemName = castIdentification.castItemNameYami;
-                castMaterial = castIdentification.castMaterialYami;
-                break;
-
-            case fruitIdentification.fruitItemNameMera:
-                consumedFruit = consumedFruit(meraValue,event);
-                meraValue = event.getPlayer().getName();
-                casterItemName = castIdentification.castItemNameMera;
-                castMaterial = castIdentification.castMaterialMera;
-                break;
-
-            case fruitIdentification.fruitItemNameGura:
-                consumedFruit= consumedFruit(guraValue,event);
-                guraValue = event.getPlayer().getName();
-                casterItemName = castIdentification.castItemNameGura;
-                castMaterial = castIdentification.castMaterialGura;
-                break;
-
-            case fruitIdentification.fruitItemNameMoku:
-                consumedFruit = consumedFruit(mokuValue,event);
-                mokuValue = event.getPlayer().getName();
-                casterItemName = castIdentification.castItemNameMoku;
-                castMaterial = castIdentification.castMaterialMoku;
-                break;
-
-            case fruitIdentification.fruitItemNameNekoReoparudo:
-                consumedFruit = consumedFruit(nekoReoparudoValue,event);
-                nekoReoparudoValue = event.getPlayer().getName();
-                casterItemName = castIdentification.castItemNameNekoReoparudo;
-                castMaterial = castIdentification.castMaterialNekoReoparudo;
-                break;
-
-            case fruitIdentification.fruitItemNameMagu:
-                consumedFruit = consumedFruit(maguValue, event);
-                maguValue = event.getPlayer().getName();
-                casterItemName = castIdentification.castItemNameMagu;
-                castMaterial = castIdentification.castMaterialMagu;
-                break;
-            case fruitIdentification.fruitItemNameGoro:
-                consumedFruit = consumedFruit(goroValue,event);
-                goroValue = event.getPlayer().getName();
-                casterItemName = castIdentification.castItemNameGoro;
-                castMaterial = castIdentification.castMaterialGoro;
-                break;
-
-            default:
-                break;
-        }
-
-        if(!consumedFruit){
-            plugin.getConfig().set("FruitAssociations.yami_yami",yamiValue);
-            plugin.getConfig().set("FruitAssociations.mera_mera",meraValue);
-            plugin.getConfig().set("FruitAssociations.gura_gura",guraValue);
-            plugin.getConfig().set("FruitAssociations.moku_moku",mokuValue);
-            plugin.getConfig().set("FruitAssociations.neko_neko_reoparudo",nekoReoparudoValue);
-            plugin.getConfig().set("FruitAssociations.goro_goro",goroValue);
-            plugin.saveConfig();
-        }
-
-        ItemStack caster = new ItemStack(castMaterial);
-        ItemMeta casterItemMeta = caster.getItemMeta();
-        casterItemMeta.setDisplayName(casterItemName);
-        caster.setItemMeta(casterItemMeta);
-        event.getPlayer().getInventory().addItem(caster);
-        if(dfPlayers.containsKey(event.getPlayer().getName())){
-            event.getPlayer().getWorld().strikeLightningEffect(event.getPlayer().getLocation());
-            event.getPlayer().setHealth(0);
-        } else{
-            abilities ability = abilities.get(fruit.getItemMeta().getDisplayName());
-            fruitIdentification fruitID = new fruitIdentification();
-            devilFruitUser dfUser = new devilFruitUser(event.getPlayer().getName(), new devilFruit(fruitID.getCommandName(fruit.getItemMeta().getDisplayName())), ability);
-            dfPlayers.put(event.getPlayer().getName(), dfUser);
-            scoreboard.addScoreboard(event.getPlayer());
+            caster.setItemMeta(casterItemMeta);
+            event.getPlayer().getInventory().addItem(caster);
+            if(dfPlayers.containsKey(event.getPlayer().getName())){
+                event.getPlayer().getWorld().strikeLightningEffect(event.getPlayer().getLocation());
+                event.getPlayer().setHealth(0);
+            } else{
+                abilities ability = abilitiesM.get(fruit.getItemMeta().getDisplayName());
+                fruitIdentification fruitID = new fruitIdentification();
+                devilFruitUser dfUser = new devilFruitUser(event.getPlayer().getName(), new devilFruit(fruitID.getCommandName(fruit.getItemMeta().getDisplayName())), ability);
+                dfPlayers.put(event.getPlayer().getName(), dfUser);
+                plugin.getConfig().set("FruitAssociations." + a.getName(), event.getPlayer().getName());
+                plugin.saveConfig();
+                scoreboard.addScoreboard(event.getPlayer().getName());
+            }
         }
     }
 
@@ -204,7 +141,7 @@ public class fruitAssociation implements Listener {
                 player.addPotionEffect(new PotionEffect(PotionEffectType.BLINDNESS, 100, 1));
                 player.addPotionEffect(new PotionEffect(PotionEffectType.WEAKNESS, 100, 1));
                 player.addPotionEffect(new PotionEffect(PotionEffectType.SLOW_DIGGING, 100, 1));
-                player.addPotionEffect(new PotionEffect(PotionEffectType.HUNGER, 100, 1));           
+                player.addPotionEffect(new PotionEffect(PotionEffectType.HUNGER, 100, 1));
             }
         }
     }

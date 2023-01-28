@@ -2,6 +2,9 @@ package abilitieSystem;
 
 import htt.ophabs.OPhabs;
 import fruitSystem.devilFruitUser;
+import castSystem.castIdentification;
+import fruitSystem.fruitIdentification;
+
 import java.util.ArrayList;
 import java.util.Random;
 import org.bukkit.*;
@@ -27,7 +30,7 @@ public class gura_gura extends paramecia {
     int numberOfWaves = 0;
     final int numberOfWavesMax = 5;
     public gura_gura(OPhabs plugin) {
-        super(plugin);
+        super(plugin, castIdentification.castMaterialGura, castIdentification.castItemNameGura, fruitIdentification.fruitCommandNameGura);
         abilitiesNames.add("Earthquake");
         abilitiesCD.add(0);
         abilitiesNames.add("CreateWave");
@@ -38,7 +41,7 @@ public class gura_gura extends paramecia {
         abilitiesCD.add(0);
     }
     public gura_gura(OPhabs plugin, devilFruitUser user) {
-        super(plugin, user);
+        super(plugin, user, castIdentification.castMaterialGura, castIdentification.castItemNameGura, fruitIdentification.fruitCommandNameGura);
         abilitiesNames.add("Earthquake");
         abilitiesCD.add(0);
         abilitiesNames.add("CreateWave");
