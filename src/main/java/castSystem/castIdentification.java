@@ -15,7 +15,9 @@ public class castIdentification {
                             castMaterialMagu = Material.MAGMA_CREAM,
                             castMaterialGoro = Material.IRON_INGOT,
                             castMaterialIshi = Material.FLINT,
-                            castMaterialGoru = Material.GOLD_INGOT;
+                            castMaterialGoru = Material.GOLD_INGOT,
+                            castMaterialInuOkuchi = Material.YELLOW_DYE,
+                            castMaterialRyuAllosaurs = Material.YELLOW_DYE;
 
     public static String castItemNameYami = "Yami Yami caster",
                          castItemNameMera = "Mera Mera caster",
@@ -25,7 +27,9 @@ public class castIdentification {
                          castItemNameMagu = "Magu Magu caster",
                          castItemNameGoro = "Goro Goro caster",
                          castItemNameIshi = "Ishi Ishi caster",
-                         castItemNameGoru = "Goru Goru caster";
+                         castItemNameGoru = "Goru Goru caster",
+                         castItemNameInuOkuchi = "Inu Inu Okuchi caster",
+                         castItemNameRyuAllosaurs = "Ryu Ryu Allosaurs caster";
 
     public static boolean itemIsCaster(ItemStack item , Player player) {
 
@@ -47,8 +51,11 @@ public class castIdentification {
                 || (itemName.equals(castIdentification.castItemNameMagu) && itemMaterial.equals(castIdentification.castMaterialMagu))
                 || (itemName.equals(castIdentification.castItemNameGoro) && itemMaterial.equals(castIdentification.castMaterialGoro))
                 || (itemName.equals(castIdentification.castItemNameIshi) && itemMaterial.equals(castIdentification.castMaterialIshi))
-                || (itemName.equals(castIdentification.castItemNameGoru) && itemMaterial.equals(castIdentification.castMaterialGoru)))
+                || (itemName.equals(castIdentification.castItemNameGoru) && itemMaterial.equals(castIdentification.castMaterialGoru))
+                || (itemName.equals(castIdentification.castItemNameInuOkuchi) && itemMaterial.equals(castIdentification.castMaterialInuOkuchi))
+                || (itemName.equals(castIdentification.castItemNameRyuAllosaurs) && itemMaterial.equals(castIdentification.castMaterialRyuAllosaurs))){
             return true;
+        }
         else
             return false;
     }

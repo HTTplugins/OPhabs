@@ -38,6 +38,7 @@ public class fruitAssociation implements Listener {
         this.plugin = plugin;
 
         for (abilities ability : abilitiesList) {
+            System.out.println(ability.getName());
             abilitiesM.put(fruitIdentification.getItemName(ability.getName()), ability);
         }
 
@@ -99,6 +100,7 @@ public class fruitAssociation implements Listener {
                 event.getPlayer().getWorld().strikeLightningEffect(event.getPlayer().getLocation());
                 event.getPlayer().setHealth(0);
             } else{
+                System.out.println("Player " + event.getPlayer().getName() + " has eaten a " + fruit.getItemMeta().getDisplayName() + " Size: " + abilitiesM.size());
                 abilities ability = abilitiesM.get(fruit.getItemMeta().getDisplayName());
                 fruitIdentification fruitID = new fruitIdentification();
                 devilFruitUser dfUser = new devilFruitUser(event.getPlayer().getName(), new devilFruit(fruitID.getCommandName(fruit.getItemMeta().getDisplayName())), ability);

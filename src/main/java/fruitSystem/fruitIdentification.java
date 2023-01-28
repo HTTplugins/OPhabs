@@ -2,7 +2,7 @@ package fruitSystem;
 
 public class fruitIdentification {
 
-    public final static int fruitsNumber = 9;
+    public final static int fruitsNumber = 11;
 
     public final static String
             fruitItemNameYami = "yami yami no mi",
@@ -13,7 +13,10 @@ public class fruitIdentification {
             fruitItemNameMagu = "magu magu no mi",
             fruitItemNameGoro = "goro goro no mi",
             fruitItemNameIshi = "ishi ishi no mi",
-            fruitItemNameGoru = "goru goru no mi";
+            fruitItemNameGoru = "goru goru no mi",
+            fruitItemNameInuOkuchi = "inu inu okuchi no makami",
+            fruitItemNameRyuAllosaurs = "ryu ryu allosaurs no mi";
+
 
     public final static String
             fruitCommandNameYami = "yami_yami",
@@ -24,7 +27,9 @@ public class fruitIdentification {
             fruitCommandNameMagu = "magu_magu",
             fruitCommandNameGoro = "goro_goro",
             fruitCommandNameIshi = "ishi_ishi",
-            fruitCommandNameGoru = "goru_goru";
+            fruitCommandNameGoru = "goru_goru",
+            fruitCommandNameInuOkuchi = "inu_inu_okuchi",
+            fruitCommandNameRyuAllosaurs = "ryu_ryu_allosaurs";
 
     public static String getItemName(String fruitCommandName){
         switch (fruitCommandName){
@@ -46,6 +51,10 @@ public class fruitIdentification {
                 return fruitItemNameIshi;
             case fruitCommandNameGoru:
                 return fruitItemNameGoru;
+            case fruitCommandNameInuOkuchi:
+                return fruitItemNameInuOkuchi;
+            case fruitCommandNameRyuAllosaurs:
+                return fruitItemNameRyuAllosaurs;
             default:
                 return null;
         }
@@ -71,6 +80,10 @@ public class fruitIdentification {
                 return fruitCommandNameIshi;
             case fruitItemNameGoru:
                 return fruitCommandNameGoru;
+            case fruitItemNameInuOkuchi:
+                return fruitCommandNameInuOkuchi;
+            case fruitItemNameRyuAllosaurs:
+                return fruitCommandNameRyuAllosaurs;
             default:
                 return null;
         }
@@ -95,6 +108,10 @@ public class fruitIdentification {
             case fruitItemNameIshi:
                 return true;
             case fruitItemNameGoru:
+                return true;
+            case fruitItemNameInuOkuchi:
+                return true;
+            case fruitItemNameRyuAllosaurs:
                 return true;
             default:
                 return false;

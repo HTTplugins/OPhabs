@@ -39,6 +39,8 @@ public final class OPhabs extends JavaPlugin {
         abilitiesList.add(new goro_goro(this));
         abilitiesList.add(new ishi_ishi(this));
         abilitiesList.add(new goru_goru(this));
+        abilitiesList.add(new inu_inu_okuchi(this));
+        abilitiesList.add(new ryu_ryu_allosaurs(this));
 
         //--------------
         //FruitSystem
