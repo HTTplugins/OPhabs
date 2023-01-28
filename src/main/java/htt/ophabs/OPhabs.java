@@ -18,7 +18,6 @@ public final class OPhabs extends JavaPlugin {
 
     @Override
     public void onEnable(){
-        registerCommands();
 
         //---------------
         //Files
@@ -64,8 +63,12 @@ public final class OPhabs extends JavaPlugin {
         association.setScoreboard(scoreboard);
         lFruit.setScoreboard(scoreboard);
 
+        registerCommands(abilitiesList);
+
         //--------------
         Bukkit.getConsoleSender().sendMessage(ChatColor.GREEN + "" + ChatColor.BOLD +  "OPhabs started correctly.");
+
+
     }
 
     @Override
@@ -73,9 +76,9 @@ public final class OPhabs extends JavaPlugin {
         Bukkit.getConsoleSender().sendMessage(ChatColor.DARK_RED + "" + ChatColor.BOLD + "HTTrolplay closed correctly.");
     }
 
-    public void registerCommands(){
-        Objects.requireNonNull(this.getCommand("oph")).setExecutor(new oph(this));
-        Objects.requireNonNull(this.getCommand("oph")).setTabCompleter(new oph(this));
+    public void registerCommands(ArrayList<abilities> abilitiesList) {
+        Objects.requireNonNull(this.getCommand("oph")).setExecutor(new oph(this, abilitiesList));
+        Objects.requireNonNull(this.getCommand("oph")).setTabCompleter(new oph(this, abilitiesList));
         Objects.requireNonNull(this.getCommand("weaponShop")).setExecutor(new weaponShop(this));
     }
 }

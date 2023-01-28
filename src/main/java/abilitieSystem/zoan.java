@@ -46,13 +46,12 @@ public class zoan extends abilities{
     public void ability1(){
         transformation();
     }
+
     public void playerOnDeath(PlayerDeathEvent event){
-        if(event.getEntity().getName().equals(user.getPlayer().getName())){
-            if(transformed){
-                transformed = false;
-                skinC.resetSkin(user.getPlayer());
-                super.user = null;
-            }
+        if(transformed){
+            transformed = false;
+            skinC.resetSkin(event.getEntity());
+            super.user = null;
         }
     }
 

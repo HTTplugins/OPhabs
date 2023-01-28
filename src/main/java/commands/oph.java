@@ -1,5 +1,6 @@
 package commands;
 
+import abilitieSystem.*;
 import fruitSystem.devilFruit;
 import fruitSystem.fruitIdentification;
 import org.bukkit.Bukkit;
@@ -15,8 +16,13 @@ import java.util.List;
 
 public class oph implements CommandExecutor, TabCompleter {
     private  final OPhabs plugin;
-
-    public oph(OPhabs plugin){this.plugin = plugin;}
+    public ArrayList<String> fruitCommands = new ArrayList<String>();
+    public oph(OPhabs plugin, ArrayList<abilities> abilitiesList){
+        this.plugin = plugin;
+        for (abilities ability : abilitiesList){
+            fruitCommands.add(ability.getName());
+        }
+    }
 
     @Override
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args){
@@ -27,17 +33,7 @@ public class oph implements CommandExecutor, TabCompleter {
 
         if(args.length == 3)
             if (order.equalsIgnoreCase("giveFruit"))
-                if(fruitCommandName.equalsIgnoreCase(fruitIdentification.fruitCommandNameYami)
-                        || fruitCommandName.equalsIgnoreCase(fruitIdentification.fruitCommandNameMera)
-                        ||fruitCommandName.equalsIgnoreCase(fruitIdentification.fruitCommandNameGura)
-                        || fruitCommandName.equalsIgnoreCase(fruitIdentification.fruitCommandNameMoku)
-                        || fruitCommandName.equalsIgnoreCase(fruitIdentification.fruitCommandNameNekoReoparudo)
-                        || fruitCommandName.equals(fruitIdentification.fruitCommandNameMagu)
-                        || fruitCommandName.equalsIgnoreCase(fruitIdentification.fruitCommandNameGoro)
-                        || fruitCommandName.equalsIgnoreCase(fruitIdentification.fruitCommandNameIshi)
-                        || fruitCommandName.equalsIgnoreCase(fruitIdentification.fruitCommandNameGoru)
-                        || fruitCommandName.equalsIgnoreCase(fruitIdentification.fruitCommandNameInuOkuchi)
-                        || fruitCommandName.equalsIgnoreCase(fruitIdentification.fruitCommandNameRyuAllosaurs))
+                if(fruitCommands.contains(fruitCommandName))
                     if( targetPlayer != null) {
                         if(plugin.getConfig().getString("FruitAssociations."+fruitCommandName).equals("none")){
                             devilFruit devFruit = new devilFruit(fruitCommandName);
@@ -79,17 +75,9 @@ public class oph implements CommandExecutor, TabCompleter {
             list.add("giveFruit");
         }
         if(args.length == 2){
-            list.add(fruitIdentification.fruitCommandNameYami);
-            list.add(fruitIdentification.fruitCommandNameMera);
-            list.add(fruitIdentification.fruitCommandNameGura);
-            list.add(fruitIdentification.fruitCommandNameMoku);
-            list.add(fruitIdentification.fruitCommandNameNekoReoparudo);
-            list.add(fruitIdentification.fruitCommandNameMagu);
-            list.add(fruitIdentification.fruitCommandNameGoro);
-            list.add(fruitIdentification.fruitCommandNameIshi);
-            list.add(fruitIdentification.fruitCommandNameGoru);
-            list.add(fruitIdentification.fruitCommandNameInuOkuchi);
-            list.add(fruitIdentification.fruitCommandNameRyuAllosaurs);
+            for (String fruitCommandName : fruitCommands){
+                list.add(fruitCommandName);
+            }
         }
         if(args.length == 3){
             for (Player player : Bukkit.getServer().getOnlinePlayers() ) {
