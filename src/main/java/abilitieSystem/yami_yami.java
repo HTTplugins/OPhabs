@@ -137,7 +137,6 @@ public class yami_yami extends logia {
 
 
     public static void onEntityChangeBlock(EntityChangeBlockEvent event) {
-
         if(event.getBlock().getRelative(0,-1,0).getType().equals(voidMaterial)) {
             event.setCancelled(true);
         }
@@ -248,7 +247,6 @@ public class yami_yami extends logia {
     }
 
     public void livingVoid(Player player){
-
         player.playSound(player.getLocation(),Sound.BLOCK_REDSTONE_TORCH_BURNOUT,10,0);
         World world = player.getWorld();
 
@@ -270,73 +268,53 @@ public class yami_yami extends logia {
             double finish = 2* PI*5 - 2* PI*5/10;
             @Override
             public void run() {
-
                 for(double i=start; i>finish ; i-=0.05) {
-
                     double x = i * sin(i) / 5;
                     double y = i * cos(i) / 5;
                     double z = i;
-
                     double xr = player.getLocation().getX() + cos(toRadians(angle))*x + sin(toRadians(angle))*z;
                     double yr = 1 + player.getLocation().getY() + y;
                     double zr = player.getLocation().getZ() + -sin(toRadians(angle))*x + cos(toRadians(angle))*z;
 
-                    Location rotation = new Location(player.getWorld(), xr,yr,zr);
-
+                    Location rotation = new Location(player.getWorld(), xr, yr, zr);
                     world.spawnParticle(element,rotation,0,0,0,0,yamiDO);
-
                 }
                 start = finish;
-
                 finish = finish -  2* PI*5/10;
-
-
                 if(finish < 0) this.cancel();
-
             }
         }.runTaskTimer(plugin,0,1);
     }
 
     public void repealAnimation(Player player){
-
         new BukkitRunnable(){
             final double angle = -player.getLocation().getYaw();
             World world = player.getWorld();
-
             double start = 0;
             double finish = 0 + 2* PI*5/10;
+
             @Override
             public void run() {
-
-                for(double i=start; i<finish ; i+=0.05) {
-
+                for(double i = start; i < finish ; i += 0.05) {
                     double x = i * sin(i) / 5;
                     double y = i * cos(i) / 5;
                     double z = i;
 
-                    double xr = player.getLocation().getX() + cos(toRadians(angle))*x + sin(toRadians(angle))*z;
+                    double xr = player.getLocation().getX() + cos(toRadians(angle)) * x + sin(toRadians(angle)) * z;
                     double yr = 1 + player.getLocation().getY() + y;
-                    double zr = player.getLocation().getZ() + -sin(toRadians(angle))*x + cos(toRadians(angle))*z;
+                    double zr = player.getLocation().getZ() + -sin(toRadians(angle)) * x + cos(toRadians(angle)) * z;
 
-                    Location rotation = new Location(player.getWorld(), xr,yr,zr);
-
-
-
-                    world.spawnParticle(element,rotation,0,0,0,0,yamiDO);
-
+                    Location rotation = new Location(player.getWorld(), xr, yr, zr);
+                    world.spawnParticle(element, rotation, 0, 0, 0, 0, yamiDO);
                 }
                 start = finish;
-
-                finish = finish +  2* PI*5/10;
+                finish = finish + 2* PI*5/10;
 
                 if(finish < 0) this.cancel();
-
             }
         }.runTaskTimer(plugin,0,1);
-
     }
     public void livingVoidForEntity(Entity ent, Player player){
-
         BukkitTask attract = new BukkitRunnable(){
             Vector FirstVector;
             boolean fV = false;
@@ -361,7 +339,6 @@ public class yami_yami extends logia {
                 //Para levantar al mob si hay desnivel
                 if(player.getLocation().getY() >= ent.getLocation().getY() && !entityInHand)
                     movement.setY(movement.getY() + (player.getLocation().getY() - ent.getLocation().getY()) + 3);
-
 
                 ent.setVelocity(movement);
 
@@ -391,7 +368,6 @@ public class yami_yami extends logia {
         dir.setX(dir.getX() % 5);
         dir.setZ(dir.getZ() % 5);
         ent.setVelocity(dir);
-
     }
     public void liberateAbsorptions(Player player){
 
