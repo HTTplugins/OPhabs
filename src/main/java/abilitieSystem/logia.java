@@ -1,6 +1,5 @@
 package abilitieSystem;
 
-
 import htt.ophabs.OPhabs;
 import castSystem.castIdentification;
 import org.bukkit.*;
@@ -47,7 +46,6 @@ public abstract class logia extends abilities {
                 if (!(player.getLocation().getBlock().isLiquid()) && (castIdentification.itemIsCaster(player.getInventory().getItemInMainHand(), player)) || castIdentification.itemIsCaster(player.getInventory().getItemInOffHand(), player)) {
                     event.setCancelled(true);
                     player.getWorld().spawnParticle(element,player.getLocation(), 10, 0, 1, 0, 0.1);
-
                 }
             }
         }

@@ -21,8 +21,8 @@ import java.util.Random;
 
 import static java.lang.Math.*;
 
-
 public class mera_mera extends logia {
+    public static Particle.DustOptions meraDO = new Particle.DustOptions(Color.ORANGE,2.0F);
     final float ExplosionRadius = 4;
     final int Abilitie1Radius = 4;
     final Material FIRE = Material.FIRE, OBSIDIANA = Material.OBSIDIAN, BEDROCK = Material.BEDROCK, AIR = Material.AIR;
@@ -31,7 +31,7 @@ public class mera_mera extends logia {
               BERSERK_AMPLIFIER = 2;
     boolean BERSERK = true;
 
-    private int FIRE_POOL_DURATION = 5, FIREBALL_STORM_COOLDOWN = 20;
+    private int FIRE_POOL_DURATION = 2, FIREBALL_STORM_COOLDOWN = 20, FIRE_POOL_COOLDOWN = 15;
 
     public mera_mera(OPhabs plugin){
         super(plugin, Particle.FLAME, castIdentification.castMaterialMera, castIdentification.castItemNameMera, fruitIdentification.fruitCommandNameMera);
@@ -41,21 +41,30 @@ public class mera_mera extends logia {
         abilitiesCD.add(0);
         abilitiesNames.add("Fireball Storm");
         abilitiesCD.add(0);
+        abilitiesNames.add("a3");
+        abilitiesCD.add(0);
         this.runParticles();
     }
 
     //Habilidades activas:
     public void ability1(){
-        if(abilitiesCD.get(0) == 0){
+        if(abilitiesCD.get(0) == 0) {
             FirePool(user.getPlayer());
-            abilitiesCD.set(0, 20); // Pon el cooldown en segundos
+            abilitiesCD.set(0, FIRE_POOL_COOLDOWN);
         }
     }
 
     public void ability2(){
-        if(abilitiesCD.get(1) == 0){
+        if(abilitiesCD.get(1) == 0) {
             FireballStorm(user.getPlayer());
-            abilitiesCD.set(1, 20); // Pon el cooldown en segundos
+            abilitiesCD.set(1, FIREBALL_STORM_COOLDOWN);
+        }
+    }
+
+    public void ability3(){
+        if(abilitiesCD.get(2) == 0) {
+            a3(user.getPlayer());
+            abilitiesCD.set(2, FIREBALL_STORM_COOLDOWN);
         }
     }
 
@@ -144,7 +153,6 @@ public class mera_mera extends logia {
                     RADIO_PARTICULAS, RADIO_PARTICULAS, RADIO_PARTICULAS);
     }
 
-
 //  @EventHandler
     //public void onEntityDamage(EntityDamageEvent event) {
     //    if (event.getEntity() instanceof Player) {
@@ -209,7 +217,7 @@ public class mera_mera extends logia {
 
     }
 
-    public void FirePool(Player player){
+    public void FirePool(Player player) {
         new BukkitRunnable() {
             int i = 0;
             @Override
@@ -224,7 +232,6 @@ public class mera_mera extends logia {
 
                 i++;
             }
-
             public void cancelTask() { Bukkit.getScheduler().cancelTask(this.getTaskId()); }
         }.runTaskTimer(plugin, 0, FIRE_POOL_DURATION);
     }
@@ -241,7 +248,29 @@ public class mera_mera extends logia {
     }
 
     public void a3(Player player) {
+        new BukkitRunnable(){
+            double angle = -player.getLocation().getYaw();
+            World world = player.getWorld();
+            double start = 2* PI*5;
+            double finish = 2* PI*5 - 2* PI*5/10;
+            @Override
+            public void run() {
+                for(double i=start; i>finish ; i-=0.05) {
+                    double x = i * sin(i) / 5;
+                    double y = i * cos(i) / 5;
+                    double z = i;
+                    double xr = player.getLocation().getX() + cos(toRadians(angle))*x + sin(toRadians(angle))*z;
+                    double yr = 1 + player.getLocation().getY() + y;
+                    double zr = player.getLocation().getZ() + -sin(toRadians(angle))*x + cos(toRadians(angle))*z;
 
+                    Location rotation = new Location(player.getWorld(), xr, yr, zr);
+                    world.spawnParticle(element, rotation,0,0,0,0);
+                }
+                start = finish;
+                finish = finish -  2* PI*5/10;
+                if(finish < 0) this.cancel();
+            }
+        }.runTaskTimer(plugin,0,1);
     }
 
     public void onPlayerEggThrow(PlayerEggThrowEvent event) {
@@ -266,7 +295,6 @@ public class mera_mera extends logia {
             Random random = new Random();
             @Override
             public void run() {
-
                 Player player = null;
                 if(user != null)
                     if(user.getPlayer() != null){
@@ -286,46 +314,35 @@ public class mera_mera extends logia {
                                 }
                             }
                         }
-
                         if(isCaster && caster.getItemMeta().getDisplayName().equals(castIdentification.castItemNameMera)){
-
                             double x = sin(i)/2;
                             double z = cos(i)/2;
-
                             double xr = player.getLocation().getX() + x;
                             double yr = player.getLocation().getY() + y;
                             double zr = player.getLocation().getZ() + z;
 
                             Location partLoc = new Location(player.getWorld(),xr,yr,zr);
                             player.spawnParticle(element,partLoc, 0,0,0,0);
-
                             summonParticle(player);
                             summonParticle(player);
                             player.setAllowFlight(true);
-
                         }else {
                             player.setAllowFlight(false);
                             player.setFlying(false);
-
                         }
                     }
-                i+= 0.5;
+                i += 0.5;
                 y += 0.05;
 
                 if(y > 2)
                     y = 0;
-
-
             }
 
             public void summonParticle(Player player){
-
                 double xdecimals;
                 double ydecimals;
                 double zdecimals;
-
                 double x,y,z;
-
 
                 xdecimals = random.nextDouble();
                 ydecimals = random.nextDouble();
@@ -336,12 +353,7 @@ public class mera_mera extends logia {
                 z = random.nextInt(1 + 1 ) - 1 + zdecimals;
 
                 player.getWorld().spawnParticle(element,player.getLocation().add(x,y,z),0,0,0,0);
-
             }
-
-
-
         }.runTaskTimer(plugin,0,1);
-
     }
 }

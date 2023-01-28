@@ -17,7 +17,6 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class abilitiesScoreboard {
-
     OPhabs plugin;
     public Map<String, devilFruitUser> dfPlayers = new HashMap<>();
     Map <String,Scoreboard> scoreboards = new HashMap<>();
@@ -58,23 +57,22 @@ public class abilitiesScoreboard {
             if(!goroValue.equals("none")){
                 addScoreboard(Bukkit.getPlayerExact(goroValue));
             }
-
     }
 
-
-    public void ini(){
+    public void ini() {
         new BukkitRunnable(){
             @Override
             public void run() {
                 updateScoreboards();
             }
         }.runTaskTimer(plugin,0,10);
-
     }
 
     public void addScoreboard(Player player){
-        Scoreboard scoreboard = manager.getNewScoreboard();
-        scoreboards.put(player.getName(),scoreboard);
+        if(player != null){
+            Scoreboard scoreboard = manager.getNewScoreboard();
+            scoreboards.put(player.getName(), scoreboard);
+        }
     }
 
     public void removeScoreboard(Player player){
@@ -83,37 +81,38 @@ public class abilitiesScoreboard {
 
     public boolean updateScoreboards(){
         for (Map.Entry<String, Scoreboard> userScoreboard : scoreboards.entrySet()) {
-
             String playerName = userScoreboard.getKey();
             Scoreboard scoreboard = manager.getNewScoreboard();
             devilFruitUser user = dfPlayers.get(playerName);
             Player player = Bukkit.getPlayerExact(playerName);
             Objective objective = scoreboard.registerNewObjective("abilitiesScoreboard","dummy");
-            ItemStack caster = player.getInventory().getItemInMainHand();
-            ArrayList<String> abNames = new ArrayList<>(user.getAbilitiesNames());
-            String active = ChatColor.RED + "" + ChatColor.BOLD + "" + abNames.get(user.actual);
 
-            abNames.set(user.actual, active);
+            if(player != null){
+                ItemStack caster = player.getInventory().getItemInMainHand();
+                ArrayList<String> abNames = new ArrayList<>(user.getAbilitiesNames());
+                String active = ChatColor.RED + "" + ChatColor.BOLD + "" + abNames.get(user.actual);
 
-            player.setScoreboard(Bukkit.getScoreboardManager().getNewScoreboard());
+                abNames.set(user.actual, active);
 
-            if(castIdentification.itemIsCaster(caster)){
-                objective.setDisplaySlot(DisplaySlot.SIDEBAR);
+                player.setScoreboard(Bukkit.getScoreboardManager().getNewScoreboard());
 
-                objective.setDisplayName(user.getFruit().getFruitName());
+                if(castIdentification.itemIsCaster(caster, user.getPlayer())){
+                    objective.setDisplaySlot(DisplaySlot.SIDEBAR);
 
+                    objective.setDisplayName(user.getFruit().getFruitName());
 
-                for(int i = 0; i < abNames.size(); i++){
-                    Score score = objective.getScore(abNames.get(i));
-                    score.setScore(user.getAbilitiesCD().get(i));
-                }
+                    for(int i = 0; i < abNames.size(); i++){
+                        Score score = objective.getScore(abNames.get(i));
+                        score.setScore(user.getAbilitiesCD().get(i));
+                    }
 
-                player.setScoreboard(scoreboard);
-            } else
-            player.setScoreboard(Bukkit.getScoreboardManager().getNewScoreboard());
-            userScoreboard.setValue(scoreboard);
+                    player.setScoreboard(scoreboard);
+                } else
+                player.setScoreboard(Bukkit.getScoreboardManager().getNewScoreboard());
+                userScoreboard.setValue(scoreboard);
+            }
         }
 
-    return true;
+        return true;
     }
 }
