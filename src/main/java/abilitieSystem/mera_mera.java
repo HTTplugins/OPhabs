@@ -227,13 +227,13 @@ public class mera_mera extends logia {
                 createAbilitie1Effect(player.getLocation());
 
                 i++;
-
-                Vector jugador = new Vector(player.getLocation().getX(), player.getLocation().getY(), player.getLocation().getZ());
-
-                generateFirePoolEntities(player.getWorld(), player.getLocation(), jugador);
             }
             public void cancelTask() { Bukkit.getScheduler().cancelTask(this.getTaskId()); }
         }.runTaskTimer(plugin, 0, 1);
+
+        Vector jugador = new Vector(player.getLocation().getX(), player.getLocation().getY(), player.getLocation().getZ());
+
+        generateFirePoolEntities(player.getWorld(), player.getLocation(), jugador);
 
         new BukkitRunnable() {
             int k = 0, fireballs = 0;
@@ -245,6 +245,7 @@ public class mera_mera extends logia {
                         ((Fireball) entity).setDirection(new Vector(0, entity.getLocation().getY() - 10, 0));
                         entity.setVelocity(entity.getLocation().getDirection().multiply(2));
                         ((Fireball) entity).setDirection(((Fireball) entity).getDirection().multiply(-1));
+                        entity.getWorld().createExplosion(entity.getLocation(), ExplosionRadius/2);
                                 /*entity.getWorld().getNearbyEntities(entity.getLocation(), 10, 10, 10).forEach(entity1 -> {
                                     if (entity1.getName() != player.getName() && entity1 instanceof LivingEntity) {
                                         double  x = entity1.getLocation().getX(),
@@ -267,10 +268,10 @@ public class mera_mera extends logia {
     }
 
     public void generateFirePoolEntities(World mundo, Location loc, Vector direccion) {
-        ((Fireball)mundo.spawnEntity(loc.clone().add(1, 0, 0), EntityType.FIREBALL)).setDirection(direccion);
-        ((Fireball)mundo.spawnEntity(loc.clone().add(0, 0, 1), EntityType.FIREBALL)).setDirection(direccion);
-        ((Fireball)mundo.spawnEntity(loc.clone().add(0, 1, 0), EntityType.FIREBALL)).setDirection(direccion);
-        ((Fireball)mundo.spawnEntity(loc.clone(), EntityType.FIREBALL)).setDirection(direccion);
+        ((Fireball)mundo.spawnEntity(loc.clone().add(3, 2, 0), EntityType.FIREBALL)).setDirection(direccion);
+        ((Fireball)mundo.spawnEntity(loc.clone().add(0, 2, 3), EntityType.FIREBALL)).setDirection(direccion);
+        ((Fireball)mundo.spawnEntity(loc.clone().add(0, 2, 0), EntityType.FIREBALL)).setDirection(direccion);
+        ((Fireball)mundo.spawnEntity(loc.clone().add(3, 2, 3), EntityType.FIREBALL)).setDirection(direccion);
     }
 
     public void FireballStorm(Player player) {
@@ -318,7 +319,7 @@ public class mera_mera extends logia {
                     if(entity.getName() != player.getName() && entity instanceof LivingEntity) {
                         ((LivingEntity) entity).damage(10);
                         entity.setFireTicks(100);
-                        mundo.spawnEntity(entity.getLocation(), EntityType.FIREBALL);
+                        mundo.createExplosion(entity.getLocation(), ExplosionRadius);
                         mundo.playSound(entity.getLocation(), Sound.ENTITY_DRAGON_FIREBALL_EXPLODE, 100, 10);
                     }
                 });
@@ -331,19 +332,30 @@ public class mera_mera extends logia {
     public void animacionFaiyabu(World mundo, Location loc, Vector direccion) {
         new BukkitRunnable() {
             int k = 0;
+            Location loc_aux = loc.clone();
             @Override
             public void run() {
                 if(k > 30)
                     this.cancel();
 
                 loc.add(direccion);
+                loc_aux.add(direccion);
 
                 for(double i = -2*PI; i < 2*PI; i+=0.2) {
                     double  x = sin(i)/5,
                             y = cos(i)/5,
                             z = 0;
-                    mundo.spawnParticle(Particle.FLAME, loc.clone().add(-x, -y, -z), 0, 0, 0, 0);
+                    mundo.spawnParticle(Particle.FLAME, loc_aux.add(z, y, x), 0, 0, 0, 0);
                     mundo.spawnParticle(Particle.FLAME, loc.add(x, y, z), 0, 0, 0, 0);
+                }
+
+                for(double i = -2*PI; i < 2*PI; i+=0.2) {
+                    double  x = sin(i)/5,
+                            y = cos(i)/5,
+                            z = 0;
+
+                    mundo.spawnParticle(Particle.FLAME, loc_aux.add(z, -y, -x), 0, 0, 0, 0);
+                    mundo.spawnParticle(Particle.FLAME, loc.add(-x, -y, z), 0, 0, 0, 0);
                 }
 
                 k++;
