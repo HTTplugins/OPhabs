@@ -6,8 +6,6 @@ import htt.ophabs.OPhabs;
 import org.bukkit.*;
 import org.bukkit.block.Block;
 import org.bukkit.entity.*;
-import org.bukkit.event.EventHandler;
-import org.bukkit.event.Listener;
 import org.bukkit.event.entity.*;
 import org.bukkit.event.player.PlayerEggThrowEvent;
 import org.bukkit.event.player.PlayerItemConsumeEvent;
@@ -29,7 +27,7 @@ public class mera_mera extends logia {
     final int N_PARTICULAS = 20, RADIO_PARTICULAS = 0, RESPAWN_HEALTH = 10, RESPAWN_FOOD = 10, BERSERK_DURATION = 3600,
               BERSERK_AMPLIFIER = 2;
     boolean BERSERK = true;
-    private int FIRE_POOL_DURATION = 3, FIREBALL_STORM_COOLDOWN = 5, FIRE_POOL_COOLDOWN = 15, FAIYABU_COOLDOWN = 5;
+    private final int FIRE_POOL_DURATION = 3, FIREBALL_STORM_COOLDOWN = 5, FIRE_POOL_COOLDOWN = 15, FAIYABU_COOLDOWN = 5;
 
     public mera_mera(OPhabs plugin) {
         super(plugin, Particle.FLAME, castIdentification.castMaterialMera, castIdentification.castItemNameMera, fruitIdentification.fruitCommandNameMera);
@@ -61,7 +59,7 @@ public class mera_mera extends logia {
 
     public void ability3() {
         if(abilitiesCD.get(2) == 0) {
-            a3(user.getPlayer());
+            Faiyabu(user.getPlayer());
             abilitiesCD.set(2, FAIYABU_COOLDOWN);
         }
     }
@@ -229,9 +227,50 @@ public class mera_mera extends logia {
                 createAbilitie1Effect(player.getLocation());
 
                 i++;
+
+                Vector jugador = new Vector(player.getLocation().getX(), player.getLocation().getY(), player.getLocation().getZ());
+
+                generateFirePoolEntities(player.getWorld(), player.getLocation(), jugador);
             }
             public void cancelTask() { Bukkit.getScheduler().cancelTask(this.getTaskId()); }
         }.runTaskTimer(plugin, 0, 1);
+
+        new BukkitRunnable() {
+            int k = 0, fireballs = 0;
+            @Override
+            public void run() {
+                player.getWorld().getNearbyEntities(player.getLocation(), 5, 5, 5).forEach(entity -> {
+                    if (entity instanceof Fireball) {
+                        fireballs++;
+                        ((Fireball) entity).setDirection(new Vector(0, entity.getLocation().getY() - 10, 0));
+                        entity.setVelocity(entity.getLocation().getDirection().multiply(2));
+                        ((Fireball) entity).setDirection(((Fireball) entity).getDirection().multiply(-1));
+                                /*entity.getWorld().getNearbyEntities(entity.getLocation(), 10, 10, 10).forEach(entity1 -> {
+                                    if (entity1.getName() != player.getName() && entity1 instanceof LivingEntity) {
+                                        double  x = entity1.getLocation().getX(),
+                                                y = entity1.getLocation().getY(),
+                                                z = entity1.getLocation().getZ();
+
+                                        Vector nueva_dir = new Vector(x, y, z);
+                                        ((SmallFireball) player.getWorld().spawnEntity(player.getLocation(), EntityType.SMALL_FIREBALL)).setDirection(nueva_dir);
+                                    }
+                                });*/
+                    }
+                });
+
+                k += 10;
+
+                if(fireballs >= 4 || k >= 100)
+                    this.cancel();
+            }
+        }.runTaskTimer(plugin,0,10);
+    }
+
+    public void generateFirePoolEntities(World mundo, Location loc, Vector direccion) {
+        ((Fireball)mundo.spawnEntity(loc.clone().add(1, 0, 0), EntityType.FIREBALL)).setDirection(direccion);
+        ((Fireball)mundo.spawnEntity(loc.clone().add(0, 0, 1), EntityType.FIREBALL)).setDirection(direccion);
+        ((Fireball)mundo.spawnEntity(loc.clone().add(0, 1, 0), EntityType.FIREBALL)).setDirection(direccion);
+        ((Fireball)mundo.spawnEntity(loc.clone(), EntityType.FIREBALL)).setDirection(direccion);
     }
 
     public void FireballStorm(Player player) {
@@ -255,18 +294,20 @@ public class mera_mera extends logia {
         bola5.setVelocity(bola5.getLocation().getDirection().multiply(2));
     }
 
-    public void a3(Player player) {
+    public void Faiyabu(Player player) {
         Location loc = player.getEyeLocation().clone();
         Vector direccion = loc.getDirection();
         World mundo = player.getWorld();
 
-        loc.add(0, -0.5, 0);
-        animacionAbilitie3(mundo, loc.clone(), direccion);
+        mundo.playSound(loc, Sound.ENTITY_DRAGON_FIREBALL_EXPLODE, 100, 10);
 
-        efectoAbilitie3(mundo, loc, direccion, player);
+        loc.add(0, -0.5, 0);
+        animacionFaiyabu(mundo, loc.clone(), direccion);
+
+        efectoFaiyabu(mundo, loc, direccion, player);
     }
 
-    void efectoAbilitie3(World mundo, Location loc, Vector direccion, Player player) {
+    public void efectoFaiyabu(World mundo, Location loc, Vector direccion, Player player) {
         new BukkitRunnable() {
             int k = 0;
             @Override
@@ -286,7 +327,8 @@ public class mera_mera extends logia {
             }
         }.runTaskTimer(plugin,0,0);
     }
-    public void animacionAbilitie3(World mundo, Location loc, Vector direccion) {
+
+    public void animacionFaiyabu(World mundo, Location loc, Vector direccion) {
         new BukkitRunnable() {
             int k = 0;
             @Override
@@ -300,7 +342,7 @@ public class mera_mera extends logia {
                     double  x = sin(i)/5,
                             y = cos(i)/5,
                             z = 0;
-
+                    mundo.spawnParticle(Particle.FLAME, loc.clone().add(-x, -y, -z), 0, 0, 0, 0);
                     mundo.spawnParticle(Particle.FLAME, loc.add(x, y, z), 0, 0, 0, 0);
                 }
 
