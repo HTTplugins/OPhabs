@@ -3,5 +3,15 @@
 		"sounds": [
 			"discharge"
 		]
+	},
+	"openroom": {
+		"sounds": [
+			"openroom"
+		]
+	},
+	"closeroom": {
+		"sounds": [
+			"closeroom"
+		]
 	}
 }
