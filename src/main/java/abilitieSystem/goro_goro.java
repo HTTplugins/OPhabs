@@ -174,7 +174,6 @@ public class goro_goro extends logia {
         Location playerLoc = player.getLocation();
 
 
-
         world.playSound(playerLoc,Sound.ENTITY_LIGHTNING_BOLT_THUNDER,1,1);
 
         Vector dir = player.getLocation().getDirection();

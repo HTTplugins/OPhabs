@@ -29,6 +29,8 @@ public class ope_ope extends paramecia {
 
     private final int radius = 15;
 
+    private final int roomTime = 400;
+
     public ope_ope(OPhabs plugin) {
         super(plugin, castIdentification.castMaterialOpe, castIdentification.castItemNameOpe, fruitIdentification.fruitCommandNameOpe);
 
@@ -36,7 +38,7 @@ public class ope_ope extends paramecia {
         abilitiesCD.add(0);
         abilitiesNames.add("Levitation");
         abilitiesCD.add(0);
-        abilitiesNames.add("ab3");
+        abilitiesNames.add("Dash");
         abilitiesCD.add(0);
         abilitiesNames.add("ab4");
         abilitiesCD.add(0);
@@ -48,7 +50,7 @@ public class ope_ope extends paramecia {
 
     public void ability1() {
         if (abilitiesCD.get(0) == 0) {
-            room(user.getPlayer().getLocation(), radius);
+            room(user.getPlayer().getLocation(), radius, user.getPlayer());
             abilitiesCD.set(0, 0); // Pon el cooldown en segundos
         }
     }
@@ -62,7 +64,7 @@ public class ope_ope extends paramecia {
 
     public void ability3() {
         if (abilitiesCD.get(2) == 0) {
-
+            dash(user.getPlayer());
             abilitiesCD.set(2, 0); // Pon el cooldown en segundos
         }
     }
@@ -74,7 +76,7 @@ public class ope_ope extends paramecia {
         }
     }
 
-    public void room(Location location, int radius) {
+    public void room(Location location, int radius, Player player) {
         Random rand = new Random();
         World world = location.getWorld();
         world.playSound(location, "openroom", 1, 1);
@@ -113,6 +115,69 @@ public class ope_ope extends paramecia {
             }
         }.runTaskLater(plugin, 20);
 
+        new BukkitRunnable(){
+            int ticks = 0;
+            @Override
+            public void run() {
+                ticks++;
+
+                if(ticks == roomTime) this.cancel();
+
+                double yaw = player.getLocation().getYaw();
+                double y = player.getLocation().getY();
+
+                spawnBackParticle(player,yaw - 90,y+0.5);
+                spawnBackParticle(player, yaw - 45,y+0.5);
+                spawnBackParticle(player, yaw - 135,y+0.5);
+
+                spawnBackParticle(player,yaw - 90,y+1);
+                spawnBackParticle(player, yaw - 45,y+1);
+                spawnBackParticle(player, yaw - 135,y+1);
+            }
+
+
+            public void spawnBackParticle(Player player, double yaw, double y){
+                double x = cos(toRadians(yaw)) / 2;
+                double z = sin(toRadians(yaw)) / 2;
+                //Behind
+                double xBehind = player.getLocation().getX() + x;
+                double zBehind = player.getLocation().getZ() + z;
+                Location pBehind = new Location(player.getWorld(),xBehind,y,zBehind);
+
+                Random random = new Random();
+                Particle.DustOptions dustOptions = new Particle.DustOptions(random.nextBoolean() ? Color.fromRGB(179,232,244) : Color.AQUA, 3.0f);
+
+                player.getWorld().spawnParticle(Particle.REDSTONE,pBehind,0,0,0,0,dustOptions);
+            }
+
+            public void createParticlesBehindPlayer(Player player) {
+                Location location = player.getLocation();
+                float yaw = location.getYaw();
+                float pitch = location.getPitch();
+                double x = -1 * Math.cos(Math.toRadians(yaw)) * Math.cos(Math.toRadians(-pitch));
+                double y = -1 * Math.sin(Math.toRadians(-pitch));
+                double z = -1 * Math.sin(Math.toRadians(yaw)) * Math.cos(Math.toRadians(-pitch));
+                location.add(x, y, z);
+
+                Random random = new Random();
+                Particle.DustOptions dustOptions = new Particle.DustOptions(random.nextBoolean() ? Color.fromRGB(179,232,244) : Color.AQUA, 1.0f);
+
+
+                player.getWorld().spawnParticle(Particle.REDSTONE, location.add(0,0.2,0), 0,0,0,0, dustOptions);
+                player.getWorld().spawnParticle(Particle.REDSTONE, location.add(0,0.4,0), 0,0,0,0, dustOptions);
+                player.getWorld().spawnParticle(Particle.REDSTONE, location.add(0,0.6,0), 0,0,0,0, dustOptions);
+                player.getWorld().spawnParticle(Particle.REDSTONE, location.add(0,0.8,0), 0,0,0,0, dustOptions);
+                player.getWorld().spawnParticle(Particle.REDSTONE, location.add(0,1,0), 0,0,0,0, dustOptions);
+                player.getWorld().spawnParticle(Particle.REDSTONE, location.add(0,1.5,0), 0,0,0,0, dustOptions);
+
+                location.subtract(0,2,0);
+
+            }
+
+
+
+        }.runTaskTimer(plugin,0,1);
+
         new BukkitRunnable() {
 
             @Override
@@ -127,7 +192,7 @@ public class ope_ope extends paramecia {
 
                 roomBlocks.clear();
             }
-        }.runTaskLater(plugin, 400);
+        }.runTaskLater(plugin, roomTime);
 
 
     }
@@ -142,6 +207,24 @@ public class ope_ope extends paramecia {
             }
 
         }
+
+
+    }
+
+    public void dash(Player player){
+
+        if(activeRoom){
+            Location location = player.getLocation();
+            float yaw = location.getYaw();
+            float pitch = location.getPitch();
+            double x = 2 * Math.cos(Math.toRadians(yaw + 90)) * Math.cos(Math.toRadians(-pitch));
+            double y = 2 * Math.sin(Math.toRadians(-pitch));
+            double z = 2 * Math.sin(Math.toRadians(yaw + 90)) * Math.cos(Math.toRadians(-pitch));
+            player.setVelocity(new Vector(x, y, z));
+
+
+        }
+
 
 
     }
