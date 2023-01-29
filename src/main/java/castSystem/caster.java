@@ -5,6 +5,7 @@ import org.bukkit.Material;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
+import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.player.*;
 import org.bukkit.inventory.EquipmentSlot;
 import abilitieSystem.*;
@@ -109,6 +110,7 @@ public class caster implements Listener {
     @EventHandler
     public void onEntityChangeBlock(EntityChangeBlockEvent event){
         yami_yami.onEntityChangeBlock(event);
+
     }
     @EventHandler
     public void onInventoryClick(InventoryClickEvent event){
@@ -116,5 +118,11 @@ public class caster implements Listener {
             devilFruitUser user = dfPlayers.get(event.getWhoClicked().getName());
             user.onInventoryClick(event);
         }
+    }
+
+    @EventHandler(ignoreCancelled = true)
+    public void onBlockBreak(BlockBreakEvent event) {
+        ope_ope.onBlockBreak(event);
+
     }
 }

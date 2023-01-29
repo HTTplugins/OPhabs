@@ -3,5 +3,25 @@
 		"sounds": [
 			"discharge"
 		]
+	},
+	"openroom": {
+		"sounds": [
+			"openroom"
+		]
+	},
+	"closeroom": {
+		"sounds": [
+			"closeroom"
+		]
+	},
+	"swordcut": {
+		"sounds": [
+			"swordcut"
+		]
+	},
+	"fastsoru": {
+		"sounds": [
+			"fastsoru"
+		]
 	}
 }
