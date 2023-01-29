@@ -96,29 +96,26 @@ public class ope_ope extends paramecia {
 
             @Override
             public void run() {
-                for (double x = -radius; x <= radius; x++) {
-                    for (double y = -radius; y <= radius; y++) {
-                        for (double z = -radius; z <= radius; z++) {
-                            double distance = Math.sqrt((x * x) + (y * y) + (z * z));
-                            if (distance <= radius) {
-                                Location blockLocation = location.clone().add(x, y, z);
-                                if (blockLocation.getBlockY() >= location.getBlockY() && blockLocation.getBlock().getType() == Material.AIR) {
-                                    if (distance >= radius - 1) {
-                                        int randMaterial = rand.nextInt(3);
-                                        if (randMaterial == 0 || randMaterial == 1)
-                                            material = Material.BLUE_STAINED_GLASS;
-                                        else
-                                            material = Material.LIGHT_BLUE_STAINED_GLASS;
+                World world = roomcenter.getWorld();
+                for (int x = -radius; x <= radius; x++) {
+                    for (int y = -radius; y <= radius; y++) {
+                        for (int z = -radius; z <= radius; z++) {
+                            Location blockLoc = roomcenter.clone().add(x, y, z);
+                            double distance = blockLoc.distance(roomcenter);
+                            if (distance < radius + 0.5 && distance > radius - 0.5) {
+                                int randMaterial = rand.nextInt(3);
+                                if (randMaterial == 0 || randMaterial == 1)
+                                    material = Material.BLUE_STAINED_GLASS;
+                                else
+                                    material = Material.LIGHT_BLUE_STAINED_GLASS;
 
-                                        blockLocation.getBlock().setType(material);
-                                        roomBlocks.add(blockLocation);
-
-                                    }
-                                }
+                                blockLoc.getBlock().setType(material);
+                                roomBlocks.add(blockLoc);
                             }
                         }
                     }
                 }
+
             }
         }.runTaskLater(plugin, 20);
 
