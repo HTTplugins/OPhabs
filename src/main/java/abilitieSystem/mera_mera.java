@@ -278,6 +278,7 @@ public class mera_mera extends logia {
 
         mundo.playSound(player, Sound.AMBIENT_NETHER_WASTES_LOOP, 100, 10);
         spawnBolas(mundo, player.getLocation());
+
     }
 
     public void spawnBolas(World mundo, Location loc) {
