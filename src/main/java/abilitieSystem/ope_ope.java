@@ -4,6 +4,7 @@ import castSystem.castIdentification;
 import fruitSystem.fruitIdentification;
 import htt.ophabs.OPhabs;
 import org.bukkit.*;
+import org.bukkit.block.Block;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
@@ -12,6 +13,7 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import org.bukkit.scheduler.BukkitRunnable;
+import org.bukkit.util.RayTraceResult;
 import org.bukkit.util.Vector;
 
 import java.util.ArrayList;
@@ -31,6 +33,10 @@ public class ope_ope extends paramecia {
 
     private final int roomTime = 400;
 
+    private LivingEntity currentHearth = null;
+
+    private int availableSqueezes;
+
     public ope_ope(OPhabs plugin) {
         super(plugin, castIdentification.castMaterialOpe, castIdentification.castItemNameOpe, fruitIdentification.fruitCommandNameOpe);
 
@@ -40,11 +46,12 @@ public class ope_ope extends paramecia {
         abilitiesCD.add(0);
         abilitiesNames.add("Dash");
         abilitiesCD.add(0);
-        abilitiesNames.add("ab4");
+        abilitiesNames.add("stealHearth");
         abilitiesCD.add(0);
 
         roomcenter = null;
         activeRoom = false;
+        availableSqueezes = 5;
 
     }
 
@@ -71,7 +78,7 @@ public class ope_ope extends paramecia {
 
     public void ability4() {
         if (abilitiesCD.get(3) == 0) {
-
+            stealHearth(user.getPlayer());
             abilitiesCD.set(3, 0); // Pon el cooldown en segundos
         }
     }
@@ -221,13 +228,55 @@ public class ope_ope extends paramecia {
             double y = 2 * Math.sin(Math.toRadians(-pitch));
             double z = 2 * Math.sin(Math.toRadians(yaw + 90)) * Math.cos(Math.toRadians(-pitch));
             player.setVelocity(new Vector(x, y, z));
-
-
+            player.getWorld().playSound(player.getLocation(),"fastsoru",1,1);
         }
 
 
 
     }
+
+    public void stealHearth(Player player){
+
+        if(!player.isSneaking()){
+            if(activeRoom){
+                Vector direction = player.getEyeLocation().getDirection();
+                RayTraceResult result = player.getWorld().rayTraceEntities(player.getEyeLocation(), direction, 2, p -> !player.getUniqueId().equals(p.getUniqueId()));
+                if (result != null && result.getHitEntity() != null) {
+                    currentHearth = (LivingEntity) result.getHitEntity();
+                    player.getWorld().playSound(currentHearth.getLocation(),"swordcut",1,1);
+                    spawnBloodParticles(currentHearth);
+                    player.sendMessage("You have stolen " + currentHearth.getName() + "'s ❤.");
+                }
+            }
+        } else {
+            if(currentHearth == null) {
+                player.sendMessage("You don't have anybody's ❤ right now.");
+            } else {
+
+                availableSqueezes--;
+
+                currentHearth.damage(2);
+                currentHearth.getWorld().playSound(currentHearth.getLocation(),"swordcut",1,1);
+                player.getWorld().playSound(player.getLocation(),"swordcut",1,1);
+                currentHearth.getWorld().spawnParticle(Particle.DAMAGE_INDICATOR,currentHearth.getLocation().add(0,currentHearth.getHeight(),0),4);
+
+
+                if(availableSqueezes == 0){
+                    availableSqueezes = 5;
+                    currentHearth = null;
+                }
+            }
+
+        }
+    }
+
+    public void spawnBloodParticles(Entity entity) {
+
+        Location loc = entity.getLocation();
+        World world = entity.getWorld();
+        world.spawnParticle(Particle.REDSTONE, loc.add(0, entity.getHeight(), 0), 20, 0.5, 0.5, 0.5, 0.1, new Particle.DustOptions(Color.RED, 1.0f));
+    }
+
 
     public static void onBlockBreak(BlockBreakEvent event) {
         if(activeRoom)
