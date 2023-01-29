@@ -12,6 +12,7 @@ import org.bukkit.potion.PotionEffectType;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageEvent;
+import org.bukkit.event.entity.EntityDamageEvent.DamageCause;
 import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.event.player.PlayerToggleSneakEvent;
 import org.bukkit.scheduler.BukkitRunnable;
@@ -28,6 +29,7 @@ public class inu_inu_okuchi extends zoan {
     private final ItemStack iceBlock = new ItemStack(Material.PACKED_ICE);
     public double iceArmor = 0.0;
     public boolean creatingIceArmor = false;
+    public boolean himo = false;
     public inu_inu_okuchi(OPhabs plugin){
         super(plugin, castIdentification.castMaterialInuOkuchi, castIdentification.castItemNameInuOkuchi, fruitIdentification.fruitCommandNameInuOkuchi,"http://novask.in/4672583547.png","white_wolf");
 
@@ -75,7 +77,6 @@ public class inu_inu_okuchi extends zoan {
         
     }
 
-    //launch player in the lookin direction
     public void himorogiri(){
         Player player = user.getPlayer();
 
@@ -84,7 +85,7 @@ public class inu_inu_okuchi extends zoan {
             int i = 0;
             @Override
             public void run() {
-                if(i>5*2){
+                if(i>5*4 || user == null || !user.getPlayer().isOnline()){
                     player.setVelocity(player.getLocation().getDirection().multiply(2));
                     cancelTask();
                 }
@@ -99,26 +100,32 @@ public class inu_inu_okuchi extends zoan {
             public void cancelTask(){
                 Bukkit.getScheduler().cancelTask(this.getTaskId());
             }
-        }.runTaskTimer(plugin, 15, 4);
+        }.runTaskTimer(plugin, 15, 2);
         
     new BukkitRunnable() {
         boolean first = true;
         @Override
         public void run() { 
-           if(player.getLocation().add(0,-1,0).getBlock().getType() != Material.AIR){
+            if(user == null || !user.getPlayer().isOnline()){
+                cancelTask();
+            }
+            if(player.getLocation().add(0,-1,0).getBlock().getType() != Material.AIR){
                 player.getWorld().getNearbyEntities(player.getLocation(), 5, 2, 5).forEach(entity -> {
-                    if(entity instanceof LivingEntity){
+                    if(entity instanceof LivingEntity && entity.getName() != player.getName()){
                         LivingEntity livingEntity = (LivingEntity) entity;
                         livingEntity.damage(15, player);
                     }
                 });
                 player.getWorld().spawnParticle(Particle.BLOCK_CRACK, player.getLocation(), 10000, 5, 0, 5, 0.1, Material.PACKED_ICE.createBlockData());
+                himo = false;
                 cancelTask();
             }
             if(first){
                 player.setVelocity(player.getLocation().getDirection().multiply(2));
                 first = false;
+                himo = true;
             }
+            
 
             Vector sideWayOffset = player.getLocation().getDirection().crossProduct(new Vector(0,1,0)).normalize().multiply(0.4);
             Vector downOffset = player.getLocation().getDirection().crossProduct(sideWayOffset).normalize().multiply(0.2);
@@ -137,7 +144,7 @@ public class inu_inu_okuchi extends zoan {
             int i = 0;
             @Override
             public void run() {
-                if(i>10*2){
+                if(i>10*2 || user == null){
                     cancelTask();
                 }
                 Vector direction = player.getEyeLocation().getDirection();
@@ -146,7 +153,7 @@ public class inu_inu_okuchi extends zoan {
                     location.add(direction);
                     player.getWorld().spawnParticle(Particle.BLOCK_CRACK, location, 100, 0.5, 0.5, 0.5, 0.1*j, Material.PACKED_ICE.createBlockData());
                     location.getWorld().getNearbyEntities(location, 0.5, 0.5, 0.5).forEach(entity -> {
-                        if(entity instanceof LivingEntity && entity != player){
+                        if(entity instanceof LivingEntity && entity.getName() != player.getName()){
                             LivingEntity livingEntity = (LivingEntity) entity;
                             livingEntity.damage(10, player);
                         }
@@ -177,6 +184,9 @@ public class inu_inu_okuchi extends zoan {
 
     public void onEntityDamage(EntityDamageEvent event){
         if(event.getEntity() == user.getPlayer()){
+            if(event.getCause() == DamageCause.FALL && himo){
+                event.setCancelled(true);
+            }
             if(iceArmor > 0){
                 double damage = event.getDamage();
                 iceArmor -= damage;
