@@ -5,15 +5,11 @@ import org.bukkit.Material;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
+import org.bukkit.event.entity.*;
 import org.bukkit.event.player.*;
 import org.bukkit.inventory.EquipmentSlot;
 import abilitieSystem.*;
 
-import org.bukkit.event.entity.EntityDamageEvent;
-import org.bukkit.event.entity.EntityChangeBlockEvent;
-import org.bukkit.event.entity.PlayerDeathEvent;
-import org.bukkit.event.entity.EntityShootBowEvent;
-import org.bukkit.event.entity.EntityPickupItemEvent;
 import org.bukkit.event.inventory.InventoryClickEvent;
 
 
@@ -116,5 +112,17 @@ public class caster implements Listener {
             devilFruitUser user = dfPlayers.get(event.getWhoClicked().getName());
             user.onInventoryClick(event);
         }
+    }
+
+    @EventHandler(ignoreCancelled = true)
+    public void onEntityToggleGlide(EntityToggleGlideEvent event) {
+        zushi_zushi.onEntityToggleGlide(event);
+    }
+
+
+    @EventHandler(ignoreCancelled = true)
+    public void onPlayerMove(PlayerMoveEvent event) {
+        zushi_zushi.onPlayerMove(event);
+
     }
 }
