@@ -17,7 +17,8 @@ public class castIdentification {
                             castMaterialIshi = Material.FLINT,
                             castMaterialGoru = Material.GOLD_INGOT,
                             castMaterialInuOkuchi = Material.YELLOW_DYE,
-                            castMaterialRyuAllosaurs = Material.YELLOW_DYE;
+                            castMaterialRyuAllosaurs = Material.YELLOW_DYE,
+                            castMaterialZushi = Material.ARROW;
 
     public static String castItemNameYami = "Yami Yami caster",
                          castItemNameMera = "Mera Mera caster",
@@ -29,8 +30,8 @@ public class castIdentification {
                          castItemNameIshi = "Ishi Ishi caster",
                          castItemNameGoru = "Goru Goru caster",
                          castItemNameInuOkuchi = "Inu Inu Okuchi caster",
-                         castItemNameRyuAllosaurs = "Ryu Ryu Allosaurs caster";
-
+                         castItemNameRyuAllosaurs = "Ryu Ryu Allosaurs caster",
+                         castItemNameZushi = "Zushi Zushi caster";
     public static boolean itemIsCaster(ItemStack item , Player player) {
 
         if(player == null || !player.isOnline())
@@ -53,7 +54,8 @@ public class castIdentification {
                 || (itemName.equals(castIdentification.castItemNameIshi) && itemMaterial.equals(castIdentification.castMaterialIshi))
                 || (itemName.equals(castIdentification.castItemNameGoru) && itemMaterial.equals(castIdentification.castMaterialGoru))
                 || (itemName.equals(castIdentification.castItemNameInuOkuchi) && itemMaterial.equals(castIdentification.castMaterialInuOkuchi))
-                || (itemName.equals(castIdentification.castItemNameRyuAllosaurs) && itemMaterial.equals(castIdentification.castMaterialRyuAllosaurs))){
+                || (itemName.equals(castIdentification.castItemNameRyuAllosaurs) && itemMaterial.equals(castIdentification.castMaterialRyuAllosaurs))
+                || (itemName.equals(castIdentification.castItemNameZushi) && itemMaterial.equals(castIdentification.castMaterialZushi))){
             return true;
         }
         else
