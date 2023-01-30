@@ -339,6 +339,7 @@ public class mera_mera extends logia {
                 double  x = sin(i)/5,
                         y = cos(i)/5,
                         z = 0;
+
                 mundo.spawnParticle(Particle.FLAME, loc_aux.add(z, y, x), 0, 0, 0, 0);
                 mundo.spawnParticle(Particle.FLAME, loc.add(x, y, z), 0, 0, 0, 0);
                 mundo.spawnParticle(Particle.FLAME, loc_aux2.add(z, -y, -x), 0, 0, 0, 0);
