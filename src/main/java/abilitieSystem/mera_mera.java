@@ -27,7 +27,8 @@ public class mera_mera extends logia {
     final int N_PARTICULAS = 20, RADIO_PARTICULAS = 0, RESPAWN_HEALTH = 10, RESPAWN_FOOD = 10, BERSERK_DURATION = 3600,
               BERSERK_AMPLIFIER = 2;
     boolean BERSERK = true;
-    private final int FIRE_POOL_DURATION = 3, FIREBALL_STORM_COOLDOWN = 5, FIRE_POOL_COOLDOWN = 15, FAIYABU_COOLDOWN = 5;
+    private final int FIRE_POOL_DURATION = 3, FIREBALL_STORM_COOLDOWN = 5, FIRE_POOL_COOLDOWN = 15, FAIYABU_COOLDOWN = 5,
+                      BOMUSHOTTO_COOLDOWN = 10;
 
     public mera_mera(OPhabs plugin) {
         super(plugin, Particle.FLAME, castIdentification.castMaterialMera, castIdentification.castItemNameMera, fruitIdentification.fruitCommandNameMera);
@@ -38,6 +39,8 @@ public class mera_mera extends logia {
         abilitiesNames.add("Fireball Storm");
         abilitiesCD.add(0);
         abilitiesNames.add("Faiyābū");
+        abilitiesCD.add(0);
+        abilitiesNames.add("Bomushotto");
         abilitiesCD.add(0);
         this.runParticles();
     }
@@ -61,6 +64,13 @@ public class mera_mera extends logia {
         if(abilitiesCD.get(2) == 0) {
             Faiyabu(user.getPlayer());
             abilitiesCD.set(2, FAIYABU_COOLDOWN);
+        }
+    }
+
+    public void ability4() {
+        if(abilitiesCD.get(3) == 0) {
+            Bomushotto(user.getPlayer());
+            abilitiesCD.set(3, BOMUSHOTTO_COOLDOWN);
         }
     }
 
@@ -242,7 +252,7 @@ public class mera_mera extends logia {
                 player.getWorld().getNearbyEntities(player.getLocation(), 5, 5, 5).forEach(entity -> {
                     if (entity instanceof Fireball) {
                         fireballs++;
-                        ((Fireball) entity).setDirection(new Vector(0, entity.getLocation().getY() - 10, 0));
+                        ((Fireball) entity).setDirection(new Vector(player.getLocation().getX(), entity.getLocation().getY() - 10, player.getLocation().getZ()));
                         entity.setVelocity(entity.getLocation().getDirection().multiply(2));
                         ((Fireball) entity).setDirection(((Fireball) entity).getDirection().multiply(-1));
                         entity.getWorld().createExplosion(entity.getLocation(), ExplosionRadius/2);
@@ -373,6 +383,81 @@ public class mera_mera extends logia {
             event.setHatchingType(EntityType.BLAZE);
 
         event.getPlayer().addPotionEffect(new PotionEffect(PotionEffectType.FIRE_RESISTANCE, BERSERK_DURATION, BERSERK_AMPLIFIER));
+    }
+
+    public void Bomushotto(Player player) {
+        Location loc = player.getEyeLocation().clone();
+        Vector direccion = loc.getDirection();
+        World mundo = player.getWorld();
+
+        animacionBomushotto(mundo, loc, direccion);
+    }
+
+    public void animacionBomushotto(World mundo, Location loc, Vector direccion) {
+        new BukkitRunnable() {
+            int k = 0;
+            Location loc_aux = loc.clone(), loc_aux2 = loc_aux.clone(), loc_aux3 = loc_aux2.clone(),
+                     loc_aux4 = loc_aux3.clone(), loc_aux5 = loc_aux4.clone(), loc_aux6 = loc_aux5.clone(), loc_aux7 = loc_aux6.clone();
+            @Override
+            public void run() {
+                if(k > 5)
+                    this.cancel();
+
+                loc.add(direccion.clone().multiply(4));
+                loc_aux.add(direccion.clone().multiply(4));
+
+                for(double i = -2*PI; i < 2*PI; i+=0.2) {
+                    double  x = sin(i)/5,
+                            y = cos(i)/5,
+                            z = 0;
+                    mundo.spawnParticle(Particle.FLAME, loc_aux.add(z, y, x), 0, 0, 0, 0);
+                    mundo.spawnParticle(Particle.FLAME, loc.add(x, y, z), 0, 0, 0, 0);
+                }
+
+                for(double i = -2*PI; i < 2*PI; i+=0.2) {
+                    double  x = sin(i)/5,
+                            y = cos(i)/5,
+                            z = 0;
+
+                    mundo.spawnParticle(Particle.FLAME, loc_aux.add(z, -y, -x), 0, 0, 0, 0);
+                    mundo.spawnParticle(Particle.FLAME, loc.add(-x, -y, z), 0, 0, 0, 0);
+                }
+
+                for(double i = -2*PI; i < 2*PI; i+=0.2) {
+                    double  x = sin(i)/5,
+                            y = cos(i)/5;
+
+                    mundo.spawnParticle(Particle.FLAME, loc_aux.add(x, y, x/2), 0, 0, 0, 0);
+                    mundo.spawnParticle(Particle.FLAME, loc.add(x/2, y, x), 0, 0, 0, 0);
+                }
+
+                for(double i = -2*PI; i < 2*PI; i+=0.2) {
+                    double  x = sin(i)/5,
+                            y = cos(i)/5;
+
+                    mundo.spawnParticle(Particle.FLAME, loc_aux.add(-x, -y, -x/2), 0, 0, 0, 0);
+                    mundo.spawnParticle(Particle.FLAME, loc.add(-x/2, -y, -x), 0, 0, 0, 0);
+                }
+
+                for(double i = -2*PI; i < 2*PI; i+=0.2) {
+                    double  x = sin(i)/5,
+                            y = cos(i)/5;
+
+                    mundo.spawnParticle(Particle.FLAME, loc_aux.add(x, y, -x/2), 0, 0, 0, 0);
+                    mundo.spawnParticle(Particle.FLAME, loc.add(-x/2, y, x), 0, 0, 0, 0);
+                }
+
+                for(double i = -2*PI; i < 2*PI; i+=0.2) {
+                    double  x = sin(i)/5,
+                            y = cos(i)/5;
+
+                    mundo.spawnParticle(Particle.FLAME, loc_aux.add(-x, -y, x/2), 0, 0, 0, 0);
+                    mundo.spawnParticle(Particle.FLAME, loc.add(x/2, -y, -x), 0, 0, 0, 0);
+                }
+
+                k++;
+            }
+        }.runTaskTimer(plugin,0,20);
     }
 
     @Override
