@@ -3,13 +3,11 @@ package abilitieSystem;
 import htt.ophabs.OPhabs;
 import org.bukkit.*;
 import org.bukkit.entity.Player;
-import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.event.entity.PlayerDeathEvent;
 import skin.skinsChanger;
-import fruitSystem.devilFruitUser;
 
 
-public class zoan extends abilities{
+public class zoan extends df{
     public boolean transformed = false;
     skinsChanger skinC = new skinsChanger();
     String skinUrl="", skinAwakenUrl="", skinName="", skinAwakenName="";
@@ -24,7 +22,7 @@ public class zoan extends abilities{
         abilitiesCD.add(0);
     }
 
-    public zoan(OPhabs plugin, devilFruitUser user, Material castMaterial, String castName, String commandName) {
+    public zoan(OPhabs plugin, abilityUser user, Material castMaterial, String castName, String commandName) {
         super(plugin, user, castMaterial, castName, commandName);
         abilitiesNames.add("Transform");
         abilitiesCD.add(0);

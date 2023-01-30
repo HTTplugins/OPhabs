@@ -19,7 +19,7 @@ public final class skinsChanger {
         Bukkit.dispatchCommand( Bukkit.getConsoleSender(), "skin set " + name + " " + skinName );
     }
 
-    public void resetSkin( Player player ) {
+    public static void resetSkin( Player player ) {
         Bukkit.dispatchCommand( Bukkit.getConsoleSender(), "skin set " + player.getName() + " " + player.getName().toLowerCase() );
     }
 }

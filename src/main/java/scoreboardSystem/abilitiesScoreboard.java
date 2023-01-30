@@ -9,9 +9,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.scoreboard.*;
-import abilitieSystem.*;
-import castSystem.*;
-import fruitSystem.devilFruitUser;
+import abilitieSystem.abilityUser;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -20,21 +18,21 @@ import java.util.Map;
 public class abilitiesScoreboard {
 
     OPhabs plugin;
-    public Map<String, devilFruitUser> dfPlayers = new HashMap<>();
+    public Map<String, abilityUser> users = new HashMap<>();
     Map <String,Scoreboard> scoreboards = new HashMap<>();
     ScoreboardManager manager = Bukkit.getScoreboardManager();
-// Hashmap nameplayer, pair <dfuser,scoreboard>
 
-    public abilitiesScoreboard(OPhabs plugin, Map<String,devilFruitUser> dfPlayers) {
+    public abilitiesScoreboard(OPhabs plugin, Map<String, abilityUser> users) {
         this.plugin = plugin;
-        this.dfPlayers = dfPlayers;
+        this.users = users;
 
         ArrayList<String> values = new ArrayList<>();
-        for(devilFruitUser dfUser : dfPlayers.values()) {
-            if(!plugin.getConfig().getString("FruitAssociations." + dfUser.ability.getName()).equals("none")){
-                values.add(plugin.getConfig().getString("FruitAssociations." + dfUser.ability.getName()));
-            }
+        for(abilityUser user : users.values()) {
+            if (user.hasFruit())
+                if (!plugin.getConfig().getString("FruitAssociations." + user.getDFAbilities().getName()).equals("none"))
+                    values.add(plugin.getConfig().getString("FruitAssociations." + user.getDFAbilities().getName()));
         }
+
         
         for(String value : values) {
             addScoreboard(value);
@@ -69,7 +67,7 @@ public class abilitiesScoreboard {
             if(Bukkit.getPlayer(playerName) != null) {
 
                 Scoreboard scoreboard = manager.getNewScoreboard();
-                devilFruitUser user = dfPlayers.get(playerName);
+                abilityUser user = users.get(playerName);
 
                 Player player = null;
 
@@ -101,7 +99,7 @@ public class abilitiesScoreboard {
                 if( (castIdentification.itemIsCaster(player.getInventory().getItemInMainHand(), player)) || castIdentification.itemIsCaster(player.getInventory().getItemInOffHand(), player)){
                     objective.setDisplaySlot(DisplaySlot.SIDEBAR);
 
-                    String fruit = fruitIdentification.getItemName(user.ability.getName());
+                    String fruit = fruitIdentification.getItemName(user.getDFAbilities().getName());
                     fruit = fruit.substring(0,1).toUpperCase() + fruit.substring(1);
                     
                     objective.setDisplayName(ChatColor.BOLD + "" + fruit);

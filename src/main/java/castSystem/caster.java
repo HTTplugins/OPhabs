@@ -1,20 +1,16 @@
 package castSystem;
 
-import fruitSystem.devilFruitUser;
 import org.bukkit.Material;
+import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.block.BlockBreakEvent;
+import org.bukkit.event.entity.*;
 import org.bukkit.event.player.*;
-import org.bukkit.inventory.EquipmentSlot;
 import abilitieSystem.*;
+import skin.skinsChanger;
 
-import org.bukkit.event.entity.EntityDamageEvent;
-import org.bukkit.event.entity.EntityChangeBlockEvent;
-import org.bukkit.event.entity.PlayerDeathEvent;
-import org.bukkit.event.entity.EntityShootBowEvent;
-import org.bukkit.event.entity.EntityPickupItemEvent;
 import org.bukkit.event.inventory.InventoryClickEvent;
 
 
@@ -23,30 +19,30 @@ import java.util.Map;
 
 
 public class caster implements Listener {
-    private Map<String, devilFruitUser> dfPlayers = new HashMap<>();
+    private Map<String, abilityUser> users = new HashMap<>();
 
-    public caster(coolDown cooldown, Map<String, devilFruitUser> dfPlayers){
-        this.dfPlayers = dfPlayers;
+    public caster(coolDown cooldown, Map<String, abilityUser> users){
+        this.users = users;
     }
 
     @EventHandler
     public void onInteract(PlayerInteractEvent event){
-        if(dfPlayers.containsKey(event.getPlayer().getName())) {
-            devilFruitUser user = dfPlayers.get(event.getPlayer().getName());
-                if (event.getItem() != null && castIdentification.itemIsCaster(event.getItem(), event.getPlayer())) {
+        if(users.containsKey(event.getPlayer().getName())) {
+            abilityUser user = users.get(event.getPlayer().getName());
+            Action action = event.getAction();
+            if (event.getItem() != null && castIdentification.itemIsCaster(event.getItem(), event.getPlayer()) && user.hasFruit()) {
 
-                    String casterItemName = event.getItem().getItemMeta().getDisplayName();
-                    Material casterMaterial = event.getMaterial();
-                    Action action = event.getAction();
+                String casterItemName = event.getItem().getItemMeta().getDisplayName();
+                Material casterMaterial = event.getMaterial();
 
-                    if ((action == Action.RIGHT_CLICK_AIR || action == Action.RIGHT_CLICK_BLOCK))
-                        user.abilityActive();
+                if ((action == Action.RIGHT_CLICK_AIR || action == Action.RIGHT_CLICK_BLOCK))
+                    user.abilityActive();
 
 
-                    //else 
-                        //user.switchAbility();
+                //else
+                //user.switchAbility();
 
-                }
+            }
         }
     }
 
@@ -55,8 +51,8 @@ public class caster implements Listener {
         if(castIdentification.itemIsCaster(event.getItemDrop().getItemStack(), event.getPlayer())){
             event.setCancelled(true);
 
-            if(dfPlayers.containsKey(event.getPlayer().getName())) {
-                devilFruitUser user = dfPlayers.get(event.getPlayer().getName());
+            if(users.containsKey(event.getPlayer().getName())) {
+                abilityUser user = users.get(event.getPlayer().getName());
                 user.switchAbility();
             }
         }
@@ -65,45 +61,52 @@ public class caster implements Listener {
 
     @EventHandler
     public void onEntityDamage(EntityDamageEvent event){
-        if(dfPlayers.containsKey(event.getEntity().getName())) {
-            devilFruitUser user = dfPlayers.get(event.getEntity().getName());
+        if(users.containsKey(event.getEntity().getName())) {
+            abilityUser user = users.get(event.getEntity().getName());
             user.onEntityDamage(event);
             user.onFall(event);
         }
     }
     @EventHandler
+    public void onEntityDamageByEntityEvent(EntityDamageByEntityEvent event){
+        if(event.getDamager() instanceof Player &&  users.containsKey(event.getDamager().getName())) {
+            abilityUser user = users.get(event.getDamager().getName());
+            user.onUserDamageAnotherEntity(event);
+        }
+    }
+    @EventHandler
     public void onPlayerToggleSneak(PlayerToggleSneakEvent e){
-        if(dfPlayers.containsKey(e.getPlayer().getName())) {
-            devilFruitUser user = dfPlayers.get(e.getPlayer().getName());
+        if(users.containsKey(e.getPlayer().getName())) {
+            abilityUser user = users.get(e.getPlayer().getName());
             user.onPlayerToggleSneak(e);
         }
     }
 
     @EventHandler
     public void onPlayerItemConsume(PlayerItemConsumeEvent event){
-        if(dfPlayers.containsKey(event.getPlayer().getName())) {
-            devilFruitUser user = dfPlayers.get(event.getPlayer().getName());
+        if(users.containsKey(event.getPlayer().getName())) {
+            abilityUser user = users.get(event.getPlayer().getName());
             user.onPlayerItemConsume(event);
         }
     }
     @EventHandler
     public void onEntityPickupItem(EntityPickupItemEvent event){
-        if(dfPlayers.containsKey(event.getEntity().getName())) {
-            devilFruitUser user = dfPlayers.get(event.getEntity().getName());
+        if(users.containsKey(event.getEntity().getName())) {
+            abilityUser user = users.get(event.getEntity().getName());
             user.onEntityPickupItem(event);
         }
     }
     @EventHandler
     public void onPlayerEggThrow(PlayerEggThrowEvent event){
-        if(dfPlayers.containsKey(event.getPlayer().getName())) {
-            devilFruitUser user = dfPlayers.get(event.getPlayer().getName());
+        if(users.containsKey(event.getPlayer().getName())) {
+            abilityUser user = users.get(event.getPlayer().getName());
             user.onPlayerEggThrow(event);
         }
     }
     @EventHandler
     public void onEntityShootBow(EntityShootBowEvent event){
-        if(dfPlayers.containsKey(event.getEntity().getName())) {
-            devilFruitUser user = dfPlayers.get(event.getEntity().getName());
+        if(users.containsKey(event.getEntity().getName())) {
+            abilityUser user = users.get(event.getEntity().getName());
             user.onEntityShootBow(event);
         }
     }
@@ -114,8 +117,8 @@ public class caster implements Listener {
     }
     @EventHandler
     public void onInventoryClick(InventoryClickEvent event){
-        if(dfPlayers.containsKey(event.getWhoClicked().getName())) {
-            devilFruitUser user = dfPlayers.get(event.getWhoClicked().getName());
+        if(users.containsKey(event.getWhoClicked().getName())) {
+            abilityUser user = users.get(event.getWhoClicked().getName());
             user.onInventoryClick(event);
         }
     }
@@ -123,6 +126,22 @@ public class caster implements Listener {
     @EventHandler(ignoreCancelled = true)
     public void onBlockBreak(BlockBreakEvent event) {
         ope_ope.onBlockBreak(event);
+    }
 
+    @EventHandler
+    public void onPlayerRespawn(PlayerRespawnEvent event){
+        skinsChanger.resetSkin(event.getPlayer());
+        if(users.containsKey(event.getPlayer().getName())) {
+            abilityUser user = users.get(event.getPlayer().getName());
+            user.onPlayerRespawn(event);
+        }
+    }
+
+    @EventHandler
+    public void onItemDamage(PlayerItemDamageEvent event){
+        if(users.containsKey(event.getPlayer().getName())) {
+            abilityUser user = users.get(event.getPlayer().getName());
+            user.onItemDamage(event);
+        }
     }
 }

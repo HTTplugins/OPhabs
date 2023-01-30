@@ -10,6 +10,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageEvent;
+import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityToggleSwimEvent;
 import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.event.player.PlayerAnimationEvent;
@@ -21,7 +22,7 @@ import org.bukkit.block.Biome;
 import org.bukkit.entity.Vex;
 import java.util.ArrayList;
 
-public abstract class logia extends abilities {
+public abstract class logia extends df {
     protected Particle element;
     boolean logiaBodyON = false;
 
@@ -40,6 +41,13 @@ public abstract class logia extends abilities {
     public void onEntityDamage(EntityDamageEvent event) {
         super.onEntityDamage(event);
         Player player;
+
+        if(event instanceof EntityDamageByEntityEvent && ((EntityDamageByEntityEvent)event).getDamager() instanceof Player){
+            Player damager = (Player) ((EntityDamageByEntityEvent)event).getDamager();
+            if(plugin.users.containsKey(damager.getName()) && plugin.users.get(damager.getName()).hasHaki())
+                return;
+        }
+
         if(active){
             if (event.getEntity() instanceof Player) {
                 player = (Player) event.getEntity();

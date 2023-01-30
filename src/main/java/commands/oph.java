@@ -17,9 +17,9 @@ import java.util.List;
 public class oph implements CommandExecutor, TabCompleter {
     private  final OPhabs plugin;
     public ArrayList<String> fruitCommands = new ArrayList<String>();
-    public oph(OPhabs plugin, ArrayList<abilities> abilitiesList){
+    public oph(OPhabs plugin, ArrayList<df> abilitiesList){
         this.plugin = plugin;
-        for (abilities ability : abilitiesList){
+        for (df ability : abilitiesList){
             fruitCommands.add(ability.getName());
         }
     }
