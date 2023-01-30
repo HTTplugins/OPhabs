@@ -27,7 +27,8 @@ public class mera_mera extends logia {
     final int N_PARTICULAS = 20, RADIO_PARTICULAS = 0, RESPAWN_HEALTH = 10, RESPAWN_FOOD = 10, BERSERK_DURATION = 3600,
               BERSERK_AMPLIFIER = 2;
     boolean BERSERK = true;
-    private final int FIRE_POOL_DURATION = 3, FIREBALL_STORM_COOLDOWN = 5, FIRE_POOL_COOLDOWN = 15, FAIYABU_COOLDOWN = 5;
+    private final int FIRE_POOL_DURATION = 3, FIREBALL_STORM_COOLDOWN = 5, FIRE_POOL_COOLDOWN = 15, FAIYABU_COOLDOWN = 5,
+                      BOMUSHOTTO_COOLDOWN = 10;
 
     public mera_mera(OPhabs plugin) {
         super(plugin, Particle.FLAME, castIdentification.castMaterialMera, castIdentification.castItemNameMera, fruitIdentification.fruitCommandNameMera);
@@ -38,6 +39,8 @@ public class mera_mera extends logia {
         abilitiesNames.add("Fireball Storm");
         abilitiesCD.add(0);
         abilitiesNames.add("Faiyābū");
+        abilitiesCD.add(0);
+        abilitiesNames.add("Bomushotto");
         abilitiesCD.add(0);
         this.runParticles();
     }
@@ -61,6 +64,13 @@ public class mera_mera extends logia {
         if(abilitiesCD.get(2) == 0) {
             Faiyabu(user.getPlayer());
             abilitiesCD.set(2, FAIYABU_COOLDOWN);
+        }
+    }
+
+    public void ability4() {
+        if(abilitiesCD.get(3) == 0) {
+            Bomushotto(user.getPlayer());
+            abilitiesCD.set(3, BOMUSHOTTO_COOLDOWN);
         }
     }
 
@@ -227,34 +237,25 @@ public class mera_mera extends logia {
                 createAbilitie1Effect(player.getLocation());
 
                 i++;
-
-                Vector jugador = new Vector(player.getLocation().getX(), player.getLocation().getY(), player.getLocation().getZ());
-
-                generateFirePoolEntities(player.getWorld(), player.getLocation(), jugador);
             }
             public void cancelTask() { Bukkit.getScheduler().cancelTask(this.getTaskId()); }
         }.runTaskTimer(plugin, 0, 1);
+
+        Vector jugador = new Vector(player.getLocation().getX(), player.getLocation().getY(), player.getLocation().getZ());
+
+        generateFirePoolEntities(player.getWorld(), player.getLocation(), jugador);
 
         new BukkitRunnable() {
             int k = 0, fireballs = 0;
             @Override
             public void run() {
-                player.getWorld().getNearbyEntities(player.getLocation(), 5, 5, 5).forEach(entity -> {
+                player.getWorld().getNearbyEntities(player.getLocation(), 10, 10, 10).forEach(entity -> {
                     if (entity instanceof Fireball) {
                         fireballs++;
-                        ((Fireball) entity).setDirection(new Vector(0, entity.getLocation().getY() - 10, 0));
+                        ((Fireball) entity).setDirection(new Vector(player.getLocation().getX(), entity.getLocation().getY() - 10, player.getLocation().getZ()));
                         entity.setVelocity(entity.getLocation().getDirection().multiply(2));
                         ((Fireball) entity).setDirection(((Fireball) entity).getDirection().multiply(-1));
-                                /*entity.getWorld().getNearbyEntities(entity.getLocation(), 10, 10, 10).forEach(entity1 -> {
-                                    if (entity1.getName() != player.getName() && entity1 instanceof LivingEntity) {
-                                        double  x = entity1.getLocation().getX(),
-                                                y = entity1.getLocation().getY(),
-                                                z = entity1.getLocation().getZ();
-
-                                        Vector nueva_dir = new Vector(x, y, z);
-                                        ((SmallFireball) player.getWorld().spawnEntity(player.getLocation(), EntityType.SMALL_FIREBALL)).setDirection(nueva_dir);
-                                    }
-                                });*/
+                        entity.getWorld().createExplosion(entity.getLocation(), ExplosionRadius/2);
                     }
                 });
 
@@ -263,14 +264,14 @@ public class mera_mera extends logia {
                 if(fireballs >= 4 || k >= 100)
                     this.cancel();
             }
-        }.runTaskTimer(plugin,0,10);
+        }.runTaskTimer(plugin,0,0);
     }
 
     public void generateFirePoolEntities(World mundo, Location loc, Vector direccion) {
-        ((Fireball)mundo.spawnEntity(loc.clone().add(1, 0, 0), EntityType.FIREBALL)).setDirection(direccion);
-        ((Fireball)mundo.spawnEntity(loc.clone().add(0, 0, 1), EntityType.FIREBALL)).setDirection(direccion);
-        ((Fireball)mundo.spawnEntity(loc.clone().add(0, 1, 0), EntityType.FIREBALL)).setDirection(direccion);
-        ((Fireball)mundo.spawnEntity(loc.clone(), EntityType.FIREBALL)).setDirection(direccion);
+        ((Fireball)mundo.spawnEntity(loc.clone().add(3, 2, 0), EntityType.FIREBALL)).setDirection(direccion);
+        ((Fireball)mundo.spawnEntity(loc.clone().add(0, 2, 3), EntityType.FIREBALL)).setDirection(direccion);
+        ((Fireball)mundo.spawnEntity(loc.clone().add(0, 2, 0), EntityType.FIREBALL)).setDirection(direccion);
+        ((Fireball)mundo.spawnEntity(loc.clone().add(3, 2, 3), EntityType.FIREBALL)).setDirection(direccion);
     }
 
     public void FireballStorm(Player player) {
@@ -303,53 +304,46 @@ public class mera_mera extends logia {
         mundo.playSound(loc, Sound.ENTITY_DRAGON_FIREBALL_EXPLODE, 100, 10);
 
         loc.add(0, -0.5, 0);
-        animacionFaiyabu(mundo, loc.clone(), direccion);
 
-        efectoFaiyabu(mundo, loc, direccion, player);
-    }
-
-    public void efectoFaiyabu(World mundo, Location loc, Vector direccion, Player player) {
         new BukkitRunnable() {
             int k = 0;
-            @Override
-            public void run() {
-                loc.add(direccion);
-
-                mundo.getNearbyEntities(loc, 1, 1, 1).forEach(entity -> {
-                    if(entity.getName() != player.getName() && entity instanceof LivingEntity) {
-                        ((LivingEntity) entity).damage(10);
-                        entity.setFireTicks(100);
-                        mundo.spawnEntity(entity.getLocation(), EntityType.FIREBALL);
-                        mundo.playSound(entity.getLocation(), Sound.ENTITY_DRAGON_FIREBALL_EXPLODE, 100, 10);
-                    }
-                });
-
-                k++;
-            }
-        }.runTaskTimer(plugin,0,0);
-    }
-
-    public void animacionFaiyabu(World mundo, Location loc, Vector direccion) {
-        new BukkitRunnable() {
-            int k = 0;
-            @Override
             public void run() {
                 if(k > 30)
                     this.cancel();
 
                 loc.add(direccion);
 
-                for(double i = -2*PI; i < 2*PI; i+=0.2) {
-                    double  x = sin(i)/5,
-                            y = cos(i)/5,
-                            z = 0;
-                    mundo.spawnParticle(Particle.FLAME, loc.clone().add(-x, -y, -z), 0, 0, 0, 0);
-                    mundo.spawnParticle(Particle.FLAME, loc.add(x, y, z), 0, 0, 0, 0);
-                }
+                animacionFaiyabu(mundo, loc.clone());
+                efectoFaiyabu(mundo, loc.clone(), player);
 
                 k++;
             }
-        }.runTaskTimer(plugin,0,0);
+        }.runTaskTimer(plugin, 0, 0);
+    }
+
+    public void efectoFaiyabu(World mundo, Location loc, Player player) {
+        mundo.getNearbyEntities(loc, 1, 1, 1).forEach(entity -> {
+            if(entity.getName() != player.getName() && entity instanceof LivingEntity) {
+                ((LivingEntity) entity).damage(10);
+                entity.setFireTicks(100);
+                mundo.createExplosion(entity.getLocation(), ExplosionRadius);
+                mundo.playSound(entity.getLocation(), Sound.ENTITY_DRAGON_FIREBALL_EXPLODE, 100, 10);
+            }
+        });
+    }
+
+    public void animacionFaiyabu(World mundo, Location loc) {
+            Location loc_aux = loc.clone(), loc_aux2 = loc_aux.clone(), loc_aux3 = loc_aux2.clone();
+
+            for(double i = -2*PI; i < 2*PI; i+=0.2) {
+                double  x = sin(i)/5,
+                        y = cos(i)/5,
+                        z = 0;
+                mundo.spawnParticle(Particle.FLAME, loc_aux.add(z, y, x), 0, 0, 0, 0);
+                mundo.spawnParticle(Particle.FLAME, loc.add(x, y, z), 0, 0, 0, 0);
+                mundo.spawnParticle(Particle.FLAME, loc_aux2.add(z, -y, -x), 0, 0, 0, 0);
+                mundo.spawnParticle(Particle.FLAME, loc_aux3.add(-x, -y, z), 0, 0, 0, 0);
+            }
     }
 
     public void onPlayerEggThrow(PlayerEggThrowEvent event) {
@@ -362,6 +356,85 @@ public class mera_mera extends logia {
             event.setHatchingType(EntityType.BLAZE);
 
         event.getPlayer().addPotionEffect(new PotionEffect(PotionEffectType.FIRE_RESISTANCE, BERSERK_DURATION, BERSERK_AMPLIFIER));
+    }
+
+    public void Bomushotto(Player player) {
+        Location loc = player.getEyeLocation().clone();
+        Vector direccion = loc.getDirection();
+        World mundo = player.getWorld();
+
+        new BukkitRunnable() {
+            int k = 0;
+            boolean boom = false;
+            @Override
+            public void run() {
+                loc.add(direccion.clone().multiply(4));
+
+                animacionBomushotto(mundo, loc.clone());
+                efectoBomushotto(mundo, loc.clone(), player, boom);
+
+                if(k > 5 || loc.getBlock().getType() != Material.AIR) {
+                    boom = true;
+                    efectoBomushotto(mundo, loc, player, boom);
+                    this.cancel();
+                }
+
+                k++;
+            }
+        }.runTaskTimer(plugin, 0, 20);
+
+        animacionBomushotto(mundo, loc);
+    }
+
+    public void efectoBomushotto(World mundo, Location loc, Player player, Boolean boom) {
+        if(boom)
+            mundo.createExplosion(loc, ExplosionRadius*ExplosionRadius);
+
+        mundo.getNearbyEntities(loc, 4, 4, 4).forEach(entity -> {
+            if(!entity.getName().equals(player.getName()) && entity instanceof LivingEntity) {
+                ((LivingEntity) entity).damage(5);
+                entity.setFireTicks(50);
+            }
+        });
+    }
+
+    public void animacionBomushotto(World mundo, Location loc) {
+        Location loc_aux = loc.clone(), loc_aux2 = loc_aux.clone(), loc_aux3 = loc_aux2.clone(),
+                 loc_aux4 = loc_aux3.clone(), loc_aux5 = loc_aux4.clone(), loc_aux6 = loc_aux5.clone(),
+                 loc_aux7 = loc_aux6.clone(), loc_aux8 = loc_aux7.clone(), loc_aux9 = loc_aux8.clone(),
+                 loc_aux10 = loc_aux9.clone(), loc_aux11 = loc_aux10.clone();
+
+        for(double i = -2*PI; i < 2*PI; i+=0.2) {
+            double  x = sin(i)/5,
+                    y = cos(i)/5,
+                    z = 0;
+
+            mundo.spawnParticle(Particle.FLAME, loc.clone().add(x, y, z), 0, 0, 0, 0);
+            mundo.spawnParticle(Particle.FLAME, loc_aux.add(z, y, x), 0, 0, 0, 0);
+            mundo.spawnParticle(Particle.FLAME, loc_aux2.add(z, -y, -x), 0, 0, 0, 0);
+            mundo.spawnParticle(Particle.FLAME, loc_aux3.add(-x, -y, z), 0, 0, 0, 0);
+            mundo.spawnParticle(Particle.FLAME, loc_aux4.add(x, y, x/2), 0, 0, 0, 0);
+            mundo.spawnParticle(Particle.FLAME, loc_aux5.add(x/2, y, x), 0, 0, 0, 0);
+            mundo.spawnParticle(Particle.FLAME, loc_aux6.add(-x, -y, -x/2), 0, 0, 0, 0);
+            mundo.spawnParticle(Particle.FLAME, loc_aux7.add(-x/2, -y, -x), 0, 0, 0, 0);
+            mundo.spawnParticle(Particle.FLAME, loc_aux8.add(x, y, -x/2), 0, 0, 0, 0);
+            mundo.spawnParticle(Particle.FLAME, loc_aux9.add(-x/2, y, x), 0, 0, 0, 0);
+            mundo.spawnParticle(Particle.FLAME, loc_aux10.add(-x, -y, x/2), 0, 0, 0, 0);
+            mundo.spawnParticle(Particle.FLAME, loc_aux11.add(x/2, -y, -x), 0, 0, 0, 0);
+
+            /*mundo.spawnParticle(Particle.FLAME, loc.clone().add(x, y, z), 0, 0, 0, 0);
+            mundo.spawnParticle(Particle.FLAME, loc.clone().add(z, y, x), 0, 0, 0, 0);
+            mundo.spawnParticle(Particle.FLAME, loc.clone().add(z, -y, -x), 0, 0, 0, 0);
+            mundo.spawnParticle(Particle.FLAME, loc.clone().add(-x, -y, z), 0, 0, 0, 0);
+            mundo.spawnParticle(Particle.FLAME, loc.clone().add(x, y, x/2), 0, 0, 0, 0);
+            mundo.spawnParticle(Particle.FLAME, loc.clone().add(x/2, y, x), 0, 0, 0, 0);
+            mundo.spawnParticle(Particle.FLAME, loc.clone().add(-x, -y, -x/2), 0, 0, 0, 0);
+            mundo.spawnParticle(Particle.FLAME, loc.clone().add(-x/2, -y, -x), 0, 0, 0, 0);
+            mundo.spawnParticle(Particle.FLAME, loc.clone().add(x, y, -x/2), 0, 0, 0, 0);
+            mundo.spawnParticle(Particle.FLAME, loc.clone().add(-x/2, y, x), 0, 0, 0, 0);
+            mundo.spawnParticle(Particle.FLAME, loc.clone().add(-x, -y, x/2), 0, 0, 0, 0);
+            mundo.spawnParticle(Particle.FLAME, loc.clone().add(x/2, -y, -x), 0, 0, 0, 0);*/
+        }
     }
 
     @Override
