@@ -77,7 +77,7 @@ public final class OPhabs extends JavaPlugin {
         fAssociation.setScoreboard(scoreboard);
         lFruit.setScoreboard(scoreboard);
 
-        registerCommands(abilitiesList);
+        registerCommands(abilitiesList, haki);
 
         //--------------
         Bukkit.getConsoleSender().sendMessage(ChatColor.GREEN + "" + ChatColor.BOLD +  "OPhabs started correctly.");
@@ -98,9 +98,9 @@ public final class OPhabs extends JavaPlugin {
         Bukkit.getConsoleSender().sendMessage(ChatColor.DARK_RED + "" + ChatColor.BOLD + "HTTrolplay closed correctly.");
     }
 
-    public void registerCommands(ArrayList<df> abilitiesList) {
-        Objects.requireNonNull(this.getCommand("oph")).setExecutor(new oph(this, abilitiesList));
-        Objects.requireNonNull(this.getCommand("oph")).setTabCompleter(new oph(this, abilitiesList));
+    public void registerCommands(ArrayList<df> abilitiesList, hakiAssociation haki){
+        Objects.requireNonNull(this.getCommand("oph")).setExecutor(new oph(this, abilitiesList, haki));
+        Objects.requireNonNull(this.getCommand("oph")).setTabCompleter(new oph(this, abilitiesList, haki));
         Objects.requireNonNull(this.getCommand("weaponShop")).setExecutor(new weaponShop(this));
     }
 }

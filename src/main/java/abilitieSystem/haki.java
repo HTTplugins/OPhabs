@@ -55,7 +55,11 @@ public class haki extends abilities {
         return exp;
     }
     public void setLevel(int level){
-        this.level = level;
+        if(level > 0){
+            this.level = level;
+            reloadPlayer();
+        }
+
     }
     public void setExp(double exp){
         this.exp = exp;
@@ -102,7 +106,11 @@ public class haki extends abilities {
         }
     }
 
-
+    public void reloadPlayer(){
+        user.getPlayer().sendMessage("§a§lHaki§r§a level: "+level);
+        user.getPlayer().setMaxHealth(20+2*level);
+        user.getPlayer().getAttribute(Attribute.GENERIC_ARMOR).setBaseValue(0+2*level);
+    }
 
     public void playerOnWater(PlayerMoveEvent event){}
     public void onPlayerToggleSneak(PlayerToggleSneakEvent e){}
