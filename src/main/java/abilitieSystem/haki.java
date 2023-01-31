@@ -91,9 +91,12 @@ public class haki extends abilities {
     }
 
     public void onUserDamageAnotherEntity(EntityDamageByEntityEvent event){
-
         if(level>=5){
+            if(((Player)event.getDamager()).getInventory().getItemInMainHand().getType() == Material.AIR){
+                event.setDamage(event.getDamage()*5);
+            }
             event.setDamage(event.getDamage()+(event.getDamage()*level)/10);
+
         }
 
         exp += event.getDamage();

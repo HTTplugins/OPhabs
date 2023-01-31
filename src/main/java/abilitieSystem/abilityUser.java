@@ -52,6 +52,11 @@ public class abilityUser{
         dfAbilities.user=this;
     }
 
+    public void removeFruit(){
+        this.fruit = null;
+        this.dfAbilities = null;
+    }
+
     public void setHaki(abilities hakiAbilities){
         this.hakiAbilities = hakiAbilities;
         this.hakiAbilities.user=this;

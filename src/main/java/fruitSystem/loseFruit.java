@@ -31,7 +31,7 @@ public class loseFruit implements Listener {
             plugin.getConfig().set(("FruitAssociations."+dfUser.getDFAbilities().getName()),"none");
             plugin.saveConfig();
             dfPlayers.remove(player.getName());
-            users.remove(player.getName());
+            users.get(player.getName()).removeFruit();
             scoreboard.removeScoreboard(player);
         }
     }
