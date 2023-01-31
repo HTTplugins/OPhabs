@@ -51,14 +51,14 @@ public class goro_goro extends logia {
     public void ability3(){
         if(abilitiesCD.get(2) == 0){
             lightStep(user.getPlayer());
-            abilitiesCD.set(2, 0); // Pon el cooldown en segundos
+            abilitiesCD.set(2, 30); // Pon el cooldown en segundos
         }
     }
 
     public void ability4(){
         if(abilitiesCD.get(3) == 0){
             discharge(user.getPlayer());
-            abilitiesCD.set(3, 0); // Pon el cooldown en segundos
+            abilitiesCD.set(3, 100); // Pon el cooldown en segundos
         }
     }
 

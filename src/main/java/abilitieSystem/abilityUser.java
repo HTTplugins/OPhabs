@@ -41,6 +41,12 @@ public class abilityUser{
 
         return Bukkit.getPlayerExact(playerName);
     }
+
+    public String getName(){
+        return playerName;
+    }
+
+    
     
     public String getPlayerName(){
         return playerName;
@@ -51,7 +57,7 @@ public class abilityUser{
         this.dfAbilities = dfAbilities;
         dfAbilities.user=this;
     }
-
+    
     public void removeFruit(){
         this.fruit = null;
         this.dfAbilities = null;

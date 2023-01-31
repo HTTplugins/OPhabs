@@ -90,8 +90,8 @@ public final class OPhabs extends JavaPlugin {
 
         for (abilityUser user : users.values()) {
             if(user.hasHaki()){
-                getConfig().set("hakiPlayers." + user.getPlayer().getName() + ".Level", user.getHakiLevel());
-                getConfig().set("hakiPlayers." + user.getPlayer().getName() + ".Exp", user.getHakiExp());
+                getConfig().set("hakiPlayers." + user.getName() + ".Level", user.getHakiLevel());
+                getConfig().set("hakiPlayers." + user.getName() + ".Exp", user.getHakiExp());
             }
         }
         saveConfig();
