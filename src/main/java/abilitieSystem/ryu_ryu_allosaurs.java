@@ -30,15 +30,15 @@ public class ryu_ryu_allosaurs extends zoan {
         }
     }
 
-    public void ability3(){
-        if(abilitiesCD.get(2) == 0){
+    public void ability3() {
+        if(abilitiesCD.get(2) == 0) {
             tailSpin();
             abilitiesCD.set(2, 5);
         }
     }
 
 
-    public void transformation(){
+    public void transformation() {
         super.transformation();
 
         new BukkitRunnable() {
@@ -60,7 +60,7 @@ public class ryu_ryu_allosaurs extends zoan {
     }
 
     //launch player in the lookin direction
-    public void frontCrunch(){
+    public void frontCrunch() {
         Player player = user.getPlayer();
         player.setVelocity(player.getLocation().getDirection().multiply(2));
         new BukkitRunnable() {
@@ -90,10 +90,11 @@ public class ryu_ryu_allosaurs extends zoan {
     public void tailSpin(){
         Player player = user.getPlayer();
         player.setVelocity(player.getLocation().getDirection().multiply(2));
-                player.getWorld().getNearbyEntities(player.getLocation(), 3,1,3).forEach(entity -> {
-                    if(entity.getName() != player.getName() && entity instanceof LivingEntity)
-                        ((LivingEntity) entity).damage(15);
-                });
+
+        player.getWorld().getNearbyEntities(player.getLocation(), 3,1,3).forEach(entity -> {
+            if(entity.getName() != player.getName() && entity instanceof LivingEntity)
+                ((LivingEntity) entity).damage(15);
+        });
 
         int radius = 3, particleAmount = 3;
         World world = player.getWorld();
