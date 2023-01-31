@@ -102,7 +102,7 @@ public class caster implements Listener {
             user.onEntityShootBow(event);
         }
     }
-    @EventHandler
+    @EventHandler(ignoreCancelled = true)
     public void onEntityChangeBlock(EntityChangeBlockEvent event){
         yami_yami.onEntityChangeBlock(event);
     }
@@ -118,7 +118,6 @@ public class caster implements Listener {
     public void onEntityToggleGlide(EntityToggleGlideEvent event) {
         zushi_zushi.onEntityToggleGlide(event);
     }
-
 
     @EventHandler(ignoreCancelled = true)
     public void onPlayerMove(PlayerMoveEvent event) {

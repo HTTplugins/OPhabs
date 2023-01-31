@@ -3,42 +3,58 @@ package abilitieSystem;
 import castSystem.castIdentification;
 import htt.ophabs.OPhabs;
 import fruitSystem.fruitIdentification;
-import org.bukkit.Location;
-import org.bukkit.Material;
-import org.bukkit.Particle;
-import org.bukkit.World;
+import org.bukkit.*;
+import org.bukkit.block.Block;
 import org.bukkit.entity.Entity;
+import org.bukkit.entity.FallingBlock;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
+import org.bukkit.event.entity.EntityChangeBlockEvent;
 import org.bukkit.event.entity.EntityToggleGlideEvent;
 import org.bukkit.event.entity.EntityToggleSwimEvent;
 import org.bukkit.event.player.PlayerMoveEvent;
+import org.bukkit.metadata.FixedMetadataValue;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import org.bukkit.scheduler.BukkitRunnable;
+import org.bukkit.scheduler.BukkitTask;
 import org.bukkit.util.Vector;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
+import static java.lang.Math.*;
+
 public class zushi_zushi extends paramecia{
+
+    private final List<Material> materials = new ArrayList<>();
+
     private static boolean heavyActivated;
+
+    private boolean exploded = false;
 
     private static List<Entity> heavyEntity = null;
     private static List<Player> togglePlayer = new ArrayList<>();
+    private final Random random = new Random();
+
 
     public zushi_zushi(OPhabs plugin){
         super(plugin, castIdentification.castMaterialZushi,castIdentification.castItemNameZushi,fruitIdentification.fruitCommandNameZushi);
-        abilitiesNames.add("heavy");
+        abilitiesNames.add("Heavy");
         abilitiesCD.add(0);
-        abilitiesNames.add("ab2");
+        abilitiesNames.add("Meteor");
         abilitiesCD.add(0);
         abilitiesNames.add("ab3");
         abilitiesCD.add(0);
         abilitiesNames.add("ab4");
         abilitiesCD.add(0);
         heavyActivated = false;
+
+        //Meteor Materials initialization:
+        materials.add(Material.COBBLESTONE);
+        materials.add(Material.MAGMA_BLOCK);
+        materials.add(Material.NETHERRACK);
     }
 
     public void ability1(){
@@ -50,8 +66,8 @@ public class zushi_zushi extends paramecia{
 
     public void ability2(){
         if(abilitiesCD.get(1) == 0){
-
-            abilitiesCD.set(1, 20); // Pon el cooldown en segundos
+            meteor(user.getPlayer());
+            abilitiesCD.set(1, 0); // Pon el cooldown en segundos
         }
     }
 
@@ -163,5 +179,100 @@ public class zushi_zushi extends paramecia{
 
 
     }
+
+    public void meteor(Player player){
+        World world = player.getWorld();
+        Location end = getTargetBlock(user.getPlayer(), 40);
+
+        new BukkitRunnable(){
+            public final Particle.DustOptions purple = new Particle.DustOptions(Color.PURPLE,1.0F);
+
+            final double radius = 1.5;
+            double x,y = 2,z;
+            int ticks = 0;
+
+            final Location playerLoc = player.getLocation();
+            @Override
+            public void run() {
+
+                if(ticks < 100)
+                    circle(playerLoc,y);
+                else if(ticks % 2 == 0 && ticks < 190){
+                    circle(playerLoc,y + 0.5);
+                    circle(playerLoc,y+1);
+                    y++;
+                }
+
+                if(ticks == 155){
+                    Location start = playerLoc.clone();
+                    start.setY(playerLoc.getY() + 50);
+                    launchMeteore(start,end,5);
+                }
+
+                if(ticks == 191)
+                    this.cancel();
+
+                ticks++;
+            }
+
+            public void circle(Location loc,double y){
+                for(double i=0; i<2*PI; i+=0.1){
+                    x = radius * cos(i);
+                    z = radius * sin(i);
+
+                    loc.add(x,y,z);
+                    world.spawnParticle(Particle.REDSTONE,loc,0,0,0,0,purple);
+                    loc.subtract(x,y,z);
+                }
+
+            }
+        }.runTaskTimer(plugin,0,1);
+
+    }
+
+    public void launchMeteore(Location start, Location end, int radius) {
+        World world = start.getWorld();
+        exploded = false;
+
+        for (int x = -radius; x <= radius; x++)
+            for (int y = -radius; y <= radius; y++)
+                for (int z = -radius; z <= radius; z++)
+                    if (x * x + y * y + z * z <= 25) {
+                        Location blockLocation = start.clone().add(x, y, z);
+                        Material material = materials.get(random.nextInt(materials.size()));
+                        FallingBlock fallingBlock = world.spawnFallingBlock(blockLocation,material.createBlockData());
+                        Vector vector = end.toVector().subtract(blockLocation.toVector());
+                        fallingBlock.setVelocity(vector.multiply(0.025));
+                        fallingBlock.setDropItem(false);
+
+                        new BukkitRunnable(){   //Check explosion
+                            @Override
+                            public void run() {
+                                if(exploded) this.cancel();
+
+                                if (fallingBlock.isDead() && !exploded) {
+                                    world.createExplosion(fallingBlock.getLocation(), 15);
+                                    exploded = true;
+                                }
+                            }
+                        }.runTaskTimer(plugin,0,1);
+                    }
+    }
+
+    public Location getTargetBlock(Player player, int range) {
+        Vector direction = player.getEyeLocation().getDirection().normalize();
+        Location current = player.getEyeLocation();
+
+        for (int i = 0; i < range; i++) {
+            current = current.add(direction);
+
+            if (current.getBlock().getType().isSolid())
+                return current;
+        }
+
+        return current;
+    }
+
+
 
 }
