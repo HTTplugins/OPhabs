@@ -3,21 +3,17 @@ package abilitieSystem;
 import htt.ophabs.OPhabs;
 import castSystem.castIdentification;
 import fruitSystem.fruitIdentification;
-import fruitSystem.devilFruitUser;
 import weapons.weaponsItems;
 
 import java.util.ArrayList;
-import java.util.Random;
+
 import org.bukkit.*;
 import org.bukkit.entity.Entity;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
-import org.bukkit.entity.Projectile;
-import org.bukkit.potion.PotionEffectType;
-import org.bukkit.potion.PotionEffect;;
+;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.scheduler.BukkitRunnable;
@@ -25,13 +21,8 @@ import org.bukkit.scheduler.BukkitTask;
 import org.bukkit.util.Vector;
 import org.bukkit.block.Block;
 import org.bukkit.inventory.Inventory;
-import org.bukkit.attribute.AttributeModifier;
-import org.bukkit.attribute.Attribute;
-import org.bukkit.inventory.EquipmentSlot;
-import org.bukkit.material.MaterialData;
-import java.util.UUID;
+
 import java.lang.Math;
-import java.util.Arrays;
 
 public class ishi_ishi extends paramecia {
     final int radiusFloor = 3, radiusWall = 3;
@@ -59,7 +50,7 @@ public class ishi_ishi extends paramecia {
         abilitiesCD.add(0);
     }
 
-    public ishi_ishi(OPhabs plugin, devilFruitUser user) {
+    public ishi_ishi(OPhabs plugin, abilityUser user) {
         super(plugin, user, castIdentification.castMaterialIshi, castIdentification.castItemNameIshi, fruitIdentification.fruitCommandNameIshi);
         storaged = 5;
         abilitiesNames.add(nameAbility1 + " (" + storaged + ")");

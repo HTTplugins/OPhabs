@@ -1,7 +1,7 @@
 package castSystem;
 
 import htt.ophabs.OPhabs;
-import fruitSystem.devilFruitUser;
+import abilitieSystem.abilityUser;
 
 import org.bukkit.scheduler.BukkitRunnable;
 
@@ -12,11 +12,11 @@ import java.util.ArrayList;
 public class coolDown {
 
     private OPhabs plugin;
-    private Map<String, devilFruitUser> dfPlayers = new HashMap<>();
+    private Map<String, abilityUser> users = new HashMap<>();
 
-    public coolDown(OPhabs plugin, Map<String, devilFruitUser> dfPlayers) {
+    public coolDown(OPhabs plugin, Map<String, abilityUser> users) {
         this.plugin = plugin;
-        this.dfPlayers = dfPlayers;
+        this.users = users;
 
         runCoolDownSystem();
     }
@@ -25,11 +25,13 @@ public class coolDown {
         new BukkitRunnable() {
             @Override
             public void run() {
-                for (devilFruitUser dfUser : dfPlayers.values()) {
-                    ArrayList<Integer> coolDownList = dfUser.getAbilitiesCD();
-                    for ( int i = 0; i < coolDownList.size(); i++){
-                        if (coolDownList.get(i) > 0) {
-                            coolDownList.set(i, (coolDownList.get(i)-1));
+                for (abilityUser user : users.values()) {
+                    if(user.hasFruit()){
+                        ArrayList<Integer> coolDownList = user.getAbilitiesCD();
+                        for ( int i = 0; i < coolDownList.size(); i++){
+                            if (coolDownList.get(i) > 0) {
+                                coolDownList.set(i, (coolDownList.get(i)-1));
+                            }
                         }
                     }
                 }

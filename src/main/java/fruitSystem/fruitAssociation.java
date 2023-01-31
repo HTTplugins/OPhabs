@@ -9,7 +9,6 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerItemConsumeEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
-import castSystem.castIdentification;
 import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
@@ -22,22 +21,22 @@ import org.bukkit.inventory.EquipmentSlot;
 import java.util.UUID;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import abilitieSystem.*;
 import scoreboardSystem.abilitiesScoreboard;
 
 public class fruitAssociation implements Listener {
     private final OPhabs plugin;
-    public static Map<String, devilFruitUser> dfPlayers = new HashMap<>();
-    public static Map<String, abilities> abilitiesM = new HashMap<>();
+    public static Map<String, abilityUser> dfPlayers = new HashMap<>(), users = new HashMap<>();
+    public static Map<String, df> abilitiesM = new HashMap<>();
     public abilitiesScoreboard scoreboard = null;
     public ArrayList<String> Names = new ArrayList<>();
-    public ArrayList<abilities> abilityList = new ArrayList<>();
-    public fruitAssociation(OPhabs plugin, ArrayList<abilities> abilitiesList) {
+    public ArrayList<df> abilityList = new ArrayList<>();
+    public fruitAssociation(OPhabs plugin, ArrayList<df> abilitiesList, Map<String, abilityUser> users) {
         this.plugin = plugin;
+        this.users = users;
 
-        for (abilities ability : abilitiesList) {
+        for (df ability : abilitiesList) {
             System.out.println(ability.getName());
             abilitiesM.put(fruitIdentification.getItemName(ability.getName()), ability);
         }
@@ -51,10 +50,23 @@ public class fruitAssociation implements Listener {
         for (int i = 0; i < values.size(); i++) {
             String value = values.get(i);
             if(!values.equals("none")) {
-               dfPlayers.put(value, new devilFruitUser(value, new devilFruit(value), abilitiesList.get(i)));
+                addDevilFruitPlayer(value, new devilFruit(Names.get(i)), abilitiesList.get(i));
+
             }
         }
         abilityList = abilitiesList;
+    }
+
+    public void addDevilFruitPlayer(String name, devilFruit fruit, abilities ability) {
+        abilityUser user = new abilityUser(name);
+        user.setFruit(fruit, ability);
+        dfPlayers.put(name, user);
+        if(users.containsKey(name)){
+            users.get(name).setFruit(fruit, ability);
+
+        } else {
+            users.put(name, user);
+        }
     }
 
     public void setScoreboard(abilitiesScoreboard scoreboard){
@@ -66,13 +78,13 @@ public class fruitAssociation implements Listener {
         ItemStack fruit = event.getItem();
         if(fruitIdentification.isFruit(fruit.getItemMeta().getDisplayName())){
             ArrayList<String> values = new ArrayList<>();
-            for(abilities ability : abilitiesM.values()) {
+            for(df ability : abilitiesM.values()) {
                 values.add(ability.getName());
             }
             String casterItemName = null;
             Material castMaterial = Material.STICK;
             Boolean consumedFruit = false;
-            abilities a = null;
+            df a = null;
             //iterate in all Names
             for(int i = 0; i < Names.size(); i++) {
                 if(fruit.getItemMeta().getDisplayName().equals(Names.get(i))) {
@@ -101,10 +113,10 @@ public class fruitAssociation implements Listener {
                 event.getPlayer().setHealth(0);
             } else{
                 System.out.println("Player " + event.getPlayer().getName() + " has eaten a " + fruit.getItemMeta().getDisplayName() + " Size: " + abilitiesM.size());
-                abilities ability = abilitiesM.get(fruit.getItemMeta().getDisplayName());
+                df ability = abilitiesM.get(fruit.getItemMeta().getDisplayName());
                 fruitIdentification fruitID = new fruitIdentification();
-                devilFruitUser dfUser = new devilFruitUser(event.getPlayer().getName(), new devilFruit(fruitID.getCommandName(fruit.getItemMeta().getDisplayName())), ability);
-                dfPlayers.put(event.getPlayer().getName(), dfUser);
+                addDevilFruitPlayer(event.getPlayer().getName(), new devilFruit(fruitID.getItemName(ability.getName())), ability);
+                
                 plugin.getConfig().set("FruitAssociations." + a.getName(), event.getPlayer().getName());
                 plugin.saveConfig();
                 scoreboard.addScoreboard(event.getPlayer().getName());

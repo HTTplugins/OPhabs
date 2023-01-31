@@ -5,6 +5,7 @@ import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.Bukkit;
 import commands.*;
 import fruitSystem.*;
+import hakiSystem.*;
 import abilitieSystem.*;
 import castSystem.*;
 import org.bukkit.ChatColor;
@@ -13,8 +14,11 @@ import weapons.*;
 
 import java.util.Objects;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 public final class OPhabs extends JavaPlugin {
+    public Map<String, abilityUser> users = new HashMap<>();
 
     @Override
     public void onEnable(){
@@ -25,9 +29,10 @@ public final class OPhabs extends JavaPlugin {
         getConfig().options().copyDefaults();
         saveDefaultConfig();
 
+       
         //--------------
         //abilitieSystem
-        ArrayList<abilities> abilitiesList = new ArrayList<>();
+        ArrayList<df> abilitiesList = new ArrayList<>();
 
         abilitiesList.add(new yami_yami(this));
         abilitiesList.add(new mera_mera(this));
@@ -44,27 +49,35 @@ public final class OPhabs extends JavaPlugin {
 
         //--------------
         //FruitSystem
-        fruitAssociation association = new fruitAssociation(this, abilitiesList);
-        loseFruit lFruit = new loseFruit(this, association.dfPlayers);
-        getServer().getPluginManager().registerEvents(association, this);
+        fruitAssociation fAssociation = new fruitAssociation(this, abilitiesList, users);
+        loseFruit lFruit = new loseFruit(this, fAssociation.dfPlayers, users);
+        getServer().getPluginManager().registerEvents(fAssociation, this);
         getServer().getPluginManager().registerEvents(lFruit, this);
+
+        //
+        //HakiSystem
+        hakiAssociation haki = new hakiAssociation(this, users);
+        getServer().getPluginManager().registerEvents(haki, this);
+
+
+
 
         //--------------
         //CasterSystem
-        coolDown cooldown = new coolDown(this, association.dfPlayers);
+        coolDown cooldown = new coolDown(this, users);
 
-        getServer().getPluginManager().registerEvents(new caster(cooldown,association.dfPlayers), this);
+        getServer().getPluginManager().registerEvents(new caster(cooldown,users), this);
         getServer().getPluginManager().registerEvents(new noDropCaster(), this);
 
         //--------------
         //ScoreBoards
 
-        abilitiesScoreboard scoreboard = new abilitiesScoreboard(this, association.dfPlayers);
+        abilitiesScoreboard scoreboard = new abilitiesScoreboard(this, users);
         scoreboard.ini();
-        association.setScoreboard(scoreboard);
+        fAssociation.setScoreboard(scoreboard);
         lFruit.setScoreboard(scoreboard);
 
-        registerCommands(abilitiesList);
+        registerCommands(abilitiesList, haki);
 
         //--------------
         Bukkit.getConsoleSender().sendMessage(ChatColor.GREEN + "" + ChatColor.BOLD +  "OPhabs started correctly.");
@@ -74,12 +87,20 @@ public final class OPhabs extends JavaPlugin {
 
     @Override
     public void onDisable() {
+
+        for (abilityUser user : users.values()) {
+            if(user.hasHaki()){
+                getConfig().set("hakiPlayers." + user.getPlayer().getName() + ".Level", user.getHakiLevel());
+                getConfig().set("hakiPlayers." + user.getPlayer().getName() + ".Exp", user.getHakiExp());
+            }
+        }
+        saveConfig();
         Bukkit.getConsoleSender().sendMessage(ChatColor.DARK_RED + "" + ChatColor.BOLD + "HTTrolplay closed correctly.");
     }
 
-    public void registerCommands(ArrayList<abilities> abilitiesList) {
-        Objects.requireNonNull(this.getCommand("oph")).setExecutor(new oph(this, abilitiesList));
-        Objects.requireNonNull(this.getCommand("oph")).setTabCompleter(new oph(this, abilitiesList));
+    public void registerCommands(ArrayList<df> abilitiesList, hakiAssociation haki){
+        Objects.requireNonNull(this.getCommand("oph")).setExecutor(new oph(this, abilitiesList, haki));
+        Objects.requireNonNull(this.getCommand("oph")).setTabCompleter(new oph(this, abilitiesList, haki));
         Objects.requireNonNull(this.getCommand("weaponShop")).setExecutor(new weaponShop(this));
     }
 }

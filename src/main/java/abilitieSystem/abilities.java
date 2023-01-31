@@ -2,7 +2,6 @@ package abilitieSystem;
 
 
 import htt.ophabs.OPhabs;
-import fruitSystem.devilFruitUser;
 import castSystem.coolDown;
 
 import org.bukkit.event.entity.EntityDamageEvent;
@@ -15,7 +14,9 @@ import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.event.player.PlayerEggThrowEvent;
 import org.bukkit.event.player.PlayerToggleSneakEvent;
 import org.bukkit.event.player.PlayerItemConsumeEvent;
+import org.bukkit.event.player.PlayerRespawnEvent;
 import org.bukkit.event.inventory.InventoryClickEvent;
+import org.bukkit.event.player.PlayerItemDamageEvent;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.potion.PotionEffect;
@@ -24,55 +25,20 @@ import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.Material;
 
 import java.util.ArrayList;
-import java.util.Map;
 
 public class abilities {
     protected OPhabs plugin;
-    protected devilFruitUser user=null;
-    protected Integer actual;
-    protected String commandName;
+    protected abilityUser user=null;
     public ArrayList<String> abilitiesNames = new ArrayList<>();
     public ArrayList<Integer> abilitiesCD = new ArrayList<>();
-    protected coolDown cd;
-    public boolean active;
     
-    public Material caster;
-    public String casterName;
-    public abilities(OPhabs plugin, devilFruitUser user, Material castMaterial, String castName, String commandName){
+    
+    public abilities(OPhabs plugin, abilityUser user){
         this.plugin = plugin;
         this.user = user;
-        this.actual = 0;
-        this.caster = castMaterial;
-        this.casterName = castName;
-        this.commandName = commandName;
-        this.active = true;
     }
-    public abilities(OPhabs plugin, Material castMaterial, String castName, String commandName){
+    public abilities(OPhabs plugin){
         this.plugin = plugin;
-        actual=0;
-        this.caster = castMaterial;
-        this.casterName = castName;
-        this.commandName = commandName;
-        this.active = true;
-    }
-
-
-    public String getItemName(){
-        return this.casterName;
-    }
-
-    public Material getMaterial(){
-        return this.caster;
-    }
-    public ArrayList<String> getAbilitiesNames(){
-        return abilitiesNames;
-    }
-    
-    public void setUser(devilFruitUser user){
-        this.user = user;
-    }
-    public String getName(){
-        return commandName;
     }
 	public void ability1(){}
     public void ability2(){}
@@ -80,34 +46,7 @@ public class abilities {
 	public void ability4(){}
 	public void ability5(){}
 	public void ability6(){}
-    public void onEntityDamage(EntityDamageEvent event){
-        if(event instanceof EntityDamageByEntityEvent){
-            if(((EntityDamageByEntityEvent)event).getDamager() instanceof LivingEntity){
-                LivingEntity damager = (LivingEntity) ((EntityDamageByEntityEvent)event).getDamager();
-                if(damager.getEquipment().getItemInMainHand().getItemMeta() != null && damager.getEquipment().getItemInMainHand().getItemMeta().getLore() != null && damager.getEquipment().getItemInMainHand().getItemMeta().getLore().contains("Material:Kairōseki")){
-                    active = false;
-                    new BukkitRunnable(){
-                        @Override
-                        public void run(){
-                            active = true;
-                        }
-                    }.runTaskLater(plugin, 20*8);
-                    Player player = user.getPlayer();
-
-                    player.addPotionEffect(new PotionEffect(PotionEffectType.SLOW, 20*8, 100));
-                    player.addPotionEffect(new PotionEffect(PotionEffectType.CONFUSION, 20*8, 1));
-                    player.addPotionEffect(new PotionEffect(PotionEffectType.WEAKNESS, 20*8, 1));
-                    player.addPotionEffect(new PotionEffect(PotionEffectType.SLOW_DIGGING, 20*8, 1));
-                    player.addPotionEffect(new PotionEffect(PotionEffectType.HUNGER, 20*8, 1));           
-                }
-            }
-        }
-
-
-    }
-    public void onPlayerDeath(PlayerDeathEvent event){
-        user = null;
-    }
+    public void onPlayerDeath(PlayerDeathEvent event){}
     public void playerOnWater(PlayerMoveEvent event){}
     public void onPlayerToggleSneak(PlayerToggleSneakEvent e){}
     public void onFall(EntityDamageEvent e){}
@@ -116,5 +55,8 @@ public class abilities {
     public void onPlayerEggThrow(PlayerEggThrowEvent event){}
     public void onEntityShootBow(EntityShootBowEvent event){}
     public void onInventoryClick(InventoryClickEvent event){}
+    public void onEntityDamage(EntityDamageEvent event){}
+    public void onPlayerRespawn(PlayerRespawnEvent event){}
+    public void onItemDamage(PlayerItemDamageEvent event){}
 
 }

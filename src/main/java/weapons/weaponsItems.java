@@ -93,7 +93,6 @@ public class weaponsItems {
         meta.addAttributeModifier(Attribute.GENERIC_ATTACK_DAMAGE, modifier);
         AttributeModifier modifier2 = new AttributeModifier(UUID.randomUUID(), "generic.attackSpeed", 2, AttributeModifier.Operation.ADD_NUMBER, EquipmentSlot.HAND);
         meta.addAttributeModifier(Attribute.GENERIC_ATTACK_SPEED, modifier2);
-        meta.setUnbreakable(true);
         meta.setCustomModelData(1);
         item.setItemMeta(meta);
 
@@ -110,7 +109,6 @@ public class weaponsItems {
         meta.addAttributeModifier(Attribute.GENERIC_ATTACK_SPEED, modifier2);
         meta.setLore(Arrays.asList("Material:Kairōseki"));
         meta.setCustomModelData(786);
-        meta.setUnbreakable(true);
         item.setItemMeta(meta);
 
         return item;

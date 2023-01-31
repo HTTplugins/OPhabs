@@ -1,7 +1,6 @@
 package abilitieSystem;
 
 import htt.ophabs.OPhabs;
-import fruitSystem.devilFruitUser;
 import castSystem.castIdentification;
 import fruitSystem.fruitIdentification;
 
@@ -14,8 +13,6 @@ import org.bukkit.entity.Player;
 import org.bukkit.entity.Projectile;
 import org.bukkit.potion.PotionEffectType;
 import org.bukkit.potion.PotionEffect;
-import org.bukkit.event.EventHandler;
-import org.bukkit.event.Listener;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.util.Vector;
 import org.bukkit.block.Block;
@@ -40,7 +37,7 @@ public class gura_gura extends paramecia {
         abilitiesNames.add("ExpansionWave");
         abilitiesCD.add(0);
     }
-    public gura_gura(OPhabs plugin, devilFruitUser user) {
+    public gura_gura(OPhabs plugin, abilityUser user) {
         super(plugin, user, castIdentification.castMaterialGura, castIdentification.castItemNameGura, fruitIdentification.fruitCommandNameGura);
         abilitiesNames.add("Earthquake");
         abilitiesCD.add(0);

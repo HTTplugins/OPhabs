@@ -1,7 +1,6 @@
 package abilitieSystem;
 
 import htt.ophabs.OPhabs;
-import fruitSystem.devilFruitUser;
 import castSystem.castIdentification;
 import fruitSystem.fruitIdentification;
 
@@ -9,15 +8,10 @@ import org.bukkit.*;
 import org.bukkit.entity.Player;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
-import org.bukkit.event.EventHandler;
-import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageEvent;
-import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.event.player.PlayerToggleSneakEvent;
 import org.bukkit.scheduler.BukkitRunnable;
-import org.bukkit.scheduler.BukkitTask;
 import org.bukkit.entity.LivingEntity;
-import java.util.ArrayList;
 
 public class neko_neko_reoparudo extends zoan {
 
