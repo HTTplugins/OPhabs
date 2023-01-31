@@ -190,6 +190,7 @@ public class mera_mera extends logia {
                 jugador.setHealth(RESPAWN_HEALTH);
                 jugador.setFoodLevel(RESPAWN_FOOD);
                 BerserkEffects(jugador);
+
                 new BukkitRunnable(){
                     @Override
                     public void run(){
