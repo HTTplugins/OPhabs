@@ -100,15 +100,17 @@ public class zushi_zushi extends paramecia{
                 ticks++;
 
                 for(int i = 0; i < 30; i++){
-                    x = (random.nextDouble() * 19.98) - 9.99;
-                    z = (random.nextDouble() * 19.98) - 9.99;
-                    world.spawnParticle(Particle.SPELL_WITCH,new Location(world,playerLoc.getX()+x,playerLoc.getY(),playerLoc.getZ() + z),2);
+                    x = (random.nextDouble() * 19.98) - 9.99 + playerLoc.getX();
+                    z = (random.nextDouble() * 19.98) - 9.99 + playerLoc.getZ();
+                    double y = searchGround(x,z,playerLoc.getY(),world);
+                    world.spawnParticle(Particle.SPELL_WITCH,new Location(world,x,y, z),2);
                 }
 
                 for(int i = 0; i < 60; i++){
-                    x = (random.nextDouble() * 19.98) - 9.99;
-                    z = (random.nextDouble() * 19.98) - 9.99;
-                    world.spawnParticle(Particle.CRIT_MAGIC,new Location(world,playerLoc.getX()+x,playerLoc.getY() + 0.5,playerLoc.getZ() + z),0,0,-0.3,0);
+                    x = (random.nextDouble() * 19.98) - 9.99 + playerLoc.getX();
+                    z = (random.nextDouble() * 19.98) - 9.99 + playerLoc.getZ();
+                    double y = searchGround(x,z,playerLoc.getY(),world);
+                    world.spawnParticle(Particle.CRIT_MAGIC,new Location(world,x,y + 0.5,z),0,0,-0.3,0);
                 }
                 if(ticks == 100) this.cancel();
 
@@ -138,10 +140,10 @@ public class zushi_zushi extends paramecia{
 
                         togglePlayer.add((Player) ent);
                         Location entiLoc = ent.getLocation();
-                        ((Player)ent).teleport(new Location(world,entiLoc.getX(),entiLoc.getY(),entiLoc.getZ(),entiLoc.getYaw(),-10));
+                        (ent).teleport(new Location(world,entiLoc.getX(),entiLoc.getY(),entiLoc.getZ(),entiLoc.getYaw(),-10));
                         ((Player)ent).setGliding(true);
 
-                    } else {
+                    } else if(ent instanceof LivingEntity){
                         ((LivingEntity)ent).addPotionEffect(new PotionEffect(PotionEffectType.SLOW,10,10));
                     }
                 }
@@ -271,6 +273,17 @@ public class zushi_zushi extends paramecia{
         }
 
         return current;
+    }
+
+    public double searchGround(double x, double z, double initialY, World world){
+
+        Location loc = new Location(world,x,initialY,z);
+
+        for(int i=0; i < 40; i++)
+            if(loc.getBlock().getRelative(0,-i,0).getType().isSolid())
+                return initialY - i + 1;
+
+        return initialY - 40;
     }
 
 
