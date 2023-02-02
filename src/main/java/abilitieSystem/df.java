@@ -24,10 +24,9 @@ import org.bukkit.Material;
 
 import java.util.ArrayList;
 
-public class df extends abilities{
+public class df extends abilities {
     protected String commandName;
     protected int actual;
-
     protected coolDown cd;
     public boolean active;
     

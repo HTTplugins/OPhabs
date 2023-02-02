@@ -2,8 +2,10 @@ package abilitieSystem;
 
 import htt.ophabs.OPhabs;
 import org.bukkit.*;
+import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.entity.PlayerDeathEvent;
+import org.bukkit.scheduler.BukkitRunnable;
 import skin.skinsChanger;
 
 
@@ -53,6 +55,27 @@ public class zoan extends df{
         }
     }
 
+    public void Sangrado(LivingEntity entity) {
+        new BukkitRunnable() {
+            int i = 0;
+            @Override
+            public void run() {
+                if(i > 5)
+                    this.cancel();
+                entity.damage(2);
 
+                for(int i = 0; i < 4; i++)
+                    if(!entity.isDead()) {
+                        entity.getWorld().spawnParticle(Particle.DRIP_LAVA, entity.getEyeLocation().add(0.25, 0, 0.25),
+                                0, 0, 0, 0);
+                        entity.getWorld().spawnParticle(Particle.DRIP_LAVA, entity.getEyeLocation().add(0.25, 0, -0.25),
+                                0, 0, 0, 0);
+                        entity.getWorld().spawnParticle(Particle.DRIP_LAVA, entity.getEyeLocation().add(-0.25, 0, -0.25),
+                                0, 0, 0, 0);
+                    }
+                i++;
+            }
+        }.runTaskTimer(plugin, 0, 20);
+    }
 }
 

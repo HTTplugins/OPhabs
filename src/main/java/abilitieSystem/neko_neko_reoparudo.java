@@ -12,6 +12,7 @@ import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.player.PlayerToggleSneakEvent;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.entity.LivingEntity;
+import org.bukkit.util.Vector;
 
 import static java.lang.Math.*;
 
@@ -76,7 +77,8 @@ public class neko_neko_reoparudo extends zoan {
         
     }
 
-    // Launch player in the looking direction
+    // Launch player in the looking direction.
+
     public void frontAttack() {
         Player player = user.getPlayer();
         player.setVelocity(player.getLocation().getDirection().multiply(2));
@@ -107,61 +109,63 @@ public class neko_neko_reoparudo extends zoan {
 
     public void Tsume(Player player) {
         Location loc = player.getLocation();
-        animacionTsume(player.getWorld(), player.getEyeLocation().clone().add(player.getEyeLocation().getDirection()));
+
+        giroTsume(player);
 
         player.getWorld().getNearbyEntities(loc, 4, 2, 4).forEach(entity -> {
             if(entity instanceof LivingEntity && !entity.getName().equals(player.getName())) {
+                Vector dir = new Vector(entity.getLocation().getX() - loc.getX(), entity.getLocation().getY() - loc.getY(),
+                        entity.getLocation().getZ() - loc.getZ()).normalize();
+
                 ((LivingEntity) entity).damage(15);
 
                 player.getWorld().playSound(loc, Sound.ENTITY_CAT_PURREOW, 100, 10);
 
                 animacionTsume(player.getWorld(), ((LivingEntity) entity).getEyeLocation());
-                entity.setVelocity(player.getEyeLocation().getDirection().multiply(3));
+                entity.setVelocity(dir.multiply(3));
                 Sangrado((LivingEntity) entity);
             }
         });
     }
 
-    public void Sangrado(LivingEntity entity) {
+    public void giroTsume(Player player) {
         new BukkitRunnable() {
             int i = 0;
             @Override
             public void run() {
-                if(i > 5)
-                    this.cancel();
-                entity.damage(2);
+                if(i > 4)
+                    cancelTask();
 
-                for(int i = 0; i < 4; i++)
-                    if(!entity.isDead()){
-                        entity.getWorld().spawnParticle(Particle.DRIP_LAVA, entity.getEyeLocation().add(1, 0, 1),
-                                                     1, 1, 1, 0);
-                        entity.getWorld().spawnParticle(Particle.DRIP_LAVA, entity.getEyeLocation().add(-1, 0, -1),
-                                1, 1, 1, 0);
-                        entity.getWorld().spawnParticle(Particle.DRIP_LAVA, entity.getEyeLocation().add(-1, 0, -1),
-                                1, 1, 1, 0);
-                    }
+                Location loc = player.getLocation().clone().setDirection(player.getLocation().getDirection().rotateAroundY(24));
+
+                player.teleport(loc);
                 i++;
             }
-        }.runTaskTimer(plugin, 0, 20);
+
+            public void cancelTask(){
+                Bukkit.getScheduler().cancelTask(this.getTaskId());
+            }
+        }.runTaskTimer(plugin, 0, 0);
     }
 
     public void animacionTsume(World mundo, Location loc) {
         new BukkitRunnable() {
             int i = 0;
+            Particle particula = Particle.CRIT;
             @Override
             public void run() {
                 if(i > 10)
                     this.cancel();
 
                 for(double i = -2; i < 2; i+=0.5) {
-                    mundo.spawnParticle(Particle.CRIT_MAGIC, loc.clone().add(i, i, i), 0, 0, 0, 0);
-                    mundo.spawnParticle(Particle.CRIT_MAGIC, loc.clone().add(-i, i, i), 0, 0, 0, 0);
-                    mundo.spawnParticle(Particle.CRIT_MAGIC, loc.clone().add(i, i, -i), 0, 0, 0, 0);
-                    mundo.spawnParticle(Particle.CRIT_MAGIC, loc.clone().add(-i, i, -i), 0, 0, 0, 0);
-                    mundo.spawnParticle(Particle.CRIT_MAGIC, loc.clone().add(i, -i, i), 0, 0, 0, 0);
-                    mundo.spawnParticle(Particle.CRIT_MAGIC, loc.clone().add(-i, -i, i), 0, 0, 0, 0);
-                    mundo.spawnParticle(Particle.CRIT_MAGIC, loc.clone().add(i, -i, -i), 0, 0, 0, 0);
-                    mundo.spawnParticle(Particle.CRIT_MAGIC, loc.clone().add(-i, -i, -i), 0, 0, 0, 0);
+                    mundo.spawnParticle(particula, loc.clone().add(i, i, i), 0, 0, 0, 0);
+                    mundo.spawnParticle(particula, loc.clone().add(-i, i, i), 0, 0, 0, 0);
+                    mundo.spawnParticle(particula, loc.clone().add(i, i, -i), 0, 0, 0, 0);
+                    mundo.spawnParticle(particula, loc.clone().add(-i, i, -i), 0, 0, 0, 0);
+                    mundo.spawnParticle(particula, loc.clone().add(i, -i, i), 0, 0, 0, 0);
+                    mundo.spawnParticle(particula, loc.clone().add(-i, -i, i), 0, 0, 0, 0);
+                    mundo.spawnParticle(particula, loc.clone().add(i, -i, -i), 0, 0, 0, 0);
+                    mundo.spawnParticle(particula, loc.clone().add(-i, -i, -i), 0, 0, 0, 0);
                 }
 
                 i++;

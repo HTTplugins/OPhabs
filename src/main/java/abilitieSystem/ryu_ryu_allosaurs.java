@@ -12,18 +12,23 @@ import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.util.Vector;
 
+import static java.lang.Math.*;
+
 public class ryu_ryu_allosaurs extends zoan {
 
-    public ryu_ryu_allosaurs(OPhabs plugin){
-        super(plugin, castIdentification.castMaterialRyuAllosaurs, castIdentification.castItemNameRyuAllosaurs, fruitIdentification.fruitCommandNameRyuAllosaurs,"http://novask.in/5915273049.png","allosaurs");
+    public ryu_ryu_allosaurs(OPhabs plugin) {
+        super(plugin, castIdentification.castMaterialRyuAllosaurs, castIdentification.castItemNameRyuAllosaurs,
+                fruitIdentification.fruitCommandNameRyuAllosaurs,"http://novask.in/5915273049.png","allosaurs");
 
         abilitiesNames.add("FrontalCrunch");
         abilitiesCD.add(0);
         abilitiesNames.add("TailSpin");
         abilitiesCD.add(0);
+        abilitiesNames.add("Splash");
+        abilitiesCD.add(0);
     }
 
-    public void ability2(){
+    public void ability2() {
         if(abilitiesCD.get(1) == 0){
             frontCrunch();
             abilitiesCD.set(1, 3);
@@ -37,6 +42,12 @@ public class ryu_ryu_allosaurs extends zoan {
         }
     }
 
+    public void ability4() {
+        if(abilitiesCD.get(3) == 0) {
+            Splash(user.getPlayer());
+            abilitiesCD.set(3, 5);
+        }
+    }
 
     public void transformation() {
         super.transformation();
@@ -87,7 +98,7 @@ public class ryu_ryu_allosaurs extends zoan {
         player.setVelocity(direction.multiply(1.5));
     }
 
-    public void tailSpin(){
+    public void tailSpin() {
         Player player = user.getPlayer();
         player.setVelocity(player.getLocation().getDirection().multiply(2));
 
@@ -115,13 +126,10 @@ public class ryu_ryu_allosaurs extends zoan {
                 if(i>16)
                     cancelTask();
 
-
                 Location loc = player.getLocation();
                 loc.setYaw(loc.getYaw()-20);
 
                 player.teleport(loc);
-
-
                 i++;
             }
 
@@ -132,4 +140,36 @@ public class ryu_ryu_allosaurs extends zoan {
 
     }
 
+    public void Splash(Player player) {
+        animacionSplash(player.getWorld(), player.getLocation().clone().add(0, 0.25, 0));
+        efectoSplash(player.getWorld(), player.getLocation());
+    }
+
+    public void animacionSplash(World mundo, Location loc) {
+        for(int j = 0; j < 5; j++)
+            for(int i = 0; i < 10; i++) {
+                mundo.spawnParticle(Particle.CRIT, loc.clone().add(sin(i)*j, 0, cos(i)*j), 0, 0, 0, 0);
+                mundo.spawnParticle(Particle.CRIT, loc.clone().add(sin(-i)*j, 0, cos(i)*j), 0, 0, 0, 0);
+                mundo.spawnParticle(Particle.CRIT, loc.clone().add(sin(i)*j, 0, cos(-i)*j), 0, 0, 0, 0);
+                mundo.spawnParticle(Particle.CRIT, loc.clone().add(sin(-i)*j, 0, cos(-i)*j), 0, 0, 0, 0);
+                mundo.spawnParticle(Particle.CRIT, loc.clone().add(sin(i)*j, 0, cos(i)/2*j), 0, 0, 0, 0);
+                mundo.spawnParticle(Particle.CRIT, loc.clone().add(sin(-i)*j, 0, cos(i)/2*j), 0, 0, 0, 0);
+                mundo.spawnParticle(Particle.CRIT, loc.clone().add(sin(i)*j, 0, cos(-i)/2*j), 0, 0, 0, 0);
+                mundo.spawnParticle(Particle.CRIT, loc.clone().add(sin(-i)*j, 0, cos(-i)/2*j), 0, 0, 0, 0);
+            }
+    }
+
+    public void efectoSplash(World mundo, Location loc) {
+        mundo.getNearbyEntities(loc, 5, 3, 5).forEach(entity -> {
+            if(!entity.getName().equals(user.getName()) && entity instanceof LivingEntity) {
+                Vector dir = new Vector(entity.getLocation().getX() - loc.getX(), entity.getLocation().getY() - loc.getY(),
+                                        entity.getLocation().getZ() - loc.getZ()).normalize();
+
+                ((LivingEntity) entity).damage(10);
+                entity.setVelocity(dir.add(new Vector(0, 2, 0)));
+                ((LivingEntity) entity).addPotionEffect(new PotionEffect(PotionEffectType.SLOW, 100, 3));
+                ((LivingEntity) entity).addPotionEffect(new PotionEffect(PotionEffectType.WEAKNESS, 200, 3));
+            }
+        });
+    }
 }
