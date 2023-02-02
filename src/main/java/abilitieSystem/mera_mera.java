@@ -280,21 +280,41 @@ public class mera_mera extends logia {
 
         mundo.playSound(player, Sound.AMBIENT_NETHER_WASTES_LOOP, 100, 10);
         spawnBolas(mundo, player.getLocation());
-
     }
 
     public void spawnBolas(World mundo, Location loc) {
-        Entity bola1 = mundo.spawnEntity(loc.clone().add(0, 3, 0), EntityType.FIREBALL);
-        Entity bola2 = mundo.spawnEntity(loc.clone().add(0, 3, 3), EntityType.FIREBALL);
-        Entity bola3 = mundo.spawnEntity(loc.clone().add(0, 3, -3), EntityType.FIREBALL);
-        Entity bola4 = mundo.spawnEntity(loc.clone().add(3, 3, 0), EntityType.FIREBALL);
-        Entity bola5 = mundo.spawnEntity(loc.clone().add(-3, 3, 0), EntityType.FIREBALL);
+        final int[] i = {0};
 
-        bola1.setVelocity(bola1.getLocation().getDirection().multiply(4));
-        bola2.setVelocity(bola2.getLocation().getDirection().multiply(2));
-        bola3.setVelocity(bola3.getLocation().getDirection().multiply(2));
-        bola4.setVelocity(bola4.getLocation().getDirection().multiply(2));
-        bola5.setVelocity(bola5.getLocation().getDirection().multiply(2));
+        mundo.getNearbyEntities(loc, 10, 6, 10).forEach(entity -> {
+            if (entity instanceof LivingEntity && !entity.getName().equals(user.getName())) {
+                Vector dir = new Vector(entity.getLocation().getX() - loc.getX(), entity.getLocation().getY() - loc.getY(),
+                        entity.getLocation().getZ() - loc.getZ()).normalize();
+
+                Entity bola1 = mundo.spawnEntity(loc.clone().add(0, 1, 0), EntityType.FIREBALL);
+                Entity bola2 = mundo.spawnEntity(loc.clone().add(0, 1, 3+ i[0]), EntityType.FIREBALL);
+                Entity bola3 = mundo.spawnEntity(loc.clone().add(0, 1, -3+ i[0]), EntityType.FIREBALL);
+
+                bola1.setVelocity(dir);
+                bola2.setVelocity(dir);
+                bola3.setVelocity(dir);
+
+                entity.setFireTicks(100);
+                i[0]++;
+
+                Particle particula = Particle.LAVA;
+
+                for(double y = -2; y < 2; y+=0.5) {
+                    mundo.spawnParticle(particula, entity.getLocation().clone().add(y, y, y), 0, 0, 0, 0);
+                    mundo.spawnParticle(particula, entity.getLocation().clone().add(-y, y, y), 0, 0, 0, 0);
+                    mundo.spawnParticle(particula, entity.getLocation().clone().add(y, y, -y), 0, 0, 0, 0);
+                    mundo.spawnParticle(particula, entity.getLocation().clone().add(-y, y, -y), 0, 0, 0, 0);
+                    mundo.spawnParticle(particula, entity.getLocation().clone().add(y, -y, y), 0, 0, 0, 0);
+                    mundo.spawnParticle(particula, entity.getLocation().clone().add(-y, -y, y), 0, 0, 0, 0);
+                    mundo.spawnParticle(particula, entity.getLocation().clone().add(y, -y, -y), 0, 0, 0, 0);
+                    mundo.spawnParticle(particula, entity.getLocation().clone().add(-y, -y, -y), 0, 0, 0, 0);
+                }
+            }
+        });
     }
 
     public void Faiyabu(Player player) {
