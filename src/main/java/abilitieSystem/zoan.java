@@ -8,6 +8,8 @@ import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.scheduler.BukkitRunnable;
 import skin.skinsChanger;
 
+import java.util.ArrayList;
+
 
 public class zoan extends df{
     public boolean transformed = false;
@@ -55,22 +57,22 @@ public class zoan extends df{
         }
     }
 
-    public void Sangrado(LivingEntity entity) {
+    public void Sangrado(LivingEntity entity, int ticks) {
         new BukkitRunnable() {
             int i = 0;
             @Override
             public void run() {
-                if(i > 5)
+                if(i > ticks/20)
                     this.cancel();
                 entity.damage(2);
 
                 for(int i = 0; i < 4; i++)
                     if(!entity.isDead()) {
-                        entity.getWorld().spawnParticle(Particle.DRIP_LAVA, entity.getEyeLocation().add(0.25, 0, 0.25),
+                        entity.getWorld().spawnParticle(Particle.DRIP_LAVA, entity.getEyeLocation().add(0.2, 0, 0.2),
                                 0, 0, 0, 0);
-                        entity.getWorld().spawnParticle(Particle.DRIP_LAVA, entity.getEyeLocation().add(0.25, 0, -0.25),
+                        entity.getWorld().spawnParticle(Particle.DRIP_LAVA, entity.getEyeLocation().add(0.2, 0, -0.2),
                                 0, 0, 0, 0);
-                        entity.getWorld().spawnParticle(Particle.DRIP_LAVA, entity.getEyeLocation().add(-0.25, 0, -0.25),
+                        entity.getWorld().spawnParticle(Particle.DRIP_LAVA, entity.getEyeLocation().add(-0.2, 0, -0.2),
                                 0, 0, 0, 0);
                     }
                 i++;

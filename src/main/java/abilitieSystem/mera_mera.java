@@ -343,6 +343,8 @@ public class mera_mera extends logia {
                 k++;
             }
         }.runTaskTimer(plugin, 0, 0);
+
+        golpeadosFaiyabu.clear();
     }
 
     public void efectoFaiyabu(World mundo, Location loc, Player player) {
@@ -355,8 +357,6 @@ public class mera_mera extends logia {
                 golpeadosFaiyabu.add((LivingEntity) entity);
             }
         });
-
-        golpeadosFaiyabu.clear();
     }
 
     public void animacionFaiyabu(World mundo, Location loc) {

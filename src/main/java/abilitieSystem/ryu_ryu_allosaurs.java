@@ -12,9 +12,12 @@ import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.util.Vector;
 
+import java.util.ArrayList;
+
 import static java.lang.Math.*;
 
 public class ryu_ryu_allosaurs extends zoan {
+    private ArrayList<LivingEntity> golpeadosHabilidades = new ArrayList<>();
 
     public ryu_ryu_allosaurs(OPhabs plugin) {
         super(plugin, castIdentification.castMaterialRyuAllosaurs, castIdentification.castItemNameRyuAllosaurs,
@@ -82,20 +85,23 @@ public class ryu_ryu_allosaurs extends zoan {
                     cancelTask();
 
                 player.getWorld().getNearbyEntities(player.getEyeLocation(), 1,1,1).forEach(entity -> {
-                if(entity.getName() != player.getName() && entity instanceof LivingEntity)
-                    ((LivingEntity) entity).damage(15);
+                    if(!entity.getName().equals(player.getName()) && entity instanceof LivingEntity && !golpeadosHabilidades.contains(entity)){
+                        ((LivingEntity) entity).damage(15);
+                        golpeadosHabilidades.add((LivingEntity) entity);
+                    }
                 });
 
                 player.getWorld().spawnParticle(Particle.CRIT, player.getEyeLocation(), 10, 0, 0, 0, 0);
                 i++;
             }
-            public void cancelTask(){
+            public void cancelTask() {
                 Bukkit.getScheduler().cancelTask(this.getTaskId());
             }
         }.runTaskTimer(plugin, 0, 4);
         Vector direction = player.getLocation().getDirection();
         direction.setY(0);
         player.setVelocity(direction.multiply(1.5));
+        golpeadosHabilidades.clear();
     }
 
     public void tailSpin() {
@@ -103,7 +109,7 @@ public class ryu_ryu_allosaurs extends zoan {
         player.setVelocity(player.getLocation().getDirection().multiply(2));
 
         player.getWorld().getNearbyEntities(player.getLocation(), 3,1,3).forEach(entity -> {
-            if(entity.getName() != player.getName() && entity instanceof LivingEntity)
+            if(!entity.getName().equals(player.getName()) && entity instanceof LivingEntity)
                 ((LivingEntity) entity).damage(15);
         });
 
@@ -137,7 +143,6 @@ public class ryu_ryu_allosaurs extends zoan {
                 Bukkit.getScheduler().cancelTask(this.getTaskId());
             }
         }.runTaskTimer(plugin, 0, 1);
-
     }
 
     public void Splash(Player player) {

@@ -14,10 +14,14 @@ import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.util.Vector;
 
+import java.util.ArrayList;
+
 import static java.lang.Math.*;
 
 public class neko_neko_reoparudo extends zoan {
     public final int FrontalAttackCD = 3, TsumeCD = 4, FearsomeCD = 5;
+
+    private ArrayList<LivingEntity> golpeadosHabilidades = new ArrayList<>();
 
     public neko_neko_reoparudo(OPhabs plugin){
         super(plugin, castIdentification.castMaterialNekoReoparudo, castIdentification.castItemNameNekoReoparudo,
@@ -90,9 +94,10 @@ public class neko_neko_reoparudo extends zoan {
                     cancelTask();
 
                 player.getWorld().getNearbyEntities(player.getLocation(), 1,2,1).forEach(entity -> {
-                    if(!entity.getName().equals(player.getName()) && entity instanceof LivingEntity) {
+                    if(!entity.getName().equals(player.getName()) && entity instanceof LivingEntity && !golpeadosHabilidades.contains(entity)) {
                         ((LivingEntity) entity).damage(15);
-                        Sangrado((LivingEntity) entity);
+                        Sangrado((LivingEntity) entity, 100);
+                        golpeadosHabilidades.add((LivingEntity) entity);
                     }
                 });
 
@@ -104,6 +109,8 @@ public class neko_neko_reoparudo extends zoan {
                 Bukkit.getScheduler().cancelTask(this.getTaskId());
             }
         }.runTaskTimer(plugin, 0, 4);
+
+        golpeadosHabilidades.clear();
         player.setVelocity(player.getLocation().getDirection().multiply(1.5));
     }
 
@@ -111,6 +118,7 @@ public class neko_neko_reoparudo extends zoan {
         Location loc = player.getLocation();
 
         giroTsume(player);
+        animacionPlayerTsume(player.getWorld(), player.getLocation().clone());
 
         player.getWorld().getNearbyEntities(loc, 4, 2, 4).forEach(entity -> {
             if(entity instanceof LivingEntity && !entity.getName().equals(player.getName())) {
@@ -123,7 +131,7 @@ public class neko_neko_reoparudo extends zoan {
 
                 animacionTsume(player.getWorld(), ((LivingEntity) entity).getEyeLocation());
                 entity.setVelocity(dir.multiply(3));
-                Sangrado((LivingEntity) entity);
+                Sangrado((LivingEntity) entity, 100);
             }
         });
     }
@@ -151,7 +159,7 @@ public class neko_neko_reoparudo extends zoan {
     public void animacionTsume(World mundo, Location loc) {
         new BukkitRunnable() {
             int i = 0;
-            Particle particula = Particle.CRIT;
+            final Particle particula = Particle.CRIT;
             @Override
             public void run() {
                 if(i > 10)
@@ -171,6 +179,19 @@ public class neko_neko_reoparudo extends zoan {
                 i++;
             }
         }.runTaskTimer(plugin, 0, 0);
+    }
+
+    public void animacionPlayerTsume(World mundo, Location loc) {
+        final Particle particula = Particle.CRIT;
+
+        for(double i = 0; i < 2.0; i+=0.3) {
+            for(double j = -2*PI; j < 2*PI; j+=0.05) {
+                double  x = sin(j),
+                        z = cos(j);
+
+                mundo.spawnParticle(particula, loc.clone().add(x, i, z), 0, 0, 0, 0);
+            }
+        }
     }
 
     public void NekoFearsome(Player player) {
