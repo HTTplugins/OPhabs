@@ -15,6 +15,7 @@ import org.bukkit.potion.PotionEffectType;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.util.Vector;
 
+import java.util.ArrayList;
 import java.util.Random;
 
 import static java.lang.Math.*;
@@ -29,6 +30,8 @@ public class mera_mera extends logia {
     boolean BERSERK = true;
     private final int FIRE_POOL_DURATION = 3, FIREBALL_STORM_COOLDOWN = 5, FIRE_POOL_COOLDOWN = 15, FAIYABU_COOLDOWN = 5,
                       BOMUSHOTTO_COOLDOWN = 10;
+
+    private ArrayList<LivingEntity> golpeadosFaiyabu = new ArrayList<>();
 
     public mera_mera(OPhabs plugin) {
         super(plugin, Particle.FLAME, castIdentification.castMaterialMera, castIdentification.castItemNameMera, fruitIdentification.fruitCommandNameMera);
@@ -344,13 +347,16 @@ public class mera_mera extends logia {
 
     public void efectoFaiyabu(World mundo, Location loc, Player player) {
         mundo.getNearbyEntities(loc, 1, 1, 1).forEach(entity -> {
-            if(entity.getName() != player.getName() && entity instanceof LivingEntity) {
+            if(!entity.getName().equals(player.getName()) && entity instanceof LivingEntity && !golpeadosFaiyabu.contains((LivingEntity) entity)) {
                 ((LivingEntity) entity).damage(10);
                 entity.setFireTicks(100);
-                mundo.createExplosion(entity.getLocation(), ExplosionRadius);
+                mundo.createExplosion(entity.getLocation().add(1, 1, 1), ExplosionRadius/2);
                 mundo.playSound(entity.getLocation(), Sound.ENTITY_DRAGON_FIREBALL_EXPLODE, 100, 10);
+                golpeadosFaiyabu.add((LivingEntity) entity);
             }
         });
+
+        golpeadosFaiyabu.clear();
     }
 
     public void animacionFaiyabu(World mundo, Location loc) {
