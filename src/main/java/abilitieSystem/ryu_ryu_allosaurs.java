@@ -73,7 +73,7 @@ public class ryu_ryu_allosaurs extends zoan {
         
     }
 
-    //launch player in the lookin direction
+    //launch player in the looking direction
     public void frontCrunch() {
         Player player = user.getPlayer();
         player.setVelocity(player.getLocation().getDirection().multiply(2));
@@ -85,8 +85,9 @@ public class ryu_ryu_allosaurs extends zoan {
                     cancelTask();
 
                 player.getWorld().getNearbyEntities(player.getEyeLocation(), 1,1,1).forEach(entity -> {
-                    if(!entity.getName().equals(player.getName()) && entity instanceof LivingEntity && !golpeadosHabilidades.contains(entity)){
+                    if(!entity.getName().equals(player.getName()) && entity instanceof LivingEntity && !golpeadosHabilidades.contains(entity)) {
                         ((LivingEntity) entity).damage(15);
+                        ((LivingEntity) entity).addPotionEffect(new PotionEffect(PotionEffectType.SLOW, 100, 1));
                         golpeadosHabilidades.add((LivingEntity) entity);
                     }
                 });

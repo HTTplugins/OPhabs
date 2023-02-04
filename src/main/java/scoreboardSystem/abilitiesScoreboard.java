@@ -60,9 +60,8 @@ public class abilitiesScoreboard {
         scoreboards.remove(player.getName());
     }
 
-    public boolean updateScoreboards(){
-        for (Map.Entry<String, Scoreboard> userScoreboard : scoreboards.entrySet()) {
-
+    public boolean updateScoreboards() {
+        for(Map.Entry<String, Scoreboard> userScoreboard : scoreboards.entrySet()) {
             String playerName = userScoreboard.getKey();
             if(Bukkit.getPlayer(playerName) != null) {
 
@@ -93,46 +92,44 @@ public class abilitiesScoreboard {
                 else
                     player = null;
 
-                if(player != null){
-                    player.setScoreboard(Bukkit.getScoreboardManager().getNewScoreboard());
-
-                if( (castIdentification.itemIsCaster(player.getInventory().getItemInMainHand(), player)) || castIdentification.itemIsCaster(player.getInventory().getItemInOffHand(), player)){
-                    objective.setDisplaySlot(DisplaySlot.SIDEBAR);
-
-                    String fruit = fruitIdentification.getItemName(user.getDFAbilities().getName());
-                    fruit = fruit.substring(0,1).toUpperCase() + fruit.substring(1);
-                    
-                    objective.setDisplayName(ChatColor.BOLD + "" + fruit);
-                    
-
-                    for(int i = 0; i < abNames.size(); i++){
-                        String name = abNames.get(i);
-                        if(user.getAbilitiesCD().get(i) > 0)
-                            name += " (" + user.getAbilitiesCD().get(i) + ")";
-                        Score score = objective.getScore(name);
-                        score.setScore(i);
-                    }
-
-                    if( Bukkit.getPlayerExact(playerName) != null)
-                        player = Bukkit.getPlayerExact(playerName);
-                    else
-                        player = null;
-
-                    if(player != null){
-                        player.setScoreboard(scoreboard);
-                    }
-
-                } else {
-                    if(player != null)
+                if(player != null) {
                         player.setScoreboard(Bukkit.getScoreboardManager().getNewScoreboard());
 
-                }
+                    if((castIdentification.itemIsCaster(player.getInventory().getItemInMainHand(), player)) ||
+                            castIdentification.itemIsCaster(player.getInventory().getItemInOffHand(), player)) {
+
+                        objective.setDisplaySlot(DisplaySlot.SIDEBAR);
+
+                        String fruit = fruitIdentification.getItemName(user.getDFAbilities().getName());
+                        fruit = fruit.substring(0,1).toUpperCase() + fruit.substring(1);
+
+                        objective.setDisplayName(ChatColor.BOLD + "" + fruit);
+
+                        for(int i = 0; i < abNames.size(); i++) {
+                            String name = abNames.get(i);
+                            if(user.getAbilitiesCD().get(i) > 0)
+                                name += " (" + user.getAbilitiesCD().get(i) + ")";
+                            Score score = objective.getScore(name);
+                            score.setScore(i);
+                        }
+
+                        if( Bukkit.getPlayerExact(playerName) != null)
+                            player = Bukkit.getPlayerExact(playerName);
+                        else
+                            player = null;
+
+                        if(player != null) {
+                            player.setScoreboard(scoreboard);
+                        }
+
+                    } else {
+                        if(player != null)
+                            player.setScoreboard(Bukkit.getScoreboardManager().getNewScoreboard());
+                    }
                 }
                 userScoreboard.setValue(scoreboard);
             }
-        
         }
-
         return true;
     }
 }

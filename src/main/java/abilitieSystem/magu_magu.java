@@ -20,7 +20,6 @@ import static java.lang.Math.*;
 import static java.lang.Math.toRadians;
 
 public class magu_magu extends logia {
-
     public static Particle.DustOptions maguOrange = new Particle.DustOptions(Color.ORANGE,1.0F);
     public static Particle.DustOptions maguBlack = new Particle.DustOptions(Color.BLACK,1.0F);
     public static Particle.DustOptions maguRed = new Particle.DustOptions(Color.RED,1.0F);
