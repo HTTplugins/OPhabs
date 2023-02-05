@@ -1,11 +1,13 @@
 package castSystem;
 
+
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.block.BlockBreakEvent;
+import org.bukkit.event.entity.*;
 import org.bukkit.event.entity.*;
 import org.bukkit.event.player.*;
 import abilitieSystem.*;
@@ -143,5 +145,16 @@ public class caster implements Listener {
             abilityUser user = users.get(event.getPlayer().getName());
             user.onItemDamage(event);
         }
+    }
+
+    @EventHandler(ignoreCancelled = true)
+    public void onEntityToggleGlide(EntityToggleGlideEvent event) {
+        zushi_zushi.onEntityToggleGlide(event);
+    }
+
+    @EventHandler(ignoreCancelled = true)
+    public void onPlayerMove(PlayerMoveEvent event) {
+        zushi_zushi.onPlayerMove(event);
+
     }
 }

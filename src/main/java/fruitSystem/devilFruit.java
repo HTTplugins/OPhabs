@@ -72,6 +72,10 @@ public class devilFruit{
                 fruitItemName = fruitIdentification.fruitItemNameOpe;
                 break;
 
+            case fruitIdentification.fruitCommandNameZushi:
+                devilFruitForm = Material.APPLE;
+                fruitItemName = fruitIdentification.fruitItemNameZushi;
+                break;
             default:
                 devilFruitForm = Material.ACACIA_BOAT;
                 fruitItemName  = "ERROR";

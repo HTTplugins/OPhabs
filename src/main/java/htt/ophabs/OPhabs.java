@@ -23,13 +23,13 @@ public final class OPhabs extends JavaPlugin {
     @Override
     public void onEnable(){
 
+
         //---------------
         //Files
 
         getConfig().options().copyDefaults();
         saveDefaultConfig();
 
-       
         //--------------
         //abilitieSystem
         ArrayList<df> abilitiesList = new ArrayList<>();
@@ -46,6 +46,7 @@ public final class OPhabs extends JavaPlugin {
         abilitiesList.add(new inu_inu_okuchi(this));
         abilitiesList.add(new ryu_ryu_allosaurs(this));
         abilitiesList.add(new ope_ope(this));
+        abilitiesList.add(new zushi_zushi(this));
 
         //--------------
         //FruitSystem
