@@ -9,6 +9,7 @@ import org.bukkit.entity.Entity;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.block.BlockBreakEvent;
+import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
@@ -17,6 +18,7 @@ import org.bukkit.util.RayTraceResult;
 import org.bukkit.util.Vector;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 import java.util.Random;
 
@@ -26,7 +28,7 @@ public class ope_ope extends paramecia {
 
     private List<Location> roomBlocks = new ArrayList<>();
 
-    private Location roomcenter;
+    private static Location roomcenter;
     private static boolean activeRoom;
 
     private final int radius = 15;
@@ -41,9 +43,9 @@ public class ope_ope extends paramecia {
         super(plugin, castIdentification.castMaterialOpe, castIdentification.castItemNameOpe, fruitIdentification.fruitCommandNameOpe);
 
         abilitiesNames.add("Room");
-        abilitiesCD.add(0);
+        abilitiesCD.add(60);
         abilitiesNames.add("Levitation");
-        abilitiesCD.add(0);
+        abilitiesCD.add(8);
         abilitiesNames.add("Dash");
         abilitiesCD.add(0);
         abilitiesNames.add("stealHearth");
@@ -274,12 +276,41 @@ public class ope_ope extends paramecia {
         world.spawnParticle(Particle.REDSTONE, loc.add(0, entity.getHeight(), 0), 20, 0.5, 0.5, 0.5, 0.1, new Particle.DustOptions(Color.RED, 1.0f));
     }
 
-
     public static void onBlockBreak(BlockBreakEvent event) {
         if(activeRoom)
             if(event.getBlock().getType().equals(Material.BLUE_STAINED_GLASS) || event.getBlock().getType().equals(Material.LIGHT_BLUE_STAINED_GLASS))
                 event.setCancelled(true);
 
+    }
+
+    public static void onEntityDamageByEntity(EntityDamageByEntityEvent event){
+        World world = event.getDamager().getWorld();
+        Player player = null;
+        boolean found = false;
+        Location auxTeleport = null;
+
+        if(activeRoom){
+            if(event.getEntity() instanceof Player){
+                if(((Player)event.getEntity()).getInventory().getItemInMainHand().getType() != Material.AIR){
+                    if(((Player)event.getEntity()).getInventory().getItemInMainHand().getItemMeta().getDisplayName().equals(castIdentification.castItemNameOpe)) {
+                        player = (Player) event.getEntity();
+                        for (Entity ent : player.getPlayer().getWorld().getNearbyEntities(roomcenter, 13, 13, 13)) {
+                            if(ent instanceof LivingEntity && !found){
+                                if(!ent.equals(player) && !ent.equals(event.getDamager())){
+                                    world.playSound(event.getEntity().getLocation(),"shambless",1,1);
+                                    auxTeleport = ent.getLocation();
+                                    ent.teleport(event.getEntity());
+                                    event.getEntity().teleport(auxTeleport);
+
+                                    ((LivingEntity) ent).damage(event.getDamage());
+                                    event.setCancelled(true);
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
     }
 
 }

@@ -157,4 +157,9 @@ public class caster implements Listener {
         zushi_zushi.onPlayerMove(event);
 
     }
+
+    @EventHandler(ignoreCancelled = true)
+    public void onEntityDamageByEntity(EntityDamageByEntityEvent event) {
+        ope_ope.onEntityDamageByEntity(event);
+    }
 }
