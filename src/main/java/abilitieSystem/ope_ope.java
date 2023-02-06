@@ -43,9 +43,9 @@ public class ope_ope extends paramecia {
         super(plugin, castIdentification.castMaterialOpe, castIdentification.castItemNameOpe, fruitIdentification.fruitCommandNameOpe);
 
         abilitiesNames.add("Room");
-        abilitiesCD.add(60);
+        abilitiesCD.add(0);
         abilitiesNames.add("Levitation");
-        abilitiesCD.add(8);
+        abilitiesCD.add(0);
         abilitiesNames.add("Dash");
         abilitiesCD.add(0);
         abilitiesNames.add("stealHearth");
@@ -60,14 +60,14 @@ public class ope_ope extends paramecia {
     public void ability1() {
         if (abilitiesCD.get(0) == 0) {
             room(user.getPlayer().getLocation(), radius, user.getPlayer());
-            abilitiesCD.set(0, 0); // Pon el cooldown en segundos
+            abilitiesCD.set(0, 60); // Pon el cooldown en segundos
         }
     }
 
     public void ability2() {
         if (abilitiesCD.get(1) == 0) {
             levitation();
-            abilitiesCD.set(1, 0); // Pon el cooldown en segundos
+            abilitiesCD.set(1, 8); // Pon el cooldown en segundos
         }
     }
 
