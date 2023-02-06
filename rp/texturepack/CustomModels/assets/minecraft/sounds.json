@@ -23,5 +23,25 @@
 		"sounds": [
 			"fastsoru"
 		]
+	},
+	"rockmove": {
+		"sounds": [
+			"rockmove"
+		]
+	},
+	"heavygravity": {
+		"sounds": [
+			"heavygravity"
+		]
+	},
+	"magneticfield": {
+		"sounds": [
+			"magneticfield"
+		]
+	},
+	"flymeteor": {
+		"sounds": [
+			"flymeteor"
+		]
 	}
 }

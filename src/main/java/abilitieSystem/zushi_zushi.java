@@ -61,34 +61,37 @@ public class zushi_zushi extends paramecia{
     public void ability1(){
         if(abilitiesCD.get(0) == 0){
             heavy(user.getPlayer());
-            abilitiesCD.set(0, 0); // Pon el cooldown en segundos
+            abilitiesCD.set(0, 25); // Pon el cooldown en segundos
         }
     }
 
     public void ability2(){
         if(abilitiesCD.get(1) == 0){
             meteor(user.getPlayer());
-            abilitiesCD.set(1, 0); // Pon el cooldown en segundos
+            abilitiesCD.set(1, 50); // Pon el cooldown en segundos
         }
     }
 
     public void ability3(){
         if(abilitiesCD.get(2) == 0){
             attraction(user.getPlayer());
-            abilitiesCD.set(2, 0); // Pon el cooldown en segundos
+            abilitiesCD.set(2, 40); // Pon el cooldown en segundos
         }
     }
 
     public void ability4() {
         if (abilitiesCD.get(3) == 0) {
             flyRock(user.getPlayer());
-            abilitiesCD.set(3, 0); // Pon el cooldown en segundos
+            abilitiesCD.set(3, 60); // Pon el cooldown en segundos
         }
     }
 
     public void heavy(Player player){
 
         World world = player.getWorld();
+        Location playerLoc = player.getLocation();
+
+        world.playSound(playerLoc,"heavygravity",1,1);
         new BukkitRunnable(){
             int ticks = 0;
             Random random = new Random();
@@ -186,6 +189,15 @@ public class zushi_zushi extends paramecia{
     public void meteor(Player player){
         World world = player.getWorld();
         Location end = getTargetBlock(user.getPlayer(), 40);
+        Location playerLoc = player.getLocation();
+
+        new BukkitRunnable() {
+            @Override
+            public void run() {
+                world.playSound(playerLoc,"magneticfield",1,-1);
+            }
+        }.runTaskLater(plugin,10);
+
 
         new BukkitRunnable(){
             public final Particle.DustOptions purple = new Particle.DustOptions(Color.PURPLE,1.0F);
@@ -236,6 +248,7 @@ public class zushi_zushi extends paramecia{
     public void launchMeteore(Location start, Location end, int radius) {
         World world = start.getWorld();
         exploded = false;
+        world.playSound(start,"flymeteor",10,1);
 
         for (int x = -radius; x <= radius; x++)
             for (int y = -radius; y <= radius; y++)
@@ -292,6 +305,8 @@ public class zushi_zushi extends paramecia{
         Location playerLoc = player.getLocation();
         World world = player.getWorld();
         double iniY = playerLoc.getY();
+
+        world.playSound(playerLoc,"magneticfield",1,1);
 
         for(Entity ent : player.getNearbyEntities(30,30,30))
             if(ent instanceof LivingEntity && !player.equals(ent))
@@ -388,13 +403,14 @@ public class zushi_zushi extends paramecia{
     }
 
     public void flyRock(Player player){
-
         World world = player.getWorld();
         Location playerLoc = player.getLocation();
 
         double x = playerLoc.getX();
         double z = playerLoc.getZ();
         double y = playerLoc.getY();
+
+        world.playSound(playerLoc, "rockmove",1,1);
 
         player.setAllowFlight(true);
 
