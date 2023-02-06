@@ -2,7 +2,7 @@ package fruitSystem;
 
 public class fruitIdentification {
 
-    public final static int fruitsNumber = 11;
+    public final static int fruitsNumber = 12;
 
     public final static String
             fruitItemNameYami = "yami yami no mi",
@@ -17,7 +17,8 @@ public class fruitIdentification {
             fruitItemNameInuOkuchi = "inu inu okuchi no makami",
             fruitItemNameRyuAllosaurs = "ryu ryu allosaurs no mi",
             fruitItemNameOpe = "ope ope no mi",
-            fruitItemNameZushi = "zushi zushi no mi";
+            fruitItemNameZushi = "zushi zushi no mi",
+            fruitItemNameSuke = "Suke suke no mi";
 
 
     public final static String
@@ -33,7 +34,8 @@ public class fruitIdentification {
             fruitCommandNameInuOkuchi = "inu_inu_okuchi",
             fruitCommandNameRyuAllosaurs = "ryu_ryu_allosaurs",
             fruitCommandNameOpe = "ope_ope",
-            fruitCommandNameZushi = "zushi_zushi";
+            fruitCommandNameZushi = "zushi_zushi",
+            fruitCommandNameSuke = "suke_suke";
 
     public static String getItemName(String fruitCommandName){
         switch (fruitCommandName){
@@ -63,6 +65,8 @@ public class fruitIdentification {
                 return fruitItemNameOpe;
             case fruitCommandNameZushi:
                 return fruitItemNameZushi;
+            case fruitCommandNameSuke:
+                return fruitItemNameSuke;
             default:
                 return null;
         }
@@ -96,6 +100,8 @@ public class fruitIdentification {
                 return fruitCommandNameOpe;
             case fruitItemNameZushi:
                 return fruitCommandNameZushi;
+            case fruitItemNameSuke:
+                return fruitCommandNameSuke;
             default:
                 return null;
         }
@@ -128,6 +134,8 @@ public class fruitIdentification {
             case fruitItemNameOpe:
                 return true;
             case fruitItemNameZushi:
+                return true;
+            case fruitItemNameSuke:
                 return true;
             default:
                 return false;

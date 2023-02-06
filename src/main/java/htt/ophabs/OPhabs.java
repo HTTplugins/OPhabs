@@ -47,6 +47,7 @@ public final class OPhabs extends JavaPlugin {
         abilitiesList.add(new ryu_ryu_allosaurs(this));
         abilitiesList.add(new ope_ope(this));
         abilitiesList.add(new zushi_zushi(this));
+        abilitiesList.add(new suke_suke(this));
 
         //--------------
         //FruitSystem
