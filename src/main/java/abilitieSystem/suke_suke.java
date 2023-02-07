@@ -18,7 +18,7 @@ import static java.lang.Math.PI;
 
 public class suke_suke extends paramecia {
 
-    private int explorationDuration = 60;
+    private int explorationDuration = 6000;
 
     private static boolean invisible = false;
     public static boolean exploration = false;
@@ -41,9 +41,14 @@ public class suke_suke extends paramecia {
     }
 
     public void ability1(){
-        if(abilitiesCD.get(0) == 0){
-            invisibleExploration(user.getPlayer());
-            abilitiesCD.set(0, 0); // Pon el cooldown en segundos
+
+        if(!user.getPlayer().isSneaking()){
+            if(abilitiesCD.get(0) == 0){
+                invisibleExploration(user.getPlayer());
+                abilitiesCD.set(0, 7000); // Pon el cooldown en segundos
+            }
+        } else {
+            cancelExploration(user.getPlayer());
         }
     }
 
@@ -168,6 +173,14 @@ public class suke_suke extends paramecia {
 
     }
 
+    public void cancelExploration(Player player){
 
+        if(exploration) {
+            uninvisibility(player);
+            player.removePotionEffect(PotionEffectType.INVISIBILITY);
+        } else
+            player.sendMessage("You are not in exploration mode");
+
+    }
 
 }
