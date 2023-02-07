@@ -78,11 +78,9 @@ public class goro_goro extends logia {
             int tick = 0;
             double fin = 10;
 
-
-            double x,y, z = 0, xY, yY, zY, xX, yX, zX,xL,yL,zL;
+            double x,y, xY, yY, zY, xX, yX, zX,xZ,yZ,zZ,xL,yL,zL;
 
             boolean changedPitch = false;
-
 
 
             @Override
@@ -110,18 +108,45 @@ public class goro_goro extends logia {
 
                 for(double i=0; i<2*PI; i+= 0.5){
 
-                    x = factor*sin(i);
-                    y = factor*cos(i);
+                    x = factor*cos(i);
+                    y = factor*sin(i);
 
-                    Vector looking = player.getLocation().getDirection();
+                    //horizontally (Arround Y)
+                    xY = cos(toRadians(yaw))*x + sin(toRadians(yaw))*z;
+                    yY =  y;
+                    zY = -sin(toRadians(yaw))*x + cos(toRadians(yaw))*z;
 
+                    if(((yaw < -90 && yaw > -180) || ( yaw < 180 && yaw > 90)) && !changedPitch){
+                        changedPitch = true;
+                        pitch = pitch * -1;
+                    }
 
+                    //Vertically (Arround X)
+                    xX = xY;
+                    yX = cos(toRadians(pitch))* yY - sin(toRadians(pitch))* zY;
+                    zX = sin(toRadians(pitch))* yY + cos(toRadians(pitch))* zY;
 
-                    Location partLoc = new Location(world, x, y, 0);
+                    /*
+                    //Arround Z
+                    xZ = cos(toRadians(pitch))* xX - sin(toRadians(pitch))* yX;
+                    xY = sin(toRadians(pitch))*xX + cos(toRadians(pitch))*yX;
+                    zZ = zX;
 
-                    partLoc.add(looking);
-                    partLoc.add(playerLoc);
-                    partLoc.add(new Vector(0,1.5,0));
+                    */
+                    //Final (sum of player position.)
+                    xL = playerLoc.getX() + xX;
+                    yL = 1 + playerLoc.getY() + yX;
+                    zL = playerLoc.getZ() + zX;
+
+                    Location partLoc = new Location(world, xL, yL, zL);
+
+                    if(!partLoc.getBlock().getType().equals(Material.AIR))
+                        partLoc.getBlock().setType(Material.AIR);
+
+                    for(Entity ent : world.getNearbyEntities(partLoc,2,2,2))
+                        if(ent instanceof LivingEntity && !player.equals(ent))
+                            ((LivingEntity)ent).damage(100);
+
 
                     world.spawnParticle(element,partLoc,0,0,0,0);
                 }
@@ -281,6 +306,7 @@ public class goro_goro extends logia {
 
     @Override
     public void runParticles(){
+        /*
         new BukkitRunnable(){
 
             @Override
@@ -342,6 +368,6 @@ public class goro_goro extends logia {
 
 
         }.runTaskTimer(plugin,0,2);
-
+        */
     }
 }

@@ -205,12 +205,22 @@ public class caster implements Listener {
         sukeUserName = plugin.getConfig().getString("FruitAssociations.suke_suke");
 
         if(!sukeUserName.equals("none")) {
+
             sukeUser = Bukkit.getPlayer(sukeUserName);
 
             if(suke_suke.getInvisible())
-                other.hidePlayer(plugin,sukeUser);
-            else
-                other.showPlayer(plugin,sukeUser);
+                other.hidePlayer(plugin, sukeUser);
+            else if(sukeUser != null)
+                if(sukeUser.isOnline())
+                    other.showPlayer(plugin, sukeUser);
+
+
+
+            if(event.getPlayer().getName().equals(sukeUserName)){
+                sukeUser = Bukkit.getPlayer(sukeUserName);
+                sukeUser.removePotionEffect(PotionEffectType.INVISIBILITY);
+            }
+
 
         }
     }
