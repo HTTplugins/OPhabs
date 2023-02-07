@@ -13,6 +13,7 @@ import org.bukkit.event.entity.*;
 import org.bukkit.event.entity.*;
 import org.bukkit.event.player.*;
 import abilitieSystem.*;
+import org.bukkit.potion.PotionEffectType;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.scheduler.BukkitScheduler;
 import skin.skinsChanger;
@@ -179,6 +180,7 @@ public class caster implements Listener {
             if(event.getDamager().getName().equals(sukeUserName)){
                 sukeUser = Bukkit.getPlayer(sukeUserName);
                 suke_suke.cancelStopInvisibleTask = true;
+                sukeUser.removePotionEffect(PotionEffectType.INVISIBILITY);
                 ((suke_suke)users.get(sukeUserName).getDFAbilities()).uninvisibility(sukeUser);
 
             }

@@ -18,6 +18,8 @@ import static java.lang.Math.PI;
 
 public class suke_suke extends paramecia {
 
+    private int explorationDuration = 60;
+
     private static boolean invisible = false;
     public static boolean exploration = false;
 
@@ -77,16 +79,14 @@ public class suke_suke extends paramecia {
                 @Override
                 public void run() {
 
-                    System.out.println(cancelStopInvisibleTask);
-
-                    if(!cancelStopInvisibleTask){
+                    if(!cancelStopInvisibleTask)
                         uninvisibility(player);
 
-                    }
+
                     cancelStopInvisibleTask = false;
 
                 }
-            }.runTaskLater(plugin,200);    //6000 5 minutos
+            }.runTaskLater(plugin,explorationDuration);
 
 
         } else {
@@ -137,6 +137,7 @@ public class suke_suke extends paramecia {
     public void invisibility(Player player){
         invisible = true;
 
+        player.addPotionEffect(new PotionEffect(PotionEffectType.INVISIBILITY,explorationDuration,99,false,false));
         animation(player);
         new BukkitRunnable() {
             @Override
