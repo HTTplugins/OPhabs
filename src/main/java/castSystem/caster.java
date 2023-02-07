@@ -1,6 +1,8 @@
 package castSystem;
 
 
+import htt.ophabs.OPhabs;
+import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -11,6 +13,8 @@ import org.bukkit.event.entity.*;
 import org.bukkit.event.entity.*;
 import org.bukkit.event.player.*;
 import abilitieSystem.*;
+import org.bukkit.scheduler.BukkitRunnable;
+import org.bukkit.scheduler.BukkitScheduler;
 import skin.skinsChanger;
 
 import org.bukkit.event.inventory.InventoryClickEvent;
@@ -22,9 +26,11 @@ import java.util.Map;
 
 public class caster implements Listener {
     private Map<String, abilityUser> users = new HashMap<>();
+    private OPhabs plugin;
 
-    public caster(coolDown cooldown, Map<String, abilityUser> users){
+    public caster(coolDown cooldown, Map<String, abilityUser> users, OPhabs plugin){
         this.users = users;
+        this.plugin = plugin;
     }
 
     @EventHandler
@@ -161,5 +167,51 @@ public class caster implements Listener {
     @EventHandler(ignoreCancelled = true)
     public void onEntityDamageByEntity(EntityDamageByEntityEvent event) {
         ope_ope.onEntityDamageByEntity(event);
+
+        String sukeUserName;
+        Player sukeUser;
+
+
+        if(suke_suke.exploration){
+
+            sukeUserName = plugin.getConfig().getString("FruitAssociations.suke_suke");
+
+            if(event.getDamager().getName().equals(sukeUserName)){
+                sukeUser = Bukkit.getPlayer(sukeUserName);
+                suke_suke.cancelStopInvisibleTask = true;
+                ((suke_suke)users.get(sukeUserName).getDFAbilities()).uninvisibility(sukeUser);
+
+            }
+
+
+        }
+
+
+
+
+
+
+
+
     }
+
+    @EventHandler(ignoreCancelled = true)
+    public void onPlayerJoin(PlayerJoinEvent event) {
+        String sukeUserName;
+        Player sukeUser, other = event.getPlayer();
+
+        sukeUserName = plugin.getConfig().getString("FruitAssociations.suke_suke");
+
+        if(!sukeUserName.equals("none")) {
+            sukeUser = Bukkit.getPlayer(sukeUserName);
+
+            if(suke_suke.getInvisible())
+                other.hidePlayer(plugin,sukeUser);
+            else
+                other.showPlayer(plugin,sukeUser);
+
+        }
+    }
+
+
 }

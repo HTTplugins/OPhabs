@@ -68,7 +68,7 @@ public final class OPhabs extends JavaPlugin {
         //CasterSystem
         coolDown cooldown = new coolDown(this, users);
 
-        getServer().getPluginManager().registerEvents(new caster(cooldown,users), this);
+        getServer().getPluginManager().registerEvents(new caster(cooldown,users,this), this);
         getServer().getPluginManager().registerEvents(new noDropCaster(), this);
 
         //--------------
