@@ -111,32 +111,22 @@ public class goro_goro extends logia {
                     x = factor*cos(i);
                     y = factor*sin(i);
 
-                    //horizontally (Arround Y)
-                    xY = cos(toRadians(yaw))*x + sin(toRadians(yaw))*z;
-                    yY =  y;
-                    zY = -sin(toRadians(yaw))*x + cos(toRadians(yaw))*z;
-
-                    if(((yaw < -90 && yaw > -180) || ( yaw < 180 && yaw > 90)) && !changedPitch){
-                        changedPitch = true;
-                        pitch = pitch * -1;
-                    }
-
                     //Vertically (Arround X)
-                    xX = xY;
-                    yX = cos(toRadians(pitch))* yY - sin(toRadians(pitch))* zY;
-                    zX = sin(toRadians(pitch))* yY + cos(toRadians(pitch))* zY;
+                    xX = x;
+                    yX = cos(toRadians(pitch))* y - sin(toRadians(pitch))* z;
+                    zX = sin(toRadians(pitch))* y + cos(toRadians(pitch))* z;
 
-                    /*
-                    //Arround Z
-                    xZ = cos(toRadians(pitch))* xX - sin(toRadians(pitch))* yX;
-                    xY = sin(toRadians(pitch))*xX + cos(toRadians(pitch))*yX;
-                    zZ = zX;
 
-                    */
+                    //horizontally (Arround Y)
+                    xY = cos(toRadians(yaw))*xX + sin(toRadians(yaw))*zX;
+                    yY =  yX;
+                    zY = -sin(toRadians(yaw))*xX + cos(toRadians(yaw))*zX;
+
+
                     //Final (sum of player position.)
-                    xL = playerLoc.getX() + xX;
-                    yL = 1 + playerLoc.getY() + yX;
-                    zL = playerLoc.getZ() + zX;
+                    xL = playerLoc.getX() + xY;
+                    yL = 1 + playerLoc.getY() + yY;
+                    zL = playerLoc.getZ() + zY;
 
                     Location partLoc = new Location(world, xL, yL, zL);
 
