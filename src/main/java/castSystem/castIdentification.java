@@ -20,7 +20,7 @@ public class castIdentification {
             castMaterialRyuAllosaurs = Material.YELLOW_DYE,
             castMaterialOpe = Material.BRICK,
             castMaterialZushi = Material.ARROW,
-            castMaterialSuke = Material.FLINT;
+            castMaterialSuke = Material.LEATHER;
 
     public static String castItemNameYami = "Yami Yami caster",
             castItemNameMera = "Mera Mera caster",
