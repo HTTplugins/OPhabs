@@ -1,19 +1,27 @@
-Donde tienes que añadir una fruta cada vez que añades una nueva:
-Primero tienes que hacerla y definir tanto una habilidad como un cast identification y un fruitIdentification 
-    Ophabs.java: 
-        Añadir un objeto habilidad de la fruta que hayas hecho en sección abilitieSystem al vector
+#  HTTplugins -> OPhabs
+## Setting up the documentation:
+#### Install Doxygen and Graphviz in Debian based systems:
+```sh
+sudo apt-get doxygen
+sudo apt install graphviz
+```
 
-    FruitSystem:
-        fruitIdentification:
+#### Install Doxygen and Graphviz in centOS based systems:
+```sh
+sudo dnf install doxygen
+sudo dnf install graphviz
+```
+#### Install Doxygen and Graphviz in Fedora based systems:
+```sh
+sudo yum install doxygen
+sudo yum install graphviz
+```
 
-    commands:
-        oph: en donde aparecen tambin todas las habilidades, hay q ponerlo 2 veces
-    
-Si veis que falta algo mas añadidlo, se puede optimizar mas para quitar algunos pasos pero lo dejamos para el siguiente refactor
+#### Install Doxygenand and Graphviz in other systems (manual):
+[Doxygen official manual](https://www.doxygen.nl/manual/install.html).
+[Graphviz official manual](https://graphviz.org/download/).
 
-
-Se ha añadido todos los archivos necesarios para hacer custom models, el paquete de texturas que se usara en el server está descomprimido en rp/texturepack/CustomModels
-
-
-
-
+## Compiling Documentation:
+```sh
+doxygen Doxyfile
+```

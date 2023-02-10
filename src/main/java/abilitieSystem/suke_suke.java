@@ -4,10 +4,8 @@ import castSystem.castIdentification;
 import fruitSystem.fruitIdentification;
 import htt.ophabs.OPhabs;
 import org.bukkit.*;
-import org.bukkit.block.Block;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
-import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import org.bukkit.scheduler.BukkitRunnable;
@@ -16,10 +14,13 @@ import org.bukkit.util.Vector;
 
 import static java.lang.Math.PI;
 
-
+/**
+ * @brief suke_suke no mi ability Class.
+ * @author RedRiotTank
+ */
 public class suke_suke extends paramecia {
 
-    private int explorationDuration = 6000;
+    private final int explorationDuration = 6000;
 
     private static boolean invisible = false;
     public static boolean exploration = false;
@@ -28,53 +29,49 @@ public class suke_suke extends paramecia {
 
     public static OPhabs plug;
 
+    /**
+     * @brief suke_suke constructor.
+     * @param plugin OPhabs plugin.
+     * @author RedRiotTank.
+     */
     public suke_suke(OPhabs plugin) {
         super(plugin, castIdentification.castMaterialSuke, castIdentification.castItemNameSuke, fruitIdentification.fruitCommandNameSuke);
         abilitiesNames.add("Invisible Exploration");
         abilitiesCD.add(0);
         abilitiesNames.add("BackStab");
         abilitiesCD.add(0);
-        abilitiesNames.add("Invisible Crew");
+        abilitiesNames.add("ab3");
         abilitiesCD.add(0);
         abilitiesNames.add("ab4");
         abilitiesCD.add(0);
         plug = plugin;
     }
 
-    public void ability1() {
+    // ---------------------------------------------- AB 1 ---------------------------------------------------------------------
 
+    /**
+     * @brief Ability 1 caller: "Invisible Exploration". Shift + click to cancel it.
+     * @see suke_suke#invisibleExploration(Player)
+     * @author RedRiotTank.
+     */
+    public void ability1() {
         if (!user.getPlayer().isSneaking()) {
             if (abilitiesCD.get(0) == 0) {
                 invisibleExploration(user.getPlayer());
                 abilitiesCD.set(0, 7000); // Pon el cooldown en segundos
             }
-        } else {
+        } else 
             cancelExploration(user.getPlayer());
-        }
+        
     }
 
-    public void ability2() {
-        if (abilitiesCD.get(1) == 0) {
-            backStab(user.getPlayer());
-
-            abilitiesCD.set(1, 15); // Pon el cooldown en segundos
-        }
-    }
-
-    public void ability3() {
-        if (abilitiesCD.get(2) == 0) {
-            animation(user.getPlayer(),0.5);
-            abilitiesCD.set(2, 0); // Pon el cooldown en segundos
-        }
-    }
-
-    public void ability4() {
-        if (abilitiesCD.get(3) == 0) {
-
-            abilitiesCD.set(3, 0); // Pon el cooldown en segundos
-        }
-    }
-
+    /**
+     * @brief CORE ABILITY: Makes players invisible during explorationDuration time. If the players attacks,
+     * the invisibility gets canceled.
+     * @param player User that gets invisible.
+     * @see suke_suke#invisibleExploration(Player)
+     * @author RedRiotTank.
+     */
     public void invisibleExploration(Player player) {
         if (!invisible) {
             exploration = true;
@@ -87,7 +84,7 @@ public class suke_suke extends paramecia {
                 public void run() {
 
                     if (!cancelStopInvisibleTask)
-                        uninvisibility(player);
+                        finishInvisibility(player);
 
 
                     cancelStopInvisibleTask = false;
@@ -101,10 +98,22 @@ public class suke_suke extends paramecia {
         }
     }
 
+    /**
+     * @brief CORE ABILITY: Invisible boolean getter.
+     * @return true if any kind of invisibility of the fruit is activated.
+     * @author RedRiotTank.
+     */
     public static boolean getInvisible() {
         return invisible;
     }
 
+    /**
+     * @brief ANIMATION: creates a progressive cylinder around the player.
+     * @param player User that gets animation.
+     * @param rad initial radius of the cylinder.
+     * @see suke_suke#invisibleExploration(Player)
+     * @author RedRiotTank.
+     */
     public void animation(Player player, double rad) {
         new BukkitRunnable() {
             double radius = rad;
@@ -142,6 +151,12 @@ public class suke_suke extends paramecia {
         }.runTaskTimer(plugin, 0, 1);
     }
 
+    /**
+     * @brief make the player invisible.
+     * @param player User that gets invisible.
+     * @see suke_suke#invisibleExploration(Player)
+     * @author RedRiotTank.
+     */
     public void invisibility(Player player) {
         invisible = true;
 
@@ -158,7 +173,13 @@ public class suke_suke extends paramecia {
 
     }
 
-    public void uninvisibility(Player player) {
+    /**
+     * @brief make the player visible again.
+     * @param player User that stops being invisible.
+     * @see suke_suke#invisibleExploration(Player)
+     * @author RedRiotTank.
+     */
+    public void finishInvisibility(Player player) {
         invisible = false;
         exploration = false;
 
@@ -176,26 +197,47 @@ public class suke_suke extends paramecia {
 
     }
 
+    /**
+     * @brief Cancel Invisible Exploration ability.
+     * @param player User that cancel exploration mode.
+     * @see suke_suke#invisibleExploration(Player)
+     * @author RedRiotTank.
+     */
     public void cancelExploration(Player player) {
 
         if (exploration) {
-            uninvisibility(player);
+            finishInvisibility(player);
             player.removePotionEffect(PotionEffectType.INVISIBILITY);
         } else
             player.sendMessage("You are not in exploration mode");
 
     }
 
+    // ---------------------------------------------- AB 2 ---------------------------------------------------------------------
+
+    /**
+     * @brief Ability 2 caller: "BackStab".
+     * @see suke_suke#backStab(Player)
+     * @author RedRiotTank.
+     */
+    public void ability2() {
+        if (abilitiesCD.get(1) == 0) {
+            backStab(user.getPlayer());
+            abilitiesCD.set(1, 15); // Pon el cooldown en segundos
+        }
+    }
+
+    /**
+     * @brief CORE ABILITY: Backstab an entity the player is looking.
+     * @param player User that uses the ability.
+     * @author RedRiotTank.
+     */
     public void backStab(Player player) {
 
-        LivingEntity target;
+        LivingEntity target = auxBiblio.rayCastLivEnt(player,2);
 
-        Vector direction = player.getEyeLocation().getDirection();
-        RayTraceResult result = player.getWorld().rayTraceEntities(player.getEyeLocation(), direction, 2, p -> !player.getUniqueId().equals(p.getUniqueId()));
-        if (result != null && result.getHitEntity() != null) {
-            target = (LivingEntity) result.getHitEntity();
-
-            boolean backLooking = isLookingBack(player, target);
+        if (target != null) {
+            boolean backLooking = auxBiblio.isLookingBack(player, target);
 
             if (backLooking){
                 spawnParticleBehind(target);
@@ -206,28 +248,45 @@ public class suke_suke extends paramecia {
 
     }
 
-    public boolean isLookingBack(Player player, LivingEntity livingEntity) {
-
-
-        Vector pDir = player.getLocation().getDirection();
-        Vector eDir = livingEntity.getLocation().getDirection();
-        double xv = pDir.getX() * eDir.getZ() - pDir.getZ() * eDir.getX();
-        double zv = pDir.getX() * eDir.getX() + pDir.getZ() * eDir.getZ();
-        double angle = Math.atan2(xv, zv); // Value between -π and +π
-        double angleInDegrees = (angle * 180) / Math.PI;
-
-        if (angleInDegrees <= 60 && angleInDegrees >= -32)
-            return true;
-
-
-        return false;
-    }
-
+    /**
+     * @brief spawns a single red redstone particle behind the entity.
+     * @param entity Entity you want to spawn blood.
+     * @author RedRiotTank.
+     */
     public static void spawnParticleBehind(LivingEntity entity) {
         Location entityLocation = entity.getLocation().add(0,1,0);
         Vector direction = entityLocation.getDirection().normalize().multiply(-1);
         Location particleLocation = entityLocation.clone().add(direction);
         entity.getWorld().spawnParticle(Particle.REDSTONE, particleLocation, 0,0,0,0,new Particle.DustOptions(Color.RED, 2.0f));
     }
+
+
+    // ---------------------------------------------- AB 3 ---------------------------------------------------------------------
+    /**
+     * @brief Ability 3 caller: "-".
+     * @author RedRiotTank.
+     */
+    public void ability3() {
+        if (abilitiesCD.get(2) == 0) {
+
+            abilitiesCD.set(2, 0); // Pon el cooldown en segundos
+        }
+    }
+
+    // ---------------------------------------------- AB 4 ---------------------------------------------------------------------
+    /**
+     * @brief Ability 4 caller: "-".
+     * @author RedRiotTank.
+     */
+    public void ability4() {
+        if (abilitiesCD.get(3) == 0) {
+
+            abilitiesCD.set(3, 0); // Pon el cooldown en segundos
+        }
+    }
+
+
+
+
 
 }

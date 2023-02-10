@@ -4,41 +4,40 @@ import castSystem.castIdentification;
 import fruitSystem.fruitIdentification;
 import htt.ophabs.OPhabs;
 import org.bukkit.*;
-import org.bukkit.block.Block;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
-import org.bukkit.inventory.ItemStack;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.util.RayTraceResult;
 import org.bukkit.util.Vector;
-
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 import java.util.Random;
 
 import static java.lang.Math.*;
 
+/**
+ * @brief Ope ope no mi ability Class.
+ * @author RedRiotTank
+ */
 public class ope_ope extends paramecia {
 
     private List<Location> roomBlocks = new ArrayList<>();
-
     private static Location roomcenter;
     private static boolean activeRoom;
-
-    private final int radius = 15;
-
-    private final int roomTime = 400;
-
+    private final int radius = 15, roomTime = 400;
     private LivingEntity currentHearth = null;
-
     private int availableSqueezes;
 
+    /**
+     * @brief ope_ope constructor. Also initializes roomcenter, activeRoom and availableSqueezes.
+     * @param plugin OPhabs plugin.
+     * @author RedRiotTank.
+     */
     public ope_ope(OPhabs plugin) {
         super(plugin, castIdentification.castMaterialOpe, castIdentification.castItemNameOpe, fruitIdentification.fruitCommandNameOpe);
 
@@ -54,44 +53,36 @@ public class ope_ope extends paramecia {
         roomcenter = null;
         activeRoom = false;
         availableSqueezes = 5;
-
     }
 
+    // ---------------------------------------------- AB 1 ---------------------------------------------------------------------
+
+    /**
+     * @brief Ability 1 caller: "Room".
+     * @see ope_ope#room(int, Player)
+     * @author RedRiotTank.
+     */
     public void ability1() {
         if (abilitiesCD.get(0) == 0) {
-            room(user.getPlayer().getLocation(), radius, user.getPlayer());
+            room(radius, user.getPlayer());
             abilitiesCD.set(0, 60); // Pon el cooldown en segundos
         }
     }
 
-    public void ability2() {
-        if (abilitiesCD.get(1) == 0) {
-            levitation();
-            abilitiesCD.set(1, 8); // Pon el cooldown en segundos
-        }
-    }
-
-    public void ability3() {
-        if (abilitiesCD.get(2) == 0) {
-            dash(user.getPlayer());
-            abilitiesCD.set(2, 0); // Pon el cooldown en segundos
-        }
-    }
-
-    public void ability4() {
-        if (abilitiesCD.get(3) == 0) {
-            stealHearth(user.getPlayer());
-            abilitiesCD.set(3, 0); // Pon el cooldown en segundos
-        }
-    }
-
-    public void room(Location location, int radius, Player player) {
+    /**
+     * @brief CORE ABILITY: Creates the room space and update states (activeRoom and roomCenter).
+     * @param radius Room radius.
+     * @param player Player who activates the room.
+     * @note It also controls back particles animation and closing room timing (updates status when it closes).
+     * @author RedRiotTank.
+     */
+    public void room(int radius, Player player) {
         Random rand = new Random();
-        World world = location.getWorld();
-        world.playSound(location, "openroom", 1, 1);
+        World world = player.getLocation().getWorld();
+        world.playSound(player.getLocation(), "openroom", 1, 1);
 
         activeRoom = true;
-        roomcenter = location;
+        roomcenter = player.getLocation();
 
         new BukkitRunnable() {
             Material material;
@@ -156,39 +147,13 @@ public class ope_ope extends paramecia {
                 player.getWorld().spawnParticle(Particle.REDSTONE,pBehind,0,0,0,0,dustOptions);
             }
 
-            public void createParticlesBehindPlayer(Player player) {
-                Location location = player.getLocation();
-                float yaw = location.getYaw();
-                float pitch = location.getPitch();
-                double x = -1 * Math.cos(Math.toRadians(yaw)) * Math.cos(Math.toRadians(-pitch));
-                double y = -1 * Math.sin(Math.toRadians(-pitch));
-                double z = -1 * Math.sin(Math.toRadians(yaw)) * Math.cos(Math.toRadians(-pitch));
-                location.add(x, y, z);
-
-                Random random = new Random();
-                Particle.DustOptions dustOptions = new Particle.DustOptions(random.nextBoolean() ? Color.fromRGB(179,232,244) : Color.AQUA, 1.0f);
-
-
-                player.getWorld().spawnParticle(Particle.REDSTONE, location.add(0,0.2,0), 0,0,0,0, dustOptions);
-                player.getWorld().spawnParticle(Particle.REDSTONE, location.add(0,0.4,0), 0,0,0,0, dustOptions);
-                player.getWorld().spawnParticle(Particle.REDSTONE, location.add(0,0.6,0), 0,0,0,0, dustOptions);
-                player.getWorld().spawnParticle(Particle.REDSTONE, location.add(0,0.8,0), 0,0,0,0, dustOptions);
-                player.getWorld().spawnParticle(Particle.REDSTONE, location.add(0,1,0), 0,0,0,0, dustOptions);
-                player.getWorld().spawnParticle(Particle.REDSTONE, location.add(0,1.5,0), 0,0,0,0, dustOptions);
-
-                location.subtract(0,2,0);
-
-            }
-
-
-
         }.runTaskTimer(plugin,0,1);
 
         new BukkitRunnable() {
 
             @Override
             public void run() {
-                world.playSound(location, "closeroom", 1, 1);
+                world.playSound(player.getLocation(), "closeroom", 1, 1);
 
                 roomcenter = null;
                 activeRoom = false;
@@ -203,86 +168,29 @@ public class ope_ope extends paramecia {
 
     }
 
-    public void levitation() {
-        if (activeRoom) {
-            for (Entity ent : user.getPlayer().getWorld().getNearbyEntities(roomcenter, radius, radius, radius)) {
-
-                if (ent instanceof LivingEntity && ent != user.getPlayer())
-                    ((LivingEntity) ent).addPotionEffect(new PotionEffect(PotionEffectType.LEVITATION, 100, 10));
-
-            }
-
-        }
-
-
-    }
-
-    public void dash(Player player){
-
-        if(activeRoom){
-            Location location = player.getLocation();
-            float yaw = location.getYaw();
-            float pitch = location.getPitch();
-            double x = 2 * Math.cos(Math.toRadians(yaw + 90)) * Math.cos(Math.toRadians(-pitch));
-            double y = 2 * Math.sin(Math.toRadians(-pitch));
-            double z = 2 * Math.sin(Math.toRadians(yaw + 90)) * Math.cos(Math.toRadians(-pitch));
-            player.setVelocity(new Vector(x, y, z));
-            player.getWorld().playSound(player.getLocation(),"fastsoru",1,1);
-        }
-
-
-
-    }
-
-    public void stealHearth(Player player){
-
-        if(!player.isSneaking()){
-            if(activeRoom){
-                Vector direction = player.getEyeLocation().getDirection();
-                RayTraceResult result = player.getWorld().rayTraceEntities(player.getEyeLocation(), direction, 2, p -> !player.getUniqueId().equals(p.getUniqueId()));
-                if (result != null && result.getHitEntity() != null) {
-                    currentHearth = (LivingEntity) result.getHitEntity();
-                    player.getWorld().playSound(currentHearth.getLocation(),"swordcut",1,1);
-                    spawnBloodParticles(currentHearth);
-                    player.sendMessage("You have stolen " + currentHearth.getName() + "'s ❤.");
-                }
-            }
-        } else {
-            if(currentHearth == null) {
-                player.sendMessage("You don't have anybody's ❤ right now.");
-            } else {
-
-                availableSqueezes--;
-
-                currentHearth.damage(2);
-                currentHearth.getWorld().playSound(currentHearth.getLocation(),"swordcut",1,1);
-                player.getWorld().playSound(player.getLocation(),"swordcut",1,1);
-                currentHearth.getWorld().spawnParticle(Particle.DAMAGE_INDICATOR,currentHearth.getLocation().add(0,currentHearth.getHeight(),0),4);
-
-
-                if(availableSqueezes == 0){
-                    availableSqueezes = 5;
-                    currentHearth = null;
-                }
-            }
-
-        }
-    }
-
-    public void spawnBloodParticles(Entity entity) {
-
-        Location loc = entity.getLocation();
-        World world = entity.getWorld();
-        world.spawnParticle(Particle.REDSTONE, loc.add(0, entity.getHeight(), 0), 20, 0.5, 0.5, 0.5, 0.1, new Particle.DustOptions(Color.RED, 1.0f));
-    }
-
+    /**
+     * @brief Cancels onBlockBreak event if it's a room material and room is active to avoid breaking the room.
+     * @param event BlockBreakEvent that Minecraft client sends to server to break the block.
+     * @see ope_ope#room(int, Player)
+     * @note Called in his correspondent in the caster, as a listener.
+     * @note Abilities can destroy room blocks, is the way to scape from it.
+     * @author RedRiotTank.
+     */
     public static void onBlockBreak(BlockBreakEvent event) {
         if(activeRoom)
             if(event.getBlock().getType().equals(Material.BLUE_STAINED_GLASS) || event.getBlock().getType().equals(Material.LIGHT_BLUE_STAINED_GLASS))
                 event.setCancelled(true);
-
     }
 
+    /**
+     * @brief Passive ability of the room, if the user is hit, it "shambless" the user and some other living entity around the room positions.
+     * The damage will be dealt to this Living entity.
+     * @param event EntityDamageByEntityEvent that Minecraft client sends to server to say there was a hit.
+     * @see ope_ope#room(int, Player)
+     * @note Called in his correspondent in the caster, as a listener.
+     * @todo projectiles don't works correctly with this.
+     * @author RedRiotTank.
+     */
     public static void onEntityDamageByEntity(EntityDamageByEntityEvent event){
         World world = event.getDamager().getWorld();
         Player player = null;
@@ -313,4 +221,120 @@ public class ope_ope extends paramecia {
         }
     }
 
+    // ---------------------------------------------- AB 2 ---------------------------------------------------------------------
+
+    /**
+     * @brief Ability 2 caller: "Levitation".
+     * @see ope_ope#levitation()
+     * @note Only can be used if there is an active room.
+     * @author RedRiotTank.
+     */
+    public void ability2() {
+        if (abilitiesCD.get(1) == 0) {
+            levitation();
+            abilitiesCD.set(1, 8); // Pon el cooldown en segundos
+        }
+    }
+
+    /**
+     * @brief CORE ABILITY: Makes the Living entities inside the room levitate.
+     * @author RedRiotTank.
+     */
+    public void levitation() {
+        if (activeRoom)
+            for (Entity ent : user.getPlayer().getWorld().getNearbyEntities(roomcenter, radius, radius, radius))
+
+                if (ent instanceof LivingEntity && ent != user.getPlayer())
+                    ((LivingEntity) ent).addPotionEffect(new PotionEffect(PotionEffectType.LEVITATION, 100, 10));
+
+    }
+
+    // ---------------------------------------------- AB 3 ---------------------------------------------------------------------
+
+    /**
+     * @brief Ability 3 caller: "Dash".
+     * @see ope_ope#dash(Player)
+     * @note It has no cooldown.
+     * @author RedRiotTank.
+     */
+    public void ability3() {
+        if (abilitiesCD.get(2) == 0) {
+            dash(user.getPlayer());
+            abilitiesCD.set(2, 0); // Pon el cooldown en segundos
+        }
+    }
+
+    /**
+     * @brief CORE ABILITY: The player will dash in a *2 block distance to the direction he is looking at.
+     * @param player who is going to dash.
+     * @note Only can be used if a room is active.
+     * @author RedRiotTank.
+     */
+    public void dash(Player player){
+        if(activeRoom){
+            Location location = player.getLocation();
+            float yaw = location.getYaw();
+            float pitch = location.getPitch();
+            double x = 2 * Math.cos(Math.toRadians(yaw + 90)) * Math.cos(Math.toRadians(-pitch));
+            double y = 2 * Math.sin(Math.toRadians(-pitch));
+            double z = 2 * Math.sin(Math.toRadians(yaw + 90)) * Math.cos(Math.toRadians(-pitch));
+            player.setVelocity(new Vector(x, y, z));
+            player.getWorld().playSound(player.getLocation(),"fastsoru",1,1);
+        }
+
+
+
+    }
+
+    // ---------------------------------------------- AB 3 ---------------------------------------------------------------------
+
+    /**
+     * @brief Ability 4 caller: "Steal Hearth".
+     * @see ope_ope#stealHearth(Player)
+     * @note It has no cooldown.
+     * @author RedRiotTank.
+     */
+    public void ability4() {
+        if (abilitiesCD.get(3) == 0) {
+            stealHearth(user.getPlayer());
+            abilitiesCD.set(3, 0); // Pon el cooldown en segundos
+        }
+    }
+
+    /**
+     * @brief CORE ABILITY: The player steals hearth to the entity he is looking at. Shift + click will make damage to the hearth.
+     * @param player who is activating the ability.
+     * @note Only can steal if room is active, but can hurt the hearth whenever he wants.
+     * @author RedRiotTank.
+     */
+    public void stealHearth(Player player){
+        if(!player.isSneaking()){
+            if(activeRoom){
+                currentHearth = auxBiblio.rayCastLivEnt(player,2);
+
+                if (currentHearth != null) {
+                    player.getWorld().playSound(currentHearth.getLocation(),"swordcut",1,1);
+                    auxBiblio.spawnBloodParticles(currentHearth);
+                    player.sendMessage("You have stolen " + currentHearth.getName() + "'s ❤.");
+                }
+            }
+        } else {
+            if(currentHearth == null) {
+                player.sendMessage("You don't have anybody's ❤ right now.");
+            } else {
+                availableSqueezes--;
+
+                currentHearth.damage(2);
+                currentHearth.getWorld().playSound(currentHearth.getLocation(),"swordcut",1,1);
+                player.getWorld().playSound(player.getLocation(),"swordcut",1,1);
+                currentHearth.getWorld().spawnParticle(Particle.DAMAGE_INDICATOR,currentHearth.getLocation().add(0,currentHearth.getHeight(),0),4);
+
+                if(availableSqueezes == 0){
+                    availableSqueezes = 5;
+                    currentHearth = null;
+                }
+            }
+
+        }
+    }
 }

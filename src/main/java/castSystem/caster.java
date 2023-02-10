@@ -10,12 +10,9 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.entity.*;
-import org.bukkit.event.entity.*;
 import org.bukkit.event.player.*;
 import abilitieSystem.*;
 import org.bukkit.potion.PotionEffectType;
-import org.bukkit.scheduler.BukkitRunnable;
-import org.bukkit.scheduler.BukkitScheduler;
 import skin.skinsChanger;
 
 import org.bukkit.event.inventory.InventoryClickEvent;
@@ -172,7 +169,6 @@ public class caster implements Listener {
         String sukeUserName;
         Player sukeUser;
 
-
         if(suke_suke.exploration){
 
             sukeUserName = plugin.getConfig().getString("FruitAssociations.suke_suke");
@@ -181,20 +177,9 @@ public class caster implements Listener {
                 sukeUser = Bukkit.getPlayer(sukeUserName);
                 suke_suke.cancelStopInvisibleTask = true;
                 sukeUser.removePotionEffect(PotionEffectType.INVISIBILITY);
-                ((suke_suke)users.get(sukeUserName).getDFAbilities()).uninvisibility(sukeUser);
-
+                ((suke_suke)users.get(sukeUserName).getDFAbilities()).finishInvisibility(sukeUser);
             }
-
-
         }
-
-
-
-
-
-
-
-
     }
 
     @EventHandler(ignoreCancelled = true)

@@ -1,0 +1,109 @@
+/**
+    \mainpage OPhabs Documentation.
+
+    This is OPhabs documentation, a One Piece abilities plugin for Minecraft Server.
+
+    \section a How to add a new fruit:
+
+    - In src/main/java/castSystem/castIdentification.java (\b Caster \b settings):
+        - Add the caster \b material, example: \code{.java} castMaterialMera = Material.BLAZE_ROD; \endcode
+        - Add the caster \b name, example: \code{.java} castItemNameSuke = "Suke Suke caster"; \endcode
+        - Add the \b verification to the function itemIsCaster, example: \code{.java} || (itemName.equals(castIdentification.castItemNameSuke) && itemMaterial.equals(castIdentification.castMaterialSuke))){ \endcode
+        <br>
+
+    - In src/main/java/fruitSystem/devilFruit.java (\b Devil \b Fruit \b settings):
+        - Add devil the devil fruit creation case, example:
+        \code{.java}
+        case fruitIdentification.fruitCommandNameSuke:
+            devilFruitForm = Material.APPLE;
+            fruitItemName = fruitIdentification.fruitItemNameSuke;
+            break;
+        \endcode
+        <br>
+
+    - In src/main/java/fruitSystem/fruitIdentification.java (\b Devil \b Fruit \b creation)
+        - Increment the fruitsNumber number.
+        - Add the fruit \b item \b name, example: \code{.java} fruitItemNameSuke = "Suke suke no mi"; \endcode
+        - Add the fruit \b command \b name, example: \code{.java} fruitCommandNameSuke = "suke_suke"; \endcode
+        - Add the fruit to \b getItemName, example: \code{.java} case fruitCommandNameSuke: return fruitItemNameSuke; \endcode
+        - Add the fruit to \b getCommandName, example: \code{.java} case fruitItemNameSuke: return fruitCommandNameSuke; \endcode
+        - Add the fruit to \b isFruit, example: \code{.java} case fruitItemNameSuke: return true; \endcode
+        <br>
+
+    - In src/main/java/htt/ophabs/OPhabs.java (\b Add the \b fruit to \b abilitiesList):
+    \code{.java} abilitiesList.add(new suke_suke(this)); \endcode
+    <br>
+
+    - In src/main/resources/config.yml (\b persistent \b memory)
+     Add the fruit association to the configuration file, example: \code{.json} suke_suke: none \endcode
+    <br>
+
+    - Create a New class in the package abilitieSystem with the following structure. This class is going to be where you program abilities logic for your fruit.
+
+        \code{.java}
+            package abilitieSystem;
+            import castSystem.castIdentification;
+            import fruitSystem.fruitIdentification;
+            import htt.ophabs.OPhabs;
+
+            public class fruit_fruit extends paramecia {    //fruit_fruit is the fruit whose abilities you are going to program (command name).
+
+                public suke_suke(OPhabs plugin){
+
+                    super(plugin, castIdentification.castMaterialFRUIT,castIdentification.castItemNameFRUIT, fruitIdentification.fruitCommandNameFRUIT);    //Here you associate with  df Casting material, name and command.
+
+                    /*
+                    Here you define in the strings the ability names that appears in the casting table (scoreboard).
+                    If you want to add an ability, just add one more instance, like this:
+                    abilitiesNames.add("ab5");
+                    abilitiesCD.add(0);
+                    */
+                    abilitiesNames.add("ab1");
+                    abilitiesCD.add(0);
+                    abilitiesNames.add("ab2");
+                    abilitiesCD.add(0);
+                    abilitiesNames.add("ab3");
+                    abilitiesCD.add(0);
+                    abilitiesNames.add("ab4");
+                    abilitiesCD.add(0);
+                }
+
+                //Here are the ability overrides:
+                //you can make more until a maximum of 6.
+
+                public void ability1(){
+                    if(abilitiesCD.get(0) == 0){
+                        //Here you call the ability
+                        abilitiesCD.set(0, 0); // Second parameter is cooldown in seconds.
+                    }
+                }
+
+                public void ability2(){
+                    if(abilitiesCD.get(1) == 0){
+                        //Here you call the ability
+                        abilitiesCD.set(1, 0); // Second parameter is cooldown in seconds.
+                    }
+                }
+
+                public void ability3(){
+                    if(abilitiesCD.get(2) == 0){
+                        //Here you call the ability
+                        abilitiesCD.set(2, 0); // Second parameter is cooldown in seconds.
+                    }
+                }
+
+                public void ability4() {
+                    if (abilitiesCD.get(3) == 0) {
+                        //Here you call the ability
+                        abilitiesCD.set(3, 0); // Second parameter is cooldown in seconds.
+                    }
+                }
+            }
+        \endcode
+    - bb
+
+    \section Creators
+
+    This plugin has been created by:  RedRiotTank, MiixZ and Vaelico786.
+
+*/

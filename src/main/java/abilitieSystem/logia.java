@@ -22,19 +22,33 @@ import org.bukkit.block.Biome;
 import org.bukkit.entity.Vex;
 import java.util.ArrayList;
 
-public abstract class logia extends df {
+/**
+ * @brief Logia --> Devil fruit Subtype.
+ * @author Vaelico786.
+ */
+public abstract class logia extends df{
     protected Particle element;
     boolean logiaBodyON = false;
 
-    boolean pbON = false;
-
+    /**
+     * @brief Logia constructor.
+     * @param plugin OPhabs plugin.
+     * @param element main particle element of logia user.
+     * @param castMaterial Material type of the caster.
+     * @param castName Name of the caster.
+     * @param commandName Name of that represents the fruit.
+     * @author Vaelico786.
+     */
     public logia(OPhabs plugin, Particle element, Material castMaterial, String castName, String commandName) {
         super(plugin, castMaterial, castName, commandName);
         this.element = element;
     }
 
-
-
+    /**
+     * @brief Abstract function that forces an implementation of a logiaBody mode animation
+     * (particles + sound).
+     * @author RedRiotTank.
+     */
     public abstract void runParticles();
 
 //    @EventHandler(ignoreCancelled = true)
@@ -59,6 +73,11 @@ public abstract class logia extends df {
         }
     }
 
+    /**
+     * @brief Logia body mode.
+     * @param player Player that activates the logiaBody Mode.
+     * @author Vaelico786.
+     */
     public boolean logiaBody(Player player) {
             if (!logiaBodyON) {
                 logiaBodyON = true;

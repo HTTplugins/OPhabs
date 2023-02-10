@@ -9,37 +9,33 @@ import org.bukkit.entity.Entity;
 import org.bukkit.entity.FallingBlock;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
-import org.bukkit.event.entity.EntityChangeBlockEvent;
 import org.bukkit.event.entity.EntityToggleGlideEvent;
-import org.bukkit.event.entity.EntityToggleSwimEvent;
 import org.bukkit.event.player.PlayerMoveEvent;
-import org.bukkit.metadata.FixedMetadataValue;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.scheduler.BukkitTask;
 import org.bukkit.util.Vector;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
-
 import static java.lang.Math.*;
 
+/**
+ * @brief Zushi Zushi no mi ability Class.
+ * @author RedRiotTank
+ */
 public class zushi_zushi extends paramecia{
-
-    private final List<Material> materials = new ArrayList<>();
-
-
-    private static boolean heavyActivated;
-
-    private boolean exploded = false;
-
+    private boolean exploded = false;   //To control meteor explosion.
     private static List<Entity> heavyEntity = null;
     private static List<Player> togglePlayer = new ArrayList<>();
     private final Random random = new Random();
 
-
+    /**
+     * @brief zushi_zushi constructor.
+     * @param plugin OPhabs plugin.
+     * @author RedRiotTank.
+     */
     public zushi_zushi(OPhabs plugin){
         super(plugin, castIdentification.castMaterialZushi,castIdentification.castItemNameZushi,fruitIdentification.fruitCommandNameZushi);
         abilitiesNames.add("Heavy Field");
@@ -48,79 +44,38 @@ public class zushi_zushi extends paramecia{
         abilitiesCD.add(0);
         abilitiesNames.add("Attraction");
         abilitiesCD.add(0);
-        abilitiesNames.add("flyRock");
+        abilitiesNames.add("FlyRock");
         abilitiesCD.add(0);
-
-
-        //Meteor Materials initialization:
-        materials.add(Material.COBBLESTONE);
-        materials.add(Material.MAGMA_BLOCK);
-        materials.add(Material.NETHERRACK);
     }
 
+    // ---------------------------------------------- AB 1 ---------------------------------------------------------------------
+
+    /**
+     * @brief Ability 1 caller: "Heavy Field".
+     * @see zushi_zushi#heavyGravityField(Player)
+     * @author RedRiotTank.
+     */
     public void ability1(){
         if(abilitiesCD.get(0) == 0){
-            heavy(user.getPlayer());
+            heavyGravityField(user.getPlayer());
             abilitiesCD.set(0, 25); // Pon el cooldown en segundos
         }
     }
 
-    public void ability2(){
-        if(abilitiesCD.get(1) == 0){
-            meteor(user.getPlayer());
-            abilitiesCD.set(1, 50); // Pon el cooldown en segundos
-        }
-    }
-
-    public void ability3(){
-        if(abilitiesCD.get(2) == 0){
-            attraction(user.getPlayer());
-            abilitiesCD.set(2, 40); // Pon el cooldown en segundos
-        }
-    }
-
-    public void ability4() {
-        if (abilitiesCD.get(3) == 0) {
-            flyRock(user.getPlayer());
-            abilitiesCD.set(3, 60); // Pon el cooldown en segundos
-        }
-    }
-
-    public void heavy(Player player){
+    /**
+     * @brief CORE ABILITY: Creates a "heavy gravity field" in an x:20, y:50 z:20 box. If the entity is flying, the field
+     * pulls her to the ground and don't let move anything for 5 seconds, in addition, if the entity it's a
+     * player, glides effect it.
+     * @param player User that creates the heavy gravity field.
+     * @author RedRiotTank.
+     */
+    public void heavyGravityField(Player player){
 
         World world = player.getWorld();
         Location playerLoc = player.getLocation();
 
         world.playSound(playerLoc,"heavygravity",1,1);
-        new BukkitRunnable(){
-            int ticks = 0;
-            Random random = new Random();
-            World world = player.getWorld();
-            Location playerLoc = player.getLocation();
-            double x;
-            double z;
-            @Override
-            public void run() {
-                ticks++;
-
-                for(int i = 0; i < 30; i++){
-                    x = (random.nextDouble() * 19.98) - 9.99 + playerLoc.getX();
-                    z = (random.nextDouble() * 19.98) - 9.99 + playerLoc.getZ();
-                    double y = searchGround(x,z,playerLoc.getY(),world);
-                    world.spawnParticle(Particle.SPELL_WITCH,new Location(world,x,y, z),2);
-                }
-
-                for(int i = 0; i < 60; i++){
-                    x = (random.nextDouble() * 19.98) - 9.99 + playerLoc.getX();
-                    z = (random.nextDouble() * 19.98) - 9.99 + playerLoc.getZ();
-                    double y = searchGround(x,z,playerLoc.getY(),world);
-                    world.spawnParticle(Particle.CRIT_MAGIC,new Location(world,x,y + 0.5,z),0,0,-0.3,0);
-                }
-                if(ticks == 100) this.cancel();
-
-
-            }
-        }.runTaskTimer(plugin,0,1);
+        heavyGravityFieldAnimation(playerLoc);
 
         heavyEntity = player.getNearbyEntities(20,50,20);
 
@@ -135,8 +90,6 @@ public class zushi_zushi extends paramecia{
             int ticks = 0;
             @Override
             public void run() {
-
-
                 for(Entity ent : heavyEntity){
                     if(ent.getLocation().getY() == world.getHighestBlockAt(ent.getLocation()).getY()+1
                             && !togglePlayer.contains(ent)
@@ -147,9 +100,8 @@ public class zushi_zushi extends paramecia{
                         (ent).teleport(new Location(world,entiLoc.getX(),entiLoc.getY(),entiLoc.getZ(),entiLoc.getYaw(),-10));
                         ((Player)ent).setGliding(true);
 
-                    } else if(ent instanceof LivingEntity){
+                    } else if(ent instanceof LivingEntity)
                         ((LivingEntity)ent).addPotionEffect(new PotionEffect(PotionEffectType.SLOW,10,10));
-                    }
                 }
 
                 if(ticks == 100){
@@ -157,38 +109,100 @@ public class zushi_zushi extends paramecia{
                     heavyEntity.clear();
 
                     this.cancel();
-
                 }
 
                 ticks++;
-
             }
         }.runTaskTimer(plugin,0,1);
     }
 
+    /**
+     * @brief ANIMATION: Visual animation (particles) for heavy gravity field ability.
+     * @param playerLoc Location of the player around which the animation is going to be done.
+     * @see zushi_zushi#heavyGravityField(Player)
+     * @author RedRiotTank.
+     */
+    public void heavyGravityFieldAnimation(Location playerLoc){
+        new BukkitRunnable(){
+            int ticks = 0;
+            final Random random = new Random();
+            final World world = playerLoc.getWorld();
+            double x;
+            double z;
+            @Override
+            public void run() {
+                ticks++;
+
+                for(int i = 0; i < 30; i++){
+                    x = (random.nextDouble() * 19.98) - 9.99 + playerLoc.getX();
+                    z = (random.nextDouble() * 19.98) - 9.99 + playerLoc.getZ();
+                    double y = auxBiblio.searchGround(x,z,playerLoc.getY(),world);
+                    world.spawnParticle(Particle.SPELL_WITCH,new Location(world,x,y, z),2);
+                }
+
+                for(int i = 0; i < 60; i++){
+                    x = (random.nextDouble() * 19.98) - 9.99 + playerLoc.getX();
+                    z = (random.nextDouble() * 19.98) - 9.99 + playerLoc.getZ();
+                    double y = auxBiblio.searchGround(x,z,playerLoc.getY(),world);
+                    world.spawnParticle(Particle.CRIT_MAGIC,new Location(world,x,y + 0.5,z),0,0,-0.3,0);
+                }
+                if(ticks == 100) this.cancel();
+
+
+            }
+        }.runTaskTimer(plugin,0,1);
+
+    }
+
+    /**
+     * @brief Cancels ToggleGlide event to avoid Minecraft of un-gliding the player when detecting that it's not flying.
+     * @param event EntityToggleGlideEvent that Minecraft client sends to server to un-glide the player.
+     * @see zushi_zushi#heavyGravityField(Player)
+     * @note Called in his correspondent in the caster, as a listener.
+     * @author RedRiotTank.
+     */
     public static void onEntityToggleGlide(EntityToggleGlideEvent event){
         if(togglePlayer.contains((Player)(event.getEntity())))
             event.setCancelled(true);
     }
 
+    /**
+     * @brief Cancels onPlayerMove event to cancel players movement.
+     * @param event PlayerMoveEvent that Minecraft client sends the server to say a player is moving.
+     * @see zushi_zushi#heavyGravityField(Player)
+     * @note Called in his correspondent in the caster, as a listener.
+     * @author RedRiotTank.
+     */
     public static void onPlayerMove(PlayerMoveEvent event){
 
         if(togglePlayer.contains(event.getPlayer())){
             event.setCancelled(true);
         }
-
-
-
-
-
-
-
-
     }
 
+    // ---------------------------------------------- AB 2 ---------------------------------------------------------------------
+
+    /**
+     * @brief Ability 2 caller: "Meteor".
+     * @see zushi_zushi#meteor(Player) 
+     * @author RedRiotTank.
+     */
+    public void ability2(){
+        if(abilitiesCD.get(1) == 0){
+            meteor(user.getPlayer());
+            abilitiesCD.set(1, 50); // Pon el cooldown en segundos
+        }
+    }
+
+    /**
+     * @brief CORE ABILITY: Creates a gravity animation, when it finishes, calls launchMeteore.
+     * @param player User that sends the meteor.
+     * @note It's animation + at the end of the animation calls the launchMeteor funcition.
+     * @author RedRiotTank
+     */
     public void meteor(Player player){
         World world = player.getWorld();
-        Location end = getTargetBlock(user.getPlayer(), 40);
+        Location end = auxBiblio.getTargetBlock(user.getPlayer(), 40);
         Location playerLoc = player.getLocation();
 
         new BukkitRunnable() {
@@ -221,7 +235,7 @@ public class zushi_zushi extends paramecia{
                 if(ticks == 155){
                     Location start = playerLoc.clone();
                     start.setY(playerLoc.getY() + 50);
-                    launchMeteore(start,end,5);
+                    launchMeteor(start,end,5);
                 }
 
                 if(ticks == 191)
@@ -245,7 +259,23 @@ public class zushi_zushi extends paramecia{
 
     }
 
-    public void launchMeteore(Location start, Location end, int radius) {
+    /**
+     * @brief Creates the meteor in a start position and send it to an end position.
+     * when meteor reaches the ground or an entity, it explodes.
+     * @param start Location whete the meteor is created.
+     * @param end   Location where the meteor should reach.
+     * @param radius Meteor radius.
+     * @see zushi_zushi#meteor(Player)
+     * @author RedRiotTank.
+     */
+    public void launchMeteor(Location start, Location end, int radius) {
+        final List<Material> materials = new ArrayList<>();
+
+        //Meteor Materials initialization:
+        materials.add(Material.COBBLESTONE);
+        materials.add(Material.MAGMA_BLOCK);
+        materials.add(Material.NETHERRACK);
+
         World world = start.getWorld();
         exploded = false;
         world.playSound(start,"flymeteor",10,1);
@@ -275,33 +305,26 @@ public class zushi_zushi extends paramecia{
                     }
     }
 
-    public Location getTargetBlock(Player player, int range) {
-        Vector direction = player.getEyeLocation().getDirection().normalize();
-        Location current = player.getEyeLocation();
+    // ---------------------------------------------- AB 3 ---------------------------------------------------------------------
 
-        for (int i = 0; i < range; i++) {
-            current = current.add(direction);
-
-            if (current.getBlock().getType().isSolid())
-                return current;
+    /**
+     * @brief Ability 3 caller: "Attraction".
+     * @see zushi_zushi#attraction(Player)
+     * @author RedRiotTank.
+     */
+    public void ability3(){
+        if(abilitiesCD.get(2) == 0){
+            attraction(user.getPlayer());
+            abilitiesCD.set(2, 40); // Pon el cooldown en segundos
         }
-
-        return current;
     }
 
-    public double searchGround(double x, double z, double initialY, World world){
-
-        Location loc = new Location(world,x,initialY,z);
-
-        for(int i=0; i < 40; i++)
-            if(loc.getBlock().getRelative(0,-i,0).getType().isSolid())
-                return initialY - i + 1;
-
-        return initialY - 40;
-    }
-
+    /**
+     * @brief CORE ABILITY: Attracts all the entities in a [30,30,30] box to the player.
+     * @param player Player who creates the attraction field.
+     * @author RedRiotTank.
+     */
     public void attraction(Player player){
-
         Location playerLoc = player.getLocation();
         World world = player.getWorld();
         double iniY = playerLoc.getY();
@@ -323,47 +346,18 @@ public class zushi_zushi extends paramecia{
                     double z = random.nextInt(36) - 15 + playerLoc.getZ();
                     Location centerLoc = new Location(world,x,iniY,z);
                     groundCircularWave(centerLoc);
-
                 }
 
             }
         }.runTaskTimer(plugin,0,10);
-
     }
 
-    public void groundCircularWave(Location center){
-
-        new BukkitRunnable(){
-            double radius = 1;
-            double incrementRate = 0.25;
-            @Override
-            public void run() {
-                circle(radius,center,  incrementRate);
-                radius += 0.5;
-                incrementRate = incrementRate - incrementRate/5;
-                if (radius > 5) this.cancel();
-
-            }
-
-            public void circle(double radius, Location loc,double incrementRate){
-
-                World world = loc.getWorld();
-
-                for(double i=0; i<2*PI; i+=incrementRate){
-                    double xParticle = radius * Math.cos(i) + loc.getX();
-                    double zParticle = radius * Math.sin(i) + loc.getZ();
-                    double yParticle = searchGround(xParticle,zParticle, loc.getY(), world);
-
-                    Location particleLocation = new Location(world,xParticle,yParticle,zParticle);
-
-                    world.spawnParticle(Particle.SPELL_WITCH,particleLocation,0,0,0,0);
-                }
-
-            }
-        }.runTaskTimer(plugin,0,1);
-
-    }
-
+    /**
+     * @brief Attracts a designed entity to a player's position.
+     * @param ent Entity that's going to be moved.
+     * @param player Player to which the entity is to be drawn.
+     * @author RedRiotTank
+     */
     public void attractEntitie(Entity ent, Player player){
         BukkitTask attract = new BukkitRunnable(){
             Vector FirstVector;
@@ -402,6 +396,64 @@ public class zushi_zushi extends paramecia{
         }.runTaskTimer(plugin,0,1);
     }
 
+    /**
+     * @brief ANIMATION: Creates multiples circular particles in the ground of a location successively with bigger radius, to create a wave animation.
+     * @param center Center of the circular wave animation.
+     * @author RedRiotTank.
+     */
+    public void groundCircularWave(Location center){
+
+        new BukkitRunnable(){
+            double radius = 1;
+            double incrementRate = 0.25;
+            @Override
+            public void run() {
+                circle(radius,center,  incrementRate);
+                radius += 0.5;
+                incrementRate = incrementRate - incrementRate/5;
+                if (radius > 5) this.cancel();
+
+            }
+
+            public void circle(double radius, Location loc,double incrementRate){
+
+                World world = loc.getWorld();
+
+                for(double i=0; i<2*PI; i+=incrementRate){
+                    double xParticle = radius * Math.cos(i) + loc.getX();
+                    double zParticle = radius * Math.sin(i) + loc.getZ();
+                    double yParticle = auxBiblio.searchGround(xParticle,zParticle, loc.getY(), world);
+
+                    Location particleLocation = new Location(world,xParticle,yParticle,zParticle);
+
+                    world.spawnParticle(Particle.SPELL_WITCH,particleLocation,0,0,0,0);
+                }
+
+            }
+        }.runTaskTimer(plugin,0,1);
+
+    }
+
+
+    // ---------------------------------------------- AB 4 ---------------------------------------------------------------------
+
+    /**
+     * @brief Ability 4 caller: "FlyRock".
+     * @see zushi_zushi#flyRock(Player) 
+     * @author RedRiotTank
+     */
+    public void ability4(){
+        if (abilitiesCD.get(3) == 0) {
+            flyRock(user.getPlayer());
+            abilitiesCD.set(3, 60); // Pon el cooldown en segundos
+        }
+    }
+
+    /**
+     * @brief CORE ABILITY: Makes the player able to fly "booting up" a conic rock of the ground that levitates always below player's legs.
+     * @param player player who is going to be able to fly.
+     * @author RedRiotTank
+     */
     public void flyRock(Player player){
         World world = player.getWorld();
         Location playerLoc = player.getLocation();
@@ -414,27 +466,27 @@ public class zushi_zushi extends paramecia{
 
         player.setAllowFlight(true);
 
-        double yCenter = searchGround(x, z, y, world) - 1;
+        double yCenter = auxBiblio.searchGround(x, z, y, world) - 1;
         Location center = new Location(world,x,yCenter, z);
         Material centerMat = center.getBlock().getType();
 
-        double yDownCenter = searchGround(x, z, y-1, world) - 1;
+        double yDownCenter = auxBiblio.searchGround(x, z, y-1, world) - 1;
         Location downcenter = new Location(world,x,yDownCenter-1, z);
         Material downcenterMat = downcenter.getBlock().getType();
 
-        double yUP = searchGround(x+1, z, y, world) - 1;
+        double yUP = auxBiblio.searchGround(x+1, z, y, world) - 1;
         Location up = new Location(world,x+1,yUP, z);
         Material upMat = up.getBlock().getType();
 
-        double yDown = searchGround(x-1, z, y, world) - 1;
+        double yDown = auxBiblio.searchGround(x-1, z, y, world) - 1;
         Location down = new Location(world,x-1,yDown, z);
         Material downMat = down.getBlock().getType();
 
-        double yLeft = searchGround(x, z+1, y, world) - 1;
+        double yLeft = auxBiblio.searchGround(x, z+1, y, world) - 1;
         Location left = new Location(world,x,yLeft, z+1);
         Material leftMat = left.getBlock().getType();
 
-        double yRight = searchGround(x, z-1, y, world) - 1;
+        double yRight = auxBiblio.searchGround(x, z-1, y, world) - 1;
         Location right = new Location(world,x,yRight, z-1);
         Material rightMat = right.getBlock().getType();
 
@@ -543,8 +595,5 @@ public class zushi_zushi extends paramecia{
             }
         }.runTaskTimer(plugin,0,1);
     }
-
-
-
 
 }

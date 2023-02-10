@@ -11,16 +11,34 @@ import scoreboardSystem.abilitiesScoreboard;
 
 import java.util.Map;
 
+/**
+ * @brief Losing fruit system (when players dies, they lose their fruit).
+ * @author RedRiotTank, Vaelico786.
+ */
 public class loseFruit implements Listener {
     private final OPhabs plugin;
     public Map<String, abilityUser> dfPlayers, users;
     public abilitiesScoreboard scoreboard = null;
 
+    /**
+     * @brief LoseFruit system construction.
+     * @param plugin OPhabs plugin.
+     * @param dfPlayers List with all devil fruit abilities (abilitieSystem abilities).
+     * @param users Map of abilities by user.
+     * @author Vaelico786.
+     */
     public loseFruit(OPhabs plugin, Map<String, abilityUser> dfPlayers, Map<String, abilityUser> users) {
         this.plugin = plugin;
         this.dfPlayers = dfPlayers;
         this.users = users;
     }
+
+    /**
+     * @brief Unlinks Player and Devil Fruit abilities when tha player die and liberates
+     * access to that fruit again.
+     * @param event Death of a player event.
+     * @author RedRiotTank, Vaelico786.
+     */
     @EventHandler(ignoreCancelled = true)
     public void onPlayerDeath(PlayerDeathEvent event) {
         Player player = event.getEntity();
@@ -36,6 +54,11 @@ public class loseFruit implements Listener {
         }
     }
 
+    /**
+     * @brief Deletes scoreboard.
+     * @param scoreboard New scoreboard (empty one).
+     * @author Vaelico786.
+     */
     public void setScoreboard(abilitiesScoreboard scoreboard){
         this.scoreboard = scoreboard;
     }

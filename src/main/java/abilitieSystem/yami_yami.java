@@ -25,13 +25,15 @@ import castSystem.castIdentification;
 
 import static java.lang.Math.*;
 
-
+/**
+ * @brief Yami yami no mi ability Class.
+ * @author RedRiotTank
+ */
 public class yami_yami extends logia {
     public static Particle.DustOptions yamiDO = new Particle.DustOptions(Color.BLACK,1.0F);
     private int repealAnimationCounter = 0;
 
-    private final int
-            radius = 3;
+    private final int radius = 3;
     private final int maxRadiusAmplification = 9;
     private final int damageAmount = 1;
 
@@ -40,9 +42,15 @@ public class yami_yami extends logia {
     private Stack<Material> absorbedMaterials = new Stack<>();
 
     private List<Block> convertedToVoidBlocks = new ArrayList<>();
+
+    /**
+     * @brief yami_yami constructor.
+     * @param plugin OPhabs plugin.
+     * @author RedRiotTank.
+     */
     public yami_yami(OPhabs plugin){
         super(plugin, Particle.REDSTONE, castIdentification.castMaterialYami, castIdentification.castItemNameYami, fruitIdentification.fruitCommandNameYami);
-        abilitiesNames.add("BlackVoid");
+        abilitiesNames.add("Black Void");
         abilitiesCD.add(0);
         abilitiesNames.add("LiberateVoid");
         abilitiesCD.add(0);
@@ -53,6 +61,79 @@ public class yami_yami extends logia {
         this.runParticles();
     }
 
+    /**
+     * @brief yami_yami logia form particles.
+     * @todo add sound.
+     * @author RedRiotTank.
+     */
+    public void runParticles(){
+        new BukkitRunnable(){
+            @Override
+            public void run() {
+
+                Player player = null;
+
+                if(user != null)
+                    if(user.getPlayer() != null){
+                        player = user.getPlayer();
+
+                        ItemStack caster = null;
+                        boolean isCaster = false;
+                        if(player != null){
+                            if(castIdentification.itemIsCaster(player.getInventory().getItemInMainHand(), player)){
+                                caster = player.getInventory().getItemInMainHand();
+                                isCaster = true;
+                            }
+                            else{
+                                if(castIdentification.itemIsCaster(player.getInventory().getItemInOffHand(), player)){
+                                    caster = player.getInventory().getItemInOffHand();
+                                    isCaster = true;
+                                }
+                            }
+                        }
+
+                        if(isCaster && caster.getItemMeta().getDisplayName().equals(castIdentification.castItemNameYami)){
+
+                            double yaw = player.getLocation().getYaw();
+                            double y = player.getLocation().getY();
+
+                            spawnBackParticle(player,yaw - 90,y+0.5);
+                            spawnBackParticle(player, yaw - 45,y+0.5);
+                            spawnBackParticle(player, yaw - 135,y+0.5);
+
+                            spawnBackParticle(player,yaw - 90,y+1);
+                            spawnBackParticle(player, yaw - 45,y+1);
+                            spawnBackParticle(player, yaw - 135,y+1);
+
+                            player.setAllowFlight(true);
+
+                        }else {
+                            player.setAllowFlight(false);
+                            player.setFlying(false);
+                        }
+                    }
+            }
+
+            public void spawnBackParticle(Player player, double yaw, double y){
+                double x = cos(toRadians(yaw)) / 2;
+                double z = sin(toRadians(yaw)) / 2;
+                //Behind
+                double xBehind = player.getLocation().getX() + x;
+                double zBehind = player.getLocation().getZ() + z;
+                Location pBehind = new Location(player.getWorld(),xBehind,y,zBehind);
+                player.getWorld().spawnParticle(Particle.SMOKE_LARGE,pBehind,0,0,0,0);
+            }
+        }.runTaskTimer(plugin,0,1);
+
+    }
+
+    // ---------------------------------------------- AB 1 ---------------------------------------------------------------------
+
+    /**
+     * @brief Ability 1 caller: "Black Void".
+     * @see yami_yami#blackVoid(Player)
+     * @author RedRiotTank.
+     */
     public void ability1(){
         if(abilitiesCD.get(0) == 0){
             blackVoid(user.getPlayer());
@@ -60,27 +141,13 @@ public class yami_yami extends logia {
         }
     }
 
-    public void ability2(){
-        if(abilitiesCD.get(1) == 0){
-            liberateAbsorptions(user.getPlayer());
-            abilitiesCD.set(1, 20); // Pon el cooldown en segundos
-        }
-    }
-
-    public void ability3(){
-        if(abilitiesCD.get(2) == 0){
-            livingVoid(user.getPlayer());
-            abilitiesCD.set(2, 20); // Pon el cooldown en segundos
-        }
-    }
-
-    public void ability4(){
-        if(abilitiesCD.get(3) == 0){
-            voidMeteore(user.getPlayer());
-            abilitiesCD.set(3, 20); // Pon el cooldown en segundos
-        }
-    }
-
+    /**
+     * @brief CORE ABILITY: Changes ground blocks for black-themed blocks and "absorbs" all of them (converts them
+     * into falling blocks, and cancels the change falling block --> block). It also hurts entities above the blocks.
+     * @param player User that creates the Black void.
+     * @todo refactor, remember to avoid absorving fluids.
+     * @author RedRiotTank.
+     */
     public void blackVoid(Player player) {
         player.getWorld().playSound(player, Sound.AMBIENT_CRIMSON_FOREST_MOOD, 10, 2);
         Location playerLocation = player.getLocation();
@@ -135,13 +202,27 @@ public class yami_yami extends logia {
         }.runTaskLater(plugin, dissappearVoidBlocksDelay);
     }
 
-
+    /**
+     * @brief Cancels fallingblock --> block change to make the absorbing effect, and saves the blocks materials information.
+     * @param event EntityChangeBlockEvent that Minecraft client sends to server to convert blocks.
+     * @see yami_yami#blackVoid(Player)
+     * @note Called in his correspondent in the caster, as a listener.
+     * @author RedRiotTank.
+     */
     public static void onEntityChangeBlock(EntityChangeBlockEvent event) {
         if(event.getBlock().getRelative(0,-1,0).getType().equals(voidMaterial)) {
             event.setCancelled(true);
         }
     }
 
+    /**
+     * @brief calculates pixelation of a circle and calls setblock functions.
+     * @param radius radius of the blackvoid.
+     * @param playerLocation location of the player, center of the black void.
+     * @param fill true if fill the bresenham circle, false if not
+     * @see yami_yami#blackVoid(Player)
+     * @author RedRiotTank.
+     */
     public void bresenham(int radius, Location playerLocation, boolean fill){
         /*
         Bresenham algorithm modification.
@@ -171,6 +252,15 @@ public class yami_yami extends logia {
         }
     }
 
+    /**
+     * @brief Puts block in the x,z location, calculating y position.
+     * @param playerLocation location of the player, center of the black void.
+     * @param x true if fill the bresenham circle, false if not
+     * @param z true if fill the bresenham circle, false if not
+     * @param fill true if fill the bresenham circle, false if not
+     * @see yami_yami#blackVoid(Player)
+     * @author RedRiotTank.
+     */
     public void setBlockAndFill(Location playerLocation, int x, int z,boolean fill){
         Location perimeterPixel = new Location(playerLocation.getWorld(),0,0,0);
 
@@ -212,6 +302,12 @@ public class yami_yami extends logia {
 
     }
 
+    /**
+     * @brief raytrace a colum to check ground (calculation of the Y).
+     * @param perimeterPixel location of x,z.
+     * @see yami_yami#blackVoid(Player)
+     * @author RedRiotTank.
+     */
     public void setBlockAndLineUP(Location perimeterPixel){
         boolean found = false;
         for(int i=0; i < 3 && !found; i++){
@@ -241,134 +337,36 @@ public class yami_yami extends logia {
 
     }
 
+    /**
+     * @brief Make the voidBlocks placed disappear.
+     * @see yami_yami#blackVoid(Player)
+     * @author RedRiotTank.
+     */
     public void dissappearVoidBlocks(){
         for(Block convertedTVblock : convertedToVoidBlocks)
             convertedTVblock.setType(Material.AIR);
     }
 
-    public void livingVoid(Player player){
-        player.playSound(player.getLocation(),Sound.BLOCK_REDSTONE_TORCH_BURNOUT,10,0);
-        World world = player.getWorld();
+    // ---------------------------------------------- AB 2 ---------------------------------------------------------------------
 
-        absorbAnimation(player);
-
-        for(Entity ent : player.getNearbyEntities(10,10,10))
-            if(ent instanceof LivingEntity && !player.equals(ent))
-                livingVoidForEntity(ent,player);
-
-        repealAnimationCounter = 0;
-    }
-
-    public void absorbAnimation(Player player){
-        new BukkitRunnable(){
-            double angle = -player.getLocation().getYaw();
-            World world = player.getWorld();
-
-            double start = 2* PI*5;
-            double finish = 2* PI*5 - 2* PI*5/10;
-            @Override
-            public void run() {
-                for(double i=start; i>finish ; i-=0.05) {
-                    double x = i * sin(i) / 5;
-                    double y = i * cos(i) / 5;
-                    double z = i;
-                    double xr = player.getLocation().getX() + cos(toRadians(angle))*x + sin(toRadians(angle))*z;
-                    double yr = 1 + player.getLocation().getY() + y;
-                    double zr = player.getLocation().getZ() + -sin(toRadians(angle))*x + cos(toRadians(angle))*z;
-
-                    Location rotation = new Location(player.getWorld(), xr, yr, zr);
-                    world.spawnParticle(element,rotation,0,0,0,0,yamiDO);
-                }
-                start = finish;
-                finish = finish -  2* PI*5/10;
-                if(finish < 0) this.cancel();
-            }
-        }.runTaskTimer(plugin,0,1);
-    }
-
-    public void repealAnimation(Player player) {
-        new BukkitRunnable() {
-            final double angle = -player.getLocation().getYaw();
-            World world = player.getWorld();
-            double start = 0;
-            double finish = 0 + 2* PI*5/10;
-
-            @Override
-            public void run() {
-                for(double i = start; i < finish ; i += 0.05) {
-                    double x = i * sin(i) / 5;
-                    double y = i * cos(i) / 5;
-                    double z = i;
-
-                    double xr = player.getLocation().getX() + cos(toRadians(angle)) * x + sin(toRadians(angle)) * z;
-                    double yr = 1 + player.getLocation().getY() + y;
-                    double zr = player.getLocation().getZ() + -sin(toRadians(angle)) * x + cos(toRadians(angle)) * z;
-
-                    Location rotation = new Location(player.getWorld(), xr, yr, zr);
-                    world.spawnParticle(element, rotation, 0, 0, 0, 0, yamiDO);
-                }
-                start = finish;
-                finish = finish + 2* PI*5/10;
-
-                if(finish < 0) this.cancel();
-            }
-        }.runTaskTimer(plugin,0,1);
-    }
-    public void livingVoidForEntity(Entity ent, Player player){
-        BukkitTask attract = new BukkitRunnable(){
-            Vector FirstVector;
-            boolean fV = false;
-            boolean entityInHand = false;
-            double vx,vy,vz;
-            @Override
-            public void run() {
-                if(ent.isDead() || player.isDead())
-                    this.cancel();
-
-                vx =  player.getLocation().getX() - ent.getLocation().getX();
-                vy =  player.getLocation().getY() - ent.getLocation().getY();
-                vz =  player.getLocation().getZ() - ent.getLocation().getZ();
-
-                Vector movement = player.getLocation().toVector().subtract(ent.getLocation().toVector()).normalize();
-
-                if(!fV){
-                    FirstVector = movement.clone();
-                    fV = true;
-                }
-
-                //Para levantar al mob si hay desnivel
-                if(player.getLocation().getY() >= ent.getLocation().getY() && !entityInHand)
-                    movement.setY(movement.getY() + (player.getLocation().getY() - ent.getLocation().getY()) + 3);
-
-                ent.setVelocity(movement);
-
-                if(Math.sqrt(Math.pow(vx,2) + Math.pow(vy,2) +  Math.pow(vz,2)) <= 1){
-                    entityInHand = true;
-                    if(player.isSneaking()){
-                        this.cancel();
-                        repealEntity(ent,player);
-                    }
-                }
-            }
-        }.runTaskTimer(plugin,0,1);
-    }
-
-    public void repealEntity(Entity ent, Player player ){
-        repealAnimationCounter++;
-        World world = player.getWorld();
-
-        if(repealAnimationCounter == 1){
-            repealAnimation(player);
+    /**
+     * @brief Ability 2 caller: "Liberate Absorptions".
+     * @see yami_yami#liberateAbsorptions(Player)
+     * @author RedRiotTank.
+     */
+    public void ability2(){
+        if(abilitiesCD.get(1) == 0){
+            liberateAbsorptions(user.getPlayer());
+            abilitiesCD.set(1, 20); // Pon el cooldown en segundos
         }
-
-        ent.getWorld().playSound(ent.getLocation(),Sound.BLOCK_REDSTONE_TORCH_BURNOUT,10,2);
-
-        Vector dir = player.getLocation().getDirection();
-        dir.setY(1);
-        dir.setX(dir.getX() % 5);
-        dir.setZ(dir.getZ() % 5);
-        ent.setVelocity(dir);
     }
+
+    /**
+     * @brief CORE ABILITY: Liberates absorbed blocks with livingVoid.
+     * @param player User that liberates the blocks.
+     * @todo add potion effects when liberating.
+     * @author RedRiotTank.
+     */
     public void liberateAbsorptions(Player player){
 
         World world = player.getWorld();
@@ -433,6 +431,195 @@ public class yami_yami extends logia {
         }.runTaskTimer(plugin,0,4);
     }
 
+    // ---------------------------------------------- AB 3 ---------------------------------------------------------------------
+
+    /**
+     * @brief Ability 3 caller: "Living Void".
+     * @see yami_yami#livingVoid(Player)
+     * @author RedRiotTank.
+     */
+    public void ability3(){
+        if(abilitiesCD.get(2) == 0){
+            livingVoid(user.getPlayer());
+            abilitiesCD.set(2, 20); // Pon el cooldown en segundos
+        }
+    }
+
+    /**
+     * @brief CORE ABILITY: Absorbs an entity and let you launch it.
+     * @param player User that uses the ability.
+     * @todo refactor it to use in multiple places.
+     * @author RedRiotTank.
+     */
+    public void livingVoid(Player player){
+        player.playSound(player.getLocation(),Sound.BLOCK_REDSTONE_TORCH_BURNOUT,10,0);
+        World world = player.getWorld();
+
+        absorbAnimation(player);
+
+        for(Entity ent : player.getNearbyEntities(10,10,10))
+            if(ent instanceof LivingEntity && !player.equals(ent))
+                livingVoidForEntity(ent,player);
+
+        repealAnimationCounter = 0;
+    }
+
+    /**
+     * @brief ANIMATION: spiral animation for absorving.
+     * @param player User that uses the ability.
+     * @author RedRiotTank.
+     */
+    public void absorbAnimation(Player player){
+        new BukkitRunnable(){
+            double angle = -player.getLocation().getYaw();
+            World world = player.getWorld();
+
+            double start = 2* PI*5;
+            double finish = 2* PI*5 - 2* PI*5/10;
+            @Override
+            public void run() {
+                for(double i=start; i>finish ; i-=0.05) {
+                    double x = i * sin(i) / 5;
+                    double y = i * cos(i) / 5;
+                    double z = i;
+                    double xr = player.getLocation().getX() + cos(toRadians(angle))*x + sin(toRadians(angle))*z;
+                    double yr = 1 + player.getLocation().getY() + y;
+                    double zr = player.getLocation().getZ() + -sin(toRadians(angle))*x + cos(toRadians(angle))*z;
+
+                    Location rotation = new Location(player.getWorld(), xr, yr, zr);
+                    world.spawnParticle(element,rotation,0,0,0,0,yamiDO);
+                }
+                start = finish;
+                finish = finish -  2* PI*5/10;
+                if(finish < 0) this.cancel();
+            }
+        }.runTaskTimer(plugin,0,1);
+    }
+
+    /**
+     * @brief ANIMATION: spiral animation for repealing.
+     * @param player User that uses the ability.
+     * @author RedRiotTank.
+     */
+    public void repealAnimation(Player player) {
+        new BukkitRunnable() {
+            final double angle = -player.getLocation().getYaw();
+            World world = player.getWorld();
+            double start = 0;
+            double finish = 0 + 2* PI*5/10;
+
+            @Override
+            public void run() {
+                for(double i = start; i < finish ; i += 0.05) {
+                    double x = i * sin(i) / 5;
+                    double y = i * cos(i) / 5;
+                    double z = i;
+
+                    double xr = player.getLocation().getX() + cos(toRadians(angle)) * x + sin(toRadians(angle)) * z;
+                    double yr = 1 + player.getLocation().getY() + y;
+                    double zr = player.getLocation().getZ() + -sin(toRadians(angle)) * x + cos(toRadians(angle)) * z;
+
+                    Location rotation = new Location(player.getWorld(), xr, yr, zr);
+                    world.spawnParticle(element, rotation, 0, 0, 0, 0, yamiDO);
+                }
+                start = finish;
+                finish = finish + 2* PI*5/10;
+
+                if(finish < 0) this.cancel();
+            }
+        }.runTaskTimer(plugin,0,1);
+    }
+
+    /**
+     * @brief Attracts a designed entity to a player's position.
+     * @param ent Entity that's going to be moved.
+     * @param player Player to which the entity is to be drawn.
+     * @todo refactor it in the multiple biblio (zushi also uses this).
+     * @author RedRiotTank
+     */
+    public void livingVoidForEntity(Entity ent, Player player){
+        BukkitTask attract = new BukkitRunnable(){
+            Vector FirstVector;
+            boolean fV = false;
+            boolean entityInHand = false;
+            double vx,vy,vz;
+            @Override
+            public void run() {
+                if(ent.isDead() || player.isDead())
+                    this.cancel();
+
+                vx =  player.getLocation().getX() - ent.getLocation().getX();
+                vy =  player.getLocation().getY() - ent.getLocation().getY();
+                vz =  player.getLocation().getZ() - ent.getLocation().getZ();
+
+                Vector movement = player.getLocation().toVector().subtract(ent.getLocation().toVector()).normalize();
+
+                if(!fV){
+                    FirstVector = movement.clone();
+                    fV = true;
+                }
+
+                //Para levantar al mob si hay desnivel
+                if(player.getLocation().getY() >= ent.getLocation().getY() && !entityInHand)
+                    movement.setY(movement.getY() + (player.getLocation().getY() - ent.getLocation().getY()) + 3);
+
+                ent.setVelocity(movement);
+
+                if(Math.sqrt(Math.pow(vx,2) + Math.pow(vy,2) +  Math.pow(vz,2)) <= 1){
+                    entityInHand = true;
+                    if(player.isSneaking()){
+                        this.cancel();
+                        repealEntity(ent,player);
+                    }
+                }
+            }
+        }.runTaskTimer(plugin,0,1);
+    }
+
+    /**
+     * @brief repeals a designed entity to a player's position in the players looking direction.
+     * @param ent Entity that's going to be moved.
+     * @param player Player to which the entity is to be repealed.
+     * @todo refactor it in the multiple biblio (zushi also uses this).
+     * @author RedRiotTank
+     */
+    public void repealEntity(Entity ent, Player player ){
+        repealAnimationCounter++;
+        World world = player.getWorld();
+
+        if(repealAnimationCounter == 1){
+            repealAnimation(player);
+        }
+
+        ent.getWorld().playSound(ent.getLocation(),Sound.BLOCK_REDSTONE_TORCH_BURNOUT,10,2);
+
+        Vector dir = player.getLocation().getDirection();
+        dir.setY(1);
+        dir.setX(dir.getX() % 5);
+        dir.setZ(dir.getZ() % 5);
+        ent.setVelocity(dir);
+    }
+
+    // ---------------------------------------------- AB 4 ---------------------------------------------------------------------
+
+    /**
+     * @brief Ability 4 caller: "Void meteore".
+     * @see yami_yami#voidMeteore(Player)
+     * @author RedRiotTank.
+     */
+    public void ability4(){
+        if(abilitiesCD.get(3) == 0){
+            voidMeteore(user.getPlayer());
+            abilitiesCD.set(3, 20); // Pon el cooldown en segundos
+        }
+    }
+
+    /**
+     * @brief CORE ABILITY: sends a black particle meteor to the location player is looking.
+     * @param player Player who launchs the meteor.
+     * @todo refactor to multi biblio.
+     * @author RedRiotTank.
+     */
     public void voidMeteore(Player player){
         World world = player.getWorld();
 
@@ -490,74 +677,5 @@ public class yami_yami extends logia {
 
             }
         }.runTaskTimer(plugin,0,1);
-
-
-
-
-
-
-
     }
-
-    public void runParticles(){
-        new BukkitRunnable(){
-            @Override
-            public void run() {
-
-                Player player = null;
-
-                if(user != null)
-                    if(user.getPlayer() != null){
-                        player = user.getPlayer();
-
-                        ItemStack caster = null;
-                        boolean isCaster = false;
-                        if(player != null){
-                            if(castIdentification.itemIsCaster(player.getInventory().getItemInMainHand(), player)){
-                                caster = player.getInventory().getItemInMainHand();
-                                isCaster = true;
-                            }
-                            else{
-                                if(castIdentification.itemIsCaster(player.getInventory().getItemInOffHand(), player)){
-                                    caster = player.getInventory().getItemInOffHand();
-                                    isCaster = true;
-                                }
-                            }
-                        }
-
-                        if(isCaster && caster.getItemMeta().getDisplayName().equals(castIdentification.castItemNameYami)){
-
-                            double yaw = player.getLocation().getYaw();
-                            double y = player.getLocation().getY();
-
-                            spawnBackParticle(player,yaw - 90,y+0.5);
-                            spawnBackParticle(player, yaw - 45,y+0.5);
-                            spawnBackParticle(player, yaw - 135,y+0.5);
-
-                            spawnBackParticle(player,yaw - 90,y+1);
-                            spawnBackParticle(player, yaw - 45,y+1);
-                            spawnBackParticle(player, yaw - 135,y+1);
-
-                            player.setAllowFlight(true);
-
-                        }else {
-                            player.setAllowFlight(false);
-                            player.setFlying(false);
-                        }
-                    }
-            }
-
-            public void spawnBackParticle(Player player, double yaw, double y){
-                double x = cos(toRadians(yaw)) / 2;
-                double z = sin(toRadians(yaw)) / 2;
-                //Behind
-                double xBehind = player.getLocation().getX() + x;
-                double zBehind = player.getLocation().getZ() + z;
-                Location pBehind = new Location(player.getWorld(),xBehind,y,zBehind);
-                player.getWorld().spawnParticle(Particle.SMOKE_LARGE,pBehind,0,0,0,0);
-            }
-        }.runTaskTimer(plugin,0,1);
-
-    }
-
 }

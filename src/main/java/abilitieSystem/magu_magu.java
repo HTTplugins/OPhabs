@@ -5,20 +5,20 @@ import fruitSystem.fruitIdentification;
 import htt.ophabs.OPhabs;
 import org.bukkit.*;
 import org.bukkit.entity.*;
-import org.bukkit.event.Listener;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.RecipeChoice;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.util.Vector;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 import java.util.Random;
 
 import static java.lang.Math.*;
-import static java.lang.Math.toRadians;
 
+/**
+ * @brief Magu magu no mi ability Class.
+ * @author RedRiotTank
+ */
 public class magu_magu extends logia {
     public static Particle.DustOptions maguOrange = new Particle.DustOptions(Color.ORANGE,1.0F);
     public static Particle.DustOptions maguBlack = new Particle.DustOptions(Color.BLACK,1.0F);
@@ -26,31 +26,131 @@ public class magu_magu extends logia {
 
     public Random rand = new Random();
 
+    /**
+     * @brief magu_magu constructor.
+     * @param plugin OPhabs plugin.
+     * @author RedRiotTank.
+     */
     public magu_magu(OPhabs plugin){
         super(plugin, Particle.FLAME, castIdentification.castMaterialMagu, castIdentification.castItemNameMagu, fruitIdentification.fruitCommandNameMagu); 
-        abilitiesNames.add("Lava Meteorites");
+        abilitiesNames.add("Lava Meteors");
         abilitiesCD.add(0);
         abilitiesNames.add("Lava Ground");
         abilitiesCD.add(0);
         this.runParticles();
+    }
+
+    /**
+     * @brief magu_magu logia form particles + sound.
+     * @author RedRiotTank.
+     */
+    @Override
+    public void runParticles() {
+
+        new BukkitRunnable(){
+
+            int ticks = 0;
+
+            Random random = new Random();
+            boolean lavaAmbiance = false;
+            @Override
+            public void run() {
+
+                Player player = null;
+                if(user != null)
+                    if(user.getPlayer() != null){
+                        player = user.getPlayer();
+
+                        ItemStack caster = null;
+                        boolean isCaster = false;
+                        if(player != null){
+                            if(castIdentification.itemIsCaster(player.getInventory().getItemInMainHand(), player)){
+                                caster = player.getInventory().getItemInMainHand();
+                                isCaster = true;
+                            }
+                            else{
+                                if(castIdentification.itemIsCaster(player.getInventory().getItemInOffHand(), player)){
+                                    caster = player.getInventory().getItemInOffHand();
+                                    isCaster = true;
+                                }
+                            }
+                        }
+
+                        if(isCaster && caster.getItemMeta().getDisplayName().equals(castIdentification.castItemNameMagu)){
+                            double xdecimals = random.nextDouble();
+                            double zdecimals = random.nextDouble();
+
+                            double x = random.nextInt(1 + 1 ) - 1 + xdecimals;
+                            double z = random.nextInt(1 + 1 ) - 1 + zdecimals;
+
+                            player.getWorld().spawnParticle(element,player.getLocation().add(x,1,z),0,0,0,0);
+
+                            xdecimals = random.nextDouble();
+                            zdecimals = random.nextDouble();
+
+                            x = random.nextInt(1 + 1 ) - 1 + xdecimals;
+                            z = random.nextInt(1 + 1 ) - 1 + zdecimals;
+
+                            player.getWorld().spawnParticle(Particle.LAVA,player.getLocation().add(x,1,z),0,0,0,0);
+
+
+
+                            if (!lavaAmbiance){
+                                lavaAmbiance = true;
+                                player.getWorld().playSound(player.getLocation(), Sound.BLOCK_LAVA_AMBIENT,100,1);
+
+                                double r = random.nextDouble();
+
+                                if(r < 0.5)
+                                    player.playSound(player.getLocation(), Sound.BLOCK_LAVA_POP,100,1);
+                            }
+
+                            player.setAllowFlight(true);
+
+
+                        }else {
+                            lavaAmbiance = false;
+
+                            player.setAllowFlight(false);
+                            player.setFlying(false);
+                        }
+                    }
+
+                if(ticks == 80){
+                    lavaAmbiance = false;
+                    ticks = 0;
+                }
+
+                ticks++;
+
+            }
+
+        }.runTaskTimer(plugin,0,2);
 
     }
 
+    // ---------------------------------------------- AB 1 ---------------------------------------------------------------------
+
+    /**
+     * @brief Ability 1: "Lava Meteors".
+     * @see magu_magu#lavaMeteors(Player)
+     * @author RedRiotTank.
+     */
     public void ability1(){
         if(abilitiesCD.get(0) == 0){
-            lavaMeteorites(user.getPlayer());
-            abilitiesCD.set(0, 0); // Pon el cooldown en segundos
+            lavaMeteors(user.getPlayer());
+            abilitiesCD.set(0, 180); // Pon el cooldown en segundos
         }
     }
 
-    public void ability2(){
-        if(abilitiesCD.get(1) == 0){
-            lavaGround(user.getPlayer());
-            abilitiesCD.set(1, 0); // Pon el cooldown en segundos
-        }
-    }
-
-    public void lavaMeteorites(Player player){
+    /**
+     * @brief CORE ABILITY: Creates a "Lava Meteors rain" in a [15,10,15] box. The meteors Explode when reach an entity or when a % of particles dissapear
+     * in blocks. Meteors automatically target entities.
+     * @param player User that creates the "Lava Meteors rain".
+     * @note It has a max of 3 meteors.
+     * @author RedRiotTank.
+     */
+    public void lavaMeteors(Player player){
         final int Maximum = 3;
         int index = 0;
 
@@ -77,6 +177,12 @@ public class magu_magu extends logia {
         }
     }
 
+    /**
+     * @brief Sends the meteor (particle circle) and meanwhile do the finish conditions checks.
+     * @param player User that creates the "Lava Meteors rain".
+     * @note It has a max of 3 meteors.
+     * @author RedRiotTank.
+     */
     public void sendMeteorite(Player player, LivingEntity ent){
         Location playerLoc = player.getLocation();
         Location upHead = playerLoc.add(0,7,0);
@@ -180,21 +286,45 @@ public class magu_magu extends logia {
 
     }
 
-    public void lavaGround(Player player){
-        if(player.isSneaking()){
-            lavaRiver(player);
-        } else {
-            lavaLake(player);
+    // ---------------------------------------------- AB 2 ---------------------------------------------------------------------
+
+    /**
+     * @brief Ability 2: "Lava ground".
+     * @see magu_magu#lavaGround(Player)
+     * @author RedRiotTank.
+     */
+    public void ability2(){
+        if(abilitiesCD.get(1) == 0){
+            lavaGround(user.getPlayer());
+            abilitiesCD.set(1, 30); // Pon el cooldown en segundos
         }
     }
 
+    /**
+     * @brief CORE ABILITY: If player is shifting, creates a lava lake around him, else, create a lava river in the direction he is looking at.
+     * @param player User that creates the "Lava ground".
+     * @see magu_magu#lavaLake(Player)
+     * @see magu_magu#lavaRiver(Player)
+     * @author RedRiotTank.
+     */
+    public void lavaGround(Player player){
+        if(player.isSneaking())
+            lavaRiver(player);
+         else
+            lavaLake(player);
+
+    }
+
+    /**
+     * @brief Creates a lava river in the direction the player is looking at.
+     * @param player User that creates the "Lava river".
+     * @author RedRiotTank.
+     */
     public void lavaRiver(Player player){
         new BukkitRunnable(){
             final Vector facingDirection = player.getLocation().getDirection();
             int index = 2;
             double randomQuote = 1;
-
-
 
             Location playerLoc = player.getLocation();
             @Override
@@ -238,6 +368,11 @@ public class magu_magu extends logia {
         }.runTaskTimer(plugin,0,3);
     }
 
+    /**
+     * @brief Creates a lava lave around player's location.
+     * @param player User that creates the "Lava lake".
+     * @author RedRiotTank.
+     */
     public void lavaLake(Player player ){
 
 
@@ -271,6 +406,15 @@ public class magu_magu extends logia {
 
     }
 
+    /**
+     * @brief Puts a random Lava-themed block in the x,y,z RELATIVE location to a player location.
+     * @param x Relative x location to the player.
+     * @param y Relative y location to the player.
+     * @param z Relative z location to the player.
+     * @param randomQuote random quote possibility of placing the block.
+     * @param playerLoc Location of the player.
+     * @author RedRiotTank.
+     */
     public void putLavaBlock(int x,int y, int z, double randomQuote, Location playerLoc){
         Random Rand = new Random();
         double aleatory = rand.nextDouble();
@@ -308,6 +452,11 @@ public class magu_magu extends logia {
             playerLoc.getWorld().playSound(putBlockLocation,Sound.BLOCK_LAVA_EXTINGUISH,1,1);
 
     }
+    /**
+     * @brief this function have to be changed.
+     * @todo change this function for .isSolid().
+     * @author RedRiotTank.
+     */
 
     public boolean airOrSimilar(Material mat){
         if(mat.equals(Material.AIR)
@@ -350,89 +499,27 @@ public class magu_magu extends logia {
         else return false;
     }
 
-    @Override
-    public void runParticles() {
+    // ---------------------------------------------- AB 3 ---------------------------------------------------------------------
 
-        new BukkitRunnable(){
+    /**
+     * @brief Ability 3: "".
+     * @author -.
+     */
+    public void ability3(){
+        if(abilitiesCD.get(2) == 0){
+            abilitiesCD.set(2, 180); // Pon el cooldown en segundos
+        }
+    }
+    // ---------------------------------------------- AB 4 ---------------------------------------------------------------------
 
-            int ticks = 0;
-
-            Random random = new Random();
-            boolean lavaAmbiance = false;
-            @Override
-            public void run() {
-
-                Player player = null;
-                if(user != null)
-                    if(user.getPlayer() != null){
-                        player = user.getPlayer();
-
-                        ItemStack caster = null;
-                        boolean isCaster = false;
-                        if(player != null){
-                            if(castIdentification.itemIsCaster(player.getInventory().getItemInMainHand(), player)){
-                                caster = player.getInventory().getItemInMainHand();
-                                isCaster = true;
-                            }
-                            else{
-                                if(castIdentification.itemIsCaster(player.getInventory().getItemInOffHand(), player)){
-                                    caster = player.getInventory().getItemInOffHand();
-                                    isCaster = true;
-                                }
-                            }
-                        }
-
-                        if(isCaster && caster.getItemMeta().getDisplayName().equals(castIdentification.castItemNameMagu)){
-                            double xdecimals = random.nextDouble();
-                            double zdecimals = random.nextDouble();
-
-                            double x = random.nextInt(1 + 1 ) - 1 + xdecimals;
-                            double z = random.nextInt(1 + 1 ) - 1 + zdecimals;
-
-                            player.getWorld().spawnParticle(element,player.getLocation().add(x,1,z),0,0,0,0);
-
-                             xdecimals = random.nextDouble();
-                             zdecimals = random.nextDouble();
-
-                             x = random.nextInt(1 + 1 ) - 1 + xdecimals;
-                             z = random.nextInt(1 + 1 ) - 1 + zdecimals;
-
-                            player.getWorld().spawnParticle(Particle.LAVA,player.getLocation().add(x,1,z),0,0,0,0);
-
-
-
-                            if (!lavaAmbiance){
-                                lavaAmbiance = true;
-                                player.getWorld().playSound(player.getLocation(), Sound.BLOCK_LAVA_AMBIENT,100,1);
-
-                                double r = random.nextDouble();
-
-                                if(r < 0.5)
-                                    player.playSound(player.getLocation(), Sound.BLOCK_LAVA_POP,100,1);
-                            }
-
-                            player.setAllowFlight(true);
-
-
-                        }else {
-                            lavaAmbiance = false;
-
-                            player.setAllowFlight(false);
-                            player.setFlying(false);
-                        }
-                    }
-
-                if(ticks == 80){
-                    lavaAmbiance = false;
-                    ticks = 0;
-                }
-
-                ticks++;
-
-            }
-
-        }.runTaskTimer(plugin,0,2);
-
+    /**
+     * @brief Ability 4: "".
+     * @author -.
+     */
+    public void ability4(){
+        if(abilitiesCD.get(3) == 0){
+            abilitiesCD.set(3, 180); // Pon el cooldown en segundos
+        }
     }
 }
 

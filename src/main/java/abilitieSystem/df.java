@@ -24,6 +24,10 @@ import org.bukkit.Material;
 
 import java.util.ArrayList;
 
+/**
+ * @brief Devil Fruit (abilities) --> Ability subtype.
+ * @author Vaelico786.
+ */
 public class df extends abilities {
     protected String commandName;
     protected int actual;
@@ -32,6 +36,16 @@ public class df extends abilities {
     
     public Material caster;
     public String casterName;
+
+    /**
+     * @brief Devil fruit constructor.
+     * @param plugin OPhabs plugin.
+     * @param user Devil fruit user.
+     * @param castMaterial Material type of the caster.
+     * @param castName Name of the caster.
+     * @param commandName Name of that represents the fruit.
+     * @author Vaelico786.
+     */
     public df(OPhabs plugin, abilityUser user, Material castMaterial, String castName, String commandName){
         super(plugin, user);
         this.user = user;
@@ -41,6 +55,15 @@ public class df extends abilities {
         this.commandName = commandName;
         this.active = true;
     }
+
+    /**
+     * @brief Devil fruit constructor.
+     * @param plugin OPhabs plugin.
+     * @param castMaterial Material type of the caster.
+     * @param castName Name of the caster.
+     * @param commandName Name of that represents the fruit.
+     * @author Vaelico786.
+     */
     public df(OPhabs plugin, Material castMaterial, String castName, String commandName){
         super(plugin);
         actual=0;

@@ -6,6 +6,10 @@ import org.bukkit.inventory.ItemStack;
 
 import java.util.Objects;
 
+/**
+ * @brief Cast identification class. We initialize here caster materials and caster item names.
+ * @author RedRiotTank, MiixZ, Vaelico786.
+ */
 public class castIdentification {
     public static Material castMaterialYami = Material.BLACK_DYE,
             castMaterialMera = Material.BLAZE_ROD,
@@ -37,6 +41,13 @@ public class castIdentification {
             castItemNameZushi = "Zushi Zushi caster",
             castItemNameSuke = "Suke Suke caster";
 
+    /**
+     * @brief Checks if an item is a caster.
+     * @param item Item to check.
+     * @param player Player that haves the caster.
+     * @return true if the item is a caster, false if not.
+     * @author RedRiotTank, MiixZ, Vaelico786.
+     */
     public static boolean itemIsCaster(ItemStack item , Player player) {
 
         if(player == null || !player.isOnline())

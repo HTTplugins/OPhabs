@@ -25,6 +25,10 @@ import java.util.Map;
 import abilitieSystem.*;
 import scoreboardSystem.abilitiesScoreboard;
 
+/**
+ * @brief Fruit association system [Player - Fruit].
+ * @author RedRiotTank, Vaelico786.
+ */
 public class fruitAssociation implements Listener {
     private final OPhabs plugin;
     public static Map<String, abilityUser> dfPlayers = new HashMap<>(), users = new HashMap<>();
@@ -32,6 +36,14 @@ public class fruitAssociation implements Listener {
     public abilitiesScoreboard scoreboard = null;
     public ArrayList<String> Names = new ArrayList<>();
     public ArrayList<df> abilityList = new ArrayList<>();
+
+    /**
+     * @brief Fruit assocaition constructor, links Players (who already have a fruit linked) and abilities on start.
+     * @param plugin OPhabs plugin.
+     * @param abilitiesList List with all devil fruit abilities (abilitieSystem abilities).
+     * @param users Map of abilities by user.
+     * @author Vaelico786.
+     */
     public fruitAssociation(OPhabs plugin, ArrayList<df> abilitiesList, Map<String, abilityUser> users) {
         this.plugin = plugin;
         this.users = users;
@@ -57,6 +69,13 @@ public class fruitAssociation implements Listener {
         abilityList = abilitiesList;
     }
 
+    /**
+     * @brief Link a new player with a Devil fruit power.
+     * @param name Name of the player.
+     * @param fruit Devil fruit linked (creation).
+     * @param ability ability of the Devil fruit to be linked with user.
+     * @author Vaelico786.
+     */
     public void addDevilFruitPlayer(String name, devilFruit fruit, abilities ability) {
         abilityUser user = new abilityUser(name);
         user.setFruit(fruit, ability);
@@ -69,10 +88,20 @@ public class fruitAssociation implements Listener {
         }
     }
 
+    /**
+     * @brief Set scoreboard (Casting table) to a player.
+     * @param scoreboard Scoreboard that's going to be set on the user.
+     * @author Vaelico786.
+     */
     public void setScoreboard(abilitiesScoreboard scoreboard){
         this.scoreboard = scoreboard;
     }
 
+    /**
+     * @brief Linkation of a Devil fruit power (ability) with a player when player eats the Devil Fruit.
+     * @param event Scoreboard that's going to be set on the user.
+     * @author RedRiotTank, Vaelico786.
+     */
     @EventHandler(ignoreCancelled = true)
     public void onPlayerItemConsume(PlayerItemConsumeEvent event){
         ItemStack fruit = event.getItem();
@@ -124,6 +153,13 @@ public class fruitAssociation implements Listener {
         }
     }
 
+    /**
+     * @brief Checks if a devil fruit has alredy been consumed when a player eats it.
+     * @param event eating something event.
+     * @return true if the Devil Fruit has already been consumed, false if not.
+     * @todo checkout this functionality.
+     * @author RedRiotTank.
+     */
     public Boolean consumedFruit(String value, PlayerItemConsumeEvent event){
 
         if(!value.equals("none")){
@@ -135,6 +171,12 @@ public class fruitAssociation implements Listener {
             return false;
     }
 
+    /**
+     * @brief Checks if a devil fruit player is in seawater.
+     * @param player player to check.
+     * @return true if the player is in seawater, false if not.
+     * @author Vaelico786.
+     */
     public boolean isInSeaWater(Player player) {
         boolean in = false;
         Biome biome = player.getLocation().getBlock().getBiome();
@@ -142,9 +184,13 @@ public class fruitAssociation implements Listener {
               if(player.getLocation().getBlock().getType() == Material.WATER)
                   in = true;
 
-
         return in;
     }
+    /**
+     * @brief Nerfs a Devil fruit user if he is in seawater.
+     * @param event Player in water event.
+     * @author Vaelico786.
+     */
     @EventHandler
     public void playerOnWater(PlayerMoveEvent event) {
         if (dfPlayers.containsKey(event.getPlayer().getName())) {

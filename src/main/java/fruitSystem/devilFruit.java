@@ -5,11 +5,20 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
+/**
+ * @brief Devil fruit creation class.
+ * @author RedRiotTank, Vaelico786.
+ */
 public class devilFruit{
     private ItemStack devilFruit;
     private boolean inUse;
     private String commandFruitName;
 
+    /**
+     * @brief Devil fruit constructor (creation of the DF).
+     * @param fruitCommandName Command alias of the devil fruit.
+     * @author RedRiotTank, Vaelico786.
+     */
     public devilFruit(String fruitCommandName){
         Material devilFruitForm = null;
         String fruitItemName = null;
@@ -93,10 +102,20 @@ public class devilFruit{
 
     }
 
+    /**
+     * @brief gives the DevilFruit name.
+     * @return gives the DevilFruit name.
+     * @author Vaelico786.
+     */
     public String getFruitName(){
         return devilFruit.getItemMeta().getDisplayName();
     }
 
+    /**
+     * @brief Gives the devil fruit to a player.
+     * @param player Player to give the Devil Fruit.
+     * @author RedRiotTank.
+     */
     public void playerObtainFruit(Player player){
         player.getInventory().addItem(devilFruit);
     }
