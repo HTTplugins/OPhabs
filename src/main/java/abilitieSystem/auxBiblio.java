@@ -122,7 +122,7 @@ public class auxBiblio {
      * @param particle ParticleType of the circle.
      * @param harms true if particles harms Living Entities when touching them.
      * @param destroy true if particles destroy blocks when touching them.
-     * @param player player who is looking at back.
+     * @param player player that generates the circle next to.
      * @author RedRiotTank
      */
     public static void circleEyeVector(double radius, double separation, double prof, Particle.DustOptions dustOption, Particle particle, boolean harms, boolean destroy, Player player ){
