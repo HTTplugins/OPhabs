@@ -19,15 +19,11 @@ import static java.lang.Math.PI;
  * @author RedRiotTank
  */
 public class suke_suke extends paramecia {
-
-    private final int explorationDuration = 6000, attackDuration = 80;
-
+    private final int explorationDuration = 6000, attackDuration = 400;
     private static boolean invisible = false;
     public static boolean exploration = false;
-
     public static boolean cancelStopInvisibleTask = false;
-
-    public static OPhabs plug;
+    public static boolean failedBackstab = false;
 
     /**
      * @brief suke_suke constructor.
@@ -40,11 +36,9 @@ public class suke_suke extends paramecia {
         abilitiesCD.add(0);
         abilitiesNames.add("BackStab");
         abilitiesCD.add(0);
-        abilitiesNames.add("ab3");
+        abilitiesNames.add("Invisible Attack");
         abilitiesCD.add(0);
-        abilitiesNames.add("ab4");
-        abilitiesCD.add(0);
-        plug = plugin;
+
     }
 
     /**
@@ -141,6 +135,7 @@ public class suke_suke extends paramecia {
 
         animation(player,0.5);
         player.getWorld().playSound(player.getLocation(),"appear",1,1);
+        player.removePotionEffect(PotionEffectType.INVISIBILITY);
         new BukkitRunnable() {
             @Override
             public void run() {
@@ -223,7 +218,10 @@ public class suke_suke extends paramecia {
     public void ability2() {
         if (abilitiesCD.get(1) == 0) {
             backStab(user.getPlayer());
-            abilitiesCD.set(1, 15); // Pon el cooldown en segundos
+            if(!failedBackstab){
+                abilitiesCD.set(1, 15);
+            } else failedBackstab = false;
+
         }
     }
 
@@ -242,9 +240,13 @@ public class suke_suke extends paramecia {
             if (backLooking){
                 spawnParticleBehind(target);
                 player.getWorld().playSound(target.getLocation(),"swordcut",1,1);
+                if(exploration) finishInvisibility(player);
                 target.damage(5);
-            }
-        }
+            } else
+                failedBackstab = true;
+        } else
+            failedBackstab = true;
+
 
     }
 
@@ -270,7 +272,7 @@ public class suke_suke extends paramecia {
         if (abilitiesCD.get(2) == 0) {
             if(!invisible) {
                 invisibleAttack(user.getPlayer());
-                abilitiesCD.set(2, 600); // Pon el cooldown en segundos
+                abilitiesCD.set(2, 50); // Pon el cooldown en segundos
             } else {
                 user.getPlayer().sendMessage("You are already invisible.");
             }
@@ -293,21 +295,4 @@ public class suke_suke extends paramecia {
             }
         }.runTaskLater(plugin, attackDuration);
     }
-
-    // ---------------------------------------------- AB 4 ---------------------------------------------------------------------
-    /**
-     * @brief Ability 4 caller: "-".
-     * @author RedRiotTank.
-     */
-    public void ability4() {
-        if (abilitiesCD.get(3) == 0) {
-
-            abilitiesCD.set(3, 0); // Pon el cooldown en segundos
-        }
-    }
-
-
-
-
-
 }
