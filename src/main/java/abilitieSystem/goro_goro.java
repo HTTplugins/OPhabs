@@ -11,17 +11,23 @@ import java.util.Random;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
-import org.bukkit.inventory.ItemStack;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.util.Vector;
-import castSystem.castIdentification;
 import fruitSystem.fruitIdentification;
 
 import static java.lang.Math.*;
 
-
+/**
+ * @brief Goro goro no mi ability Class.
+ * @author RedRiotTank
+ */
 public class goro_goro extends logia {
 
+    /**
+     * @brief goro_goro constructor.
+     * @param plugin OPhabs plugin.
+     * @author RedRiotTank.
+     */
     public goro_goro(OPhabs plugin){
         super(plugin, Particle.ELECTRIC_SPARK, castIdentification.castMaterialGoro, castIdentification.castItemNameGoro, fruitIdentification.fruitCommandNameGoro);
         abilitiesNames.add("El THOR");
@@ -35,64 +41,114 @@ public class goro_goro extends logia {
         this.runParticles();
     }
 
+    /**
+     * @brief goro_goro logia form particles + sound.
+     * @todo fix the line.
+     * @author RedRiotTank.
+     */
+    @Override
+    public void runParticles(){
+        /*
+        new BukkitRunnable(){
+
+            @Override
+            public void run() {
+
+                Player player = null;
+
+                if(user != null)
+                    if(user.getPlayer() != null){
+
+                        player = user.getPlayer();
+
+                        ItemStack caster = null;
+                        boolean isCaster = false;
+                        if(player != null){
+                            if(castIdentification.itemIsCaster(player.getInventory().getItemInMainHand(), player)){
+                                caster = player.getInventory().getItemInMainHand();
+                                isCaster = true;
+                            }
+                            else{
+                                if(castIdentification.itemIsCaster(player.getInventory().getItemInOffHand(), player)){
+                                    caster = player.getInventory().getItemInOffHand();
+                                    isCaster = true;
+                                }
+                            }
+                        }
+
+                        if(isCaster && caster.getItemMeta().getDisplayName().equals(castIdentification.castItemNameGoro)){
+                            double angle = toRadians(-player.getLocation().getYaw());
+
+                            for(double i=0; i < 2*PI; i+=0.05){
+                                double x = cos(i);
+                                double y = sin(i);
+                                double z = 0;
+
+                                double xr = cos(angle)*x + sin(angle)*z;
+                                double yr = y;
+                                double zr = -sin(angle)*x + cos(angle)*z;
+
+                                double xF = player.getLocation().getX() + xr-0.25*sin(angle);
+                                double yF = player.getLocation().getY() + yr + 2;
+                                double zF = player.getLocation().getZ() + zr-0.25*cos(angle);
+
+                                Location loc = new Location(player.getWorld(),xF,yF,zF);
+                                player.getWorld().spawnParticle(Particle.ELECTRIC_SPARK,loc,0,0,0,0);
+
+                                for(Entity ent : player.getWorld().getNearbyEntities(loc,0.5,0.5,0.5))
+                                    if (ent instanceof LivingEntity)
+                                            ((LivingEntity) ent).damage(1);
+
+                            }
+                            player.setAllowFlight(true);
+                        }else {
+                            player.setAllowFlight(false);
+                            player.setFlying(false);
+                        }
+                    }
+            }
+
+
+        }.runTaskTimer(plugin,0,2);
+        */
+    }
+
+    // ---------------------------------------------- AB 1 ---------------------------------------------------------------------
+
+    /**
+     * @brief Ability 1: "EL THOR".
+     * @see goro_goro#elThor(Player)
+     * @author RedRiotTank.
+     */
     public void ability1(){
         if(abilitiesCD.get(0) == 0){
             elThor(user.getPlayer());
-            abilitiesCD.set(0, 0); // Pon el cooldown en segundos
+            abilitiesCD.set(0, 50);
         }
     }
 
-    public void ability2(){
-        if(abilitiesCD.get(1) == 0){
-            thund(user.getPlayer());
-            abilitiesCD.set(1, 20); // Pon el cooldown en segundos
-        }
-    }
-
-    public void ability3(){
-        if(abilitiesCD.get(2) == 0){
-            lightStep(user.getPlayer());
-            abilitiesCD.set(2, 30); // Pon el cooldown en segundos
-        }
-    }
-
-    public void ability4(){
-        if(abilitiesCD.get(3) == 0){
-            discharge(user.getPlayer());
-            abilitiesCD.set(3, 100); // Pon el cooldown en segundos
-        }
-    }
-
-
+    /**
+     * @brief CORE ABILITY: creates a thunder ray thar destroy blocks and makes damage.
+     * @param player Player that uses the ability.
+     * @author RedRiotTank.
+     */
     public void elThor(Player player){
 
         player.playSound(player.getLocation(), Sound.ENTITY_LIGHTNING_BOLT_THUNDER,1,2);
 
-
         new BukkitRunnable() {
-
-            final Location playerLoc = player.getLocation();
-            final double yaw = -player.getLocation().getYaw();
-             double pitch = player.getLocation().getPitch();
-            final World world = player.getWorld();
-
             int tick = 0;
             double fin = 10;
-
-            double x,y, xY, yY, zY, xX, yX, zX,xZ,yZ,zZ,xL,yL,zL;
-
-            boolean changedPitch = false;
-
 
             @Override
             public void run() {
 
                 for(double prof = 0.5; prof < fin; prof+=0.5){
-                    harmingCircle(prof,1);
-                    harmingCircle(prof,0.8);
-                    harmingCircle(prof,0.6);
-                    harmingCircle(prof,0.4);
-                    harmingCircle(prof,0.2);
+                    auxBiblio.circleEyeVector(1,0.5,prof,null, element,true,true, user.getPlayer());
+                    auxBiblio.circleEyeVector(0.8,0.5,prof,null, element,true,true, user.getPlayer());
+                    auxBiblio.circleEyeVector(0.6,0.5,prof,null, element,true,true, user.getPlayer());
+                    auxBiblio.circleEyeVector(0.4,0.5,prof,null, element,true,true, user.getPlayer());
+                    auxBiblio.circleEyeVector(0.2,0.5,prof,null, element,true,true, user.getPlayer());
                 }
 
                 tick++;
@@ -102,52 +158,33 @@ public class goro_goro extends logia {
 
                 if(tick == 20)
                     this.cancel();
-
             }
 
-            public void harmingCircle(double z, double factor){
 
-                for(double i=0; i<2*PI; i+= 0.5){
-
-                    x = factor*cos(i);
-                    y = factor*sin(i);
-
-                    //Vertically (Arround X)
-                    xX = x;
-                    yX = cos(toRadians(pitch))* y - sin(toRadians(pitch))* z;
-                    zX = sin(toRadians(pitch))* y + cos(toRadians(pitch))* z;
-
-
-                    //horizontally (Arround Y)
-                    xY = cos(toRadians(yaw))*xX + sin(toRadians(yaw))*zX;
-                    yY =  yX;
-                    zY = -sin(toRadians(yaw))*xX + cos(toRadians(yaw))*zX;
-
-
-                    //Final (sum of player position.)
-                    xL = playerLoc.getX() + xY;
-                    yL = 1 + playerLoc.getY() + yY;
-                    zL = playerLoc.getZ() + zY;
-
-                    Location partLoc = new Location(world, xL, yL, zL);
-
-                    if(!partLoc.getBlock().getType().equals(Material.AIR))
-                        partLoc.getBlock().setType(Material.AIR);
-
-                    for(Entity ent : world.getNearbyEntities(partLoc,2,2,2))
-                        if(ent instanceof LivingEntity && !player.equals(ent))
-                            ((LivingEntity)ent).damage(100);
-
-
-                    world.spawnParticle(element,partLoc,0,0,0,0);
-                }
-
-            }
         }.runTaskTimer(plugin,0,1);
 
     }
 
-    public void thund(Player player){
+    // ---------------------------------------------- AB 2 ---------------------------------------------------------------------
+
+    /**
+     * @brief Ability 2: "ThunderStorm".
+     * @see goro_goro#thunderStorm(Player)
+     * @author RedRiotTank.
+     */
+    public void ability2(){
+        if(abilitiesCD.get(1) == 0){
+            thunderStorm(user.getPlayer());
+            abilitiesCD.set(1, 20);
+        }
+    }
+
+    /**
+     * @brief CORE ABILITY: Creates a thunderstorm that hits every entity in [10,10,10] blocks.
+     * @param player Player that uses the ability.
+     * @author RedRiotTank.
+     */
+    public void thunderStorm(Player player){
 
         Random random = new Random();
 
@@ -184,6 +221,27 @@ public class goro_goro extends logia {
 
     }
 
+    // ---------------------------------------------- AB 3 ---------------------------------------------------------------------
+
+    /**
+     * @brief Ability 3: "Light Step".
+     * @see goro_goro#lightStep(Player)
+     * @author RedRiotTank.
+     */
+    public void ability3(){
+        if(abilitiesCD.get(2) == 0){
+            lightStep(user.getPlayer());
+            abilitiesCD.set(2, 30);
+        }
+    }
+
+    /**
+     * @brief CORE ABILITY: dashed the player 5 blocks in the direction he is looking at,
+     * leaving lightning in its wake.
+     * @param player Player that uses the ability.
+     * @todo refactor.
+     * @author RedRiotTank.
+     */
     public void lightStep(Player player){
 
         World world = player.getWorld();
@@ -195,7 +253,7 @@ public class goro_goro extends logia {
         Vector dir = player.getLocation().getDirection();
         dir.setY(0.5);
         dir.setX(dir.getX() * 5);
-        dir.setZ(dir.getZ() *5);
+        dir.setZ(dir.getZ() * 5);
         player.setVelocity(dir);
 
         new BukkitRunnable(){
@@ -212,13 +270,32 @@ public class goro_goro extends logia {
             }
         }.runTaskTimer(plugin,0,2);
 
-       // System.out.println(direction);
+        // System.out.println(direction);
         //System.out.println(movement);
 
         player.setVelocity(dir);
 
     }
 
+    // ---------------------------------------------- AB 4 ---------------------------------------------------------------------
+    /**
+     * @brief Ability 4: "Discharge".
+     * @see goro_goro#discharge(Player)
+     * @author RedRiotTank.
+     */
+    public void ability4(){
+        if(abilitiesCD.get(3) == 0){
+            discharge(user.getPlayer());
+            abilitiesCD.set(3, 100);
+        }
+    }
+
+    /**
+     * @brief CORE ABILITY: --
+     * @param player Player that uses the ability.
+     * @todo change the whole ability, I don't like it.
+     * @author RedRiotTank.
+     */
     public void discharge(Player player){
 
         final int Maximum = 3;
@@ -293,72 +370,4 @@ public class goro_goro extends logia {
 
     }
 
-
-
-    @Override
-    public void runParticles(){
-        /*
-        new BukkitRunnable(){
-
-            @Override
-            public void run() {
-
-                Player player = null;
-
-                if(user != null)
-                    if(user.getPlayer() != null){
-
-                        player = user.getPlayer();
-
-                        ItemStack caster = null;
-                        boolean isCaster = false;
-                        if(player != null){
-                            if(castIdentification.itemIsCaster(player.getInventory().getItemInMainHand(), player)){
-                                caster = player.getInventory().getItemInMainHand();
-                                isCaster = true;
-                            }
-                            else{
-                                if(castIdentification.itemIsCaster(player.getInventory().getItemInOffHand(), player)){
-                                    caster = player.getInventory().getItemInOffHand();
-                                    isCaster = true;
-                                }
-                            }
-                        }
-
-                        if(isCaster && caster.getItemMeta().getDisplayName().equals(castIdentification.castItemNameGoro)){
-                            double angle = toRadians(-player.getLocation().getYaw());
-
-                            for(double i=0; i < 2*PI; i+=0.05){
-                                double x = cos(i);
-                                double y = sin(i);
-                                double z = 0;
-
-                                double xr = cos(angle)*x + sin(angle)*z;
-                                double yr = y;
-                                double zr = -sin(angle)*x + cos(angle)*z;
-
-                                double xF = player.getLocation().getX() + xr-0.25*sin(angle);
-                                double yF = player.getLocation().getY() + yr + 2;
-                                double zF = player.getLocation().getZ() + zr-0.25*cos(angle);
-
-                                Location loc = new Location(player.getWorld(),xF,yF,zF);
-                                player.getWorld().spawnParticle(Particle.ELECTRIC_SPARK,loc,0,0,0,0);
-
-                                for(Entity ent : player.getWorld().getNearbyEntities(loc,0.5,0.5,0.5))
-                                    if (ent instanceof LivingEntity)
-                                            ((LivingEntity) ent).damage(1);
-
-                            }
-                            player.setAllowFlight(true);
-                        }else {
-                            player.setAllowFlight(false);
-                            player.setFlying(false);
-                        }
-                    }
-            }
-
-
-        }.runTaskTimer(plugin,0,2);
-        */
-    }
 }
