@@ -48,5 +48,15 @@
 		"sounds": [
 			"shambless"
 		]
+	},
+	"appear": {
+		"sounds": [
+			"appear"
+		]
+	},
+	"vanish": {
+		"sounds": [
+			"vanish"
+		]
 	}
 }

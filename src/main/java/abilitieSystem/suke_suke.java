@@ -20,7 +20,7 @@ import static java.lang.Math.PI;
  */
 public class suke_suke extends paramecia {
 
-    private final int explorationDuration = 6000;
+    private final int explorationDuration = 6000, attackDuration = 80;
 
     private static boolean invisible = false;
     public static boolean exploration = false;
@@ -45,57 +45,6 @@ public class suke_suke extends paramecia {
         abilitiesNames.add("ab4");
         abilitiesCD.add(0);
         plug = plugin;
-    }
-
-    // ---------------------------------------------- AB 1 ---------------------------------------------------------------------
-
-    /**
-     * @brief Ability 1 caller: "Invisible Exploration". Shift + click to cancel it.
-     * @see suke_suke#invisibleExploration(Player)
-     * @author RedRiotTank.
-     */
-    public void ability1() {
-        if (!user.getPlayer().isSneaking()) {
-            if (abilitiesCD.get(0) == 0) {
-                invisibleExploration(user.getPlayer());
-                abilitiesCD.set(0, 7000); // Pon el cooldown en segundos
-            }
-        } else 
-            cancelExploration(user.getPlayer());
-        
-    }
-
-    /**
-     * @brief CORE ABILITY: Makes players invisible during explorationDuration time. If the players attacks,
-     * the invisibility gets canceled.
-     * @param player User that gets invisible.
-     * @see suke_suke#invisibleExploration(Player)
-     * @author RedRiotTank.
-     */
-    public void invisibleExploration(Player player) {
-        if (!invisible) {
-            exploration = true;
-
-            invisibility(player);
-
-            new BukkitRunnable() {
-
-                @Override
-                public void run() {
-
-                    if (!cancelStopInvisibleTask)
-                        finishInvisibility(player);
-
-
-                    cancelStopInvisibleTask = false;
-
-                }
-            }.runTaskLater(plugin, explorationDuration);
-
-
-        } else {
-            player.sendMessage("You are alredy invisible.");
-        }
     }
 
     /**
@@ -159,9 +108,16 @@ public class suke_suke extends paramecia {
      */
     public void invisibility(Player player) {
         invisible = true;
+        int time;
 
-        player.addPotionEffect(new PotionEffect(PotionEffectType.INVISIBILITY, explorationDuration, 99, false, false));
+        if(exploration)
+            time = explorationDuration;
+        else
+            time = attackDuration;
+
+        player.addPotionEffect(new PotionEffect(PotionEffectType.INVISIBILITY, time, 99, false, false));
         animation(player,0.5);
+        player.getWorld().playSound(player.getLocation(),"vanish",1,1);
         new BukkitRunnable() {
             @Override
             public void run() {
@@ -184,7 +140,7 @@ public class suke_suke extends paramecia {
         exploration = false;
 
         animation(player,0.5);
-
+        player.getWorld().playSound(player.getLocation(),"appear",1,1);
         new BukkitRunnable() {
             @Override
             public void run() {
@@ -197,6 +153,51 @@ public class suke_suke extends paramecia {
 
     }
 
+    // ---------------------------------------------- AB 1 ---------------------------------------------------------------------
+
+    /**
+     * @brief Ability 1 caller: "Invisible Exploration". Shift + click to cancel it.
+     * @see suke_suke#invisibleExploration(Player)
+     * @author RedRiotTank.
+     */
+    public void ability1() {
+        if (!user.getPlayer().isSneaking()) {
+            if(!invisible){
+                if (abilitiesCD.get(0) == 0) {
+                    invisibleExploration(user.getPlayer());
+                    abilitiesCD.set(0, 7000); // Pon el cooldown en segundos
+                }
+            } else {
+                user.getPlayer().sendMessage("You are alredy invisible.");
+            }
+        } else 
+            cancelExploration(user.getPlayer());
+        
+    }
+
+    /**
+     * @brief CORE ABILITY: Makes players invisible during explorationDuration time. If the player attacks,
+     * the invisibility gets canceled.
+     * @param player User that gets invisible.
+     * @see suke_suke#invisibleExploration(Player)
+     * @author RedRiotTank.
+     */
+    public void invisibleExploration(Player player) {
+
+        exploration = true;
+        invisibility(player);
+
+        new BukkitRunnable() {
+            @Override
+            public void run() {
+                if (!cancelStopInvisibleTask)
+                    finishInvisibility(player);
+
+                cancelStopInvisibleTask = false;
+            }
+        }.runTaskLater(plugin, explorationDuration);
+    }
+
     /**
      * @brief Cancel Invisible Exploration ability.
      * @param player User that cancel exploration mode.
@@ -204,7 +205,6 @@ public class suke_suke extends paramecia {
      * @author RedRiotTank.
      */
     public void cancelExploration(Player player) {
-
         if (exploration) {
             finishInvisibility(player);
             player.removePotionEffect(PotionEffectType.INVISIBILITY);
@@ -263,14 +263,35 @@ public class suke_suke extends paramecia {
 
     // ---------------------------------------------- AB 3 ---------------------------------------------------------------------
     /**
-     * @brief Ability 3 caller: "-".
+     * @brief Ability 3 caller: "Invisible attack".
      * @author RedRiotTank.
      */
     public void ability3() {
         if (abilitiesCD.get(2) == 0) {
-
-            abilitiesCD.set(2, 0); // Pon el cooldown en segundos
+            if(!invisible) {
+                invisibleAttack(user.getPlayer());
+                abilitiesCD.set(2, 600); // Pon el cooldown en segundos
+            } else {
+                user.getPlayer().sendMessage("You are already invisible.");
+            }
         }
+    }
+
+    /**
+     * @brief CORE ABILITY: Makes players invisible during attackDuration time. If the player attacks,
+     * the invisibility doesn't get canceled.
+     * @param player User that gets invisible.
+     * @see suke_suke#invisibleAttack(Player)
+     * @author RedRiotTank.
+     */
+    public void invisibleAttack(Player player){
+        invisibility(player);
+        new BukkitRunnable() {
+            @Override
+            public void run() {
+                finishInvisibility(player);
+            }
+        }.runTaskLater(plugin, attackDuration);
     }
 
     // ---------------------------------------------- AB 4 ---------------------------------------------------------------------
