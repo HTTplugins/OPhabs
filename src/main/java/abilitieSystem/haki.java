@@ -26,6 +26,7 @@ import org.bukkit.Material;
 import org.bukkit.attribute.Attribute;
 
 import java.util.ArrayList;
+import java.util.Random;
 
 public class haki extends abilities {
     private abilityUser user;
@@ -117,7 +118,42 @@ public class haki extends abilities {
 
     public void playerOnWater(PlayerMoveEvent event){}
     public void onPlayerToggleSneak(PlayerToggleSneakEvent e){}
-    public void onFall(EntityDamageEvent e){}
+   
+    /**
+    * @brief Event listener for when a player takes damage
+    * @param event The event that was triggered
+    * @author Vaelico786.
+    */
+    public void onEntityDamage(EntityDamageEvent event){
+        //Level 4 Observation haki, chance to dodge
+        if(event instanceof EntityDamageByEntityEvent){
+            if(level >= 4){
+                if(((EntityDamageByEntityEvent) event).getDamager() instanceof Player){
+                    Player player = (Player) ((EntityDamageByEntityEvent) event).getDamager();
+                    //When damage is done by a player probability is determined by the life of the player(The more life the player has the stronger he is
+                    if(player.getMaxHealth() < user.getPlayer().getMaxHealth()){
+                        if(player.getHealth() < user.getPlayer().getHealth()/2){
+                            event.setDamage(0);
+                        }
+                        else{
+                            event.setDamage(event.getDamage()/(user.getPlayer().getMaxHealth()-player.getMaxHealth()));
+                        }
+                    }
+                    else{
+                        event.setDamage(event.getDamage()/(player.getMaxHealth()-user.getPlayer().getMaxHealth()));
+                    }
+                }
+                else{
+                    //If the entity its not a player then a probability based on player level will be used
+                    Random rand = new Random();
+                    if(rand.nextInt(200)/5 <= level){
+                        event.setDamage(0);
+                    }
+                }
+            }
+        }
+    }
+
     public void onPlayerItemConsume(PlayerItemConsumeEvent event){}
     public void onEntityPickupItem(EntityPickupItemEvent event){}
     public void onPlayerEggThrow(PlayerEggThrowEvent event){}
