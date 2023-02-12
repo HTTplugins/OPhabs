@@ -89,6 +89,22 @@ public class caster implements Listener {
     }
 
     @EventHandler
+    public void onPlayerToggleSprint(PlayerToggleSprintEvent e){
+        if(users.containsKey(e.getPlayer().getName())) {
+            abilityUser user = users.get(e.getPlayer().getName());
+            user.onPlayerToggleSprint(e);
+        }
+    }
+
+    @EventHandler
+    public void onPlayerToggleFlight(PlayerToggleFlightEvent e){
+        if(users.containsKey(e.getPlayer().getName())) {
+            abilityUser user = users.get(e.getPlayer().getName());
+            user.onPlayerToggleFlight(e);
+        }
+    }
+
+    @EventHandler
     public void onPlayerItemConsume(PlayerItemConsumeEvent event){
         if(users.containsKey(event.getPlayer().getName())) {
             abilityUser user = users.get(event.getPlayer().getName());

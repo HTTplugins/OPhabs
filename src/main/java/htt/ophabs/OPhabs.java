@@ -6,6 +6,7 @@ import org.bukkit.Bukkit;
 import commands.*;
 import fruitSystem.*;
 import hakiSystem.*;
+import rokushikiSystem.*;
 import abilitieSystem.*;
 import castSystem.*;
 import org.bukkit.ChatColor;
@@ -69,8 +70,10 @@ public final class OPhabs extends JavaPlugin {
         hakiAssociation haki = new hakiAssociation(this, users);
         getServer().getPluginManager().registerEvents(haki, this);
 
-
-
+        //
+        //RokushikiSystem
+        rokushikiAssociation rokushiki = new rokushikiAssociation(this, users);
+        getServer().getPluginManager().registerEvents(rokushiki, this);
 
         //--------------
         //CasterSystem
@@ -87,7 +90,7 @@ public final class OPhabs extends JavaPlugin {
         fAssociation.setScoreboard(scoreboard);
         lFruit.setScoreboard(scoreboard);
 
-        registerCommands(abilitiesList, haki);
+        registerCommands(abilitiesList, haki, rokushiki);
 
         //--------------
         Bukkit.getConsoleSender().sendMessage(ChatColor.GREEN + "" + ChatColor.BOLD +  "OPhabs started correctly.");
@@ -107,6 +110,9 @@ public final class OPhabs extends JavaPlugin {
                 getConfig().set("hakiPlayers." + user.getName() + ".Level", user.getHakiLevel());
                 getConfig().set("hakiPlayers." + user.getName() + ".Exp", user.getHakiExp());
             }
+            if(user.hasRokushiki()){
+                user.getRokushikiAbilities().savePlayer();
+            }
         }
         saveConfig();
         Bukkit.getConsoleSender().sendMessage(ChatColor.DARK_RED + "" + ChatColor.BOLD + "HTTrolplay closed correctly.");
@@ -116,9 +122,9 @@ public final class OPhabs extends JavaPlugin {
      * @brief Registration of the commands.
      * @author RedRiotTank, Vaelico786.
      */
-    public void registerCommands(ArrayList<df> abilitiesList, hakiAssociation haki){
-        Objects.requireNonNull(this.getCommand("oph")).setExecutor(new oph(this, abilitiesList, haki));
-        Objects.requireNonNull(this.getCommand("oph")).setTabCompleter(new oph(this, abilitiesList, haki));
+    public void registerCommands(ArrayList<df> abilitiesList, hakiAssociation haki, rokushikiAssociation rokushiki){
+        Objects.requireNonNull(this.getCommand("oph")).setExecutor(new oph(this, abilitiesList, haki, rokushiki));
+        Objects.requireNonNull(this.getCommand("oph")).setTabCompleter(new oph(this, abilitiesList, haki, rokushiki));
         Objects.requireNonNull(this.getCommand("weaponShop")).setExecutor(new weaponShop(this));
     }
 }

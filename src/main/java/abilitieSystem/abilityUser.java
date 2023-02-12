@@ -8,6 +8,8 @@ import org.bukkit.event.entity.*;
 import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.event.player.PlayerEggThrowEvent;
 import org.bukkit.event.player.PlayerToggleSneakEvent;
+import org.bukkit.event.player.PlayerToggleSprintEvent;
+import org.bukkit.event.player.PlayerToggleFlightEvent;
 import org.bukkit.event.player.PlayerItemConsumeEvent;
 import org.bukkit.event.player.PlayerRespawnEvent;
 import org.bukkit.event.player.PlayerItemDamageEvent;
@@ -19,13 +21,14 @@ public class abilityUser{
     private String playerName;
     public int actual;
     private devilFruit fruit;
-    private abilities dfAbilities, hakiAbilities;
+    private abilities dfAbilities, hakiAbilities, rokushikiAbilities;
 
     public abilityUser(String playerName){
         this.playerName = playerName;
         this.dfAbilities = null;
         this.fruit = null;
         this.hakiAbilities = null;
+        this.rokushikiAbilities = null;
 
         actual = 0;
     }
@@ -41,8 +44,6 @@ public class abilityUser{
         return playerName;
     }
 
-    
-    
     public String getPlayerName(){
         return playerName;
     }
@@ -63,6 +64,11 @@ public class abilityUser{
         this.hakiAbilities.user=this;
     }
 
+    public void setRokushiki(abilities rokushikiAbilities){
+        this.rokushikiAbilities = rokushikiAbilities;
+        this.rokushikiAbilities.user=this;
+    }
+
     public devilFruit getFruit(){
         return fruit;
     }
@@ -75,12 +81,20 @@ public class abilityUser{
         return (haki) hakiAbilities;
     }
 
+    public rokushiki getRokushikiAbilities(){
+        return (rokushiki) rokushikiAbilities;
+    }
+
     public boolean hasFruit(){
         return fruit != null;
     }
 
     public boolean hasHaki(){
         return hakiAbilities != null;
+    }
+
+    public boolean hasRokushiki(){
+        return rokushikiAbilities != null;
     }
 
     public int getHakiLevel(){
@@ -163,6 +177,8 @@ public class abilityUser{
             hakiAbilities.onEntityDamage(event);
         if(dfAbilities != null)
             dfAbilities.onEntityDamage(event);
+        if(rokushikiAbilities != null)
+            rokushikiAbilities.onEntityDamage(event);
     }
     public void onPlayerDeath(PlayerDeathEvent event){
         if(hakiAbilities != null)
@@ -222,13 +238,24 @@ public class abilityUser{
     public void onPlayerRespawn(PlayerRespawnEvent event){
         if(hakiAbilities != null)
             hakiAbilities.onPlayerRespawn(event);
+        if(rokushikiAbilities != null)
+            rokushikiAbilities.onPlayerRespawn(event);
     }
 
     public void onUserDamageAnotherEntity(EntityDamageByEntityEvent event){
         if(hasHaki()) getHakiAbilities().onUserDamageAnotherEntity(event);
+        if(hasRokushiki()) getRokushikiAbilities().onUserDamageAnotherEntity(event);
     }
     public void onItemDamage(PlayerItemDamageEvent event){
         if(hasHaki()) getHakiAbilities().onItemDamage(event);
+    }
+
+    public void onPlayerToggleSprint(PlayerToggleSprintEvent event){
+        if(hasRokushiki()) getRokushikiAbilities().onPlayerToggleSprint(event);
+    }
+
+    public void onPlayerToggleFlight(PlayerToggleFlightEvent event){
+        if(hasRokushiki()) getRokushikiAbilities().onPlayerToggleFlight(event);
     }
 
 }

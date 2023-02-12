@@ -12,6 +12,7 @@ import org.bukkit.event.player.PlayerItemDamageEvent;
 import org.bukkit.entity.Player;
 import org.bukkit.Material;
 import org.bukkit.attribute.Attribute;
+import org.bukkit.scheduler.BukkitRunnable;
 
 import java.util.ArrayList;
 import java.util.Random;
@@ -238,8 +239,12 @@ public class haki extends abilities {
      * @author Vaelico786.
      */
     public void onPlayerRespawn(PlayerRespawnEvent event){
-        user.getPlayer().setMaxHealth(health);
-        user.getPlayer().getAttribute(Attribute.GENERIC_ARMOR).setBaseValue(armor);
+        new BukkitRunnable() {
+            @Override
+            public void run() {
+                reloadPlayer();
+            }
+        }.runTaskLater(plugin, 5);
     }
 
 }
