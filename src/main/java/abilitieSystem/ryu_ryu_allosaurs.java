@@ -167,7 +167,7 @@ public class ryu_ryu_allosaurs extends zoan {
 
     public void efectoSplash(World mundo, Location loc) {
         mundo.getNearbyEntities(loc, 5, 3, 5).forEach(entity -> {
-            if(!entity.getName().equals(user.getName()) && entity instanceof LivingEntity) {
+            if(!entity.getName().equals(user.getPlayerName()) && entity instanceof LivingEntity) {
                 Vector dir = new Vector(entity.getLocation().getX() - loc.getX(), entity.getLocation().getY() - loc.getY(),
                                         entity.getLocation().getZ() - loc.getZ()).normalize();
 

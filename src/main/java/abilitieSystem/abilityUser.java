@@ -1,9 +1,10 @@
 package abilitieSystem;
 
-import org.bukkit.entity.Player;
+
 import fruitSystem.devilFruit;
 
 import org.bukkit.Bukkit;
+import org.bukkit.entity.Player;
 import org.bukkit.event.entity.*;
 import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.event.player.PlayerEggThrowEvent;
@@ -13,6 +14,8 @@ import org.bukkit.event.player.PlayerToggleFlightEvent;
 import org.bukkit.event.player.PlayerItemConsumeEvent;
 import org.bukkit.event.player.PlayerRespawnEvent;
 import org.bukkit.event.player.PlayerItemDamageEvent;
+import org.bukkit.event.player.PlayerJoinEvent;
+import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.inventory.InventoryClickEvent;
 
 import java.util.ArrayList;
@@ -38,10 +41,6 @@ public class abilityUser{
             return null;
 
         return Bukkit.getPlayerExact(playerName);
-    }
-
-    public String getName(){
-        return playerName;
     }
 
     public String getPlayerName(){
@@ -254,8 +253,17 @@ public class abilityUser{
         if(hasRokushiki()) getRokushikiAbilities().onPlayerToggleSprint(event);
     }
 
+    public void onPlayerJoin(PlayerJoinEvent event){
+        if(hasHaki()) getHakiAbilities().reloadPlayer();
+        if(hasRokushiki()) getRokushikiAbilities().loadPlayer();
+    }
+
     public void onPlayerToggleFlight(PlayerToggleFlightEvent event){
         if(hasRokushiki()) getRokushikiAbilities().onPlayerToggleFlight(event);
+    }
+
+    public void onPlayerInteract(PlayerInteractEvent event){
+        if(hasRokushiki()) getRokushikiAbilities().onPlayerInteract(event);
     }
 
 }

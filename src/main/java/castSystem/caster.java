@@ -48,6 +48,8 @@ public class caster implements Listener {
                 //else
                 //user.switchAbility();
 
+            }else{
+                user.onPlayerInteract(event);
             }
         }
     }
@@ -200,6 +202,10 @@ public class caster implements Listener {
 
     @EventHandler(ignoreCancelled = true)
     public void onPlayerJoin(PlayerJoinEvent event) {
+        if(users.containsKey(event.getPlayer().getName())) {
+            users.get(event.getPlayer().getName()).onPlayerJoin(event);
+        }
+
         String sukeUserName;
         Player sukeUser, other = event.getPlayer();
 

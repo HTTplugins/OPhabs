@@ -289,7 +289,7 @@ public class mera_mera extends logia {
         final int[] i = {0};
 
         mundo.getNearbyEntities(loc, 10, 6, 10).forEach(entity -> {
-            if (entity instanceof LivingEntity && !entity.getName().equals(user.getName())) {
+            if (entity instanceof LivingEntity && !entity.getName().equals(user.getPlayerName())) {
                 Vector dir = new Vector(entity.getLocation().getX() - loc.getX(), entity.getLocation().getY() - loc.getY(),
                         entity.getLocation().getZ() - loc.getZ()).normalize();
 

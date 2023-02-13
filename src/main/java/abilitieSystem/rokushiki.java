@@ -2,6 +2,7 @@ package abilitieSystem;
 
 
 import htt.ophabs.OPhabs;
+import abilitieSystem.auxBiblio;
 
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
@@ -11,17 +12,22 @@ import org.bukkit.event.player.PlayerToggleSprintEvent;
 import org.bukkit.event.player.PlayerToggleFlightEvent;
 import org.bukkit.event.player.PlayerRespawnEvent;
 import org.bukkit.event.player.PlayerItemDamageEvent;
+import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.Entity;
+import org.bukkit.entity.LivingEntity;
+import org.bukkit.event.block.Action;
 import org.bukkit.GameMode;
 import org.bukkit.Material;
 import org.bukkit.Particle;
 import org.bukkit.Location;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.scheduler.BukkitRunnable;
+import org.bukkit.util.Vector;
 
 import java.util.ArrayList;
 import java.util.Random;
+import java.util.Collection;
 
 
 
@@ -73,6 +79,9 @@ public class rokushiki extends abilities {
         soruDashes = 0;
         geppoJumps = 0;
         activeShigan = true;
+        activeGeppo = true;
+        activeRankyaku = true;
+        activeSoru = true;
     }
 
 
@@ -100,6 +109,9 @@ public class rokushiki extends abilities {
         soruDashes = 0;
         geppoJumps = 0;
         activeShigan = true;
+        activeGeppo = true;
+        activeRankyaku = true;
+        activeSoru = true;
     }
     
     /**
@@ -287,8 +299,8 @@ public class rokushiki extends abilities {
                 this.lGeppo++;
                 user.getPlayer().sendMessage("§a§Geppo§r§a level up!");
                 user.getPlayer().sendMessage("§a§Geppo§r§a level: "+lGeppo);
-                plugin.getConfig().set("rokushikiPlayers."+user.getPlayer().getName()+".Geppo.Level", lGeppo);
-                plugin.getConfig().set("rokushikiPlayers."+user.getPlayer().getName()+".Geppo.Exp", expGeppo);
+                plugin.getConfig().set("rokushikiPlayers."+user.getPlayerName()+".Geppo.Level", lGeppo);
+                plugin.getConfig().set("rokushikiPlayers."+user.getPlayerName()+".Geppo.Exp", expGeppo);
 
                 return true;
             }
@@ -310,8 +322,8 @@ public class rokushiki extends abilities {
                 this.lTekkai++;
                 user.getPlayer().sendMessage("§a§Tekkai§r§a level up!");
                 user.getPlayer().sendMessage("§a§Tekkai§r§a level: "+lTekkai);
-                plugin.getConfig().set("rokushikiPlayers."+user.getPlayer().getName()+".Tekkai.Level", lTekkai);
-                plugin.getConfig().set("rokushikiPlayers."+user.getPlayer().getName()+".Tekkai.Exp", expTekkai);
+                plugin.getConfig().set("rokushikiPlayers."+user.getPlayerName()+".Tekkai.Level", lTekkai);
+                plugin.getConfig().set("rokushikiPlayers."+user.getPlayerName()+".Tekkai.Exp", expTekkai);
 
                 return true;
             }
@@ -333,8 +345,8 @@ public class rokushiki extends abilities {
                 this.lShigan++;
                 user.getPlayer().sendMessage("§a§Shigan§r§a level up!");
                 user.getPlayer().sendMessage("§a§Shigan§r§a level: "+lShigan);
-                plugin.getConfig().set("rokushikiPlayers."+user.getPlayer().getName()+".Shigan.Level", lShigan);
-                plugin.getConfig().set("rokushikiPlayers."+user.getPlayer().getName()+".Shigan.Exp", expShigan);
+                plugin.getConfig().set("rokushikiPlayers."+user.getPlayerName()+".Shigan.Level", lShigan);
+                plugin.getConfig().set("rokushikiPlayers."+user.getPlayerName()+".Shigan.Exp", expShigan);
 
                 return true;
             }
@@ -356,8 +368,8 @@ public class rokushiki extends abilities {
                 this.lRankyaku++;
                 user.getPlayer().sendMessage("§a§Rankyaku§r§a level up!");
                 user.getPlayer().sendMessage("§a§Rankyaku§r§a level: "+lRankyaku);
-                plugin.getConfig().set("rokushikiPlayers."+user.getPlayer().getName()+".Rankyaku.Level", lRankyaku);
-                plugin.getConfig().set("rokushikiPlayers."+user.getPlayer().getName()+".Rankyaku.Exp", expRankyaku);
+                plugin.getConfig().set("rokushikiPlayers."+user.getPlayerName()+".Rankyaku.Level", lRankyaku);
+                plugin.getConfig().set("rokushikiPlayers."+user.getPlayerName()+".Rankyaku.Exp", expRankyaku);
 
                 return true;
             }
@@ -379,8 +391,8 @@ public class rokushiki extends abilities {
                 this.lSoru++;
                 user.getPlayer().sendMessage("§a§Soru§r§a level up!");
                 user.getPlayer().sendMessage("§a§Soru§r§a level: "+lSoru);
-                plugin.getConfig().set("rokushikiPlayers."+user.getPlayer().getName()+".Soru.Level", lSoru);
-                plugin.getConfig().set("rokushikiPlayers."+user.getPlayer().getName()+".Soru.Exp", expSoru);
+                plugin.getConfig().set("rokushikiPlayers."+user.getPlayerName()+".Soru.Level", lSoru);
+                plugin.getConfig().set("rokushikiPlayers."+user.getPlayerName()+".Soru.Exp", expSoru);
 
                 return true;
             }
@@ -402,8 +414,8 @@ public class rokushiki extends abilities {
                 this.lKamie++;
                 user.getPlayer().sendMessage("§a§Kami-e§r§a level up!");
                 user.getPlayer().sendMessage("§a§Kami-e§r§a level: "+lKamie);
-                plugin.getConfig().set("rokushikiPlayers."+user.getPlayer().getName()+".Kamie.Level", lKamie);
-                plugin.getConfig().set("rokushikiPlayers."+user.getPlayer().getName()+".Kamie.Exp", expKamie);
+                plugin.getConfig().set("rokushikiPlayers."+user.getPlayerName()+".Kamie.Level", lKamie);
+                plugin.getConfig().set("rokushikiPlayers."+user.getPlayerName()+".Kamie.Exp", expKamie);
 
                 return true;
             }
@@ -416,32 +428,36 @@ public class rokushiki extends abilities {
      * @author Vaelico786.
      */
     public void loadPlayer(){
-        this.lGeppo = plugin.getConfig().getInt("rokushikiPlayers."+user.getPlayer().getName()+".Geppo.Level");
-        this.expGeppo = plugin.getConfig().getDouble("rokushikiPlayers."+user.getPlayer().getName()+".Geppo.Exp");
-        user.getPlayer().sendMessage("§a§lGeppo§r§a level: "+lGeppo);
-        if(lGeppo>0){
-            user.getPlayer().setAllowFlight(true);
-        }
+        this.lGeppo = plugin.getConfig().getInt("rokushikiPlayers."+user.getPlayerName()+".Geppo.Level");
+        this.expGeppo = plugin.getConfig().getDouble("rokushikiPlayers."+user.getPlayerName()+".Geppo.Exp");
 
-        this.lTekkai = plugin.getConfig().getInt("rokushikiPlayers."+user.getPlayer().getName()+".Tekkai.Level");
-        this.expTekkai = plugin.getConfig().getDouble("rokushikiPlayers."+user.getPlayer().getName()+".Tekkai.Exp");
-        user.getPlayer().sendMessage("§a§lTekkai§r§a level: "+lTekkai);
+        this.lTekkai = plugin.getConfig().getInt("rokushikiPlayers."+user.getPlayerName()+".Tekkai.Level");
+        this.expTekkai = plugin.getConfig().getDouble("rokushikiPlayers."+user.getPlayerName()+".Tekkai.Exp");
         
-        this.lShigan = plugin.getConfig().getInt("rokushikiPlayers."+user.getPlayer().getName()+".Shigan.Level");
-        this.expShigan = plugin.getConfig().getDouble("rokushikiPlayers."+user.getPlayer().getName()+".Shigan.Exp");
-        user.getPlayer().sendMessage("§a§lShigan§r§a level: "+lShigan);
+        this.lShigan = plugin.getConfig().getInt("rokushikiPlayers."+user.getPlayerName()+".Shigan.Level");
+        this.expShigan = plugin.getConfig().getDouble("rokushikiPlayers."+user.getPlayerName()+".Shigan.Exp");
+
         
-        this.lRankyaku = plugin.getConfig().getInt("rokushikiPlayers."+user.getPlayer().getName()+".Rankyaku.Level");
-        this.expRankyaku = plugin.getConfig().getDouble("rokushikiPlayers."+user.getPlayer().getName()+".Rankyaku.Exp");
-        user.getPlayer().sendMessage("§a§lRankyaku§r§a level: "+lRankyaku);
+        this.lRankyaku = plugin.getConfig().getInt("rokushikiPlayers."+user.getPlayerName()+".Rankyaku.Level");
+        this.expRankyaku = plugin.getConfig().getDouble("rokushikiPlayers."+user.getPlayerName()+".Rankyaku.Exp");
         
-        this.lSoru = plugin.getConfig().getInt("rokushikiPlayers."+user.getPlayer().getName()+".Soru.Level");
-        this.expSoru = plugin.getConfig().getDouble("rokushikiPlayers."+user.getPlayer().getName()+".Soru.Exp");
-        user.getPlayer().sendMessage("§a§lSoru§r§a level: "+lSoru);
+        this.lSoru = plugin.getConfig().getInt("rokushikiPlayers."+user.getPlayerName()+".Soru.Level");
+        this.expSoru = plugin.getConfig().getDouble("rokushikiPlayers."+user.getPlayerName()+".Soru.Exp");
         
-        this.lKamie = plugin.getConfig().getInt("rokushikiPlayers."+user.getPlayer().getName()+".Kamie.Level");
-        this.expKamie = plugin.getConfig().getDouble("rokushikiPlayers."+user.getPlayer().getName()+".Kamie.Exp");
-        user.getPlayer().sendMessage("§a§lKami-e§r§a level: "+lKamie);
+        this.lKamie = plugin.getConfig().getInt("rokushikiPlayers."+user.getPlayerName()+".Kamie.Level");
+        this.expKamie = plugin.getConfig().getDouble("rokushikiPlayers."+user.getPlayerName()+".Kamie.Exp");
+
+         if(user.getPlayer()!=null){
+            user.getPlayer().sendMessage("§a§lGeppo§r§a level: "+lGeppo);
+            user.getPlayer().sendMessage("§a§lTekkai§r§a level: "+lTekkai);
+            user.getPlayer().sendMessage("§a§lShigan§r§a level: "+lShigan);
+            user.getPlayer().sendMessage("§a§lSoru§r§a level: "+lSoru);
+            user.getPlayer().sendMessage("§a§lRankyaku§r§a level: "+lRankyaku);
+            user.getPlayer().sendMessage("§a§lKami-e§r§a level: "+lKamie);
+            if(lGeppo>0){
+                user.getPlayer().setAllowFlight(true);
+            }
+        }
     }
 
     /**
@@ -449,23 +465,23 @@ public class rokushiki extends abilities {
      * @author Vaelico786.
      */
     public void savePlayer(){
-        plugin.getConfig().set("rokushikiPlayers."+user.getPlayer().getName()+".Geppo.Level", lGeppo);
-        plugin.getConfig().set("rokushikiPlayers."+user.getPlayer().getName()+".Geppo.Exp", expGeppo);
+        plugin.getConfig().set("rokushikiPlayers."+user.getPlayerName()+".Geppo.Level", lGeppo);
+        plugin.getConfig().set("rokushikiPlayers."+user.getPlayerName()+".Geppo.Exp", expGeppo);
 
-        plugin.getConfig().set("rokushikiPlayers."+user.getPlayer().getName()+".Tekkai.Level", lTekkai);
-        plugin.getConfig().set("rokushikiPlayers."+user.getPlayer().getName()+".Tekkai.Exp", expTekkai);
+        plugin.getConfig().set("rokushikiPlayers."+user.getPlayerName()+".Tekkai.Level", lTekkai);
+        plugin.getConfig().set("rokushikiPlayers."+user.getPlayerName()+".Tekkai.Exp", expTekkai);
 
-        plugin.getConfig().set("rokushikiPlayers."+user.getPlayer().getName()+".Shigan.Level", lShigan);
-        plugin.getConfig().set("rokushikiPlayers."+user.getPlayer().getName()+".Shigan.Exp", expShigan);
+        plugin.getConfig().set("rokushikiPlayers."+user.getPlayerName()+".Shigan.Level", lShigan);
+        plugin.getConfig().set("rokushikiPlayers."+user.getPlayerName()+".Shigan.Exp", expShigan);
 
-        plugin.getConfig().set("rokushikiPlayers."+user.getPlayer().getName()+".Rankyaku.Level", lRankyaku);
-        plugin.getConfig().set("rokushikiPlayers."+user.getPlayer().getName()+".Rankyaku.Exp", expRankyaku);
+        plugin.getConfig().set("rokushikiPlayers."+user.getPlayerName()+".Rankyaku.Level", lRankyaku);
+        plugin.getConfig().set("rokushikiPlayers."+user.getPlayerName()+".Rankyaku.Exp", expRankyaku);
 
-        plugin.getConfig().set("rokushikiPlayers."+user.getPlayer().getName()+".Soru.Level", lSoru);
-        plugin.getConfig().set("rokushikiPlayers."+user.getPlayer().getName()+".Soru.Exp", expSoru);
+        plugin.getConfig().set("rokushikiPlayers."+user.getPlayerName()+".Soru.Level", lSoru);
+        plugin.getConfig().set("rokushikiPlayers."+user.getPlayerName()+".Soru.Exp", expSoru);
 
-        plugin.getConfig().set("rokushikiPlayers."+user.getPlayer().getName()+".Kamie.Level", lKamie);
-        plugin.getConfig().set("rokushikiPlayers."+user.getPlayer().getName()+".Kamie.Exp", expKamie);
+        plugin.getConfig().set("rokushikiPlayers."+user.getPlayerName()+".Kamie.Level", lKamie);
+        plugin.getConfig().set("rokushikiPlayers."+user.getPlayerName()+".Kamie.Exp", expKamie);
 
         plugin.saveConfig();
     }
@@ -498,6 +514,46 @@ public class rokushiki extends abilities {
         }
         return damage;
     }
+    
+    /**
+     * @brief Skill action rankyaku, level 5 combinated with haki.
+     * @author Vaelico786.
+     */
+    public void tobuShigan(){
+        if(activeShigan){
+            user.getPlayer().sendMessage("§a§lTobu Shigan§r§a");
+            new BukkitRunnable() {
+                    Vector direction = user.getPlayer().getEyeLocation().getDirection().normalize().multiply(2);
+                    Location current = user.getPlayer().getEyeLocation().add(direction);
+                @Override
+                public void run() {
+                    Collection<Entity> entities = current.getWorld().getNearbyEntities(current, 1, 1, 1);
+                    if(current.distance(user.getPlayer().getLocation()) <= 12 &&  current.getBlock().getType() == Material.AIR && (entities.contains(user.getPlayer()) || entities.isEmpty())){
+                        current.getWorld().spawnParticle(Particle.CLOUD, current, 1, 0.2, 0.2, 0.2, 0);
+                        current = current.add(direction);
+                    }else{
+                        for(Entity e: current.getWorld().getNearbyEntities(current, 1, 1, 1)){
+                            if(e instanceof LivingEntity && e != user.getPlayer()){
+                                ((LivingEntity)e).damage(lShigan+user.getHakiLevel());
+                            }
+                        }
+                        
+                        this.cancel();
+                    }
+                }
+            }.runTaskTimer(plugin, 0, 1);
+
+            activeShigan = false;
+            //runnable reactive on 10 seconds
+            new BukkitRunnable() {
+                @Override
+                public void run() {
+                    activeShigan = true;
+                }
+            }.runTaskLater(plugin, 200);
+        }
+    }
+
 
     /**
      * @brief Skill action soru, quick dash with limit.
@@ -611,6 +667,25 @@ public class rokushiki extends abilities {
     }
 
     /**
+     * @brief Event listener that activates when the user right click.
+     * @param event The event that was triggered
+     * @author Vaelico786.
+     */
+    public void onPlayerInteract(PlayerInteractEvent event){
+        if(event.getAction() == Action.LEFT_CLICK_AIR){
+            if(!event.getPlayer().isSneaking()){
+                if(event.getPlayer().getInventory().getItemInMainHand().getType() == Material.AIR){
+                    if(user.hasHaki()){
+                        if(lShigan>=3 && user.getHakiLevel()>=5){
+                            tobuShigan();
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    /**
      * @brief Event listener that activates when a player respawns.
      * @param event The event that was triggered
      * @author Vaelico786.
@@ -625,4 +700,5 @@ public class rokushiki extends abilities {
             }
         }.runTaskLater(plugin, 5);
     }
+
 }
