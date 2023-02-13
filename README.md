@@ -16,7 +16,11 @@ sudo dnf install graphviz
 sudo yum install doxygen
 sudo yum install graphviz
 ```
-
+#### Install Doxygen and Graphviz in Arch based systems:
+```sh
+sudo pacman -S doxygen
+sudo pacman -S graphviz
+```
 #### Install Doxygenand and Graphviz in other systems (manual):
 [Doxygen official manual](https://www.doxygen.nl/manual/install.html).
 [Graphviz official manual](https://graphviz.org/download/).
