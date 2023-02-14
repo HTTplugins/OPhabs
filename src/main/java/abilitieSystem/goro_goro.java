@@ -11,6 +11,8 @@ import java.util.Random;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
+import org.bukkit.potion.PotionEffect;
+import org.bukkit.potion.PotionEffectType;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.util.Vector;
 import fruitSystem.fruitIdentification;
@@ -279,95 +281,83 @@ public class goro_goro extends logia {
 
     // ---------------------------------------------- AB 4 ---------------------------------------------------------------------
     /**
-     * @brief Ability 4: "Discharge".
-     * @see goro_goro#discharge(Player)
+     * @brief Ability 4: "Electric Ground".
+     * @see goro_goro#electricGround(Player)
      * @author RedRiotTank.
      */
     public void ability4(){
         if(abilitiesCD.get(3) == 0){
-            discharge(user.getPlayer());
-            abilitiesCD.set(3, 100);
+            electricGround(user.getPlayer());
+            abilitiesCD.set(3, 30);
         }
     }
 
     /**
-     * @brief CORE ABILITY: --
+     * @brief CORE ABILITY: Creates an electric discharge in the ground that affects all entities arround.
      * @param player Player that uses the ability.
-     * @todo change the whole ability, I don't like it.
      * @author RedRiotTank.
      */
-    public void discharge(Player player){
+    public void electricGround(Player player){
+        player.getWorld().playSound(player.getLocation(),"discharge",1,1);
+        electricGroundAnimation(player);
 
-        final int Maximum = 3;
-        int index = 0;
+        List<Entity> entities  = player.getNearbyEntities(10,10,10);
 
-        List<Entity> entityList = player.getNearbyEntities(15,10,15);
+        for(Entity ent : entities){
+            if(ent instanceof LivingEntity){
+                ((LivingEntity)ent).addPotionEffect(new PotionEffect(PotionEffectType.SLOW,10,10));
+                new BukkitRunnable(){
+                    World world = ent.getWorld();
+                    int ticks = 0;
+                    @Override
+                    public void run() {
+                        ((LivingEntity) ent).damage(0.5);
+                        world.spawnParticle(Particle.ELECTRIC_SPARK,ent.getLocation(), 20, 0.5, 0.5, 0.5, 0.1);
+                        if(ticks == 5) this.cancel();
+                        ticks++;
 
-        List<LivingEntity> Players = new ArrayList<>();
-        List<LivingEntity> livingEntities = new ArrayList<>();
-
-        for(Entity ent : entityList){
-            if(ent instanceof Player)
-                Players.add((LivingEntity) ent);
-            else if(ent instanceof LivingEntity)
-                livingEntities.add((LivingEntity) ent);
-        }
-
-        for(int i=0; i<Players.size() && index < Maximum; i++){
-            sendStrike(Players.get(i));
-            index++;
-        }
-
-        for(int i=0; i<livingEntities.size() && index < Maximum; i++){
-            sendStrike(livingEntities.get(i));
-            index++;
-        }
-    }
-
-    public void sendStrike(LivingEntity ent){
-        Location location = ent.getLocation();
-        World world = ent.getWorld();
-
-
-        world.playSound(ent.getLocation(),"discharge",1,1);
-        new BukkitRunnable(){
-            double y = 5;
-
-            @Override
-            public void run() {
-
-                for (double i = 0; i < 2*PI; i += 0.05) {
-                    double x = Math.cos(i);
-                    double z = Math.sin(i);
-
-                    for(double radius = 0.6; radius < 1.4; radius+=0.2){
-                        location.add(x*radius, y, z*radius);
-
-                        //Note: with a loop doesn't work.
-                        location.getWorld().spawnParticle(Particle.ELECTRIC_SPARK, location.add(0,0.8,0), 0,0,0,0);
-                        location.getWorld().spawnParticle(Particle.ELECTRIC_SPARK, location.add(0,0.6,0), 0,0,0,0);
-                        location.getWorld().spawnParticle(Particle.ELECTRIC_SPARK, location.add(0,0.4,0), 0,0,0,0);
-                        location.getWorld().spawnParticle(Particle.ELECTRIC_SPARK, location.add(0,0.2,0), 0,0,0,0);
-                        location.getWorld().spawnParticle(Particle.ELECTRIC_SPARK, location, 0,0,0,0);
-                        location.getWorld().spawnParticle(Particle.ELECTRIC_SPARK, location.add(0,-0.2,0), 0,0,0,0);
-                        location.getWorld().spawnParticle(Particle.ELECTRIC_SPARK, location.add(0,-0.4,0), 0,0,0,0);
-                        location.getWorld().spawnParticle(Particle.ELECTRIC_SPARK, location.add(0,-0.6,0), 0,0,0,0);
-                        location.getWorld().spawnParticle(Particle.ELECTRIC_SPARK, location.add(0,-0.8,0), 0,0,0,0);
-
-                        if(location.getBlock().getType() != Material.AIR)  location.getBlock().setType(Material.AIR);
-
-                        ent.damage(0.5);
-
-                        location.subtract(x*radius, y, z*radius);
                     }
+                }.runTaskTimer(plugin,0,2);
 
-                }
-                y-=0.5;
 
-                if(y==-3) this.cancel();
             }
-        }.runTaskTimer(plugin,0,1);
+        }
 
     }
 
+    /**
+     * @brief ANIMATION: spawns electric sparks particles randombly in the ground progressively over a larger area.
+     * @param player Player that uses the ability.
+     * @author RedRiotTank.
+     */
+    public void electricGroundAnimation(Player player){
+
+    new BukkitRunnable(){
+        World world = player.getWorld();
+        double extension = 1;
+        double density = 20;
+
+        @Override
+        public void run() {
+
+            for(double i=0; i < density; i++){
+                double x = generarNumeroAleatorio(player.getLocation().getX() - extension, player.getLocation().getX() + extension);
+                double z = generarNumeroAleatorio(player.getLocation().getZ() - extension, player.getLocation().getZ() + extension);
+                double y = auxBiblio.searchGround(x,z,player.getLocation().getY(),world) + 0.2;
+
+                Location particle = new Location(world,x,y,z);
+                world.spawnParticle(Particle.ELECTRIC_SPARK,particle,0,0,0,0);
+            }
+            extension++;
+            density*=1.5;
+
+            if(extension == 10) this.cancel();
+
+        }
+        public double generarNumeroAleatorio(double minimo, double maximo) {
+            return Math.random() * (maximo - minimo) + minimo;
+        }
+    }.runTaskTimer(plugin,0,1);
+
+    }
 }
