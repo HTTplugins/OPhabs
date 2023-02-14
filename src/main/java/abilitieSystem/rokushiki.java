@@ -598,6 +598,98 @@ public class rokushiki extends abilities {
         }
     }
 
+    /**
+     * @brief Method that summons particles with a horizontal slash form to the rankyaku skill.
+     * @param loc Location to spawn the particles.
+     * @param direction Direction of the slash.
+     * @param perpendicular Perpendicular direction of the slash.
+     * @author Vaelico786.
+     */
+    public void rankyakuParticles(Location loc, Vector direction, Vector perpendicular){
+        loc.getWorld().spawnParticle(Particle.CLOUD, loc.clone().add(perpendicular), 10, perpendicular.getX(), perpendicular.getY(), perpendicular.getZ(), 0);
+        loc.getWorld().spawnParticle(Particle.CLOUD, loc.clone().add(perpendicular.clone().multiply(-1)), 10, perpendicular.getX(), perpendicular.getY(), perpendicular.getZ(), 0);
+        loc.getWorld().spawnParticle(Particle.CLOUD, loc.clone().add(direction.clone().multiply(0.2)), 10, perpendicular.getX(), perpendicular.getY(), perpendicular.getZ(), 0);
+    }
+
+    /**
+     * @brief Skill action rankyaku
+     * @author Vaelico786.
+     */
+    private void rankyaku(){
+        if(activeRankyaku){
+            user.getPlayer().sendMessage("§a§lRankyaku§r§a");
+
+            new BukkitRunnable() {
+                Vector direction = user.getPlayer().getEyeLocation().getDirection().normalize().multiply(2);
+                Location current = user.getPlayer().getEyeLocation().add(direction);
+
+                boolean horizontal = user.getPlayer().getLocation().add(0, -1, 0).getBlock().getType() != Material.AIR, first = true, sentinel = true;
+                Vector perpendicular;
+
+                @Override
+                public void run() {
+                    if(first){
+                        if(horizontal)
+                            perpendicular = new Vector(-direction.getZ(), direction.getY(), direction.getX());
+                        else
+                            perpendicular = new Vector(direction.getX(), -direction.getZ(), direction.getY());
+                        first = false;
+                    }
+
+                    Collection<Entity> entities = current.getWorld().getNearbyEntities(current, 1, 1, 1);
+                    entities.addAll(current.getWorld().getNearbyEntities(current.clone().add(perpendicular), 1, 1, 1));
+                    entities.addAll(current.getWorld().getNearbyEntities(current.clone().add(perpendicular.clone().multiply(-1)), 1, 1, 1));
+                    if( current.distance(user.getPlayer().getLocation()) <= 12  && (entities.contains(user.getPlayer()) || entities.isEmpty()) && sentinel){
+                        if( current.getBlock().getType() != Material.AIR || current.clone().add(perpendicular).getBlock().getType() != Material.AIR || current.clone().add(perpendicular.clone().multiply(-1)).getBlock().getType() != Material.AIR ){
+                            if(current.getBlock().getType() != Material.AIR){
+                                if(current.getBlock().getType().getHardness() > Material.ACACIA_LOG.getHardness())
+                                    sentinel = false;
+                                else
+                                    current.getBlock().breakNaturally();
+                            }
+
+                            if(current.clone().add(perpendicular).getBlock().getType() != Material.AIR){
+                                if(current.clone().add(perpendicular).getBlock().getType().getHardness() > Material.ACACIA_LOG.getHardness())
+                                    sentinel = false;
+                                else
+                                    current.clone().add(perpendicular).getBlock().breakNaturally();
+                            }
+
+                            if(current.clone().add(perpendicular.clone().multiply(-1)).getBlock().getType() != Material.AIR){
+                                if(current.clone().add(perpendicular.clone().multiply(-1)).getBlock().getType().getHardness() > Material.ACACIA_LOG.getHardness())
+                                    sentinel = false;
+                                else
+                                    current.clone().add(perpendicular.clone().multiply(-1)).getBlock().breakNaturally();
+                            }
+                        }
+                        rankyakuParticles(current, direction, perpendicular);
+                        current.add(direction);
+                    }else{
+                        sentinel = false;
+                    }
+                    if(!sentinel){
+                        for(Entity e: entities){
+                            if(e instanceof LivingEntity && e != user.getPlayer()){
+                                ((LivingEntity)e).damage(5+lRankyaku/2);
+                            }
+                        }
+                        
+                        this.cancel();
+                    }
+                }
+            }.runTaskTimer(plugin, 0, 1);
+
+            activeRankyaku = false;
+            //runnable reactive on 7.5 seconds
+            new BukkitRunnable() {
+                @Override
+                public void run() {
+                    activeRankyaku = true;
+                }
+            }.runTaskLater(plugin, 150);
+        }
+    }
+
 
     /**
     * @brief Event listener that activates when the user deals damage.
@@ -681,7 +773,14 @@ public class rokushiki extends abilities {
                         }
                     }
                 }
+            }else{
+                if(event.getPlayer().getInventory().getItemInMainHand().getType() == Material.AIR){
+                    if(lRankyaku>=1 && user.getHakiLevel()>=1){
+                        rankyaku();
+                    }
+                }
             }
+            
         }
     }
 
