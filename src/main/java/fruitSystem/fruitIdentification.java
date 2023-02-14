@@ -16,7 +16,9 @@ public class fruitIdentification {
             fruitItemNameGoru = "goru goru no mi",
             fruitItemNameInuOkuchi = "inu inu okuchi no makami",
             fruitItemNameRyuAllosaurs = "ryu ryu allosaurs no mi",
-            fruitItemNameOpe = "ope ope no mi";
+            fruitItemNameOpe = "ope ope no mi",
+            fruitItemNameZushi = "zushi zushi no mi",
+            fruitItemNameSuke = "Suke suke no mi";
 
 
     public final static String
@@ -31,7 +33,9 @@ public class fruitIdentification {
             fruitCommandNameGoru = "goru_goru",
             fruitCommandNameInuOkuchi = "inu_inu_okuchi",
             fruitCommandNameRyuAllosaurs = "ryu_ryu_allosaurs",
-            fruitCommandNameOpe = "ope_ope";
+            fruitCommandNameOpe = "ope_ope",
+            fruitCommandNameZushi = "zushi_zushi",
+            fruitCommandNameSuke = "suke_suke";
 
     public static String getItemName(String fruitCommandName){
         switch (fruitCommandName){
@@ -59,6 +63,10 @@ public class fruitIdentification {
                 return fruitItemNameRyuAllosaurs;
             case fruitCommandNameOpe:
                 return fruitItemNameOpe;
+            case fruitCommandNameZushi:
+                return fruitItemNameZushi;
+            case fruitCommandNameSuke:
+                return fruitItemNameSuke;
             default:
                 return null;
         }
@@ -90,6 +98,10 @@ public class fruitIdentification {
                 return fruitCommandNameRyuAllosaurs;
             case fruitItemNameOpe:
                 return fruitCommandNameOpe;
+            case fruitItemNameZushi:
+                return fruitCommandNameZushi;
+            case fruitItemNameSuke:
+                return fruitCommandNameSuke;
             default:
                 return null;
         }
@@ -120,6 +132,10 @@ public class fruitIdentification {
             case fruitItemNameRyuAllosaurs:
                 return true;
             case fruitItemNameOpe:
+                return true;
+            case fruitItemNameZushi:
+                return true;
+            case fruitItemNameSuke:
                 return true;
             default:
                 return false;

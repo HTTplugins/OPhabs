@@ -6,6 +6,10 @@ import org.bukkit.inventory.ItemStack;
 
 import java.util.Objects;
 
+/**
+ * @brief Cast identification class. We initialize here caster materials and caster item names.
+ * @author RedRiotTank, MiixZ, Vaelico786.
+ */
 public class castIdentification {
     public static Material castMaterialYami = Material.BLACK_DYE,
             castMaterialMera = Material.BLAZE_ROD,
@@ -18,7 +22,9 @@ public class castIdentification {
             castMaterialGoru = Material.GOLD_INGOT,
             castMaterialInuOkuchi = Material.YELLOW_DYE,
             castMaterialRyuAllosaurs = Material.YELLOW_DYE,
-            castMaterialOpe = Material.BRICK;
+            castMaterialOpe = Material.BRICK,
+            castMaterialZushi = Material.ARROW,
+            castMaterialSuke = Material.LEATHER;
 
     public static String castItemNameYami = "Yami Yami caster",
             castItemNameMera = "Mera Mera caster",
@@ -31,8 +37,17 @@ public class castIdentification {
             castItemNameGoru = "Goru Goru caster",
             castItemNameInuOkuchi = "Inu Inu Okuchi caster",
             castItemNameRyuAllosaurs = "Ryu Ryu Allosaurs caster",
-            castItemNameOpe = "Ope Ope caster";
+            castItemNameOpe = "Ope Ope caster",
+            castItemNameZushi = "Zushi Zushi caster",
+            castItemNameSuke = "Suke Suke caster";
 
+    /**
+     * @brief Checks if an item is a caster.
+     * @param item Item to check.
+     * @param player Player that haves the caster.
+     * @return true if the item is a caster, false if not.
+     * @author RedRiotTank, MiixZ, Vaelico786.
+     */
     public static boolean itemIsCaster(ItemStack item , Player player) {
 
         if(player == null || !player.isOnline())
@@ -56,7 +71,9 @@ public class castIdentification {
                 || (itemName.equals(castIdentification.castItemNameGoru) && itemMaterial.equals(castIdentification.castMaterialGoru))
                 || (itemName.equals(castIdentification.castItemNameInuOkuchi) && itemMaterial.equals(castIdentification.castMaterialInuOkuchi))
                 || (itemName.equals(castIdentification.castItemNameRyuAllosaurs) && itemMaterial.equals(castIdentification.castMaterialRyuAllosaurs))
-                ||(itemName.equals(castIdentification.castItemNameOpe) && itemMaterial.equals(castIdentification.castMaterialOpe))){
+                ||(itemName.equals(castIdentification.castItemNameOpe) && itemMaterial.equals(castIdentification.castMaterialOpe))
+                || (itemName.equals(castIdentification.castItemNameZushi) && itemMaterial.equals(castIdentification.castMaterialZushi))
+                || (itemName.equals(castIdentification.castItemNameSuke) && itemMaterial.equals(castIdentification.castMaterialSuke))){
             return true;
         }
         else

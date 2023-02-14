@@ -23,5 +23,40 @@
 		"sounds": [
 			"fastsoru"
 		]
+	},
+	"rockmove": {
+		"sounds": [
+			"rockmove"
+		]
+	},
+	"heavygravity": {
+		"sounds": [
+			"heavygravity"
+		]
+	},
+	"magneticfield": {
+		"sounds": [
+			"magneticfield"
+		]
+	},
+	"flymeteor": {
+		"sounds": [
+			"flymeteor"
+		]
+	},
+	"shambless": {
+		"sounds": [
+			"shambless"
+		]
+	},
+	"appear": {
+		"sounds": [
+			"appear"
+		]
+	},
+	"vanish": {
+		"sounds": [
+			"vanish"
+		]
 	}
 }

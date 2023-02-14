@@ -16,11 +16,22 @@ import org.bukkit.entity.Player;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * @brief OPhabs main command.
+ * @author RedRiotTank, Vaelico786.
+ */
 public class oph implements CommandExecutor, TabCompleter {
     private  final OPhabs plugin;
     public ArrayList<String> fruitCommands = new ArrayList<String>();
     public hakiAssociation haki;
 
+    /**
+     * @brief Main Command constructor. Initialization of devil fruits and haki.
+     * @param plugin OPhabs plugin.
+     * @param abilitiesList Devil fruit abilities list.
+     * @param haki Haki Association.
+     * @author Vaelico786.
+     */
     public oph(OPhabs plugin, ArrayList<df> abilitiesList, hakiAssociation haki){
 
         this.plugin = plugin;
@@ -30,6 +41,14 @@ public class oph implements CommandExecutor, TabCompleter {
         this.haki = haki;
     }
 
+    /**
+     * @brief Command execution.
+     * @param sender Sender of the command. (player, server,...)
+     * @param command command sent.
+     * @param label set label.
+     * @param args arguments of the command.
+     * @author RedRiotTank, Vaelico786.
+     */
     @Override
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args){
         Player player = (Player) sender;
@@ -90,27 +109,16 @@ public class oph implements CommandExecutor, TabCompleter {
         return false;
 
     }
-    public void printHelp(Player player){
-        player.sendMessage("Unknown command");
-    }
-    public void printUnkownPlayer(Player player){
-        player.sendMessage("Unkown player");
-    }
-
-    public Player getPlayerifexists(String givenPlayerName) {
-        Player existingPlayer = null;
-        for (Player player : Bukkit.getServer().getOnlinePlayers() ) {
-            if (player.getName().equals(givenPlayerName)) {
-                existingPlayer = player;
-                break;
-            }
-            else
-                existingPlayer = null;
-        }
-        return existingPlayer;
-    }
 
 
+    /**
+     * @brief Command autocomplete
+     * @param sender Sender of the command. (player, server,...)
+     * @param command command sent.
+     * @param alias alias of the command
+     * @param args arguments of the command.
+     * @author Vaelico786.
+     */
     @Override
     public List<String> onTabComplete(CommandSender sender, Command command, String alias, String[] args) {
         List<String> list = new ArrayList<>();

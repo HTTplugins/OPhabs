@@ -2,11 +2,6 @@ package abilitieSystem;
 
 import org.bukkit.entity.Player;
 import fruitSystem.devilFruit;
-import castSystem.coolDown;
-import abilitieSystem.abilities;
-import abilitieSystem.df;
-import abilitieSystem.haki;
-
 
 import org.bukkit.Bukkit;
 import org.bukkit.event.entity.*;

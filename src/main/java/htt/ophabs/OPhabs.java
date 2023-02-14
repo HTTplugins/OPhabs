@@ -17,11 +17,20 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * @brief Main class of OPhabs plugin.
+ * @author RedRiotTank, Vaelico786.
+ */
 public final class OPhabs extends JavaPlugin {
     public Map<String, abilityUser> users = new HashMap<>();
 
+    /**
+     * @brief Set up of the plugin (start configuration). Literally the main.
+     * @author RedRiotTank, Vaelico786.
+     */
     @Override
     public void onEnable(){
+
 
         //---------------
         //Files
@@ -29,7 +38,6 @@ public final class OPhabs extends JavaPlugin {
         getConfig().options().copyDefaults();
         saveDefaultConfig();
 
-       
         //--------------
         //abilitieSystem
         ArrayList<df> abilitiesList = new ArrayList<>();
@@ -46,6 +54,8 @@ public final class OPhabs extends JavaPlugin {
         abilitiesList.add(new inu_inu_okuchi(this));
         abilitiesList.add(new ryu_ryu_allosaurs(this));
         abilitiesList.add(new ope_ope(this));
+        abilitiesList.add(new zushi_zushi(this));
+        abilitiesList.add(new suke_suke(this));
 
         //--------------
         //FruitSystem
@@ -66,7 +76,7 @@ public final class OPhabs extends JavaPlugin {
         //CasterSystem
         coolDown cooldown = new coolDown(this, users);
 
-        getServer().getPluginManager().registerEvents(new caster(cooldown,users), this);
+        getServer().getPluginManager().registerEvents(new caster(cooldown,users,this), this);
         getServer().getPluginManager().registerEvents(new noDropCaster(), this);
 
         //--------------
@@ -85,6 +95,10 @@ public final class OPhabs extends JavaPlugin {
 
     }
 
+    /**
+     * @brief settings configuration on shutdown.
+     * @author RedRiotTank, Vaelico786.
+     */
     @Override
     public void onDisable() {
 
@@ -98,6 +112,10 @@ public final class OPhabs extends JavaPlugin {
         Bukkit.getConsoleSender().sendMessage(ChatColor.DARK_RED + "" + ChatColor.BOLD + "HTTrolplay closed correctly.");
     }
 
+    /**
+     * @brief Registration of the commands.
+     * @author RedRiotTank, Vaelico786.
+     */
     public void registerCommands(ArrayList<df> abilitiesList, hakiAssociation haki){
         Objects.requireNonNull(this.getCommand("oph")).setExecutor(new oph(this, abilitiesList, haki));
         Objects.requireNonNull(this.getCommand("oph")).setTabCompleter(new oph(this, abilitiesList, haki));

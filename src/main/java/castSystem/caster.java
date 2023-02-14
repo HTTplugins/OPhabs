@@ -1,5 +1,8 @@
 package castSystem;
 
+
+import htt.ophabs.OPhabs;
+import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -9,6 +12,7 @@ import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.entity.*;
 import org.bukkit.event.player.*;
 import abilitieSystem.*;
+import org.bukkit.potion.PotionEffectType;
 import skin.skinsChanger;
 
 import org.bukkit.event.inventory.InventoryClickEvent;
@@ -20,9 +24,11 @@ import java.util.Map;
 
 public class caster implements Listener {
     private Map<String, abilityUser> users = new HashMap<>();
+    private OPhabs plugin;
 
-    public caster(coolDown cooldown, Map<String, abilityUser> users){
+    public caster(coolDown cooldown, Map<String, abilityUser> users, OPhabs plugin){
         this.users = users;
+        this.plugin = plugin;
     }
 
     @EventHandler
@@ -144,4 +150,65 @@ public class caster implements Listener {
             user.onItemDamage(event);
         }
     }
+
+    @EventHandler(ignoreCancelled = true)
+    public void onEntityToggleGlide(EntityToggleGlideEvent event) {
+        zushi_zushi.onEntityToggleGlide(event);
+    }
+
+    @EventHandler(ignoreCancelled = true)
+    public void onPlayerMove(PlayerMoveEvent event) {
+        zushi_zushi.onPlayerMove(event);
+
+    }
+
+    @EventHandler(ignoreCancelled = true)
+    public void onEntityDamageByEntity(EntityDamageByEntityEvent event) {
+        ope_ope.onEntityDamageByEntity(event);
+
+        String sukeUserName;
+        Player sukeUser;
+
+        if(suke_suke.exploration){
+
+            sukeUserName = plugin.getConfig().getString("FruitAssociations.suke_suke");
+
+            if(event.getDamager().getName().equals(sukeUserName)){
+                sukeUser = Bukkit.getPlayer(sukeUserName);
+                suke_suke.cancelStopInvisibleTask = true;
+                sukeUser.removePotionEffect(PotionEffectType.INVISIBILITY);
+                ((suke_suke)users.get(sukeUserName).getDFAbilities()).finishInvisibility(sukeUser);
+            }
+        }
+    }
+
+    @EventHandler(ignoreCancelled = true)
+    public void onPlayerJoin(PlayerJoinEvent event) {
+        String sukeUserName;
+        Player sukeUser, other = event.getPlayer();
+
+        sukeUserName = plugin.getConfig().getString("FruitAssociations.suke_suke");
+
+        if(!sukeUserName.equals("none")) {
+
+            sukeUser = Bukkit.getPlayer(sukeUserName);
+
+            if(suke_suke.getInvisible())
+                other.hidePlayer(plugin, sukeUser);
+            else if(sukeUser != null)
+                if(sukeUser.isOnline())
+                    other.showPlayer(plugin, sukeUser);
+
+
+
+            if(event.getPlayer().getName().equals(sukeUserName)){
+                sukeUser = Bukkit.getPlayer(sukeUserName);
+                sukeUser.removePotionEffect(PotionEffectType.INVISIBILITY);
+            }
+
+
+        }
+    }
+
+
 }
