@@ -13,6 +13,7 @@ import org.bukkit.event.entity.*;
 import org.bukkit.event.player.*;
 import abilitieSystem.*;
 import org.bukkit.potion.PotionEffectType;
+import org.bukkit.scheduler.BukkitRunnable;
 import skin.skinsChanger;
 
 import org.bukkit.event.inventory.InventoryClickEvent;
@@ -136,12 +137,19 @@ public class caster implements Listener {
 
     @EventHandler
     public void onPlayerRespawn(PlayerRespawnEvent event){
-        skinsChanger.resetSkin(event.getPlayer());
+        new BukkitRunnable() {
+            @Override
+            public void run() {
+                skinsChanger.resetSkin(event.getPlayer());
+            }
+        }.runTaskLater(plugin, 5);
+
         if(users.containsKey(event.getPlayer().getName())) {
             abilityUser user = users.get(event.getPlayer().getName());
             user.onPlayerRespawn(event);
         }
     }
+    
 
     @EventHandler
     public void onItemDamage(PlayerItemDamageEvent event){

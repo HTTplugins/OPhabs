@@ -217,18 +217,15 @@ public class neko_neko_reoparudo extends zoan {
                 mundo.spawnParticle(Particle.CRIT_MAGIC, loc.clone().add(sin(i)*j, 0, cos(i)/2*j), 0, 0, 0, 0);
                 mundo.spawnParticle(Particle.CRIT_MAGIC, loc.clone().add(sin(-i)*j, 0, cos(i)/2*j), 0, 0, 0, 0);
                 mundo.spawnParticle(Particle.CRIT_MAGIC, loc.clone().add(sin(i)*j, 0, cos(-i)/2*j), 0, 0, 0, 0);
-                mundo.spawnParticle(Particle.CRIT_MAGIC, loc.clone().add(sin(-i)*j, 0, cos(-i)/2*j), 0, 0, 0, 0);
             }
     }
 
-    public Location climbWall() {
-        Player player = user.getPlayer();
-        Location loc = player.getLocation();
-        if(transformed && player.getEyeLocation().add(player.getLocation().getDirection()).getBlock().getType() != Material.AIR){
-            loc.getBlock().setType(Material.VINE);
-            player.setFallDistance(0);
+    public void climbWall(Player player) {
+        Location loc = player.getEyeLocation().add(player.getLocation().getDirection()); 
+        if(transformed && loc.getBlock().getType()!= Material.AIR){
+            Vector vector = new Vector(0, 0.5, 0);
+            player.setVelocity(vector);
         }
-        return loc;
     }
 
     public void onFall(EntityDamageEvent e) {
@@ -241,21 +238,19 @@ public class neko_neko_reoparudo extends zoan {
         Player player = e.getPlayer();
         if(player.getName() == user.getPlayer().getName()){
             new BukkitRunnable() {
-                Location loc =climbWall();
                 @Override
                 public void run() {
                 if (player.isSneaking()) {
-                    if(transformed && player.getEyeLocation().add(player.getLocation().getDirection()).getBlock().getType() != Material.AIR)
-                        loc = climbWall();
+                    climbWall(player);
                 }
                 else
                     cancelTask();
                 }
                 public void cancelTask() {
-                    loc.getBlock().breakNaturally();
                     Bukkit.getScheduler().cancelTask(this.getTaskId());
                 }
             }.runTaskTimer(plugin, 0, 3);
         }
     }
 }
+

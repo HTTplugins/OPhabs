@@ -119,8 +119,8 @@ public class haki extends abilities {
             upHealth();
             upArmor();
         }
-        plugin.getConfig().set("hakiPlayers."+user.getPlayer().getName()+".Level", level);
-        plugin.getConfig().set("hakiPlayers."+user.getPlayer().getName()+".Exp", exp);
+        plugin.getConfig().set("hakiPlayers."+user.getPlayerName()+".Level", level);
+        plugin.getConfig().set("hakiPlayers."+user.getPlayerName()+".Exp", exp);
     }
 
     /**
@@ -238,8 +238,8 @@ public class haki extends abilities {
      * @author Vaelico786.
      */
     public void onPlayerRespawn(PlayerRespawnEvent event){
-        user.getPlayer().setMaxHealth(health);
-        user.getPlayer().getAttribute(Attribute.GENERIC_ARMOR).setBaseValue(armor);
+        // user.getPlayer().setMaxHealth(health);
+        // user.getPlayer().getAttribute(Attribute.GENERIC_ARMOR).setBaseValue(armor);
     }
 
 }
