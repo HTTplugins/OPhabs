@@ -1,0 +1,45 @@
+{
+	"credit": "Made with Blockbench",
+	"texture_size": [128, 128],
+	"textures": {
+		"0": "item/yamifruit",
+		"particle": "item/yamifruit"
+	},
+	"elements": [
+		{
+			"from": [0, 0, 5],
+			"to": [16, 16, 5],
+			"faces": {
+				"north": {"uv": [16, 0, 0, 16], "texture": "#0"},
+				"east": {"uv": [0, 0, 0.25, 2], "texture": "#0"},
+				"south": {"uv": [0, 0, 16, 16], "texture": "#0"},
+				"west": {"uv": [0, 0, 0.25, 2], "texture": "#0"},
+				"up": {"uv": [0, 0, 2, 0.25], "texture": "#0"},
+				"down": {"uv": [0, 0, 2, 0.25], "texture": "#0"}
+			}
+		}
+	],
+	"gui_light": "front",
+	"display": {
+		"thirdperson_righthand": {
+			"translation": [0, 3.25, 2.25],
+			"scale": [0.9, 0.9, 0.9]
+		},
+		"thirdperson_lefthand": {
+			"translation": [0, 1.75, 2.25],
+			"scale": [0.9, 0.9, 0.9]
+		},
+		"firstperson_righthand": {
+			"rotation": [0, -82, 0]
+		},
+		"firstperson_lefthand": {
+			"rotation": [0, -42, 0]
+		},
+		"ground": {
+			"translation": [0, 4.25, 3]
+		},
+		"fixed": {
+			"translation": [-1, 0, 2.25]
+		}
+	}
+}
