@@ -520,7 +520,7 @@ public class ishi_ishi extends paramecia {
     }
 
     public void onInventoryClick(InventoryClickEvent event){
-        if(opened){
+        if(opened && event.getView().getTitle().contains("Stone Creation")){
             Player player = (Player) event.getWhoClicked();
             ItemStack clicked = event.getCurrentItem();
             Inventory inventory = event.getInventory();
