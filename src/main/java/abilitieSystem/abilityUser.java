@@ -26,6 +26,8 @@ public class abilityUser {
     private devilFruit fruit;
     private abilities dfAbilities, hakiAbilities;
 
+    // *********************************************** CONSTRUCTORS *******************************************************
+
     /**
      * @brief abilityUser constructor.
      * @param playerName Player's name.
@@ -156,7 +158,8 @@ public class abilityUser {
     }
 
     /**
-     * @brief Gets all abilities' names of the current devil fruit.
+     * @brief Returns fruit abilities' name.
+     * @see df#getAbilitiesNames()
      * @author Vaelico786.
      */
     public ArrayList<String> getAbilitiesNames() {
