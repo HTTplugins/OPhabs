@@ -24,6 +24,8 @@ import org.bukkit.inventory.Inventory;
 
 import java.lang.Math;
 
+import static abilitieSystem.auxBiblio.isSolidBlock;
+
 public class ishi_ishi extends paramecia {
     final int radiusFloor = 3, radiusWall = 3;
     public static Particle.DustOptions piedra = new Particle.DustOptions(Color.GRAY,1.0F);
@@ -101,7 +103,6 @@ public class ishi_ishi extends paramecia {
         abilitiesNames.set(0, nameAbility1 + " (" + storaged + ")");
     }
     public void ability3() {
-
         if(abilitiesCD.get(2) == 0){
             controlStone(user.getPlayer());
         }
@@ -122,39 +123,6 @@ public class ishi_ishi extends paramecia {
             isStone=true;
         }
         return isStone;
-    }
-
-    public Boolean isSolidBlock(Block block) {
-        return !(block.getType().getHardness() <= Material.TORCH.getHardness() || block.getType() == Material.AIR || block.getType() == Material.WATER || block.getType() == Material.LAVA);
-    }
-
-    public void getSolidRelativeY(Location loc, int y) {
-       if(isSolidBlock(loc.getBlock()))
-            loc = getSolidRelativeUpper(loc, y);
-        else
-            loc = getSolidRelativeDown(loc.add(0,-1,0), y);
-    }
-
-    public Location getSolidRelativeUpper(Location loc, int y) {
-        Location loc2 = loc.clone().add(0,1,0);
-        if(!isSolidBlock(loc2.getBlock()))
-            return loc;
-        else
-            if(y > 0)
-                return getSolidRelativeUpper(loc.add(0, 1, 0), y-1);
-            else
-                return null;
-    }
-
-    public Location getSolidRelativeDown(Location loc, int y) {
-        if(isSolidBlock(loc.getBlock()))
-            return loc;
-        else {
-            if(y > 0)
-               return getSolidRelativeDown(loc.add(0, -1, 0), y-1);
-            else
-                return null;
-        } 
     }
 
     public void controlStone(Player player) {

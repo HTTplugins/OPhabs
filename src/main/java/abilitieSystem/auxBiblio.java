@@ -1,6 +1,8 @@
 package abilitieSystem;
 
 import org.bukkit.*;
+import org.bukkit.block.Block;
+import org.bukkit.block.Container;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
@@ -12,7 +14,6 @@ import static java.lang.Math.*;
 
 /**
  * Common class created to make easier the development of abilities.
- *
  * In this class we put multiples parameterized functions that we create for a class and that we think other could use in theirs.
  */
 public class auxBiblio {
@@ -165,5 +166,85 @@ public class auxBiblio {
 
             world.spawnParticle(particle,partLoc,0,0,0,0,dustOption);
         }
+    }
+
+    /**
+     * @brief Returns true if given block is solid (Not air, water, ...).
+     * @param block Given block.
+     * @author Vaelico786.
+     */
+    public static Boolean isSolidBlock(Block block) {
+        return !(block.getType().getHardness() <= Material.TORCH.getHardness() || block.getType() == Material.AIR ||
+                block.getType() == Material.WATER ||
+                block.getType() == Material.LAVA ||
+                block.getType() == Material.BEDROCK);
+    }
+
+    /**
+     * @brief Transform loc into location (above or down) where it would be a normal block. It means that loc is on a solid
+     * block, and it has air above him.
+     * @param loc Actual Location.
+     * @param y Actual 'y' we want to compare with.
+     * @see auxBiblio#getSolidRelativeUpper(Location, int)
+     * @see auxBiblio#getSolidRelativeDown(Location, int)
+     * @author Vaelico786.
+     */
+    public void getSolidRelativeY(Location loc, int y) {
+        if(isSolidBlock(loc.getBlock()))
+            loc = getSolidRelativeUpper(loc, y);
+        else
+            loc = getSolidRelativeDown(loc.add(0,-1,0), y);
+    }
+
+    /**
+     * @brief Returns the first location starting at loc where it has an air block above.
+     * @param loc Actual Location.
+     * @param y Actual 'y' we want to compare with.
+     * @author Vaelico786.
+     */
+    public Location getSolidRelativeUpper(Location loc, int y) {
+        Location loc2 = loc.clone().add(0,1,0);
+        if(!isSolidBlock(loc2.getBlock()))
+            return loc;
+        else
+        if(y > 0)
+            return getSolidRelativeUpper(loc.add(0, 1, 0), y-1);
+        else
+            return null;
+    }
+
+    /**
+     * @brief Returns the first location starting at loc where it has a solid block down.
+     * @param loc Actual Location.
+     * @param y Actual 'y' we want to compare with.
+     * @author Vaelico786.
+     */
+    public Location getSolidRelativeDown(Location loc, int y) {
+        if(isSolidBlock(loc.getBlock()))
+            return loc;
+        else {
+            if(y > 0)
+                return getSolidRelativeDown(loc.add(0, -1, 0), y-1);
+            else
+                return null;
+        }
+    }
+
+    /**
+     * @brief Returns the falling block created. Transform block given into an equal falling block.
+     * @param block Block we want to transform.
+     * @author Vaelico786.
+     */
+    public static Entity setFallingBlock(Location block) {
+        if (block.getBlock().getType() != Material.AIR && block.getBlock().getType() != Material.WATER && block.getBlock().getType() != Material.BEDROCK) {
+            if(block.getBlock().getState() instanceof Container){
+                block.getBlock().breakNaturally();
+                return null;
+            }
+            Material matFallingBlock = block.getBlock().getType();
+            block.getBlock().setType(Material.AIR);
+            return block.getWorld().spawnFallingBlock(block, matFallingBlock, (byte) 9);
+        }
+        return null;
     }
 }

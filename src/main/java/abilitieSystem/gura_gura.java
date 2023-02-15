@@ -3,7 +3,6 @@ package abilitieSystem;
 import htt.ophabs.OPhabs;
 import castSystem.castIdentification;
 import fruitSystem.fruitIdentification;
-
 import java.util.ArrayList;
 import java.util.Random;
 import org.bukkit.*;
@@ -15,8 +14,8 @@ import org.bukkit.potion.PotionEffectType;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.util.Vector;
-import org.bukkit.block.Block;
 import org.bukkit.block.Container;
+import static abilitieSystem.auxBiblio.*;
 
 public class gura_gura extends paramecia {
     final int waveDistance = 8, radiusFloor = 4, radiusWall = 3;
@@ -50,31 +49,31 @@ public class gura_gura extends paramecia {
         abilitiesCD.add(0);
     }
    
-    public void ability1(){
-        if(abilitiesCD.get(0) == 0){
+    public void ability1() {
+        if(abilitiesCD.get(0) == 0) {
             earthquake(user.getPlayer());
             abilitiesCD.set(0, 30);
         }
     }
-    public void ability2(){
-        if(abilitiesCD.get(1) == 0){
+    public void ability2() {
+        if(abilitiesCD.get(1) == 0) {
             createWave(user.getPlayer());
             abilitiesCD.set(1, 10);
         }
     }
 
-    public void ability3(){
-        if(abilitiesCD.get(2) == 0){
+    public void ability3() {
+        if(abilitiesCD.get(2) == 0) {
             handVibration(user.getPlayer());
             abilitiesCD.set(2, 10);
         }
     }
-    public void ability4(){
-        if(abilitiesCD.get(3) == 0){
-            if(numberOfWaves == 0){
-                new BukkitRunnable(){
+    public void ability4() {
+        if(abilitiesCD.get(3) == 0) {
+            if(numberOfWaves == 0) {
+                new BukkitRunnable() {
                     @Override
-                    public void run(){
+                    public void run() {
                         abilitiesCD.set(3, 30);
                         numberOfWaves = 0;
                     }
@@ -84,34 +83,35 @@ public class gura_gura extends paramecia {
         }
     }
 
-    public void handVibration(Player player){
-        player.addPotionEffect(new PotionEffect(PotionEffectType.INCREASE_DAMAGE, 100, 10, false, false));
-            //Particles following player hand
-            Location loc = player.getEyeLocation();
-            loc.add(player.getLocation().getDirection());
+    public void handVibration(Player player) {
+        player.addPotionEffect(new PotionEffect(PotionEffectType.INCREASE_DAMAGE, 100, 10, false,
+                false));
 
-            new BukkitRunnable() {
-                int i = 0;
-                @Override
-                public void run(){
-                    if(player.isDead() || i > 3){ 
-                        cancelTask();
-                    }
-                    Vector sideWayOffset = player.getLocation().getDirection().crossProduct(new Vector(0,1,0)).normalize().multiply(0.4);
-                    Vector downOffset = player.getLocation().getDirection().crossProduct(sideWayOffset).normalize().multiply(0.2);
-                    loc.getWorld().spawnParticle(Particle.SONIC_BOOM, player.getEyeLocation().add(player.getLocation().getDirection()).add(sideWayOffset).add(downOffset), 1, 0, 0, 0, 0);
-                    i++;
-                }
-                public void cancelTask(){
-                    Bukkit.getScheduler().cancelTask(this.getTaskId());
-                } 
-            }.runTaskTimer(plugin, 0, 20);
+        Location loc = player.getEyeLocation();
+        loc.add(player.getLocation().getDirection());
+
+        new BukkitRunnable() {
+            int i = 0;
+            @Override
+            public void run(){
+                if(player.isDead() || i > 3)
+                    cancelTask();
+
+                Vector sideWayOffset = player.getLocation().getDirection().crossProduct(new Vector(0,1,0)).normalize().multiply(0.4);
+                Vector downOffset = player.getLocation().getDirection().crossProduct(sideWayOffset).normalize().multiply(0.2);
+
+                loc.getWorld().spawnParticle(Particle.SONIC_BOOM,
+                        player.getEyeLocation().add(player.getLocation().getDirection()).add(sideWayOffset).add(downOffset),
+                        1, 0, 0, 0, 0);
+
+                i++;
+            }
+            public void cancelTask(){
+                Bukkit.getScheduler().cancelTask(this.getTaskId());
+            }
+        }.runTaskTimer(plugin, 0, 20);
     }
 
-
-    public Boolean isSolidBlock(Block block){
-        return !(block.getType().getHardness() <= Material.TORCH.getHardness() || block.getType() == Material.AIR || block.getType() == Material.WATER || block.getType() == Material.LAVA || block.getType() == Material.BEDROCK);
-    }
 
     public void getSolidRelativeY(Location loc, int y){
        if(isSolidBlock(loc.getBlock()))
@@ -145,120 +145,31 @@ public class gura_gura extends paramecia {
     public void expansionWaveBlocks(Player player){
         int deep = 3;
         Location loc = player.getLocation().add(0, -1, 0);
-        if(loc.getBlock().getType() != AIR && numberOfWaves < numberOfWavesMax){
+        if(loc.getBlock().getType() != AIR && numberOfWaves < numberOfWavesMax) {
             numberOfWaves++;
             new BukkitRunnable() {
                 int i = 1;
                 @Override
                 public void run() {
-                    Location l= null;
-                    for(int j=0; j<(i*2)+1; j++){
-                        l = loc.clone().add(j-i, 0, -i);
-                        l.getWorld().getNearbyEntities(l, 1, deep*2, 1).forEach((entity) -> {
-                            if(entity instanceof LivingEntity){
-                                if(entity.getName() != player.getName())
-                                    ((LivingEntity) entity).damage(6);
-                            }
-                        });
-                        getSolidRelativeY(l,deep);
-                        if( l != null && isSolidBlock(l.getBlock())){
-                            l.getWorld().spawnParticle(Particle.BLOCK_CRACK, l, 10, 0, 1, 0, 0, l.getBlock().getBlockData());
-                            setFallingBlock(l).setVelocity(new Vector(0, 0.15, 0));
-                        }
+                    for(int j=0; j<(i*2)+1; j++) {
+                        ExpansionWaveFallingBlock(loc.clone().add(j-i, 0, -i), deep);
 
-                        l = loc.clone().add(-i, 0, j-i);
-                        l.getWorld().getNearbyEntities(l, 1, 4, 1).forEach((entity) -> {
-                            if(entity instanceof LivingEntity){
-                                if(entity.getName() != player.getName())
-                                    ((LivingEntity) entity).damage(6);
-                            }
-                        });
-                        getSolidRelativeY(l,deep);
-                        if( l != null && isSolidBlock(l.getBlock())){
-                            l.getWorld().spawnParticle(Particle.BLOCK_CRACK, l, 10, 0, 1, 0, 0, l.getBlock().getBlockData());
-                            setFallingBlock(l).setVelocity(new Vector(0, 0.15, 0));
-                        }
+                        ExpansionWaveFallingBlock(loc.clone().add(-i, 0, j-i), deep);
 
-                        l = loc.clone().add(j-i, 0, i);
-                         l.getWorld().getNearbyEntities(l, 1, 4, 1).forEach((entity) -> {
-                            if(entity instanceof LivingEntity){
-                                if(entity.getName() != player.getName())
-                                    ((LivingEntity) entity).damage(6);
-                            }
-                        });
-                        getSolidRelativeY(l,deep);
-                        if( l != null && isSolidBlock(l.getBlock())){
-                            l.getWorld().spawnParticle(Particle.BLOCK_CRACK, l, 10, 0, 1, 0, 0, l.getBlock().getBlockData());
-                            setFallingBlock(l).setVelocity(new Vector(0, 0.15, 0));
-                        }
+                        ExpansionWaveFallingBlock(loc.clone().add(j-i, 0, i), deep);
 
-                        l = loc.clone().add(i, 0, j-i);
-                        l.getWorld().getNearbyEntities(l, 1, 4, 1).forEach((entity) -> {
-                            if(entity instanceof LivingEntity){
-                                if(entity.getName() != player.getName())
-                                   ((LivingEntity) entity).damage(6);
-                            }
-                        });
-                        getSolidRelativeY(l,deep);
-                        if( l != null && isSolidBlock(l.getBlock())){
-                            l.getWorld().spawnParticle(Particle.BLOCK_CRACK, l, 10, 0, 1, 0, 0, l.getBlock().getBlockData());
-                            setFallingBlock(l).setVelocity(new Vector(0, 0.15, 0));
-                        }
+                        ExpansionWaveFallingBlock(loc.clone().add(i, 0, j-i), deep);
                     }
 
-                    if(i >= waveDistance){
-                        for(int j=0; j<((i+1)*2)+1; j++){
-                            l = loc.clone().add(j-i, 0, -i);
-                            getSolidRelativeY(l,deep);
-                            if( l != null && isSolidBlock(l.getBlock())){
-                                l.getWorld().spawnParticle(Particle.BLOCK_CRACK, l, 10, 0, 1, 0, 0, l.getBlock().getBlockData());
-                                setFallingBlock(loc.clone().add(j-i,0,-i));
-                                l.getWorld().getNearbyEntities(l, 1, 4, 1).forEach((entity) -> {
-                                   entity.setVelocity(new Vector(0, 2, 0));
-                                    if(entity instanceof LivingEntity){
-                                        ((LivingEntity) entity).damage(30);
-                                    }
-                                });
-                            }
+                    if(i >= waveDistance) {
+                        for(int j=0; j<((i+1)*2)+1; j++) {
+                            ExpansionWaveDamage(loc.clone().add(j-i, 0, -i), loc.clone(), deep, i, j);
 
-                            l = loc.clone().add(-i, 0, j-i);
-                            getSolidRelativeY(l,deep);
-                            if( l != null && isSolidBlock(l.getBlock())){
-                                l.getWorld().spawnParticle(Particle.BLOCK_CRACK, l, 10, 0, 1, 0, 0, l.getBlock().getBlockData());
-                                setFallingBlock(loc.clone().add(-i,0,j-i));
-                                l.getWorld().getNearbyEntities(l, 1, 4, 1).forEach((entity) -> {
-                                    entity.setVelocity(new Vector(0, 2, 0));
-                                    if(entity instanceof LivingEntity){
-                                        ((LivingEntity) entity).damage(30);
-                                    }
-                                });
-                            }
+                            ExpansionWaveDamage(loc.clone().add(j-i, 0, -i), loc.clone(), deep, i, j);
 
-                            l = loc.clone().add(j-i, 0, i);
-                            getSolidRelativeY(l,deep);
-                            if( l != null && isSolidBlock(l.getBlock())){
-                                l.getWorld().spawnParticle(Particle.BLOCK_CRACK, l, 10, 0, 1, 0, 0, l.getBlock().getBlockData());
-                                setFallingBlock(loc.clone().add(j-i,0,i));
-                                l.getWorld().getNearbyEntities(l, 1, 4, 1).forEach((entity) -> {
-                                    entity.setVelocity(new Vector(0, 2, 0));
-                                    if(entity instanceof LivingEntity){
-                                        ((LivingEntity) entity).damage(30);
-                                    }
-                                });
-                            }
+                            ExpansionWaveDamage(loc.clone().add(j-i, 0, -i), loc.clone(), deep, i, j);
 
-                            l = loc.clone().add(i, 0, j-i);
-                            getSolidRelativeY(l,deep);
-                            if( l != null && isSolidBlock(l.getBlock())){
-                                l.getWorld().spawnParticle(Particle.BLOCK_CRACK, l, 10, 0, 1, 0, 0, l.getBlock().getBlockData());
-                                setFallingBlock(loc.clone().add(i,0,j-i));
-                                l.getWorld().getNearbyEntities(l, 1, 4, 1).forEach((entity) -> {
-                                    entity.setVelocity(new Vector(0, 2, 0));
-                                    if(entity instanceof LivingEntity){
-                                        ((LivingEntity) entity).damage(30);
-                                    }
-                                });
-                            }
+                            ExpansionWaveDamage(loc.clone().add(j-i, 0, -i), loc.clone(), deep, i, j);
                         }
                         numberOfWaves--;
                         cancelTask();
@@ -273,12 +184,44 @@ public class gura_gura extends paramecia {
         }
     }
 
+    public void ExpansionWaveDamage(Location l, Location loc, int deep, int i, int j) {
+        getSolidRelativeY(l, deep);
+
+        if(isSolidBlock(l.getBlock())) {
+            l.getWorld().spawnParticle(Particle.BLOCK_CRACK, l, 10, 0, 1, 0, 0, l.getBlock().getBlockData());
+            setFallingBlock(loc.clone().add(i,0,j-i));
+
+            l.getWorld().getNearbyEntities(l, 1, 4, 1).forEach((entity) -> {
+                entity.setVelocity(new Vector(0, 2, 0));
+                if(entity instanceof LivingEntity)
+                    ((LivingEntity) entity).damage(30);
+            });
+        }
+    }
+
+    public void ExpansionWaveFallingBlock(Location l, int deep) {
+        l.getWorld().getNearbyEntities(l, 1, 4, 1).forEach((entity) -> {
+            if(entity instanceof LivingEntity){
+                if(!entity.getName().equals(user.getPlayer().getName()))
+                    ((LivingEntity) entity).damage(6);
+            }
+        });
+
+        getSolidRelativeY(l,deep);
+        if(isSolidBlock(l.getBlock())) {
+            l.getWorld().spawnParticle(Particle.BLOCK_CRACK, l, 10, 0, 1, 0, 0,
+                    l.getBlock().getBlockData());
+
+            setFallingBlock(l).setVelocity(new Vector(0, 0.15, 0));
+        }
+    }
 
   public void createWave(Player player) {
     Location currentPL = player.getLocation();
     Vector direction = player.getEyeLocation().getDirection();
     currentPL.setY(currentPL.getY() + 1);
-    ArrayList<Location> blocks = new ArrayList<Location>();
+    ArrayList<Location> blocks = new ArrayList<>();
+
     for (int i = 0; i < waveDistance; i++) {
       blocks.add(currentPL.add(direction));
       blocks.addAll(positions(currentPL, direction));
@@ -314,22 +257,7 @@ public class gura_gura extends paramecia {
     }
   }
 
-  public Entity setFallingBlock(Location block) {
-    if (block.getBlock().getType() != AIR && block.getBlock().getType() != Material.WATER && block.getBlock().getType() != Material.BEDROCK) {
-      if(block.getBlock().getState() instanceof Container){
-        block.getBlock().breakNaturally();
-        return null;
-      }
-      Material matFallingBlock = block.getBlock().getType();
-      block.getBlock().setType(Material.AIR);
-      return block.getWorld().spawnFallingBlock(block, matFallingBlock, (byte) 9);
-    }
-    return null;
-
-  }
-
-
-  public ArrayList<Location> positions(Location loc, Vector direction) {
+    public ArrayList<Location> positions(Location loc, Vector direction) {
     // if faces north
     ArrayList<Location> blocks = new ArrayList<Location>();
 
