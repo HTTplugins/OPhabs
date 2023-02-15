@@ -100,8 +100,7 @@ public class ishi_ishi extends paramecia {
         }
         abilitiesNames.set(0, nameAbility1 + " (" + storaged + ")");
     }
-
-    public void ability3(){
+    public void ability3() {
 
         if(abilitiesCD.get(2) == 0){
             controlStone(user.getPlayer());
@@ -109,7 +108,7 @@ public class ishi_ishi extends paramecia {
         abilitiesNames.set(0, nameAbility1 + " (" + storaged + ")");
 
     }
-    public void ability4(){
+    public void ability4() {
         if(abilitiesCD.get(3) == 0){
             stoneRise(user.getPlayer());
             abilitiesCD.set(3, 0);
@@ -117,30 +116,26 @@ public class ishi_ishi extends paramecia {
         abilitiesNames.set(0, nameAbility1 + " (" + storaged + ")");
     }
 
-
-
-
-    public Boolean isStone(Block block){
+    public Boolean isStone(Block block) {
         boolean isStone = false;
-        if(block.getType().toString().contains("STONE") || (block.getType().toString().contains("ORE") && !block.getType().toString().contains("NETHERRACK"))){
+        if(block.getType().toString().contains("STONE") || (block.getType().toString().contains("ORE") && !block.getType().toString().contains("NETHERRACK"))) {
             isStone=true;
         }
         return isStone;
     }
 
-
-    public Boolean isSolidBlock(Block block){
+    public Boolean isSolidBlock(Block block) {
         return !(block.getType().getHardness() <= Material.TORCH.getHardness() || block.getType() == Material.AIR || block.getType() == Material.WATER || block.getType() == Material.LAVA);
     }
 
-    public void getSolidRelativeY(Location loc, int y){
+    public void getSolidRelativeY(Location loc, int y) {
        if(isSolidBlock(loc.getBlock()))
             loc = getSolidRelativeUpper(loc, y);
         else
             loc = getSolidRelativeDown(loc.add(0,-1,0), y);
     }
 
-    public Location getSolidRelativeUpper(Location loc, int y){
+    public Location getSolidRelativeUpper(Location loc, int y) {
         Location loc2 = loc.clone().add(0,1,0);
         if(!isSolidBlock(loc2.getBlock()))
             return loc;
@@ -151,10 +146,10 @@ public class ishi_ishi extends paramecia {
                 return null;
     }
 
-    public Location getSolidRelativeDown(Location loc, int y){
+    public Location getSolidRelativeDown(Location loc, int y) {
         if(isSolidBlock(loc.getBlock()))
             return loc;
-        else{
+        else {
             if(y > 0)
                return getSolidRelativeDown(loc.add(0, -1, 0), y-1);
             else
@@ -162,14 +157,14 @@ public class ishi_ishi extends paramecia {
         } 
     }
 
-    public void controlStone(Player player){
+    public void controlStone(Player player) {
         Location currentPL = player.getLocation();
         Vector direction = player.getEyeLocation().getDirection();
         currentPL.setY(currentPL.getY() + 1);
         currentPL.add(direction.multiply(1.5));
         if(player.isSneaking())
             absorbBlock(currentPL);
-        else{
+        else {
             if(!isStone(currentPL.getBlock()) && storaged > 0 && currentPL.getBlock().getType().getHardness() < Material.COBBLED_DEEPSLATE.getHardness() && currentPL.getBlock().getType() != Material.BEDROCK){
                 currentPL.getBlock().setType(Material.STONE);
                 storaged--;
@@ -177,19 +172,19 @@ public class ishi_ishi extends paramecia {
         }
     }
     
-    public void stoneRise(Player player){
+    public void stoneRise(Player player) {
         Location currentPL = player.getLocation(), currentPL1, currentPL2;
         int xDir = 1, zDir= 1;
         Vector direction = player.getEyeLocation().getDirection();
         
-        if(!user.getPlayer().isSneaking()){
+        if(!user.getPlayer().isSneaking()) {
             direction.setY(0);
             currentPL.add(direction);
 
-            if(direction.getX() > 0.1 || direction.getX() < -0.1){
+            if(direction.getX() > 0.1 || direction.getX() < -0.1) {
                 currentPL1 = currentPL.clone().add(0, 0, 1);
                 currentPL2 = currentPL.clone().add(0, 0, -1);
-            }else{
+            } else {
                 currentPL1 = currentPL.clone().add(1, 0, 0);
                 currentPL2 = currentPL.clone().add(-1, 0, 0);
             }
@@ -202,22 +197,22 @@ public class ishi_ishi extends paramecia {
                         currentPL.add(direction);
                         currentPL1.add(direction);
                         currentPL2.add(direction);
-                        if(i>6 || storaged < 3){
-                            if(storaged>=3){
+                        if(i>6 || storaged < 3) {
+                            if(storaged>=3) {
                                 currentPL.getBlock().setType(Material.POINTED_DRIPSTONE);
                                 currentPL1.getBlock().setType(Material.POINTED_DRIPSTONE);
                                 currentPL2.getBlock().setType(Material.POINTED_DRIPSTONE);
                                 storaged -= 3;
                             }
                             
-                            if(storaged >= 3){
+                            if(storaged >= 3) {
                                 currentPL.add(0,1,0).getBlock().setType(Material.POINTED_DRIPSTONE);
                                 currentPL1.add(0,1,0).getBlock().setType(Material.POINTED_DRIPSTONE);
                                 currentPL2.add(0,1,0).getBlock().setType(Material.POINTED_DRIPSTONE);
                                 storaged -= 3;
                             }
                             
-                            if(storaged >= 3){
+                            if(storaged >= 3) {
                                 currentPL.add(0,1,0).getBlock().setType(Material.POINTED_DRIPSTONE);
                                 currentPL1.add(0,1,0).getBlock().setType(Material.POINTED_DRIPSTONE);
                                 currentPL2.add(0,1,0).getBlock().setType(Material.POINTED_DRIPSTONE);
@@ -225,7 +220,7 @@ public class ishi_ishi extends paramecia {
                             }
                             cancelTask();
                         }
-                        if(storaged > 3){
+                        if(storaged > 3) {
                             if(currentPL.getBlock().getType() == Material.AIR || currentPL.getBlock().getType() == Material.WATER || currentPL.getBlock().getType() == Material.LAVA){
                                 if(currentPL.clone().add(0,-1,0).getBlock().getType() != Material.AIR && currentPL.clone().add(0,-1,0).getBlock().getType() != Material.WATER && currentPL.clone().add(0,-1,0).getBlock().getType() != Material.LAVA){
                                     currentPL.getBlock().setType(Material.POINTED_DRIPSTONE);
@@ -237,19 +232,30 @@ public class ishi_ishi extends paramecia {
                                 }
                             }
 
-                            if(currentPL1.getBlock().getType() == Material.AIR || currentPL1.getBlock().getType() == Material.WATER || currentPL1.getBlock().getType() == Material.LAVA){
-                                if(currentPL1.clone().add(0,-1,0).getBlock().getType() != Material.AIR && currentPL1.clone().add(0,-1,0).getBlock().getType() != Material.WATER && currentPL1.clone().add(0,-1,0).getBlock().getType() != Material.LAVA){
+                            if(currentPL1.getBlock().getType() == Material.AIR || currentPL1.getBlock().getType() == Material.WATER ||
+                                    currentPL1.getBlock().getType() == Material.LAVA) {
+
+                                if(currentPL1.clone().add(0,-1,0).getBlock().getType() != Material.AIR &&
+                                        currentPL1.clone().add(0,-1,0).getBlock().getType() != Material.WATER &&
+                                        currentPL1.clone().add(0,-1,0).getBlock().getType() != Material.LAVA) {
+
                                     currentPL1.getBlock().setType(Material.POINTED_DRIPSTONE);
                                     currentPL1.getWorld().getNearbyEntities(currentPL1,1,1,1).forEach(entity -> {
-                                        if(entity instanceof LivingEntity){
+                                        if(entity instanceof LivingEntity) {
                                             ((LivingEntity) entity).damage(5);
                                         }
                                     });
                                 }
                             }
 
-                            if(currentPL2.getBlock().getType() == Material.AIR || currentPL2.getBlock().getType() == Material.WATER || currentPL2.getBlock().getType() == Material.LAVA){
-                                if(currentPL2.clone().add(0,-1,0).getBlock().getType() != Material.AIR && currentPL2.clone().add(0,-1,0).getBlock().getType() != Material.WATER && currentPL2.clone().add(0,-1,0).getBlock().getType() != Material.LAVA){
+                            if(currentPL2.getBlock().getType() == Material.AIR ||
+                                    currentPL2.getBlock().getType() == Material.WATER ||
+                                    currentPL2.getBlock().getType() == Material.LAVA) {
+
+                                if(currentPL2.clone().add(0,-1,0).getBlock().getType() != Material.AIR &&
+                                        currentPL2.clone().add(0,-1,0).getBlock().getType() != Material.WATER &&
+                                        currentPL2.clone().add(0,-1,0).getBlock().getType() != Material.LAVA) {
+
                                     currentPL2.getBlock().setType(Material.POINTED_DRIPSTONE);
                                     currentPL2.getWorld().getNearbyEntities(currentPL2,1,1,1).forEach(entity -> {
                                         if(entity instanceof LivingEntity){
@@ -269,8 +275,7 @@ public class ishi_ishi extends paramecia {
                     }
                 }.runTaskTimer(plugin, 0, 4);
             }
-
-        }else{
+        } else {
                 currentPL.setY(currentPL.getY()+1);
                 new BukkitRunnable() {
                     Location current = currentPL.clone();
@@ -278,7 +283,7 @@ public class ishi_ishi extends paramecia {
                     int i = 0;
                     @Override
                     public void run() {
-                        if (isStone(current.add(direction).getBlock()) || i > 8){
+                        if (isStone(current.add(direction).getBlock()) || i > 8) {
                             Entity floatingBlock = currentPL.getWorld().spawnFallingBlock(current, current.getBlock().getBlockData());
                             current.getBlock().setType(Material.AIR);
                             catchEntity(floatingBlock, player);
@@ -293,7 +298,6 @@ public class ishi_ishi extends paramecia {
                     }
                 }.runTaskTimer(plugin, 5, 3);
             }
-
     }
      
     public void absorb(Player player) {
@@ -305,10 +309,10 @@ public class ishi_ishi extends paramecia {
         ArrayList<Location> blocks = new ArrayList<>();
         Location pos1, pos2;
 
-        if(player.isSneaking()){
+        if(player.isSneaking()) {
             pos1 = currentPL.clone().add(-radiusFloor, -radiusFloor, -radiusFloor);
         }
-        else{
+        else {
             pos1 = currentPL.clone().add(-radiusFloor, 0, -radiusFloor);
         }
         pos2 = currentPL.clone().add(radiusFloor, radiusFloor, radiusFloor);
@@ -333,8 +337,8 @@ public class ishi_ishi extends paramecia {
         }
     }
 
-    public void absorbBlock(Location block){
-        switch(block.getBlock().getType()){
+    public void absorbBlock(Location block) {
+        switch(block.getBlock().getType()) {
             case STONE:
             case DEEPSLATE:
                 storaged += 1;
@@ -399,7 +403,9 @@ public class ishi_ishi extends paramecia {
                 block.getBlock().setType(Material.AIR);
                 break;
             default:
-                if( block.getBlock().getType().name().contains("DEEPSLATE") || (block.getBlock().getType().name().contains("STONE") && !block.getBlock().getType().name().contains("REDSTONE"))){
+                if(block.getBlock().getType().name().contains("DEEPSLATE") || (block.getBlock().getType().name().contains("STONE") &&
+                        !block.getBlock().getType().name().contains("REDSTONE"))) {
+
                     storaged += 1;
                     block.getBlock().setType(Material.AIR);
                 }
@@ -407,7 +413,7 @@ public class ishi_ishi extends paramecia {
         }
     }
 
-    public void stoneCreation(Player player){
+    public void stoneCreation(Player player) {
         Inventory inv = Bukkit.createInventory(null, 45, ("Stone Creation" + " (" + storaged + ")"));
         ItemStack stone = new ItemStack(Material.STONE, 1);
         ItemStack cobblestone = new ItemStack(Material.COBBLESTONE, 1);
@@ -498,10 +504,10 @@ public class ishi_ishi extends paramecia {
         player.openInventory(inv);
     }
     
-    public void onEntityDamage(EntityDamageEvent event){
+    public void onEntityDamage(EntityDamageEvent event) {
         super.onEntityDamage(event);
         double damage = event.getDamage(), finalDamage;
-        if(storaged > 0){
+        if(storaged > 0) {
             finalDamage = damage - storaged;
             if(finalDamage <= 0) {
                 finalDamage = 0;
@@ -514,188 +520,187 @@ public class ishi_ishi extends paramecia {
                 event.setDamage(finalDamage);
             }
             ((Player) event.getEntity()).spawnParticle(Particle.REDSTONE, event.getEntity().getLocation(), 100, 0, 1, 0, piedra);
-
             abilitiesNames.set(0, nameAbility1 + " (" + storaged + ")");
         }
     }
 
-    public void onInventoryClick(InventoryClickEvent event){
-        if(opened && event.getView().getTitle().contains("Stone Creation")){
+    public void onInventoryClick(InventoryClickEvent event) {
+        if(opened) {
             Player player = (Player) event.getWhoClicked();
             ItemStack clicked = event.getCurrentItem();
             Inventory inventory = event.getInventory();
             event.setCancelled(true);
-            if(clicked.getType() == Material.STONE){
+            if(clicked.getType() == Material.STONE) {
+                if(storaged >= 1*clicked.getAmount()) {
+                    storaged -= 1*clicked.getAmount();
+                    player.getInventory().addItem(clicked);
+                    player.closeInventory();
+                }
+                else {
+                    player.sendMessage("You don't have enough stone to buy this item");
+                    player.closeInventory();
+                }
+            }
+            if(clicked.getType() == Material.COBBLESTONE) {
+                if(storaged >= 1*clicked.getAmount()) {
+                    storaged -= 1*clicked.getAmount();
+                    player.getInventory().addItem(clicked);
+                    player.closeInventory();
+                }
+                else {
+                    player.sendMessage("You don't have enough stone to buy this item");
+                    player.closeInventory();
+                }
+            }
+            if(clicked.getType() == Material.COBBLESTONE_STAIRS) {
+                if(storaged >= 1*clicked.getAmount()) {
+                    storaged -= 1*clicked.getAmount();
+                    player.getInventory().addItem(clicked);
+                    player.closeInventory();
+                }
+                else {
+                    player.sendMessage("You don't have enough stone to buy this item");
+                    player.closeInventory();
+                }
+            }
+            if(clicked.getType() == Material.COBBLESTONE_SLAB) {
                 if(storaged >= 1*clicked.getAmount()){
                     storaged -= 1*clicked.getAmount();
                     player.getInventory().addItem(clicked);
                     player.closeInventory();
                 }
-                else{
+                else {
                     player.sendMessage("You don't have enough stone to buy this item");
                     player.closeInventory();
                 }
             }
-            if(clicked.getType() == Material.COBBLESTONE){
+            if(clicked.getType() == Material.COBBLESTONE_WALL) {
                 if(storaged >= 1*clicked.getAmount()){
                     storaged -= 1*clicked.getAmount();
                     player.getInventory().addItem(clicked);
                     player.closeInventory();
                 }
-                else{
+                else {
                     player.sendMessage("You don't have enough stone to buy this item");
                     player.closeInventory();
                 }
             }
-            if(clicked.getType() == Material.COBBLESTONE_STAIRS){
-                if(storaged >= 1*clicked.getAmount()){
+            if(clicked.getType() == Material.STONE_STAIRS) {
+                if(storaged >= 1*clicked.getAmount()) {
                     storaged -= 1*clicked.getAmount();
                     player.getInventory().addItem(clicked);
                     player.closeInventory();
                 }
-                else{
+                else {
                     player.sendMessage("You don't have enough stone to buy this item");
                     player.closeInventory();
                 }
             }
-            if(clicked.getType() == Material.COBBLESTONE_SLAB){
-                if(storaged >= 1*clicked.getAmount()){
+            if(clicked.getType() == Material.STONE_SLAB) {
+                if(storaged >= 1*clicked.getAmount()) {
                     storaged -= 1*clicked.getAmount();
                     player.getInventory().addItem(clicked);
                     player.closeInventory();
                 }
-                else{
+                else {
                     player.sendMessage("You don't have enough stone to buy this item");
                     player.closeInventory();
                 }
             }
-            if(clicked.getType() == Material.COBBLESTONE_WALL){
-                if(storaged >= 1*clicked.getAmount()){
+            if(clicked.getType() == Material.STONE_BRICKS) {
+                if(storaged >= 1*clicked.getAmount()) {
                     storaged -= 1*clicked.getAmount();
                     player.getInventory().addItem(clicked);
                     player.closeInventory();
                 }
-                else{
+                else {
                     player.sendMessage("You don't have enough stone to buy this item");
                     player.closeInventory();
                 }
             }
-            if(clicked.getType() == Material.STONE_STAIRS){
-                if(storaged >= 1*clicked.getAmount()){
+            if(clicked.getType() == Material.STONE_BRICK_STAIRS) {
+                if(storaged >= 1*clicked.getAmount()) {
                     storaged -= 1*clicked.getAmount();
                     player.getInventory().addItem(clicked);
                     player.closeInventory();
                 }
-                else{
+                else {
                     player.sendMessage("You don't have enough stone to buy this item");
                     player.closeInventory();
                 }
             }
-            if(clicked.getType() == Material.STONE_SLAB){
-                if(storaged >= 1*clicked.getAmount()){
+            if(clicked.getType() == Material.STONE_BRICK_SLAB) {
+                if(storaged >= 1*clicked.getAmount()) {
                     storaged -= 1*clicked.getAmount();
                     player.getInventory().addItem(clicked);
                     player.closeInventory();
                 }
-                else{
+                else {
                     player.sendMessage("You don't have enough stone to buy this item");
                     player.closeInventory();
                 }
             }
-            if(clicked.getType() == Material.STONE_BRICKS){
-                if(storaged >= 1*clicked.getAmount()){
+            if(clicked.getType() == Material.STONE_BRICK_WALL) {
+                if(storaged >= 1*clicked.getAmount()) {
                     storaged -= 1*clicked.getAmount();
                     player.getInventory().addItem(clicked);
                     player.closeInventory();
                 }
-                else{
+                else {
                     player.sendMessage("You don't have enough stone to buy this item");
                     player.closeInventory();
                 }
             }
-            if(clicked.getType() == Material.STONE_BRICK_STAIRS){
-                if(storaged >= 1*clicked.getAmount()){
-                    storaged -= 1*clicked.getAmount();
-                    player.getInventory().addItem(clicked);
-                    player.closeInventory();
-                }
-                else{
-                    player.sendMessage("You don't have enough stone to buy this item");
-                    player.closeInventory();
-                }
-            }
-            if(clicked.getType() == Material.STONE_BRICK_SLAB){
-                if(storaged >= 1*clicked.getAmount()){
-                    storaged -= 1*clicked.getAmount();
-                    player.getInventory().addItem(clicked);
-                    player.closeInventory();
-                }
-                else{
-                    player.sendMessage("You don't have enough stone to buy this item");
-                    player.closeInventory();
-                }
-            }
-            if(clicked.getType() == Material.STONE_BRICK_WALL){
-                if(storaged >= 1*clicked.getAmount()){
-                    storaged -= 1*clicked.getAmount();
-                    player.getInventory().addItem(clicked);
-                    player.closeInventory();
-                }
-                else{
-                    player.sendMessage("You don't have enough stone to buy this item");
-                    player.closeInventory();
-                }
-            }
-            if(clicked.getType() == Material.STONE_SWORD){
-                if(clicked.getItemMeta().getDisplayName().equals("Reinforced Stone Sword")){
-                    if(storaged >= 20*clicked.getAmount()){
+            if(clicked.getType() == Material.STONE_SWORD) {
+                if(clicked.getItemMeta().getDisplayName().equals("Reinforced Stone Sword")) {
+                    if(storaged >= 20*clicked.getAmount()) {
                         storaged -= 20*clicked.getAmount();
                         player.getInventory().addItem(clicked);
                         player.closeInventory();
                     }
-                    else{
+                    else {
                         player.sendMessage("You don't have enough stone to buy this item");
                         player.closeInventory();
                     }
                 }
-                else{
-                    if(storaged >= 2*clicked.getAmount()){
+                else {
+                    if(storaged >= 2*clicked.getAmount()) {
                         storaged -= 2*clicked.getAmount();
                         player.getInventory().addItem(clicked);
                         player.closeInventory();
                     }
-                    else{
+                    else {
                         player.sendMessage("You don't have enough stone to buy this item");
                         player.closeInventory();
                     }
                }
             }
-            if(clicked.getType() == Material.STONE_AXE){
-                if(clicked.getItemMeta().getDisplayName().equals("Reinforced Stone Axe")){
-                    if(storaged >= 30*clicked.getAmount()){
+            if(clicked.getType() == Material.STONE_AXE) {
+                if(clicked.getItemMeta().getDisplayName().equals("Reinforced Stone Axe")) {
+                    if(storaged >= 30*clicked.getAmount()) {
                         storaged -= 30*clicked.getAmount();
                         player.getInventory().addItem(clicked);
                         player.closeInventory();
                     }
-                    else{
+                    else {
                         player.sendMessage("You don't have enough stone to buy this item");
                         player.closeInventory();
                     }
                }
-                else{
-                    if(storaged >= 3*clicked.getAmount()){
+                else {
+                    if(storaged >= 3*clicked.getAmount()) {
                         storaged -= 3*clicked.getAmount();
                         player.getInventory().addItem(clicked);
                         player.closeInventory();
                     }
-                    else{
+                    else {
                         player.sendMessage("You don't have enough stone to buy this item");
                         player.closeInventory();
                     }
                }
             }
-            if(clicked.getType() == Material.STONE_PICKAXE){
-                if(storaged >= 3*clicked.getAmount()){
+            if(clicked.getType() == Material.STONE_PICKAXE) {
+                if(storaged >= 3*clicked.getAmount()) {
                     storaged -= 3*clicked.getAmount();
                     player.getInventory().addItem(clicked);
                     player.closeInventory();
@@ -705,8 +710,8 @@ public class ishi_ishi extends paramecia {
                     player.closeInventory();
                 }
             }
-            if(clicked.getType() == Material.STONE_SHOVEL){
-                if(storaged >= 1*clicked.getAmount()){
+            if(clicked.getType() == Material.STONE_SHOVEL) {
+                if(storaged >= 1*clicked.getAmount()) {
                     storaged -= 1*clicked.getAmount();
                     player.getInventory().addItem(clicked);
                     player.closeInventory();
@@ -716,46 +721,46 @@ public class ishi_ishi extends paramecia {
                     player.closeInventory();
                 }
             }
-            if(clicked.getType() == Material.STONE_HOE){
-                if(storaged >= 2*clicked.getAmount()){
+            if(clicked.getType() == Material.STONE_HOE) {
+                if(storaged >= 2*clicked.getAmount()) {
                     storaged -= 2*clicked.getAmount();
                     player.getInventory().addItem(clicked);
                     player.closeInventory();
                 }
-                else{
+                else {
                     player.sendMessage("You don't have enough stone to buy this item");
                     player.closeInventory();
                 }
             }
-            if(clicked.getType() == Material.FURNACE){
-                if(storaged >= 8*clicked.getAmount()){
+            if(clicked.getType() == Material.FURNACE) {
+                if(storaged >= 8*clicked.getAmount()) {
                     storaged -= 8*clicked.getAmount();
                     player.getInventory().addItem(clicked);
                     player.closeInventory();
                 }
-                else{
+                else {
                     player.sendMessage("You don't have enough stone to buy this item");
                     player.closeInventory();
                 }
             }
-            if(clicked.getType() == Material.STONE_BUTTON){
-                if(storaged >= 1*clicked.getAmount()){
+            if(clicked.getType() == Material.STONE_BUTTON) {
+                if(storaged >= 1*clicked.getAmount()) {
                     storaged -= 1*clicked.getAmount();
                     player.getInventory().addItem(clicked);
                     player.closeInventory();
                 }
-                else{
+                else {
                     player.sendMessage("You don't have enough stone to buy this item");
                     player.closeInventory();
                 }
             }
-            if(clicked.getType() == Material.STONE_PRESSURE_PLATE){
-                if(storaged >= 2*clicked.getAmount()){
+            if(clicked.getType() == Material.STONE_PRESSURE_PLATE) {
+                if(storaged >= 2*clicked.getAmount()) {
                     storaged -= 2*clicked.getAmount();
                     player.getInventory().addItem(clicked);
                     player.closeInventory();
                 }
-                else{
+                else {
                     player.sendMessage("You don't have enough stone to buy this item");
                     player.closeInventory();
                 }
@@ -764,23 +769,21 @@ public class ishi_ishi extends paramecia {
         opened = false;
     }
 
-    public void onPlayerDeath(PlayerDeathEvent event){
+    public void onPlayerDeath(PlayerDeathEvent event) {
         super.onPlayerDeath(event);
         storaged = 5;
     }
 
-  public Entity setFallingBlock(Location block) {
-    if (block.getBlock().getType() != Material.AIR && block.getBlock().getType() != Material.WATER) {
+    public Entity setFallingBlock(Location block) {
+    if(block.getBlock().getType() != Material.AIR && block.getBlock().getType() != Material.WATER) {
       Material matFallingBlock = block.getBlock().getType();
       block.getBlock().setType(Material.AIR);
       return block.getWorld().spawnFallingBlock(block, matFallingBlock, (byte) 9);
     }
     return null;
+    }
 
-  }
-
-
-  public ArrayList<Location> positions(Location loc, Vector direction) {
+    public ArrayList<Location> positions(Location loc, Vector direction) {
     // if faces north
     ArrayList<Location> blocks = new ArrayList<Location>();
 
@@ -806,12 +809,12 @@ public class ishi_ishi extends paramecia {
       blocks.add(loc.clone().add(0, -1, -1));
     }
     return blocks;
-  }
+    }
 
     //From Yami, modified forLivingVoidEntity
-    public void catchEntity(Entity ent, Player player){
+    public void catchEntity(Entity ent, Player player) {
 
-        BukkitTask attract = new BukkitRunnable(){
+        BukkitTask attract = new BukkitRunnable() {
             Vector FirstVector;
             boolean fV = false;
             boolean entityInHand = false;
@@ -831,7 +834,7 @@ public class ishi_ishi extends paramecia {
 
                 Vector movement = loc.clone().toVector().subtract(ent.getLocation().toVector()).normalize();
 
-                if(!fV){
+                if(!fV) {
                     FirstVector = movement.clone();
                     fV = true;
                 }
@@ -840,25 +843,25 @@ public class ishi_ishi extends paramecia {
                 if(loc.getY() > ent.getLocation().getY() && !entityInHand)
                     movement.setY(movement.getY() + (player.getLocation().getY() - ent.getLocation().getY()) + 3);
 
-                if(!entityInHand){
+                if(!entityInHand) {
                     ent.setVelocity(movement);
                     i++;
                 }
-                else{
+                else {
                     ent.teleport(player.getLocation().add(0,2,0));
                     ent.setVelocity(new Vector(0,0.042,0));
                     j++;
                 }
 
-                if(Math.sqrt(Math.pow(vx,2) + Math.pow(vy,2) +  Math.pow(vz,2)) <= 1){
+                if(Math.sqrt(Math.pow(vx,2) + Math.pow(vy,2) +  Math.pow(vz,2)) <= 1) {
                     entityInHand = true;
-                    if(!player.isSneaking()){
+                    if(!player.isSneaking()) {
                         this.cancel();
                         repealEntity(ent,player);
                     }
                 }
 
-                if(!player.isSneaking()){
+                if(!player.isSneaking()) {
                     this.cancel();
                 }
             }
@@ -866,7 +869,7 @@ public class ishi_ishi extends paramecia {
     }
 
     //From Yami
-    public void repealEntity(Entity ent, Player player ){
+    public void repealEntity(Entity ent, Player player) {
         repealAnimationCounter++;
         World world = player.getWorld();
 
@@ -876,7 +879,7 @@ public class ishi_ishi extends paramecia {
         ent.setVelocity(dir.multiply(3));
 
         //timer
-        new BukkitRunnable(){
+        new BukkitRunnable() {
 
             Vector aux = dir;
 
@@ -884,9 +887,7 @@ public class ishi_ishi extends paramecia {
             int i = 0;
             @Override
             public void run() {
-
-
-                if(ent.getVelocity().getX() != aux.getX() || ent.getVelocity().getZ() != aux.getZ()){
+                if(ent.getVelocity().getX() != aux.getX() || ent.getVelocity().getZ() != aux.getZ()) {
                     aux = ent.getVelocity();
 
                     ent.getWorld().getNearbyEntities(ent.getLocation(), 2,2,2).forEach(entity -> {
@@ -895,8 +896,7 @@ public class ishi_ishi extends paramecia {
                         }
                     });
                 }
-
-                if(ent.isOnGround()){
+                if(ent.isOnGround()) {
                     cancelTask();
                 }
                 i++;
@@ -905,10 +905,7 @@ public class ishi_ishi extends paramecia {
                 Bukkit.getScheduler().cancelTask(this.getTaskId());
             }
         }.runTaskTimer(plugin, 0, 2);
-
     }
-
-
 }
 
 

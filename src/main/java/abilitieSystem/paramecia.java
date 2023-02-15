@@ -33,6 +33,5 @@ public class paramecia extends df{
     public paramecia(OPhabs plugin, abilityUser user, Material castMaterial, String castName, String commandName){
         super(plugin, user, castMaterial, castName, commandName);
     }
-    
 }
 

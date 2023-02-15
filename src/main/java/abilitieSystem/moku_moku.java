@@ -25,8 +25,10 @@ public class moku_moku extends logia {
     final int numMaxSmokers=4;
     public int numSmokers=0;
 
-    public moku_moku(OPhabs plugin){
-        super(plugin, Particle.CLOUD, castIdentification.castMaterialMoku, castIdentification.castItemNameMoku, fruitIdentification.fruitCommandNameMoku);
+    public moku_moku(OPhabs plugin) {
+        super(plugin, Particle.CLOUD, castIdentification.castMaterialMoku, castIdentification.castItemNameMoku,
+                fruitIdentification.fruitCommandNameMoku);
+
         abilitiesNames.add("SmokeBody");
         abilitiesCD.add(0);
         abilitiesNames.add("SummonSmoker");
@@ -34,20 +36,20 @@ public class moku_moku extends logia {
         runParticles();
     }
 
-    public void ability1(){
-        if(abilitiesCD.get(0)==0){
+    public void ability1() {
+        if(abilitiesCD.get(0)==0) {
             logiaBody(user.getPlayer());
             abilitiesCD.set(0, 0);
         }
     }
-    public void ability2(){
-        if(abilitiesCD.get(1)==0){
+    public void ability2() {
+        if(abilitiesCD.get(1)==0) {
             summonSmoker(user.getPlayer());
             abilitiesCD.set(1, 3);
         }
     }
 
-    public void toggleFly(Player player){
+    public void toggleFly(Player player) {
         if (logiaBodyON){
         } else {
             player.setAllowFlight(false);
@@ -55,7 +57,7 @@ public class moku_moku extends logia {
         }
     }
     
-    public void runParticles(Player player){
+    public void runParticles(Player player) {
         new BukkitRunnable() {
             @Override
             public void run() {
@@ -72,7 +74,7 @@ public class moku_moku extends logia {
 
     @Override
     public void runParticles() {
-        new BukkitRunnable(){
+        new BukkitRunnable() {
             int ticks = 0;
             double i = 0;
             double y = 0;
@@ -80,28 +82,27 @@ public class moku_moku extends logia {
             Random random = new Random();
             @Override
             public void run() {
-
                 Player player = null;
                 if(user != null)
-                    if(user.getPlayer() != null){
+                    if(user.getPlayer() != null) {
                         player = user.getPlayer();
 
                         ItemStack caster = null;
                         boolean isCaster = false;
-                        if(player != null){
-                            if(castIdentification.itemIsCaster(player.getInventory().getItemInMainHand(), player)){
+                        if(player != null) {
+                            if(castIdentification.itemIsCaster(player.getInventory().getItemInMainHand(), player)) {
                                 caster = player.getInventory().getItemInMainHand();
                                 isCaster = true;
                             }
                             else{
-                                if(castIdentification.itemIsCaster(player.getInventory().getItemInOffHand(), player)){
+                                if(castIdentification.itemIsCaster(player.getInventory().getItemInOffHand(), player)) {
                                     caster = player.getInventory().getItemInOffHand();
                                     isCaster = true;
                                 }
                             }
                         }
 
-                        if(isCaster && caster.getItemMeta().getDisplayName().equals(castIdentification.castItemNameMoku)){
+                        if(isCaster && caster.getItemMeta().getDisplayName().equals(castIdentification.castItemNameMoku)) {
                             double x = sin(i)/2;
                             double z = cos(i)/2;
 
@@ -116,46 +117,35 @@ public class moku_moku extends logia {
                             
                             player.setAllowFlight(true);
 
-                        }else {
+                        } else {
                             player.setAllowFlight(false);
                             player.setFlying(false);
                         }
                     }
-
                 i+= 0.5;
                 y+=0.05;
 
                 if(y > 2)
                     y = 0;
-
-
-
             }
 
-            public void summonParticle(double y,Player player){
-
+            public void summonParticle(double y,Player player) {
                 double xdecimals;
                 double ydecimals;
                 double zdecimals;
-
                 double x,z;
-
 
                 xdecimals = random.nextDouble();
                 ydecimals = random.nextDouble();
                 zdecimals = random.nextDouble();
 
                 x = random.nextInt(1 + 1 ) - 1 + xdecimals;
-                y += random.nextInt(1 + 1 ) - 1 + ydecimals ;
+                y += random.nextInt(1 + 1 ) - 1 + ydecimals;
                 z = random.nextInt(1 + 1 ) - 1 + zdecimals;
 
                 player.getWorld().spawnParticle(element,player.getLocation().add(x,y,z),0,0,0,0);
-
             }
-
-
         }.runTaskTimer(plugin,0,1);
-
     }
 //    @EventHandler(ignoreCancelled = true)
     public void onPlayerDeath(PlayerDeathEvent event) {

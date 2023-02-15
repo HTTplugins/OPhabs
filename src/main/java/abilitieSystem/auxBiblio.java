@@ -27,7 +27,7 @@ public class auxBiblio {
      * for example, if you're inside a house.
      * @author RedRiotTank
      */
-    public static double searchGround(double x, double z, double initialY, World world){
+    public static double searchGround(double x, double z, double initialY, World world) {
 
         Location loc = new Location(world,x,initialY,z);
 
@@ -68,7 +68,8 @@ public class auxBiblio {
     public static void spawnBloodParticles(Entity entity) {
         Location loc = entity.getLocation();
         World world = entity.getWorld();
-        world.spawnParticle(Particle.REDSTONE, loc.add(0, entity.getHeight(), 0), 20, 0.5, 0.5, 0.5, 0.1, new Particle.DustOptions(Color.RED, 1.0f));
+        world.spawnParticle(Particle.REDSTONE, loc.add(0, entity.getHeight(), 0), 20, 0.5, 0.5, 0.5,
+                0.1, new Particle.DustOptions(Color.RED, 1.0f));
     }
 
     /**
@@ -78,11 +79,13 @@ public class auxBiblio {
      * @return The first living entity if it is found, null if nothing is found.
      * @author RedRiotTank
      */
-    public static LivingEntity rayCastLivEnt(Player player, int distance){
+    public static LivingEntity rayCastLivEnt(Player player, int distance) {
         LivingEntity target = null;
 
         Vector direction = player.getEyeLocation().getDirection();
-        RayTraceResult result = player.getWorld().rayTraceEntities(player.getEyeLocation(), direction, distance, p -> !player.getUniqueId().equals(p.getUniqueId()));
+        RayTraceResult result = player.getWorld().rayTraceEntities(player.getEyeLocation(), direction, distance,
+                p -> !player.getUniqueId().equals(p.getUniqueId()));
+
         if (result != null && result.getHitEntity() != null)
             target = (LivingEntity) result.getHitEntity();
 
@@ -106,11 +109,7 @@ public class auxBiblio {
         double angle = Math.atan2(xv, zv); // Value between -π and +π
         double angleInDegrees = (angle * 180) / Math.PI;
 
-        if (angleInDegrees <= 60 && angleInDegrees >= -32)
-            return true;
-
-
-        return false;
+        return angleInDegrees <= 60 && angleInDegrees >= -32;
     }
 
     /**
@@ -125,15 +124,16 @@ public class auxBiblio {
      * @param player player that generates the circle next to.
      * @author RedRiotTank
      */
-    public static void circleEyeVector(double radius, double separation, double prof, Particle.DustOptions dustOption, Particle particle, boolean harms, boolean destroy, Player player ){
+    public static void circleEyeVector(double radius, double separation, double prof, Particle.DustOptions dustOption,
+                                       Particle particle, boolean harms, boolean destroy, Player player) {
+
         final Location playerLoc = player.getLocation();
         double x,y, xY, yY, zY, xX, yX, zX,xL,yL,zL;
         final double yaw = -player.getLocation().getYaw(),
                 pitch = player.getLocation().getPitch();
         final World world = player.getWorld();
 
-        for(double i=0; i<2*PI; i+= separation){
-
+        for(double i=0; i<2*PI; i+= separation) {
             x = radius*cos(i);
             y = radius*sin(i);
 
@@ -147,7 +147,7 @@ public class auxBiblio {
             yY =  yX;
             zY = -sin(toRadians(yaw))*xX + cos(toRadians(yaw))*zX;
 
-            //Final (sum of player position.)
+            //Final (sum of player position)
             xL = playerLoc.getX() + xY;
             yL = 1 + playerLoc.getY() + yY;
             zL = playerLoc.getZ() + zY;
@@ -166,5 +166,4 @@ public class auxBiblio {
             world.spawnParticle(particle,partLoc,0,0,0,0,dustOption);
         }
     }
-
 }

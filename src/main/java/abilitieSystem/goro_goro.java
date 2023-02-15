@@ -30,7 +30,7 @@ public class goro_goro extends logia {
      * @param plugin OPhabs plugin.
      * @author RedRiotTank.
      */
-    public goro_goro(OPhabs plugin){
+    public goro_goro(OPhabs plugin) {
         super(plugin, Particle.ELECTRIC_SPARK, castIdentification.castMaterialGoro, castIdentification.castItemNameGoro, fruitIdentification.fruitCommandNameGoro);
         abilitiesNames.add("El THOR");
         abilitiesCD.add(0);
@@ -49,7 +49,7 @@ public class goro_goro extends logia {
      * @author RedRiotTank.
      */
     @Override
-    public void runParticles(){
+    public void runParticles() {
         /*
         new BukkitRunnable(){
 
@@ -122,8 +122,8 @@ public class goro_goro extends logia {
      * @see goro_goro#elThor(Player)
      * @author RedRiotTank.
      */
-    public void ability1(){
-        if(abilitiesCD.get(0) == 0){
+    public void ability1() {
+        if(abilitiesCD.get(0) == 0) {
             elThor(user.getPlayer());
             abilitiesCD.set(0, 50);
         }
@@ -134,8 +134,7 @@ public class goro_goro extends logia {
      * @param player Player that uses the ability.
      * @author RedRiotTank.
      */
-    public void elThor(Player player){
-
+    public void elThor(Player player) {
         player.playSound(player.getLocation(), Sound.ENTITY_LIGHTNING_BOLT_THUNDER,1,2);
 
         new BukkitRunnable() {
@@ -144,15 +143,13 @@ public class goro_goro extends logia {
 
             @Override
             public void run() {
-
-                for(double prof = 0.5; prof < fin; prof+=0.5){
+                for(double prof = 0.5; prof < fin; prof+=0.5) {
                     auxBiblio.circleEyeVector(1,0.5,prof,null, element,true,true, user.getPlayer());
                     auxBiblio.circleEyeVector(0.8,0.5,prof,null, element,true,true, user.getPlayer());
                     auxBiblio.circleEyeVector(0.6,0.5,prof,null, element,true,true, user.getPlayer());
                     auxBiblio.circleEyeVector(0.4,0.5,prof,null, element,true,true, user.getPlayer());
                     auxBiblio.circleEyeVector(0.2,0.5,prof,null, element,true,true, user.getPlayer());
                 }
-
                 tick++;
 
                 if(fin <= 20)
@@ -161,10 +158,7 @@ public class goro_goro extends logia {
                 if(tick == 20)
                     this.cancel();
             }
-
-
         }.runTaskTimer(plugin,0,1);
-
     }
 
     // ---------------------------------------------- AB 2 ---------------------------------------------------------------------
@@ -174,8 +168,8 @@ public class goro_goro extends logia {
      * @see goro_goro#thunderStorm(Player)
      * @author RedRiotTank.
      */
-    public void ability2(){
-        if(abilitiesCD.get(1) == 0){
+    public void ability2() {
+        if(abilitiesCD.get(1) == 0) {
             thunderStorm(user.getPlayer());
             abilitiesCD.set(1, 20);
         }
@@ -186,19 +180,16 @@ public class goro_goro extends logia {
      * @param player Player that uses the ability.
      * @author RedRiotTank.
      */
-    public void thunderStorm(Player player){
-
+    public void thunderStorm(Player player) {
         Random random = new Random();
 
         World world = player.getWorld();
-        for(Entity ent : player.getNearbyEntities(10,10,10)){
+        for(Entity ent : player.getNearbyEntities(10,10,10)) {
             world.strikeLightning(ent.getLocation());
             world.spawnParticle(Particle.ELECTRIC_SPARK,ent.getLocation(),3);
         }
 
-
-        for(int i=0; i<15; i++){
-
+        for(int i=0; i<15; i++) {
             double xdecimals = random.nextDouble();
             double ydecimals = random.nextDouble();
             double zdecimals = random.nextDouble();
@@ -218,9 +209,6 @@ public class goro_goro extends logia {
             world.strikeLightning(new Location(world,x,y,z));
             world.spawnParticle(Particle.CLOUD,new Location(world,xP,yP,zP),30);
         }
-
-
-
     }
 
     // ---------------------------------------------- AB 3 ---------------------------------------------------------------------
@@ -230,25 +218,24 @@ public class goro_goro extends logia {
      * @see goro_goro#lightStep(Player)
      * @author RedRiotTank.
      */
-    public void ability3(){
-        if(abilitiesCD.get(2) == 0){
+    public void ability3() {
+        if(abilitiesCD.get(2) == 0) {
             lightStep(user.getPlayer());
             abilitiesCD.set(2, 30);
         }
     }
 
     /**
-     * @brief CORE ABILITY: dashed the player 5 blocks in the direction he is looking at,
+     * @brief CORE ABILITY: dashes the player 5 blocks in the direction he is looking at,
      * leaving lightning in its wake.
      * @param player Player that uses the ability.
      * @todo refactor.
      * @author RedRiotTank.
      */
-    public void lightStep(Player player){
+    public void lightStep(Player player) {
 
         World world = player.getWorld();
         Location playerLoc = player.getLocation();
-
 
         world.playSound(playerLoc,Sound.ENTITY_LIGHTNING_BOLT_THUNDER,1,1);
 
@@ -258,8 +245,7 @@ public class goro_goro extends logia {
         dir.setZ(dir.getZ() * 5);
         player.setVelocity(dir);
 
-        new BukkitRunnable(){
-
+        new BukkitRunnable() {
             int tick = 0;
 
             @Override
@@ -276,7 +262,6 @@ public class goro_goro extends logia {
         //System.out.println(movement);
 
         player.setVelocity(dir);
-
     }
 
     // ---------------------------------------------- AB 4 ---------------------------------------------------------------------
@@ -285,7 +270,7 @@ public class goro_goro extends logia {
      * @see goro_goro#electricGround(Player)
      * @author RedRiotTank.
      */
-    public void ability4(){
+    public void ability4() {
         if(abilitiesCD.get(3) == 0){
             electricGround(user.getPlayer());
             abilitiesCD.set(3, 30);
@@ -297,16 +282,16 @@ public class goro_goro extends logia {
      * @param player Player that uses the ability.
      * @author RedRiotTank.
      */
-    public void electricGround(Player player){
+    public void electricGround(Player player) {
         player.getWorld().playSound(player.getLocation(),"discharge",1,1);
         electricGroundAnimation(player);
 
         List<Entity> entities  = player.getNearbyEntities(10,10,10);
 
-        for(Entity ent : entities){
-            if(ent instanceof LivingEntity){
+        for(Entity ent : entities) {
+            if(ent instanceof LivingEntity) {
                 ((LivingEntity)ent).addPotionEffect(new PotionEffect(PotionEffectType.SLOW,10,10));
-                new BukkitRunnable(){
+                new BukkitRunnable() {
                     World world = ent.getWorld();
                     int ticks = 0;
                     @Override
@@ -315,14 +300,10 @@ public class goro_goro extends logia {
                         world.spawnParticle(Particle.ELECTRIC_SPARK,ent.getLocation(), 20, 0.5, 0.5, 0.5, 0.1);
                         if(ticks == 5) this.cancel();
                         ticks++;
-
                     }
                 }.runTaskTimer(plugin,0,2);
-
-
             }
         }
-
     }
 
     /**
@@ -330,34 +311,32 @@ public class goro_goro extends logia {
      * @param player Player that uses the ability.
      * @author RedRiotTank.
      */
-    public void electricGroundAnimation(Player player){
+    public void electricGroundAnimation(Player player) {
+        new BukkitRunnable(){
+            World world = player.getWorld();
+            double extension = 1;
+            double density = 20;
 
-    new BukkitRunnable(){
-        World world = player.getWorld();
-        double extension = 1;
-        double density = 20;
+            @Override
+            public void run() {
 
-        @Override
-        public void run() {
+                for(double i=0; i < density; i++){
+                    double x = generarNumeroAleatorio(player.getLocation().getX() - extension, player.getLocation().getX() + extension);
+                    double z = generarNumeroAleatorio(player.getLocation().getZ() - extension, player.getLocation().getZ() + extension);
+                    double y = auxBiblio.searchGround(x,z,player.getLocation().getY(),world) + 0.2;
 
-            for(double i=0; i < density; i++){
-                double x = generarNumeroAleatorio(player.getLocation().getX() - extension, player.getLocation().getX() + extension);
-                double z = generarNumeroAleatorio(player.getLocation().getZ() - extension, player.getLocation().getZ() + extension);
-                double y = auxBiblio.searchGround(x,z,player.getLocation().getY(),world) + 0.2;
+                    Location particle = new Location(world,x,y,z);
+                    world.spawnParticle(Particle.ELECTRIC_SPARK,particle,0,0,0,0);
+                }
+                extension++;
+                density*=1.5;
 
-                Location particle = new Location(world,x,y,z);
-                world.spawnParticle(Particle.ELECTRIC_SPARK,particle,0,0,0,0);
+                if(extension == 10) this.cancel();
             }
-            extension++;
-            density*=1.5;
 
-            if(extension == 10) this.cancel();
-
-        }
-        public double generarNumeroAleatorio(double minimo, double maximo) {
-            return Math.random() * (maximo - minimo) + minimo;
-        }
-    }.runTaskTimer(plugin,0,1);
-
+            public double generarNumeroAleatorio(double minimo, double maximo) {
+                return Math.random() * (maximo - minimo) + minimo;
+            }
+        }.runTaskTimer(plugin,0,1);
     }
 }

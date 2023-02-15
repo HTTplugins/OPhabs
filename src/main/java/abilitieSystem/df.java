@@ -45,7 +45,7 @@ public class df extends abilities {
      * @param commandName Name of that represents the fruit.
      * @author Vaelico786.
      */
-    public df(OPhabs plugin, abilityUser user, Material castMaterial, String castName, String commandName){
+    public df(OPhabs plugin, abilityUser user, Material castMaterial, String castName, String commandName) {
         super(plugin, user);
         this.user = user;
         this.actual = 0;
@@ -63,7 +63,7 @@ public class df extends abilities {
      * @param commandName Name of that represents the fruit.
      * @author Vaelico786.
      */
-    public df(OPhabs plugin, Material castMaterial, String castName, String commandName){
+    public df(OPhabs plugin, Material castMaterial, String castName, String commandName) {
         super(plugin);
         actual=0;
         this.caster = castMaterial;
@@ -71,7 +71,6 @@ public class df extends abilities {
         this.commandName = commandName;
         this.active = true;
     }
-
 
     public String getItemName(){
         return this.casterName;
@@ -90,18 +89,22 @@ public class df extends abilities {
     public String getName(){
         return commandName;
     }
-	public void ability1(){}
-    public void ability2(){}
-	public void ability3(){}
-	public void ability4(){}
-	public void ability5(){}
-	public void ability6(){}
-    public void onEntityDamage(EntityDamageEvent event){
-        if(event instanceof EntityDamageByEntityEvent){
-            if(((EntityDamageByEntityEvent)event).getDamager() instanceof LivingEntity){
+	public void ability1() {}
+    public void ability2() {}
+	public void ability3() {}
+	public void ability4() {}
+	public void ability5() {}
+	public void ability6() {}
+    public void onEntityDamage(EntityDamageEvent event) {
+        if(event instanceof EntityDamageByEntityEvent) {
+            if(((EntityDamageByEntityEvent)event).getDamager() instanceof LivingEntity) {
                 LivingEntity damager = (LivingEntity) ((EntityDamageByEntityEvent)event).getDamager();
-                if(damager.getEquipment().getItemInMainHand().getItemMeta() != null && damager.getEquipment().getItemInMainHand().getItemMeta().getLore() != null && damager.getEquipment().getItemInMainHand().getItemMeta().getLore().contains("Material:Kairōseki")){
+                if(damager.getEquipment().getItemInMainHand().getItemMeta() != null &&
+                        damager.getEquipment().getItemInMainHand().getItemMeta().getLore() != null &&
+                        damager.getEquipment().getItemInMainHand().getItemMeta().getLore().contains("Material:Kairōseki")) {
+
                     active = false;
+
                     new BukkitRunnable(){
                         @Override
                         public void run(){
@@ -118,8 +121,6 @@ public class df extends abilities {
                 }
             }
         }
-
-
     }
     public void onPlayerDeath(PlayerDeathEvent event){
         user = null;
@@ -132,5 +133,4 @@ public class df extends abilities {
     public void onPlayerEggThrow(PlayerEggThrowEvent event){}
     public void onEntityShootBow(EntityShootBowEvent event){}
     public void onInventoryClick(InventoryClickEvent event){}
-
 }
