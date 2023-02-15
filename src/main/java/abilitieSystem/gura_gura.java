@@ -16,6 +16,7 @@ import org.bukkit.potion.PotionEffect;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.util.Vector;
 import org.bukkit.block.Block;
+import org.bukkit.block.Container;
 
 public class gura_gura extends paramecia {
     final int waveDistance = 8, radiusFloor = 4, radiusWall = 3;
@@ -70,8 +71,16 @@ public class gura_gura extends paramecia {
     }
     public void ability4(){
         if(abilitiesCD.get(3) == 0){
+            if(numberOfWaves == 0){
+                new BukkitRunnable(){
+                    @Override
+                    public void run(){
+                        abilitiesCD.set(3, 30);
+                        numberOfWaves = 0;
+                    }
+                }.runTaskLater(plugin, 60);
+            }
             expansionWaveBlocks(user.getPlayer());
-            abilitiesCD.set(3, 10);
         }
     }
 
@@ -101,7 +110,7 @@ public class gura_gura extends paramecia {
 
 
     public Boolean isSolidBlock(Block block){
-        return !(block.getType().getHardness() <= Material.TORCH.getHardness() || block.getType() == Material.AIR || block.getType() == Material.WATER || block.getType() == Material.LAVA);
+        return !(block.getType().getHardness() <= Material.TORCH.getHardness() || block.getType() == Material.AIR || block.getType() == Material.WATER || block.getType() == Material.LAVA || block.getType() == Material.BEDROCK);
     }
 
     public void getSolidRelativeY(Location loc, int y){
@@ -148,7 +157,7 @@ public class gura_gura extends paramecia {
                         l.getWorld().getNearbyEntities(l, 1, deep*2, 1).forEach((entity) -> {
                             if(entity instanceof LivingEntity){
                                 if(entity.getName() != player.getName())
-                                    ((LivingEntity) entity).damage(3);
+                                    ((LivingEntity) entity).damage(6);
                             }
                         });
                         getSolidRelativeY(l,deep);
@@ -161,7 +170,7 @@ public class gura_gura extends paramecia {
                         l.getWorld().getNearbyEntities(l, 1, 4, 1).forEach((entity) -> {
                             if(entity instanceof LivingEntity){
                                 if(entity.getName() != player.getName())
-                                    ((LivingEntity) entity).damage(3);
+                                    ((LivingEntity) entity).damage(6);
                             }
                         });
                         getSolidRelativeY(l,deep);
@@ -174,7 +183,7 @@ public class gura_gura extends paramecia {
                          l.getWorld().getNearbyEntities(l, 1, 4, 1).forEach((entity) -> {
                             if(entity instanceof LivingEntity){
                                 if(entity.getName() != player.getName())
-                                    ((LivingEntity) entity).damage(3);
+                                    ((LivingEntity) entity).damage(6);
                             }
                         });
                         getSolidRelativeY(l,deep);
@@ -187,7 +196,7 @@ public class gura_gura extends paramecia {
                         l.getWorld().getNearbyEntities(l, 1, 4, 1).forEach((entity) -> {
                             if(entity instanceof LivingEntity){
                                 if(entity.getName() != player.getName())
-                                   ((LivingEntity) entity).damage(3);
+                                   ((LivingEntity) entity).damage(6);
                             }
                         });
                         getSolidRelativeY(l,deep);
@@ -284,9 +293,9 @@ public class gura_gura extends paramecia {
 
     for (Location b : blocks) {
       if (b.getBlock().getType() != AIR && b.getBlock().getType() != Material.WATER) {
-        if (b.getBlock().getType().getHardness() < Material.DIRT.getHardness())
+        if (b.getBlock().getType().getHardness() < Material.DIRT.getHardness() && b.getBlock().getType() != Material.BEDROCK) 
           b.getBlock().breakNaturally();
-        else if (b.getBlock().getType().getHardness() <= Material.GRASS_BLOCK.getHardness()) {
+        else if (b.getBlock().getType().getHardness() <= Material.GRASS_BLOCK.getHardness() && b.getBlock().getType() != Material.BEDROCK) {
           if (b.getBlock().getType() == Material.GRASS_BLOCK) b.getBlock().setType(Material.DIRT);
           Random rand = new Random(); // instance of random class
           int int_random = rand.nextInt(15);
@@ -306,7 +315,11 @@ public class gura_gura extends paramecia {
   }
 
   public Entity setFallingBlock(Location block) {
-    if (block.getBlock().getType() != AIR && block.getBlock().getType() != Material.WATER) {
+    if (block.getBlock().getType() != AIR && block.getBlock().getType() != Material.WATER && block.getBlock().getType() != Material.BEDROCK) {
+      if(block.getBlock().getState() instanceof Container){
+        block.getBlock().breakNaturally();
+        return null;
+      }
       Material matFallingBlock = block.getBlock().getType();
       block.getBlock().setType(Material.AIR);
       return block.getWorld().spawnFallingBlock(block, matFallingBlock, (byte) 9);
@@ -358,7 +371,6 @@ public class gura_gura extends paramecia {
     int y2 = Math.max(pos1.getBlockY(), pos2.getBlockY());
     int z2 = Math.max(pos1.getBlockZ(), pos2.getBlockZ());
 
-    System.out.println(x1 + "," + y1 + "," + z1 + " : " + x2 + "," + y2 + "," + z2);
     for (int x = x1; x <= x2; x++) {
       for (int y = y1; y <= y2; y++) {
         for (int z = z1; z <= z2; z++) {
@@ -388,10 +400,10 @@ public class gura_gura extends paramecia {
             }
           }
           if (block.getBlock().getType() != AIR && block.getBlock().getType() != Material.WATER) {
-            if (block.getBlock().getType().getHardness() < Material.DIRT.getHardness())
+            if (block.getBlock().getType().getHardness() < Material.DIRT.getHardness() && block.getBlock().getType() != Material.BEDROCK) 
               block.getBlock().breakNaturally();
             else {
-              if (block.getBlock().getType().getHardness() <= Material.STONE.getHardness()) {
+              if (block.getBlock().getType().getHardness() <= Material.STONE.getHardness() && block.getBlock().getType() != Material.BEDROCK) {
                 Random rand = new Random(); // instance of random class
                 int int_random = rand.nextInt(25);
                 if (int_random == 1) block.getBlock().breakNaturally();

@@ -535,7 +535,7 @@ public class goru_goru extends paramecia {
     }
 
     public void onInventoryClick(InventoryClickEvent event){
-        if(opened){
+        if(opened && event.getView().getTitle().contains("Gold Creation")){
             Player player = (Player) event.getWhoClicked();
             ItemStack clicked = event.getCurrentItem();
             Inventory inventory = event.getInventory();

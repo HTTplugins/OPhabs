@@ -1,0 +1,24 @@
+{
+  "parent": "minecraft:item/generated",
+  "textures": {
+    "layer0": "minecraft:item/apple"
+  },
+    "overrides": [
+        {"predicate": {"custom_model_data": 1},"model": "custom/yamifruit"},
+        {"predicate": {"custom_model_data": 2},"model": "custom/merafruit"},
+        {"predicate": {"custom_model_data": 3},"model": "custom/gurafruit"},
+        {"predicate": {"custom_model_data": 4},"model": "custom/mokufruit"},
+        {"predicate": {"custom_model_data": 5},"model": "custom/nekofruit"},
+        {"predicate": {"custom_model_data": 6},"model": "custom/magufruit"},
+        {"predicate": {"custom_model_data": 7},"model": "custom/gorofruit"},
+        {"predicate": {"custom_model_data": 8},"model": "custom/ishifruit"},
+        {"predicate": {"custom_model_data": 9},"model": "custom/gorufruit"},
+        {"predicate": {"custom_model_data": 10},"model": "custom/inufruit"},
+        {"predicate": {"custom_model_data": 11},"model": "custom/ryuallosaurfruit"},
+        {"predicate": {"custom_model_data": 12},"model": "custom/opefruit"},
+        {"predicate": {"custom_model_data": 13},"model": "custom/zushifruit"},
+        {"predicate": {"custom_model_data": 14},"model": "custom/sukefruit"},
+        {"predicate": {"custom_model_data": 15},"model": "custom/hiefruit"}
+
+    ]
+}

@@ -1,4 +1,5 @@
 .idea/
 Makefile
 target/
-
+html/
+latex/

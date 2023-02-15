@@ -20,84 +20,85 @@ public class devilFruit{
      * @author RedRiotTank, Vaelico786.
      */
     public devilFruit(String fruitCommandName){
-        Material devilFruitForm = null;
         String fruitItemName = null;
+        int modelData = 0;
         ItemMeta metaDataDevilFruit = (new ItemStack(Material.APPLE)).getItemMeta().clone();
         commandFruitName = fruitCommandName;
         switch (fruitCommandName){
             case fruitIdentification.fruitCommandNameYami:
-                devilFruitForm = Material.APPLE;
                 fruitItemName = fruitIdentification.fruitItemNameYami;
+                modelData = 1;
                 break;
 
             case fruitIdentification.fruitCommandNameMera:
-                devilFruitForm = Material.CARROT;
                 fruitItemName  = fruitIdentification.fruitItemNameMera;
+                modelData = 2;
                 break;
 
             case fruitIdentification.fruitCommandNameGura:
-                devilFruitForm = Material.CARROT;
                 fruitItemName  = fruitIdentification.fruitItemNameGura;
+                modelData = 3;
                 break;
 
             case fruitIdentification.fruitCommandNameMoku:
-                devilFruitForm = Material.CARROT;
                 fruitItemName  = fruitIdentification.fruitItemNameMoku;
+                modelData = 4;
                 break;
             case fruitIdentification.fruitCommandNameNekoReoparudo:
-                devilFruitForm = Material.CARROT;
                 fruitItemName  = fruitIdentification.fruitItemNameNekoReoparudo;
+                modelData = 5;
                 break;
 
             case fruitIdentification.fruitCommandNameMagu :
-                devilFruitForm = Material.APPLE;
                 fruitItemName = fruitIdentification.fruitItemNameMagu;
+                modelData = 6;
                 break;
 
             case fruitIdentification.fruitCommandNameGoro:
-                devilFruitForm = Material.CARROT;
                 fruitItemName = fruitIdentification.fruitItemNameGoro;
+                modelData = 7;
                 break;
 
             case fruitIdentification.fruitCommandNameIshi:
-                devilFruitForm = Material.BEETROOT;
                 fruitItemName = fruitIdentification.fruitItemNameIshi;
+                modelData = 8;
                 break;
 
             case fruitIdentification.fruitCommandNameGoru:
-                devilFruitForm = Material.GOLDEN_APPLE;
                 fruitItemName = fruitIdentification.fruitItemNameGoru;
+                modelData = 9;
                 break;
             case fruitIdentification.fruitCommandNameInuOkuchi:
-                devilFruitForm = Material.CARROT;
                 fruitItemName = fruitIdentification.fruitItemNameInuOkuchi;
+                modelData = 10;
                 break;
             case fruitIdentification.fruitCommandNameRyuAllosaurs:
-                devilFruitForm = Material.CARROT;
                 fruitItemName = fruitIdentification.fruitItemNameRyuAllosaurs;
+                modelData = 11;
                 break;
             case fruitIdentification.fruitCommandNameOpe:
-                devilFruitForm = Material.CARROT;
                 fruitItemName = fruitIdentification.fruitItemNameOpe;
+                modelData = 12;
                 break;
 
             case fruitIdentification.fruitCommandNameZushi:
-                devilFruitForm = Material.APPLE;
                 fruitItemName = fruitIdentification.fruitItemNameZushi;
+                modelData = 13;
                 break;
             case fruitIdentification.fruitCommandNameSuke:
-                devilFruitForm = Material.APPLE;
                 fruitItemName = fruitIdentification.fruitItemNameSuke;
+                modelData = 14;
                 break;
             default:
-                devilFruitForm = Material.ACACIA_BOAT;
                 fruitItemName  = "ERROR";
                 break;
         }
 
-        devilFruit = new ItemStack(devilFruitForm);
+        devilFruit = new ItemStack(Material.APPLE);
         metaDataDevilFruit.setDisplayName(fruitItemName);
+        metaDataDevilFruit.setCustomModelData(modelData);
         devilFruit.setItemMeta(metaDataDevilFruit);
+
         inUse = false;
 
     }

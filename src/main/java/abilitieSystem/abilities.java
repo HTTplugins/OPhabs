@@ -1,12 +1,7 @@
 package abilitieSystem;
 
-
 import htt.ophabs.OPhabs;
-import castSystem.coolDown;
-
 import org.bukkit.event.entity.EntityDamageEvent;
-import org.bukkit.event.entity.EntityDamageByEntityEvent;
-import org.bukkit.event.entity.EntityChangeBlockEvent;
 import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.event.entity.EntityShootBowEvent;
 import org.bukkit.event.entity.EntityPickupItemEvent;
@@ -17,46 +12,157 @@ import org.bukkit.event.player.PlayerItemConsumeEvent;
 import org.bukkit.event.player.PlayerRespawnEvent;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.player.PlayerItemDamageEvent;
-import org.bukkit.entity.LivingEntity;
-import org.bukkit.entity.Player;
-import org.bukkit.potion.PotionEffect;
-import org.bukkit.potion.PotionEffectType;
-import org.bukkit.scheduler.BukkitRunnable;
-import org.bukkit.Material;
 
 import java.util.ArrayList;
+
+/**
+ * @brief Abilities for fruits Class.
+ * @author Vaelico786
+ */
 
 public class abilities {
     protected OPhabs plugin;
     protected abilityUser user=null;
     public ArrayList<String> abilitiesNames = new ArrayList<>();
     public ArrayList<Integer> abilitiesCD = new ArrayList<>();
-    
-    
-    public abilities(OPhabs plugin, abilityUser user){
+
+    /**
+     * @brief abilities constructor.
+     * @param plugin OPhabs plugin.
+     * @param user Fruit's user.
+     * @author Vaelico786.
+     */
+    public abilities(OPhabs plugin, abilityUser user) {
         this.plugin = plugin;
         this.user = user;
     }
-    public abilities(OPhabs plugin){
+
+    /**
+     * @brief abilities constructor.
+     * @param plugin OPhabs plugin.
+     * @author Vaelico786.
+     */
+    public abilities(OPhabs plugin) {
         this.plugin = plugin;
     }
-	public void ability1(){}
-    public void ability2(){}
-	public void ability3(){}
-	public void ability4(){}
-	public void ability5(){}
-	public void ability6(){}
-    public void onPlayerDeath(PlayerDeathEvent event){}
-    public void playerOnWater(PlayerMoveEvent event){}
-    public void onPlayerToggleSneak(PlayerToggleSneakEvent e){}
-    public void onFall(EntityDamageEvent e){}
-    public void onPlayerItemConsume(PlayerItemConsumeEvent event){}
-    public void onEntityPickupItem(EntityPickupItemEvent event){}
-    public void onPlayerEggThrow(PlayerEggThrowEvent event){}
-    public void onEntityShootBow(EntityShootBowEvent event){}
-    public void onInventoryClick(InventoryClickEvent event){}
-    public void onEntityDamage(EntityDamageEvent event){}
-    public void onPlayerRespawn(PlayerRespawnEvent event){}
-    public void onItemDamage(PlayerItemDamageEvent event){}
 
+    /**
+     * @brief Fruit's ability 1.
+     * @author Vaelico786.
+     */
+	public void ability1() {}
+
+    /**
+     * @brief Fruit's ability 2.
+     * @author Vaelico786.
+     */
+    public void ability2() {}
+
+    /**
+     * @brief Fruit's ability 3.
+     * @author Vaelico786.
+     */
+	public void ability3() {}
+
+    /**
+     * @brief Fruit's ability 4.
+     * @author Vaelico786.
+     */
+	public void ability4() {}
+
+    /**
+     * @brief Fruit's ability 5.
+     * @author Vaelico786.
+     */
+	public void ability5() {}
+
+    /**
+     * @brief Fruit's ability 6.
+     * @author Vaelico786.
+     */
+	public void ability6() {}
+
+    /**
+     * @brief Passive function when a player dies.
+     * @param event Player's death event.
+     * @author Vaelico786.
+     */
+    public void onPlayerDeath(PlayerDeathEvent event) {}
+
+    /**
+     * @brief Passive function when a player is in water.
+     * @param event Player's movement event.
+     * @author Vaelico786.
+     */
+    public void playerOnWater(PlayerMoveEvent event) {}
+
+    /**
+     * @brief Passive function when a player "shifts".
+     * @param e Player's shift event.
+     * @author Vaelico786.
+     */
+    public void onPlayerToggleSneak(PlayerToggleSneakEvent e) {}
+
+    /**
+     * @brief Passive function when a player falls from so high.
+     * @param e Player's fall event.
+     * @author Vaelico786.
+     */
+    public void onFall(EntityDamageEvent e) {}
+
+    /**
+     * @brief Passive function when a player consumes a consumable item.
+     * @param event Player's consume event.
+     * @author Vaelico786.
+     */
+    public void onPlayerItemConsume(PlayerItemConsumeEvent event) {}
+
+    /**
+     * @brief Passive function when a player picks up an item on his inventory.
+     * @param event Player's pick up event.
+     * @author Vaelico786.
+     */
+    public void onEntityPickupItem(EntityPickupItemEvent event) {}
+
+    /**
+     * @brief Passive function when a player throws an egg.
+     * @param event Player's throw egg event.
+     * @author Vaelico786.
+     */
+    public void onPlayerEggThrow(PlayerEggThrowEvent event) {}
+
+    /**
+     * @brief Passive function when an entity shoots a bow.
+     * @param event Player's shoot bow event.
+     * @author Vaelico786.
+     */
+    public void onEntityShootBow(EntityShootBowEvent event) {}
+
+    /**
+     * @brief Passive function when a player clicks into his inventory.
+     * @param event Player's click inventory event.
+     * @author Vaelico786.
+     */
+    public void onInventoryClick(InventoryClickEvent event) {}
+
+    /**
+     * @brief Passive function when an entity receives damage.
+     * @param event Player's receive damage event.
+     * @author Vaelico786.
+     */
+    public void onEntityDamage(EntityDamageEvent event) {}
+
+    /**
+     * @brief Passive function when a player respawns after die.
+     * @param event Player's respawn event.
+     * @author Vaelico786.
+     */
+    public void onPlayerRespawn(PlayerRespawnEvent event) {}
+
+    /**
+     * @brief Passive function when a player deals damage with an item.
+     * @param event Player's item damage event.
+     * @author Vaelico786.
+     */
+    public void onItemDamage(PlayerItemDamageEvent event) {}
 }

@@ -10,8 +10,6 @@ import org.bukkit.entity.Entity;
 import org.bukkit.entity.FallingBlock;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
-import org.bukkit.event.EventHandler;
-import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityChangeBlockEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.scheduler.BukkitRunnable;
@@ -21,7 +19,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 import java.util.Stack;
-import castSystem.castIdentification;
 
 import static java.lang.Math.*;
 
@@ -261,7 +258,7 @@ public class yami_yami extends logia {
      * @see yami_yami#blackVoid(Player)
      * @author RedRiotTank.
      */
-    public void setBlockAndFill(Location playerLocation, int x, int z,boolean fill){
+    public void setBlockAndFill(Location playerLocation, int x, int z,boolean fill) {
         Location perimeterPixel = new Location(playerLocation.getWorld(),0,0,0);
 
         perimeterPixel.setY( playerLocation.getBlockY() - 1);
@@ -308,7 +305,7 @@ public class yami_yami extends logia {
      * @see yami_yami#blackVoid(Player)
      * @author RedRiotTank.
      */
-    public void setBlockAndLineUP(Location perimeterPixel){
+    public void setBlockAndLineUP(Location perimeterPixel) {
         boolean found = false;
         for(int i=0; i < 3 && !found; i++){
 
@@ -342,7 +339,7 @@ public class yami_yami extends logia {
      * @see yami_yami#blackVoid(Player)
      * @author RedRiotTank.
      */
-    public void dissappearVoidBlocks(){
+    public void dissappearVoidBlocks() {
         for(Block convertedTVblock : convertedToVoidBlocks)
             convertedTVblock.setType(Material.AIR);
     }
@@ -354,7 +351,7 @@ public class yami_yami extends logia {
      * @see yami_yami#liberateAbsorptions(Player)
      * @author RedRiotTank.
      */
-    public void ability2(){
+    public void ability2() {
         if(abilitiesCD.get(1) == 0){
             liberateAbsorptions(user.getPlayer());
             abilitiesCD.set(1, 20); // Pon el cooldown en segundos
@@ -367,7 +364,7 @@ public class yami_yami extends logia {
      * @todo add potion effects when liberating.
      * @author RedRiotTank.
      */
-    public void liberateAbsorptions(Player player){
+    public void liberateAbsorptions(Player player) {
 
         World world = player.getWorld();
         Random random = new Random();
@@ -438,8 +435,8 @@ public class yami_yami extends logia {
      * @see yami_yami#livingVoid(Player)
      * @author RedRiotTank.
      */
-    public void ability3(){
-        if(abilitiesCD.get(2) == 0){
+    public void ability3() {
+        if(abilitiesCD.get(2) == 0) {
             livingVoid(user.getPlayer());
             abilitiesCD.set(2, 20); // Pon el cooldown en segundos
         }
@@ -451,7 +448,7 @@ public class yami_yami extends logia {
      * @todo refactor it to use in multiple places.
      * @author RedRiotTank.
      */
-    public void livingVoid(Player player){
+    public void livingVoid(Player player) {
         player.playSound(player.getLocation(),Sound.BLOCK_REDSTONE_TORCH_BURNOUT,10,0);
         World world = player.getWorld();
 
@@ -469,7 +466,7 @@ public class yami_yami extends logia {
      * @param player User that uses the ability.
      * @author RedRiotTank.
      */
-    public void absorbAnimation(Player player){
+    public void absorbAnimation(Player player) {
         new BukkitRunnable(){
             double angle = -player.getLocation().getYaw();
             World world = player.getWorld();
@@ -537,8 +534,8 @@ public class yami_yami extends logia {
      * @todo refactor it in the multiple biblio (zushi also uses this).
      * @author RedRiotTank
      */
-    public void livingVoidForEntity(Entity ent, Player player){
-        BukkitTask attract = new BukkitRunnable(){
+    public void livingVoidForEntity(Entity ent, Player player) {
+        BukkitTask attract = new BukkitRunnable() {
             Vector FirstVector;
             boolean fV = false;
             boolean entityInHand = false;
@@ -554,7 +551,7 @@ public class yami_yami extends logia {
 
                 Vector movement = player.getLocation().toVector().subtract(ent.getLocation().toVector()).normalize();
 
-                if(!fV){
+                if(!fV) {
                     FirstVector = movement.clone();
                     fV = true;
                 }
@@ -583,11 +580,11 @@ public class yami_yami extends logia {
      * @todo refactor it in the multiple biblio (zushi also uses this).
      * @author RedRiotTank
      */
-    public void repealEntity(Entity ent, Player player ){
+    public void repealEntity(Entity ent, Player player) {
         repealAnimationCounter++;
         World world = player.getWorld();
 
-        if(repealAnimationCounter == 1){
+        if(repealAnimationCounter == 1) {
             repealAnimation(player);
         }
 
@@ -607,8 +604,8 @@ public class yami_yami extends logia {
      * @see yami_yami#voidMeteore(Player)
      * @author RedRiotTank.
      */
-    public void ability4(){
-        if(abilitiesCD.get(3) == 0){
+    public void ability4() {
+        if(abilitiesCD.get(3) == 0) {
             voidMeteore(user.getPlayer());
             abilitiesCD.set(3, 20); // Pon el cooldown en segundos
         }
@@ -620,13 +617,10 @@ public class yami_yami extends logia {
      * @todo refactor to multi biblio.
      * @author RedRiotTank.
      */
-    public void voidMeteore(Player player){
+    public void voidMeteore(Player player) {
         World world = player.getWorld();
-
-
-        new BukkitRunnable(){
-            double x,y,z, xr,yr,zr;
-
+        new BukkitRunnable() {
+            double x, y, z, xr, yr, zr;
             Location startPosition = player.getLocation().add(0,3,0);
 
             Vector direction = new Vector(0,0,0);
@@ -646,7 +640,7 @@ public class yami_yami extends logia {
                 ticks++;
                 numplarticles = 0;
 
-                for (double i = 0; i < 2*PI*4; i+=0.05){
+                for (double i = 0; i < 2*PI*4; i+=0.05) {
                     x = sin(i/10*PI);
                     y = sin((i%10)*PI) * cos(i/10*PI);
                     z =cos((i%10)*PI)*cos(i/10*PI);
@@ -671,7 +665,7 @@ public class yami_yami extends logia {
 
                 direction.add(new Vector(sumX,sumY,sumZ));
 
-                if(numplarticles < 25 || ticks > 50){
+                if(numplarticles < 25 || ticks > 50) {
                     this.cancel();
                 }
 

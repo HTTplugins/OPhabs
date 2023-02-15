@@ -1,0 +1,49 @@
+{
+	"credit": "Made with Blockbench",
+	"texture_size": [128, 128],
+	"textures": {
+		"0": "item/ryuallosaur",
+		"particle": "item/ryuallosaur"
+	},
+	"elements": [
+		{
+			"from": [0, 0, 6],
+			"to": [16, 16, 6],
+			"faces": {
+				"north": {"uv": [16, 0, 0, 16], "texture": "#0"},
+				"east": {"uv": [0, 0, 0.25, 2], "texture": "#0"},
+				"south": {"uv": [0, 0, 16, 16], "texture": "#0"},
+				"west": {"uv": [0, 0, 0.25, 2], "texture": "#0"},
+				"up": {"uv": [0, 0, 2, 0.25], "texture": "#0"},
+				"down": {"uv": [0, 0, 2, 0.25], "texture": "#0"}
+			}
+		}
+	],
+	"gui_light": "front",
+	"display": {
+		"thirdperson_righthand": {
+			"translation": [1.25, 0.5, 1.75],
+			"scale": [0.6, 0.6, 1]
+		},
+		"thirdperson_lefthand": {
+			"translation": [-1, 0, 1.75],
+			"scale": [0.6, 0.6, 1]
+		},
+		"firstperson_righthand": {
+			"rotation": [0, -82.25, 0]
+		},
+		"firstperson_lefthand": {
+			"rotation": [0, -89, 0]
+		},
+		"ground": {
+			"translation": [3.75, 4.5, 2.75]
+		},
+		"gui": {
+			"rotation": [0, 0, 12.25]
+		},
+		"fixed": {
+			"rotation": [0, 0, 17.75],
+			"translation": [1.25, 0, 1.75]
+		}
+	}
+}

@@ -1,14 +1,13 @@
 package abilitieSystem;
 
-import org.bukkit.Color;
-import org.bukkit.Location;
-import org.bukkit.Particle;
-import org.bukkit.World;
+import org.bukkit.*;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.util.RayTraceResult;
 import org.bukkit.util.Vector;
+
+import static java.lang.Math.*;
 
 
 /**
@@ -28,7 +27,7 @@ public class auxBiblio {
      * for example, if you're inside a house.
      * @author RedRiotTank
      */
-    public static double searchGround(double x, double z, double initialY, World world){
+    public static double searchGround(double x, double z, double initialY, World world) {
 
         Location loc = new Location(world,x,initialY,z);
 
@@ -69,7 +68,8 @@ public class auxBiblio {
     public static void spawnBloodParticles(Entity entity) {
         Location loc = entity.getLocation();
         World world = entity.getWorld();
-        world.spawnParticle(Particle.REDSTONE, loc.add(0, entity.getHeight(), 0), 20, 0.5, 0.5, 0.5, 0.1, new Particle.DustOptions(Color.RED, 1.0f));
+        world.spawnParticle(Particle.REDSTONE, loc.add(0, entity.getHeight(), 0), 20, 0.5, 0.5, 0.5,
+                0.1, new Particle.DustOptions(Color.RED, 1.0f));
     }
 
     /**
@@ -79,11 +79,13 @@ public class auxBiblio {
      * @return The first living entity if it is found, null if nothing is found.
      * @author RedRiotTank
      */
-    public static LivingEntity rayCastLivEnt(Player player, int distance){
+    public static LivingEntity rayCastLivEnt(Player player, int distance) {
         LivingEntity target = null;
 
         Vector direction = player.getEyeLocation().getDirection();
-        RayTraceResult result = player.getWorld().rayTraceEntities(player.getEyeLocation(), direction, distance, p -> !player.getUniqueId().equals(p.getUniqueId()));
+        RayTraceResult result = player.getWorld().rayTraceEntities(player.getEyeLocation(), direction, distance,
+                p -> !player.getUniqueId().equals(p.getUniqueId()));
+
         if (result != null && result.getHitEntity() != null)
             target = (LivingEntity) result.getHitEntity();
 
@@ -107,10 +109,61 @@ public class auxBiblio {
         double angle = Math.atan2(xv, zv); // Value between -π and +π
         double angleInDegrees = (angle * 180) / Math.PI;
 
-        if (angleInDegrees <= 60 && angleInDegrees >= -32)
-            return true;
+        return angleInDegrees <= 60 && angleInDegrees >= -32;
+    }
 
+    /**
+     * @brief Creates a circle of particles in the direction the player is looking at.
+     * @param radius Radius of the circle.
+     * @param separation Separation between the particles.
+     * @param prof How far away from the player you want the circle to appear.
+     * @param dustOption Dust Option of the particle. Set it to null if your particle don't use dust options.
+     * @param particle ParticleType of the circle.
+     * @param harms true if particles harms Living Entities when touching them.
+     * @param destroy true if particles destroy blocks when touching them.
+     * @param player player that generates the circle next to.
+     * @author RedRiotTank
+     */
+    public static void circleEyeVector(double radius, double separation, double prof, Particle.DustOptions dustOption,
+                                       Particle particle, boolean harms, boolean destroy, Player player) {
 
-        return false;
+        final Location playerLoc = player.getLocation();
+        double x,y, xY, yY, zY, xX, yX, zX,xL,yL,zL;
+        final double yaw = -player.getLocation().getYaw(),
+                pitch = player.getLocation().getPitch();
+        final World world = player.getWorld();
+
+        for(double i=0; i<2*PI; i+= separation) {
+            x = radius*cos(i);
+            y = radius*sin(i);
+
+            //Vertically (Arround X)
+            xX = x;
+            yX = cos(toRadians(pitch))* y - sin(toRadians(pitch))* prof;
+            zX = sin(toRadians(pitch))* y + cos(toRadians(pitch))* prof;
+
+            //horizontally (Arround Y)
+            xY = cos(toRadians(yaw))*xX + sin(toRadians(yaw))*zX;
+            yY =  yX;
+            zY = -sin(toRadians(yaw))*xX + cos(toRadians(yaw))*zX;
+
+            //Final (sum of player position)
+            xL = playerLoc.getX() + xY;
+            yL = 1 + playerLoc.getY() + yY;
+            zL = playerLoc.getZ() + zY;
+
+            Location partLoc = new Location(world, xL, yL, zL);
+
+            if(destroy)
+                if(!partLoc.getBlock().getType().equals(Material.AIR))
+                    partLoc.getBlock().setType(Material.AIR);
+
+            if(harms)
+                for(Entity ent : world.getNearbyEntities(partLoc,2,2,2))
+                    if(ent instanceof LivingEntity && !player.equals(ent))
+                        ((LivingEntity)ent).damage(100);
+
+            world.spawnParticle(particle,partLoc,0,0,0,0,dustOption);
+        }
     }
 }

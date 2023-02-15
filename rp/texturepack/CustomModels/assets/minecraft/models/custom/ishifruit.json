@@ -1,0 +1,43 @@
+{
+	"credit": "Made with Blockbench",
+	"texture_size": [128, 128],
+	"textures": {
+		"0": "item/ishifruit",
+		"particle": "item/ishifruit"
+	},
+	"elements": [
+		{
+			"from": [0, 0, 5],
+			"to": [16, 16, 5],
+			"faces": {
+				"north": {"uv": [16, 0, 0, 16], "texture": "#0"},
+				"east": {"uv": [0, 0, 0.25, 2], "texture": "#0"},
+				"south": {"uv": [0, 0, 16, 16], "texture": "#0"},
+				"west": {"uv": [0, 0, 0.25, 2], "texture": "#0"},
+				"up": {"uv": [14, 1.875, 16, 3.75], "texture": "#0"},
+				"down": {"uv": [13.625, 2.375, 16, 4.125], "texture": "#0"}
+			}
+		}
+	],
+	"gui_light": "front",
+	"display": {
+		"thirdperson_righthand": {
+			"translation": [0, 3.75, 2.75]
+		},
+		"thirdperson_lefthand": {
+			"translation": [0, 1.25, 2.25]
+		},
+		"firstperson_righthand": {
+			"rotation": [0, -89.75, 0]
+		},
+		"firstperson_lefthand": {
+			"rotation": [0, -81.25, 0]
+		},
+		"ground": {
+			"translation": [0, 5.25, 3.5]
+		},
+		"fixed": {
+			"translation": [0.75, 0, 2.75]
+		}
+	}
+}

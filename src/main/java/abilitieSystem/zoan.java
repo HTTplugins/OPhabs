@@ -8,8 +8,6 @@ import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.scheduler.BukkitRunnable;
 import skin.skinsChanger;
 
-import java.util.ArrayList;
-
 
 /**
  * @brief Zoan --> Devil fruit Subtype.
