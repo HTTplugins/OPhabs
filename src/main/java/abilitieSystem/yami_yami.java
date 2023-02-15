@@ -468,8 +468,8 @@ public class yami_yami extends logia {
      */
     public void absorbAnimation(Player player) {
         new BukkitRunnable(){
-            double angle = -player.getLocation().getYaw();
-            World world = player.getWorld();
+            final double angle = -player.getLocation().getYaw();
+            final World world = player.getWorld();
 
             double start = 2* PI*5;
             double finish = 2* PI*5 - 2* PI*5/10;
@@ -501,7 +501,7 @@ public class yami_yami extends logia {
     public void repealAnimation(Player player) {
         new BukkitRunnable() {
             final double angle = -player.getLocation().getYaw();
-            World world = player.getWorld();
+            final World world = player.getWorld();
             double start = 0;
             double finish = 0 + 2* PI*5/10;
 
@@ -577,12 +577,11 @@ public class yami_yami extends logia {
      * @brief repeals a designed entity to a player's position in the players looking direction.
      * @param ent Entity that's going to be moved.
      * @param player Player to which the entity is to be repealed.
-     * @todo refactor it in the multiple biblio (zushi also uses this).
+     * @todo refactor it in the multiple biblio (zushi and goru also uses this).
      * @author RedRiotTank
      */
     public void repealEntity(Entity ent, Player player) {
         repealAnimationCounter++;
-        World world = player.getWorld();
 
         if(repealAnimationCounter == 1) {
             repealAnimation(player);
