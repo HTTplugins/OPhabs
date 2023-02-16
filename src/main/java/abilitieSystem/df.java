@@ -22,6 +22,7 @@ import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.Material;
 
 import java.util.ArrayList;
+import java.util.Objects;
 
 /**
  * @brief Devil Fruit (abilities) --> Ability subtype.
@@ -35,6 +36,8 @@ public class df extends abilities {
     
     public Material caster;
     public String casterName;
+
+    // *********************************************** CONSTRUCTORS *******************************************************
 
     /**
      * @brief Devil fruit constructor.
@@ -72,42 +75,68 @@ public class df extends abilities {
         this.active = true;
     }
 
-    public String getItemName(){
+    // *********************************************** SETTERS/GETTERS *******************************************************
+
+    /**
+     * @brief Returns caster's name.
+     * @author Vaelico786.
+     */
+    public String getItemName() {
         return this.casterName;
     }
 
-    public Material getMaterial(){
+    /**
+     * @brief Returns fruit's caster.
+     * @author Vaelico786.
+     */
+    public Material getMaterial() {
         return this.caster;
     }
-    public ArrayList<String> getAbilitiesNames(){
+
+    /**
+     * @brief Returns fruit abilities' name.
+     * @author Vaelico786.
+     */
+    public ArrayList<String> getAbilitiesNames() {
         return abilitiesNames;
     }
-    
-    public void setUser(abilityUser user){
+
+    /**
+     * @brief Sets fruit's user.
+     * @author Vaelico786.
+     */
+    public void setUser(abilityUser user) {
         this.user = user;
     }
-    public String getName(){
+
+    /**
+     * @brief Gets fruit's name.
+     * @author Vaelico786.
+     */
+    public String getName() {
         return commandName;
     }
-	public void ability1() {}
-    public void ability2() {}
-	public void ability3() {}
-	public void ability4() {}
-	public void ability5() {}
-	public void ability6() {}
+
+    // *********************************************** PASSIVES *******************************************************
+
+    /**
+     * @brief Passive function when an entity receives damage.
+     * @see abilities#onEntityDamage(EntityDamageEvent)
+     * @author Vaelico786.
+     */
     public void onEntityDamage(EntityDamageEvent event) {
         if(event instanceof EntityDamageByEntityEvent) {
             if(((EntityDamageByEntityEvent)event).getDamager() instanceof LivingEntity) {
                 LivingEntity damager = (LivingEntity) ((EntityDamageByEntityEvent)event).getDamager();
-                if(damager.getEquipment().getItemInMainHand().getItemMeta() != null &&
+                if(Objects.requireNonNull(damager.getEquipment()).getItemInMainHand().getItemMeta() != null &&
                         damager.getEquipment().getItemInMainHand().getItemMeta().getLore() != null &&
                         damager.getEquipment().getItemInMainHand().getItemMeta().getLore().contains("Material:Kairōseki")) {
 
                     active = false;
 
-                    new BukkitRunnable(){
+                    new BukkitRunnable() {
                         @Override
-                        public void run(){
+                        public void run() {
                             active = true;
                         }
                     }.runTaskLater(plugin, 20*8);
@@ -122,15 +151,13 @@ public class df extends abilities {
             }
         }
     }
-    public void onPlayerDeath(PlayerDeathEvent event){
+
+    /**
+     * @brief Passive function when player dies.
+     * @see abilities#onPlayerDeath(PlayerDeathEvent)
+     * @author Vaelico786.
+     */
+    public void onPlayerDeath(PlayerDeathEvent event) {
         user = null;
     }
-    public void playerOnWater(PlayerMoveEvent event){}
-    public void onPlayerToggleSneak(PlayerToggleSneakEvent e){}
-    public void onFall(EntityDamageEvent e){}
-    public void onPlayerItemConsume(PlayerItemConsumeEvent event){}
-    public void onEntityPickupItem(EntityPickupItemEvent event){}
-    public void onPlayerEggThrow(PlayerEggThrowEvent event){}
-    public void onEntityShootBow(EntityShootBowEvent event){}
-    public void onInventoryClick(InventoryClickEvent event){}
 }

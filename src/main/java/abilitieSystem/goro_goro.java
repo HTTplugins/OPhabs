@@ -292,7 +292,7 @@ public class goro_goro extends logia {
             if(ent instanceof LivingEntity) {
                 ((LivingEntity)ent).addPotionEffect(new PotionEffect(PotionEffectType.SLOW,10,10));
                 new BukkitRunnable() {
-                    World world = ent.getWorld();
+                    final World world = ent.getWorld();
                     int ticks = 0;
                     @Override
                     public void run() {
@@ -312,8 +312,8 @@ public class goro_goro extends logia {
      * @author RedRiotTank.
      */
     public void electricGroundAnimation(Player player) {
-        new BukkitRunnable(){
-            World world = player.getWorld();
+        new BukkitRunnable() {
+            final World world = player.getWorld();
             double extension = 1;
             double density = 20;
 

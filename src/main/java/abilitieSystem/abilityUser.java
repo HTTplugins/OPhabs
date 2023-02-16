@@ -26,6 +26,8 @@ public class abilityUser {
     private devilFruit fruit;
     private abilities dfAbilities, hakiAbilities;
 
+    // *********************************************** CONSTRUCTORS *******************************************************
+
     /**
      * @brief abilityUser constructor.
      * @param playerName Player's name.
@@ -156,7 +158,8 @@ public class abilityUser {
     }
 
     /**
-     * @brief Gets all abilities' names of the current devil fruit.
+     * @brief Returns fruit abilities' name.
+     * @see df#getAbilitiesNames()
      * @author Vaelico786.
      */
     public ArrayList<String> getAbilitiesNames() {
@@ -240,6 +243,7 @@ public class abilityUser {
 
     /**
      * @brief Same as "abilities" class.
+     * @see abilities#onEntityDamage(EntityDamageEvent) 
      * @author Vaelico786.
      */
     public void onEntityDamage(EntityDamageEvent event) {
@@ -251,6 +255,7 @@ public class abilityUser {
 
     /**
      * @brief Same as "abilities" class.
+     * @see abilities#onPlayerDeath(PlayerDeathEvent)
      * @author Vaelico786.
      */
     public void onPlayerDeath(PlayerDeathEvent event) {
@@ -262,6 +267,7 @@ public class abilityUser {
 
     /**
      * @brief Same as "abilities" class.
+     * @see abilities#playerOnWater(PlayerMoveEvent)
      * @author Vaelico786.
      */
     public void playerOnWater(PlayerMoveEvent event) {
@@ -273,6 +279,7 @@ public class abilityUser {
 
     /**
      * @brief Same as "abilities" class.
+     * @see abilities#onPlayerToggleSneak(PlayerToggleSneakEvent)
      * @author Vaelico786.
      */
     public void onPlayerToggleSneak(PlayerToggleSneakEvent e) {
@@ -284,6 +291,7 @@ public class abilityUser {
 
     /**
      * @brief Same as "abilities" class.
+     * @see abilities#onFall(EntityDamageEvent)
      * @author Vaelico786.
      */
     public void onFall(EntityDamageEvent e) {
@@ -295,6 +303,7 @@ public class abilityUser {
 
     /**
      * @brief Same as "abilities" class.
+     * @see abilities#onPlayerItemConsume(PlayerItemConsumeEvent)
      * @author Vaelico786.
      */
     public void onPlayerItemConsume(PlayerItemConsumeEvent event) {
@@ -306,6 +315,7 @@ public class abilityUser {
 
     /**
      * @brief Same as "abilities" class.
+     * @see abilities#onEntityPickupItem(EntityPickupItemEvent)
      * @author Vaelico786.
      */
     public void onEntityPickupItem(EntityPickupItemEvent event) {
@@ -317,6 +327,7 @@ public class abilityUser {
 
     /**
      * @brief Same as "abilities" class.
+     * @see abilities#onPlayerEggThrow(PlayerEggThrowEvent)
      * @author Vaelico786.
      */
     public void onPlayerEggThrow(PlayerEggThrowEvent event) {
@@ -328,6 +339,7 @@ public class abilityUser {
 
     /**
      * @brief Same as "abilities" class.
+     * @see abilities#onEntityShootBow(EntityShootBowEvent)
      * @author Vaelico786.
      */
     public void onEntityShootBow(EntityShootBowEvent event) {
@@ -339,6 +351,7 @@ public class abilityUser {
 
     /**
      * @brief Same as "abilities" class.
+     * @see abilities#onInventoryClick(InventoryClickEvent)
      * @author Vaelico786.
      */
     public void onInventoryClick(InventoryClickEvent event) {
@@ -350,6 +363,7 @@ public class abilityUser {
 
     /**
      * @brief Same as "abilities" class.
+     * @see abilities#onPlayerRespawn(PlayerRespawnEvent)
      * @author Vaelico786.
      */
     public void onPlayerRespawn(PlayerRespawnEvent event) {
@@ -367,6 +381,7 @@ public class abilityUser {
 
     /**
      * @brief Same as "abilities" class.
+     * @see abilities#onItemDamage(PlayerItemDamageEvent)
      * @author Vaelico786.
      */
     public void onItemDamage(PlayerItemDamageEvent event) {

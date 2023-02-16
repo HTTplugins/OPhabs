@@ -1,24 +1,7 @@
 package hakiSystem;
 
 import htt.ophabs.OPhabs;
-
-import org.bukkit.Material;
-import org.bukkit.entity.Player;
-import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
-import org.bukkit.event.player.PlayerItemConsumeEvent;
-import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.meta.ItemMeta;
-import org.bukkit.event.player.PlayerMoveEvent;
-import org.bukkit.potion.PotionEffect;
-import org.bukkit.potion.PotionEffectType;
-import org.bukkit.block.Biome;
-//AttributeModifier
-import org.bukkit.attribute.AttributeModifier;
-import org.bukkit.attribute.Attribute;
-import org.bukkit.inventory.EquipmentSlot;
-
-import java.util.UUID;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
@@ -27,18 +10,19 @@ import scoreboardSystem.abilitiesScoreboard;
 
 public class hakiAssociation implements Listener {
     private final OPhabs plugin;
-    public static Map<String, abilityUser> hakiPlayers = new HashMap<>(), users = new HashMap<>();
+    public static Map<String, abilityUser> users = new HashMap<>();
     public abilitiesScoreboard scoreboard = null;
     public ArrayList<String> Names = new ArrayList<>();
     public ArrayList<Integer> Levels = new ArrayList<>();
     public ArrayList<Integer> Exp = new ArrayList<>();
-    public ArrayList<abilities> abilityList = new ArrayList<>();
+
     public hakiAssociation(OPhabs plugin, Map<String, abilityUser> users) {
         this.plugin = plugin;
         this.users = users;
 
         plugin.getConfig().getConfigurationSection("hakiPlayers").getKeys(false).forEach(key -> {
-            addHakiPlayer(key, plugin.getConfig().getInt("hakiPlayers." + key + ".Level"), plugin.getConfig().getInt("hakiPlayers." + key + ".Exp"));
+            addHakiPlayer(key, plugin.getConfig().getInt("hakiPlayers." + key + ".Level"),
+                          plugin.getConfig().getInt("hakiPlayers." + key + ".Exp"));
         });
     }
 
@@ -63,10 +47,5 @@ public class hakiAssociation implements Listener {
     public void setScoreboard(abilitiesScoreboard scoreboard){
         this.scoreboard = scoreboard;
     }
-
-    // @EventHandler(ignoreCancelled = true)
-    // public void onPlayerItemConsume(PlayerItemConsumeEvent event){
-    // }
-
 }
 
