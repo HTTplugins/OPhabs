@@ -174,7 +174,8 @@ public class auxBiblio {
      * @author Vaelico786.
      */
     public static Boolean isSolidBlock(Block block) {
-        return !(block.getType().getHardness() <= Material.TORCH.getHardness() || block.getType() == Material.AIR ||
+        return !(block.getType().getHardness() <= Material.TORCH.getHardness() ||
+                block.getType() == Material.AIR ||
                 block.getType() == Material.WATER ||
                 block.getType() == Material.LAVA ||
                 block.getType() == Material.BEDROCK);
@@ -189,7 +190,7 @@ public class auxBiblio {
      * @see auxBiblio#getSolidRelativeDown(Location, int)
      * @author Vaelico786.
      */
-    public void getSolidRelativeY(Location loc, int y) {
+    public static void getSolidRelativeY(Location loc, int y) {
         if(isSolidBlock(loc.getBlock()))
             loc = getSolidRelativeUpper(loc, y);
         else
@@ -202,7 +203,7 @@ public class auxBiblio {
      * @param y Actual 'y' we want to compare with.
      * @author Vaelico786.
      */
-    public Location getSolidRelativeUpper(Location loc, int y) {
+    public static Location getSolidRelativeUpper(Location loc, int y) {
         Location loc2 = loc.clone().add(0,1,0);
         if(!isSolidBlock(loc2.getBlock()))
             return loc;
@@ -219,7 +220,7 @@ public class auxBiblio {
      * @param y Actual 'y' we want to compare with.
      * @author Vaelico786.
      */
-    public Location getSolidRelativeDown(Location loc, int y) {
+    public static Location getSolidRelativeDown(Location loc, int y) {
         if(isSolidBlock(loc.getBlock()))
             return loc;
         else {

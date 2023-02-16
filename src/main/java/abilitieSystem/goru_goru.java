@@ -7,7 +7,6 @@ import fruitSystem.fruitIdentification;
 
 import java.util.ArrayList;
 import java.util.Objects;
-import java.util.Random;
 import org.bukkit.entity.Entity;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.inventory.ItemStack;
@@ -20,11 +19,9 @@ import org.bukkit.Material;
 import org.bukkit.Location;
 import org.bukkit.Sound;
 import org.bukkit.Bukkit;
-import org.bukkit.World;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.scheduler.BukkitRunnable;
-import org.bukkit.scheduler.BukkitTask;
 import org.bukkit.util.Vector;
 import org.bukkit.block.Block;
 import org.bukkit.inventory.Inventory;
@@ -43,7 +40,7 @@ import static org.bukkit.Material.GOLDEN_CARROT;
  * @author Vaelico786.
  */
 public class goru_goru extends paramecia {
-    final int radiusFloor = 3, radiusWall = 3;
+    final int radiusFloor = 3;
     public static Particle.DustOptions gold = new Particle.DustOptions(Color.YELLOW,1.0F);
     int storaged, maxStoraged;
     String nameAbility1 = "Absorb Gold";
