@@ -56,6 +56,7 @@ public final class OPhabs extends JavaPlugin {
         abilitiesList.add(new ope_ope(this));
         abilitiesList.add(new zushi_zushi(this));
         abilitiesList.add(new suke_suke(this));
+        abilitiesList.add(new hie_hie(this));
 
         //--------------
         //FruitSystem
@@ -104,8 +105,9 @@ public final class OPhabs extends JavaPlugin {
 
         for (abilityUser user : users.values()) {
             if(user.hasHaki()){
-                getConfig().set("hakiPlayers." + user.getName() + ".Level", user.getHakiLevel());
-                getConfig().set("hakiPlayers." + user.getName() + ".Exp", user.getHakiExp());
+
+                getConfig().set("hakiPlayers." + user.getPlayerName() + ".Level", user.getHakiLevel());
+                getConfig().set("hakiPlayers." + user.getPlayerName() + ".Exp", user.getHakiExp());
             }
         }
         saveConfig();

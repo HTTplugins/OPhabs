@@ -24,7 +24,8 @@ public class castIdentification {
             castMaterialRyuAllosaurs = Material.YELLOW_DYE,
             castMaterialOpe = Material.BRICK,
             castMaterialZushi = Material.ARROW,
-            castMaterialSuke = Material.LEATHER;
+            castMaterialSuke = Material.LEATHER,
+            castMaterialHie = Material.ARROW;
 
     public static String castItemNameYami = "Yami Yami caster",
             castItemNameMera = "Mera Mera caster",
@@ -39,7 +40,8 @@ public class castIdentification {
             castItemNameRyuAllosaurs = "Ryu Ryu Allosaurs caster",
             castItemNameOpe = "Ope Ope caster",
             castItemNameZushi = "Zushi Zushi caster",
-            castItemNameSuke = "Suke Suke caster";
+            castItemNameSuke = "Suke Suke caster",
+            castItemNameHie = "Hie Hie caster";
 
     /**
      * @brief Checks if an item is a caster.
@@ -73,7 +75,8 @@ public class castIdentification {
                 || (itemName.equals(castIdentification.castItemNameRyuAllosaurs) && itemMaterial.equals(castIdentification.castMaterialRyuAllosaurs))
                 ||(itemName.equals(castIdentification.castItemNameOpe) && itemMaterial.equals(castIdentification.castMaterialOpe))
                 || (itemName.equals(castIdentification.castItemNameZushi) && itemMaterial.equals(castIdentification.castMaterialZushi))
-                || (itemName.equals(castIdentification.castItemNameSuke) && itemMaterial.equals(castIdentification.castMaterialSuke))){
+                || (itemName.equals(castIdentification.castItemNameSuke) && itemMaterial.equals(castIdentification.castMaterialSuke))
+                || (itemName.equals(castIdentification.castItemNameHie) && itemMaterial.equals(castIdentification.castMaterialHie))){
             return true;
         }
         else

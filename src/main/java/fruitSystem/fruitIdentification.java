@@ -18,7 +18,8 @@ public class fruitIdentification {
             fruitItemNameRyuAllosaurs = "ryu ryu allosaurs no mi",
             fruitItemNameOpe = "ope ope no mi",
             fruitItemNameZushi = "zushi zushi no mi",
-            fruitItemNameSuke = "Suke suke no mi";
+            fruitItemNameSuke = "Suke suke no mi",
+            fruitItemNameHie = "Hie hie no mi";
 
 
     public final static String
@@ -35,7 +36,8 @@ public class fruitIdentification {
             fruitCommandNameRyuAllosaurs = "ryu_ryu_allosaurs",
             fruitCommandNameOpe = "ope_ope",
             fruitCommandNameZushi = "zushi_zushi",
-            fruitCommandNameSuke = "suke_suke";
+            fruitCommandNameSuke = "suke_suke",
+            fruitCommandNameHie = "hie_hie";
 
     public static String getItemName(String fruitCommandName){
         switch (fruitCommandName){
@@ -67,6 +69,8 @@ public class fruitIdentification {
                 return fruitItemNameZushi;
             case fruitCommandNameSuke:
                 return fruitItemNameSuke;
+            case fruitCommandNameHie:
+                return fruitItemNameHie;
             default:
                 return null;
         }
@@ -102,6 +106,8 @@ public class fruitIdentification {
                 return fruitCommandNameZushi;
             case fruitItemNameSuke:
                 return fruitCommandNameSuke;
+            case fruitItemNameHie:
+                return fruitCommandNameHie;
             default:
                 return null;
         }
@@ -136,6 +142,8 @@ public class fruitIdentification {
             case fruitItemNameZushi:
                 return true;
             case fruitItemNameSuke:
+                return true;
+            case fruitItemNameHie:
                 return true;
             default:
                 return false;
