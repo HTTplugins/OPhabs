@@ -21,7 +21,7 @@ import java.util.ArrayList;
  */
 
 public class abilities {
-    protected OPhabs plugin;
+    protected static OPhabs plugin;
     protected abilityUser user=null;
     public ArrayList<String> abilitiesNames = new ArrayList<>();
     public ArrayList<Integer> abilitiesCD = new ArrayList<>();

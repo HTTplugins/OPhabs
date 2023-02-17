@@ -21,9 +21,9 @@ import static java.lang.Math.*;
 public class neko_neko_reoparudo extends zoan {
     public final int FrontalAttackCD = 3, TsumeCD = 4, FearsomeCD = 5;
 
-    private ArrayList<LivingEntity> golpeadosHabilidades = new ArrayList<>();
+    private final ArrayList<LivingEntity> golpeadosHabilidades = new ArrayList<>();
 
-    public neko_neko_reoparudo(OPhabs plugin){
+    public neko_neko_reoparudo(OPhabs plugin) {
         super(plugin, castIdentification.castMaterialNekoReoparudo, castIdentification.castItemNameNekoReoparudo,
                 fruitIdentification.fruitCommandNameNekoReoparudo,"https://s.namemc.com/i/18525c829f6918fe.png","reoparudo");
 

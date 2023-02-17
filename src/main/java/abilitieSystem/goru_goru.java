@@ -11,13 +11,11 @@ import org.bukkit.entity.Entity;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
-import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.Color;
 import org.bukkit.Particle;
 import org.bukkit.Material;
 import org.bukkit.Location;
-import org.bukkit.Sound;
 import org.bukkit.Bukkit;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.entity.PlayerDeathEvent;
@@ -32,6 +30,7 @@ import org.bukkit.inventory.EquipmentSlot;
 import java.util.UUID;
 import java.lang.Math;
 
+import static abilitieSystem.OPHLib.*;
 import static org.bukkit.Material.GOLDEN_APPLE;
 import static org.bukkit.Material.GOLDEN_CARROT;
 
@@ -335,8 +334,8 @@ public class goru_goru extends paramecia {
     /**
      * @brief Ability 4 function --> If player is sneaking, spawns gold block at the looking position with current cost.
      * If he is not sneaking, transform into falling block the first block made by gold in front of the player. ???
-     * @see goru_goru#repealEntity(Entity, Player)
-     * @see goru_goru#catchEntity(Entity, Player)
+     * @see OPHLib#repealEntity(Entity, Player)
+     * @see OPHLib#catchEntity(Entity, Player)
      * @param player Fruit's user.
      * @author Vaelico786.
      */
@@ -579,106 +578,6 @@ public class goru_goru extends paramecia {
             blocks.add(loc.clone().add(0, -1, -1));
         }
         return blocks;
-    }
-
-    /**
-     * @brief Modified yami-yami's livingVoidForEntity function. ???
-     * @see yami_yami#livingVoidForEntity(Entity, Player)
-     * @param ent Entity wanted to be repealed.
-     * @param player Fruit's user.
-     * @author Vaelico786.
-     */
-    public void catchEntity(Entity ent, Player player) {
-        new BukkitRunnable() {
-            Vector FirstVector;
-            boolean fV = false;
-            boolean entityInHand = false;
-            double vx,vy,vz;
-            int i = 0, j = 0;
-            @Override
-            public void run() {
-                Location loc = player.getLocation().add(0,2,0);
-                if(player.isDead() || ent.isOnGround())
-                    this.cancel();
-
-                vx =  loc.getX() - ent.getLocation().getX();
-                vy =  loc.getY() - ent.getLocation().getY();
-                vz =  loc.getZ() - ent.getLocation().getZ();
-
-                Vector movement = loc.clone().toVector().subtract(ent.getLocation().toVector()).normalize();
-
-                if(!fV) {
-                    FirstVector = movement.clone();
-                    fV = true;
-                }
-
-                //Para levantar al mob si hay desnivel
-                if(loc.getY() >= ent.getLocation().getY() && !entityInHand)
-                    movement.setY(movement.getY() + (player.getLocation().getY() - ent.getLocation().getY()) + 3);
-
-                if(!entityInHand) {
-                    ent.setVelocity(movement);
-                    i++;
-                }
-                else {
-                    ent.teleport(player.getLocation().add(0,2,0));
-                    ent.setVelocity(new Vector(0,0.042,0));
-                    j++;
-                }
-
-                if(Math.sqrt(Math.pow(vx,2) + Math.pow(vy,2) +  Math.pow(vz,2)) <= 1) {
-                    entityInHand = true;
-                    if(!player.isSneaking()) {
-                        this.cancel();
-                        repealEntity(ent,player);
-                    }
-                }
-
-                if(!player.isSneaking()) {
-                    this.cancel();
-                }
-            }
-        }.runTaskTimer(plugin,0,1);
-    }
-
-    /**
-     * @brief Modified yami-yami's repealEntity function. ???
-     * @see yami_yami#repealEntity(Entity, Player)
-     * @param ent Entity wanted to be repealed.
-     * @param player Fruit's user.
-     * @author Vaelico786.
-     */
-    public void repealEntity(Entity ent, Player player) {
-
-        ent.getWorld().playSound(ent.getLocation(),Sound.BLOCK_REDSTONE_TORCH_BURNOUT,10,2);
-
-        Vector dir = player.getLocation().getDirection();
-        ent.setVelocity(dir.multiply(3));
-
-        //timer
-        new BukkitRunnable() {
-            Vector aux = dir;
-            int i = 0;
-            @Override
-            public void run() {
-                if(ent.getVelocity().getX() != aux.getX() || ent.getVelocity().getZ() != aux.getZ()) {
-                    aux = ent.getVelocity();
-
-                    ent.getWorld().getNearbyEntities(ent.getLocation(), 2,2,2).forEach(entity -> {
-                        if(entity instanceof LivingEntity && entity != player && entity != ent) {
-                            ((LivingEntity) entity).damage(14);
-                        }
-                    });
-                }
-                if(ent.isOnGround() || i >= 120) {
-                    cancelTask();
-                }
-                i++;
-            }
-            public void cancelTask(){
-                Bukkit.getScheduler().cancelTask(this.getTaskId());
-            }
-        }.runTaskTimer(plugin, 0, 2);
     }
 
     /**
@@ -1064,7 +963,7 @@ public class goru_goru extends paramecia {
     }
 }
 
-//Custom armor
+// *********************************************** CUSTOM ARMORS *******************************************************
 /**
  * @brief Goru goru no mi's custom golden helmet.
  * @author Vaelico786.

@@ -7,7 +7,7 @@ import org.bukkit.*;
  * @brief Paramecia --> Devil fruit Subtype.
  * @author Vaelico786.
  */
-public class paramecia extends df{
+public class paramecia extends df {
 
     /**
      * @brief Paramecia constructor.

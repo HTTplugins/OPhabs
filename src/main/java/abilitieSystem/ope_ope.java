@@ -309,11 +309,11 @@ public class ope_ope extends paramecia {
     public void stealHearth(Player player){
         if(!player.isSneaking()){
             if(activeRoom){
-                currentHearth = auxBiblio.rayCastLivEnt(player,2);
+                currentHearth = OPHLib.rayCastLivEnt(player,2);
 
                 if (currentHearth != null) {
                     player.getWorld().playSound(currentHearth.getLocation(),"swordcut",1,1);
-                    auxBiblio.spawnBloodParticles(currentHearth);
+                    OPHLib.spawnBloodParticles(currentHearth);
                     player.sendMessage("You have stolen " + currentHearth.getName() + "'s ❤.");
                 }
             }
