@@ -89,6 +89,10 @@ public class devilFruit{
                 fruitItemName = fruitIdentification.fruitItemNameSuke;
                 modelData = 14;
                 break;
+            case fruitIdentification.fruitCommandNameHie:
+                fruitItemName = fruitIdentification.fruitItemNameHie;
+                modelData = 15;
+                break;
             default:
                 fruitItemName  = "ERROR";
                 break;
