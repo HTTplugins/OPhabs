@@ -2,11 +2,7 @@ package skin;
 
 import org.bukkit.Bukkit;
 
-import org.bukkit.*;
 import org.bukkit.entity.Player;
-import org.bukkit.command.Command;
-import org.bukkit.command.CommandSender;
-import org.bukkit.command.CommandExecutor;
 
 
 public final class skinsChanger {

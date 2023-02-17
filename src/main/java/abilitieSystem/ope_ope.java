@@ -175,7 +175,7 @@ public class ope_ope extends paramecia {
      * @note Abilities can destroy room blocks, is the way to scape from it.
      * @author RedRiotTank.
      */
-    public static void onBlockBreak(BlockBreakEvent event) {
+    public static void roomBlockBreak(BlockBreakEvent event) {
         if(activeRoom)
             if(event.getBlock().getType().equals(Material.BLUE_STAINED_GLASS) || event.getBlock().getType().equals(Material.LIGHT_BLUE_STAINED_GLASS))
                 event.setCancelled(true);
@@ -184,13 +184,13 @@ public class ope_ope extends paramecia {
     /**
      * @brief Passive ability of the room, if the user is hit, it "shambless" the user and some other living entity around the room positions.
      * The damage will be dealt to this Living entity.
-     * @param event EntityDamageByEntityEvent that Minecraft client sends to server to say there was a hit.
+     * @param event userDamageByEntityEvent that Minecraft client sends to server to say there was a hit.
      * @see ope_ope#room(int, Player)
      * @note Called in his correspondent in the caster, as a listener.
      * @todo projectiles don't works correctly with this.
      * @author RedRiotTank.
      */
-    public static void onEntityDamageByEntity(EntityDamageByEntityEvent event){
+    public void onUserDamageByEntity(EntityDamageByEntityEvent event){
         World world = event.getDamager().getWorld();
         Player player = null;
         boolean found = false;

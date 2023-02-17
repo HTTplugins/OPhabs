@@ -7,7 +7,6 @@ import org.bukkit.attribute.AttributeModifier;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.Material;
-import org.bukkit.material.MaterialData;
 import org.bukkit.entity.Player;
 import org.bukkit.Bukkit;
 

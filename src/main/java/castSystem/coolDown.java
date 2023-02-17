@@ -21,12 +21,11 @@ public class coolDown {
     /**
      * @brief CoolDown system constructor.
      * @param plugin OPhabs plugin.
-     * @param users map of <user - abilityUser>.
      * @author RedRiotTank, Vaelico786.
      */
-    public coolDown(OPhabs plugin, Map<String, abilityUser> users) {
+    public coolDown(OPhabs plugin) {
         this.plugin = plugin;
-        this.users = users;
+        this.users = plugin.users;
 
         runCoolDownSystem();
     }

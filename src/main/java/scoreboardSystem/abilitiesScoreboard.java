@@ -15,16 +15,24 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * @brief Scoreboard for abilities class.
+ * @author RedRiotTank, Vaelico786.
+ */
 public class abilitiesScoreboard {
-
     OPhabs plugin;
     public Map<String, abilityUser> users = new HashMap<>();
     Map <String,Scoreboard> scoreboards = new HashMap<>();
     ScoreboardManager manager = Bukkit.getScoreboardManager();
 
-    public abilitiesScoreboard(OPhabs plugin, Map<String, abilityUser> users) {
+    /**
+     * @brief Scoreboard constructor.
+     * @param plugin OPhabs plugin.
+     * @author RedRiotTank, Vaelico786.
+     */
+    public abilitiesScoreboard(OPhabs plugin) {
         this.plugin = plugin;
-        this.users = users;
+        this.users = plugin.users;
 
         ArrayList<String> values = new ArrayList<>();
         for(abilityUser user : users.values()) {
@@ -33,14 +41,16 @@ public class abilitiesScoreboard {
                     values.add(plugin.getConfig().getString("FruitAssociations." + user.getDFAbilities().getName()));
         }
 
-        
         for(String value : values) {
             addScoreboard(value);
         }
-
     }
 
-
+    /**
+     * @brief Scoreboard initialization.
+     * Updates the scoreboard every 10 ticks
+     * @author RedRiotTank, Vaelico786.
+     */
     public void ini(){
         new BukkitRunnable(){
             @Override
@@ -48,18 +58,31 @@ public class abilitiesScoreboard {
                 updateScoreboards();
             }
         }.runTaskTimer(plugin,0,10);
-
     }
 
+    /**
+     * @brief Adds an scoreboard to the scoreboards map.
+     * @param name Name of the player linked to the scoreboard.
+     * @author RedRiotTank, Vaelico786.
+     */
     public void addScoreboard(String playerName){
         Scoreboard scoreboard = manager.getNewScoreboard();
         scoreboards.put(playerName,scoreboard);
     }
 
+    /**
+     * @brief Removes an scoreboard from the scoreboards map.
+     * @param name Name of the player linked to the scoreboard.
+     * @author RedRiotTank, Vaelico786.
+     */
     public void removeScoreboard(Player player){
         scoreboards.remove(player.getName());
     }
 
+    /**
+     * @brief Updates the data from the scoreboard.
+     * @author RedRiotTank, Vaelico786.
+     */
     public boolean updateScoreboards() {
         for(Map.Entry<String, Scoreboard> userScoreboard : scoreboards.entrySet()) {
             String playerName = userScoreboard.getKey();

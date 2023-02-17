@@ -10,6 +10,8 @@ import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.util.Vector;
+import org.bukkit.event.entity.EntityDamageByEntityEvent;
+import org.bukkit.event.player.PlayerJoinEvent;
 
 import static java.lang.Math.PI;
 
@@ -293,5 +295,31 @@ public class suke_suke extends paramecia {
                 finishInvisibility(player);
             }
         }.runTaskLater(plugin, attackDuration);
+    }
+
+
+    // ---------------------------------------------- Event ---------------------------------------------------------------------
+    /**
+     * @brief Makes players visible when attacks and exploration is active.
+     * @param event Event that triggers the method.
+     * @see suke_suke#invisibleExploration(Player)
+     * @author Vaelico786.
+     */
+    public void onEntityDamageByUser(EntityDamageByEntityEvent event) {
+        if(exploration){
+            cancelStopInvisibleTask = true;
+            user.getPlayer().removePotionEffect(PotionEffectType.INVISIBILITY);
+            finishInvisibility(user.getPlayer());
+        }
+    }
+
+    /**
+     * @brief Removes player potion effect when player joins.
+     * @param event Event that triggers the method.
+     * @see suke_suke#invisibleExploration(Player)
+     * @author Vaelico786.
+     */
+    public void onPlayerJoin(PlayerJoinEvent event) {
+        user.getPlayer().removePotionEffect(PotionEffectType.INVISIBILITY);
     }
 }

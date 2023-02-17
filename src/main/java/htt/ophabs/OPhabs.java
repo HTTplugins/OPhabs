@@ -22,8 +22,8 @@ import java.util.Map;
  * @author RedRiotTank, Vaelico786.
  */
 public final class OPhabs extends JavaPlugin {
-    public Map<String, abilityUser> users = new HashMap<>();
-
+    public static Map<String, abilityUser> users = new HashMap<>();
+    public static ArrayList<df> abilitiesList = new ArrayList<>();
     /**
      * @brief Set up of the plugin (start configuration). Literally the main.
      * @author RedRiotTank, Vaelico786.
@@ -40,7 +40,6 @@ public final class OPhabs extends JavaPlugin {
 
         //--------------
         //abilitieSystem
-        ArrayList<df> abilitiesList = new ArrayList<>();
 
         abilitiesList.add(new yami_yami(this));
         abilitiesList.add(new mera_mera(this));
@@ -60,14 +59,14 @@ public final class OPhabs extends JavaPlugin {
 
         //--------------
         //FruitSystem
-        fruitAssociation fAssociation = new fruitAssociation(this, abilitiesList, users);
-        loseFruit lFruit = new loseFruit(this, fAssociation.dfPlayers, users);
+        fruitAssociation fAssociation = new fruitAssociation(this);
+        loseFruit lFruit = new loseFruit(this, fAssociation.dfPlayers);
         getServer().getPluginManager().registerEvents(fAssociation, this);
         getServer().getPluginManager().registerEvents(lFruit, this);
 
         //
         //HakiSystem
-        hakiAssociation haki = new hakiAssociation(this, users);
+        hakiAssociation haki = new hakiAssociation(this);
         getServer().getPluginManager().registerEvents(haki, this);
 
 
@@ -75,15 +74,15 @@ public final class OPhabs extends JavaPlugin {
 
         //--------------
         //CasterSystem
-        coolDown cooldown = new coolDown(this, users);
+        coolDown cooldown = new coolDown(this);
 
-        getServer().getPluginManager().registerEvents(new caster(cooldown,users,this), this);
+        getServer().getPluginManager().registerEvents(new caster(cooldown,this), this);
         getServer().getPluginManager().registerEvents(new noDropCaster(), this);
 
         //--------------
         //ScoreBoards
 
-        abilitiesScoreboard scoreboard = new abilitiesScoreboard(this, users);
+        abilitiesScoreboard scoreboard = new abilitiesScoreboard(this);
         scoreboard.ini();
         fAssociation.setScoreboard(scoreboard);
         lFruit.setScoreboard(scoreboard);
@@ -119,8 +118,8 @@ public final class OPhabs extends JavaPlugin {
      * @author RedRiotTank, Vaelico786.
      */
     public void registerCommands(ArrayList<df> abilitiesList, hakiAssociation haki){
-        Objects.requireNonNull(this.getCommand("oph")).setExecutor(new oph(this, abilitiesList, haki));
-        Objects.requireNonNull(this.getCommand("oph")).setTabCompleter(new oph(this, abilitiesList, haki));
+        Objects.requireNonNull(this.getCommand("oph")).setExecutor(new oph(this, haki));
+        Objects.requireNonNull(this.getCommand("oph")).setTabCompleter(new oph(this, haki));
         Objects.requireNonNull(this.getCommand("weaponShop")).setExecutor(new weaponShop(this));
     }
 }

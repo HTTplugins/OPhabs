@@ -161,7 +161,7 @@ public class zushi_zushi extends paramecia{
      * @note Called in his correspondent in the caster, as a listener.
      * @author RedRiotTank.
      */
-    public static void onEntityToggleGlide(EntityToggleGlideEvent event){
+    public void onEntityToggleGlide(EntityToggleGlideEvent event){
         if(togglePlayer.contains((Player)(event.getEntity())))
             event.setCancelled(true);
     }
@@ -173,8 +173,7 @@ public class zushi_zushi extends paramecia{
      * @note Called in his correspondent in the caster, as a listener.
      * @author RedRiotTank.
      */
-    public static void onPlayerMove(PlayerMoveEvent event){
-
+    public void onPlayerMove(PlayerMoveEvent event){
         if(togglePlayer.contains(event.getPlayer())){
             event.setCancelled(true);
         }

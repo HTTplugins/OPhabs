@@ -3,6 +3,7 @@ package abilitieSystem;
 import org.bukkit.entity.Player;
 import fruitSystem.devilFruit;
 import org.bukkit.Bukkit;
+import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.entity.*;
 import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.event.player.PlayerEggThrowEvent;
@@ -10,6 +11,7 @@ import org.bukkit.event.player.PlayerToggleSneakEvent;
 import org.bukkit.event.player.PlayerItemConsumeEvent;
 import org.bukkit.event.player.PlayerRespawnEvent;
 import org.bukkit.event.player.PlayerItemDamageEvent;
+import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.inventory.InventoryClickEvent;
 
 import java.util.ArrayList;
@@ -375,8 +377,18 @@ public class abilityUser {
      * @brief Passive function when a player deals damage to another entity.
      * @author Vaelico786.
      */
-    public void onUserDamageAnotherEntity(EntityDamageByEntityEvent event) {
-        if(hasHaki()) getHakiAbilities().onUserDamageAnotherEntity(event);
+    public void onEntityDamageByUser(EntityDamageByEntityEvent event) {
+        if(hasHaki()) getHakiAbilities().onEntityDamageByUser(event);
+        if(hasFruit()) getDFAbilities().onEntityDamageByUser(event);
+    }
+
+    /**
+     * @brief Passive function when a player is damaged by another entity.
+     * @author Vaelico786.
+     */
+    public void onUserDamageByEntity(EntityDamageByEntityEvent event) {
+        if(hasHaki()) getHakiAbilities().onUserDamageByEntity(event);
+        if(hasFruit()) getDFAbilities().onUserDamageByEntity(event);
     }
 
     /**
@@ -387,4 +399,38 @@ public class abilityUser {
     public void onItemDamage(PlayerItemDamageEvent event) {
         if(hasHaki()) getHakiAbilities().onItemDamage(event);
     }
+
+    /**
+     * @brief Same as "abilities" class.
+     * @see abilities#onPlayerMove(PlayerMoveEvent)
+     * @author Vaelico786, RedRiotTank
+     */
+    public void onPlayerMove(PlayerMoveEvent event) {
+        if(hasFruit()) getDFAbilities().onPlayerMove(event);
+    }
+
+    /**
+     * @brief Same as "abilities" class.
+     * @see abilities#onEntityToggleGlide(EntityToggleGlideEvent)
+     * @author Vaelico786, RedRiotTank
+     */
+    public void onEntityToggleGlide(EntityToggleGlideEvent event) {
+        if(hasFruit()) getDFAbilities().onEntityToggleGlide(event);
+    }
+
+    /**
+     * @brief Same as "abilities" class.
+     * @see abilities#onPlayerJoin(PlayerJoinEvent)
+     * @author Vaelico786, RedRiotTank
+     */
+    public void onPlayerJoin(PlayerJoinEvent event) {
+        if(hasFruit()) getDFAbilities().onPlayerJoin(event);
+    }
+
+    /**
+     * @brief Same as "abilities" class.
+     * @see abilities#onBlockBreak(BlockBreakEvent)
+     * @author Vaelico786, RedRiotTank
+     */
+    public void onBlockBreak(BlockBreakEvent event) {}
 }

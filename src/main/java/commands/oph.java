@@ -2,7 +2,6 @@ package commands;
 
 import abilitieSystem.*;
 import fruitSystem.devilFruit;
-import fruitSystem.fruitIdentification;
 import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
 import org.bukkit.command.TabCompleter;
@@ -28,14 +27,13 @@ public class oph implements CommandExecutor, TabCompleter {
     /**
      * @brief Main Command constructor. Initialization of devil fruits and haki.
      * @param plugin OPhabs plugin.
-     * @param abilitiesList Devil fruit abilities list.
      * @param haki Haki Association.
      * @author Vaelico786.
      */
-    public oph(OPhabs plugin, ArrayList<df> abilitiesList, hakiAssociation haki){
+    public oph(OPhabs plugin, hakiAssociation haki){
 
         this.plugin = plugin;
-        for (df ability : abilitiesList){
+        for (df ability : plugin.abilitiesList){
             fruitCommands.add(ability.getName());
         }
         this.haki = haki;

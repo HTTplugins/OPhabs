@@ -31,22 +31,22 @@ import scoreboardSystem.abilitiesScoreboard;
  */
 public class fruitAssociation implements Listener {
     private final OPhabs plugin;
-    public static Map<String, abilityUser> dfPlayers = new HashMap<>(), users = new HashMap<>();
-    public static Map<String, df> abilitiesM = new HashMap<>();
+    public  Map<String, abilityUser> dfPlayers = new HashMap<>(), users = new HashMap<>();
+    public  Map<String, df> abilitiesM = new HashMap<>();
     public abilitiesScoreboard scoreboard = null;
     public ArrayList<String> Names = new ArrayList<>();
-    public ArrayList<df> abilityList = new ArrayList<>();
+    public ArrayList<df> abilitiesList = new ArrayList<>();
 
     /**
      * @brief Fruit assocaition constructor, links Players (who already have a fruit linked) and abilities on start.
      * @param plugin OPhabs plugin.
-     * @param abilitiesList List with all devil fruit abilities (abilitieSystem abilities).
-     * @param users Map of abilities by user.
      * @author Vaelico786.
      */
-    public fruitAssociation(OPhabs plugin, ArrayList<df> abilitiesList, Map<String, abilityUser> users) {
+    public fruitAssociation(OPhabs plugin) {
         this.plugin = plugin;
-        this.users = users;
+        this.users = plugin.users;
+        this.abilitiesList = plugin.abilitiesList;
+
 
         for (df ability : abilitiesList) {
             System.out.println(ability.getName());
@@ -66,7 +66,6 @@ public class fruitAssociation implements Listener {
 
             }
         }
-        abilityList = abilitiesList;
     }
 
     /**
@@ -119,9 +118,9 @@ public class fruitAssociation implements Listener {
                 if(fruit.getItemMeta().getDisplayName().equals(Names.get(i))) {
                     consumedFruit = consumedFruit(values.get(i),event);
                     values.set(i,event.getPlayer().getName());
-                    casterItemName = abilityList.get(i).getItemName();
-                    castMaterial = abilityList.get(i).getMaterial();
-                    a = abilityList.get(i);
+                    casterItemName = abilitiesList.get(i).getItemName();
+                    castMaterial = abilitiesList.get(i).getMaterial();
+                    a = abilitiesList.get(i);
                 }
             }
 

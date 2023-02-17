@@ -24,13 +24,12 @@ public class loseFruit implements Listener {
      * @brief LoseFruit system construction.
      * @param plugin OPhabs plugin.
      * @param dfPlayers List with all devil fruit abilities (abilitieSystem abilities).
-     * @param users Map of abilities by user.
      * @author Vaelico786.
      */
-    public loseFruit(OPhabs plugin, Map<String, abilityUser> dfPlayers, Map<String, abilityUser> users) {
+    public loseFruit(OPhabs plugin, Map<String, abilityUser> dfPlayers) {
         this.plugin = plugin;
+        this.users = plugin.users;
         this.dfPlayers = dfPlayers;
-        this.users = users;
     }
 
     /**

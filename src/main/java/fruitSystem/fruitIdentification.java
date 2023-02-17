@@ -1,5 +1,8 @@
 package fruitSystem;
 
+/**
+ * @brief Fruit identification class.
+ */
 public class fruitIdentification {
 
     public final static int fruitsNumber = 12;
@@ -39,114 +42,132 @@ public class fruitIdentification {
             fruitCommandNameSuke = "suke_suke",
             fruitCommandNameHie = "hie_hie";
 
+    /**
+     * @brief Obtains the fruit name from the command name.
+     * @param fruitCommandName Command name.
+     * @return Fruit name.
+     */
     public static String getItemName(String fruitCommandName){
+        String fruitItemName;
         switch (fruitCommandName){
             case fruitCommandNameYami:
-                return fruitItemNameYami;
+                fruitItemName = fruitItemNameYami;
+                break;
             case fruitCommandNameMera:
-                return fruitItemNameMera;
+                fruitItemName = fruitItemNameMera;
+                break;
             case fruitCommandNameGura:
-                return fruitItemNameGura;
+                fruitItemName = fruitItemNameGura;
+                break;
             case fruitCommandNameMoku:
-                return fruitItemNameMoku;
+                fruitItemName = fruitItemNameMoku;
+                break;
             case fruitCommandNameNekoReoparudo:
-                return fruitItemNameNekoReoparudo;
+                fruitItemName = fruitItemNameNekoReoparudo;
+                break;
             case fruitCommandNameMagu:
-                return fruitItemNameMagu;
+                fruitItemName = fruitItemNameMagu;
+                break;
             case fruitCommandNameGoro:
-                return fruitItemNameGoro;
+                fruitItemName = fruitItemNameGoro;
+                break;
             case fruitCommandNameIshi:
-                return fruitItemNameIshi;
+                fruitItemName = fruitItemNameIshi;
+                break;
             case fruitCommandNameGoru:
-                return fruitItemNameGoru;
+                fruitItemName = fruitItemNameGoru;
+                break;
             case fruitCommandNameInuOkuchi:
-                return fruitItemNameInuOkuchi;
+                fruitItemName = fruitItemNameInuOkuchi;
+                break;
             case fruitCommandNameRyuAllosaurs:
-                return fruitItemNameRyuAllosaurs;
+                fruitItemName = fruitItemNameRyuAllosaurs;
+                break;
             case fruitCommandNameOpe:
-                return fruitItemNameOpe;
+                fruitItemName = fruitItemNameOpe;
+                break;
             case fruitCommandNameZushi:
-                return fruitItemNameZushi;
+                fruitItemName = fruitItemNameZushi;
+                break;
             case fruitCommandNameSuke:
-                return fruitItemNameSuke;
+                fruitItemName = fruitItemNameSuke;
+                break;
             case fruitCommandNameHie:
-                return fruitItemNameHie;
+                fruitItemName = fruitItemNameHie;
+                break;
             default:
-                return null;
+                fruitItemName = null;
+                break;
         }
+        return fruitItemName;
     }
 
-    public String getCommandName(String fruitItemName){
+    /**
+     * @brief Obtains the command name from the item name.
+     * @param fruitItemName fruit name.
+     * @return Command name.
+     */
+    public static String getCommandName(String fruitItemName){
+        String fruitCommandName;
         switch (fruitItemName){
             case fruitItemNameYami:
-                return fruitCommandNameYami;
+                fruitCommandName = fruitCommandNameYami;
+                break;
             case fruitItemNameMera:
-                return fruitCommandNameMera;
+                fruitCommandName = fruitCommandNameMera;
+                break;
             case fruitItemNameGura:
-                return fruitCommandNameGura;
+                fruitCommandName = fruitCommandNameGura;
+                break;
             case fruitItemNameMoku:
-                return fruitCommandNameMoku;
+                fruitCommandName = fruitCommandNameMoku;
+                break;
             case fruitItemNameNekoReoparudo:
-                return fruitCommandNameNekoReoparudo;
+                fruitCommandName = fruitCommandNameNekoReoparudo;
+                break;
             case fruitItemNameMagu:
-                return fruitCommandNameMagu;
+                fruitCommandName = fruitCommandNameMagu;
+                break;
             case fruitItemNameGoro:
-                return fruitCommandNameGoro;
+                fruitCommandName = fruitCommandNameGoro;
+                break;
             case fruitItemNameIshi:
-                return fruitCommandNameIshi;
+                fruitCommandName = fruitCommandNameIshi;
+                break;
             case fruitItemNameGoru:
-                return fruitCommandNameGoru;
+                fruitCommandName = fruitCommandNameGoru;
+                break;
             case fruitItemNameInuOkuchi:
-                return fruitCommandNameInuOkuchi;
+                fruitCommandName = fruitCommandNameInuOkuchi;
+                break;
             case fruitItemNameRyuAllosaurs:
-                return fruitCommandNameRyuAllosaurs;
+                fruitCommandName = fruitCommandNameRyuAllosaurs;
+                break;
             case fruitItemNameOpe:
-                return fruitCommandNameOpe;
+                fruitCommandName = fruitCommandNameOpe;
+                break;
             case fruitItemNameZushi:
-                return fruitCommandNameZushi;
+                fruitCommandName = fruitCommandNameZushi;
+                break;
             case fruitItemNameSuke:
-                return fruitCommandNameSuke;
+                fruitCommandName = fruitCommandNameSuke;
+                break;
             case fruitItemNameHie:
-                return fruitCommandNameHie;
+                fruitCommandName = fruitCommandNameHie;
+                break;
             default:
-                return null;
+                fruitCommandName = null;
+                break;
         }
+        return fruitCommandName;
     }
 
+    /**
+     * @brief Obtains if the string is an identificated fruit.
+     * @param fruitItemName fruit name.
+     * @return if exist.
+     */
     public static boolean isFruit(String fruitItemName){
-        switch (fruitItemName){
-            case fruitItemNameYami:
-                return true;
-            case fruitItemNameMera:
-                return true;
-            case fruitItemNameGura:
-                return true;
-            case fruitItemNameMoku:
-                return true;
-            case fruitItemNameNekoReoparudo:
-                return true;
-            case fruitItemNameMagu:
-                return true;
-            case fruitItemNameGoro:
-                return true;
-            case fruitItemNameIshi:
-                return true;
-            case fruitItemNameGoru:
-                return true;
-            case fruitItemNameInuOkuchi:
-                return true;
-            case fruitItemNameRyuAllosaurs:
-                return true;
-            case fruitItemNameOpe:
-                return true;
-            case fruitItemNameZushi:
-                return true;
-            case fruitItemNameSuke:
-                return true;
-            case fruitItemNameHie:
-                return true;
-            default:
-                return false;
-        }
+        return getCommandName(fruitItemName) != null;
     }
 }

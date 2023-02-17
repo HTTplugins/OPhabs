@@ -8,17 +8,28 @@ import java.util.Map;
 import abilitieSystem.*;
 import scoreboardSystem.abilitiesScoreboard;
 
+
+/**
+ * @brief Haki association system [Player - Haki].
+ * @author RedRiotTank, Vaelico786.
+ */
 public class hakiAssociation implements Listener {
     private final OPhabs plugin;
-    public static Map<String, abilityUser> users = new HashMap<>();
+    public Map<String, abilityUser> users = new HashMap<>();
     public abilitiesScoreboard scoreboard = null;
     public ArrayList<String> Names = new ArrayList<>();
     public ArrayList<Integer> Levels = new ArrayList<>();
     public ArrayList<Integer> Exp = new ArrayList<>();
 
-    public hakiAssociation(OPhabs plugin, Map<String, abilityUser> users) {
+
+    /**
+     * @brief Haki association constructor, links Players (who already have a Haki linked) and abilities on start.
+     * @param plugin OPhabs plugin.
+     * @author Vaelico786.
+     */
+    public hakiAssociation(OPhabs plugin) {
         this.plugin = plugin;
-        this.users = users;
+        this.users = plugin.users;
 
         plugin.getConfig().getConfigurationSection("hakiPlayers").getKeys(false).forEach(key -> {
             addHakiPlayer(key, plugin.getConfig().getInt("hakiPlayers." + key + ".Level"),
@@ -26,6 +37,13 @@ public class hakiAssociation implements Listener {
         });
     }
 
+    /**
+     * @brief Links Players (who already have a Haki linked) and haki with its stats.
+     * @param name Player name.
+     * @param level Player level haki.
+     * @param exp Player exp haki.
+     * @author Vaelico786.
+     */
     public void addHakiPlayer(String name, int level, int exp) {
         Names.add(name);
         Levels.add(level);
@@ -44,8 +62,5 @@ public class hakiAssociation implements Listener {
         }
     }
 
-    public void setScoreboard(abilitiesScoreboard scoreboard){
-        this.scoreboard = scoreboard;
-    }
 }
 
