@@ -136,14 +136,14 @@ public class zushi_zushi extends paramecia{
                 for(int i = 0; i < 30; i++){
                     x = (random.nextDouble() * 19.98) - 9.99 + playerLoc.getX();
                     z = (random.nextDouble() * 19.98) - 9.99 + playerLoc.getZ();
-                    double y = auxBiblio.searchGround(x,z,playerLoc.getY(),world);
+                    double y = auxBiblio.searchGround(x,z,playerLoc.getY(),world) + 1;
                     world.spawnParticle(Particle.SPELL_WITCH,new Location(world,x,y, z),2);
                 }
 
                 for(int i = 0; i < 60; i++){
                     x = (random.nextDouble() * 19.98) - 9.99 + playerLoc.getX();
                     z = (random.nextDouble() * 19.98) - 9.99 + playerLoc.getZ();
-                    double y = auxBiblio.searchGround(x,z,playerLoc.getY(),world);
+                    double y = auxBiblio.searchGround(x,z,playerLoc.getY(),world) + 1;
                     world.spawnParticle(Particle.CRIT_MAGIC,new Location(world,x,y + 0.5,z),0,0,-0.3,0);
                 }
                 if(ticks == 100) this.cancel();
@@ -422,7 +422,7 @@ public class zushi_zushi extends paramecia{
                 for(double i=0; i<2*PI; i+=incrementRate){
                     double xParticle = radius * Math.cos(i) + loc.getX();
                     double zParticle = radius * Math.sin(i) + loc.getZ();
-                    double yParticle = auxBiblio.searchGround(xParticle,zParticle, loc.getY(), world);
+                    double yParticle = auxBiblio.searchGround(xParticle,zParticle, loc.getY(), world) + 1;
 
                     Location particleLocation = new Location(world,xParticle,yParticle,zParticle);
 
@@ -466,27 +466,27 @@ public class zushi_zushi extends paramecia{
 
         player.setAllowFlight(true);
 
-        double yCenter = auxBiblio.searchGround(x, z, y, world) - 1;
+        double yCenter = auxBiblio.searchGround(x, z, y, world) ;
         Location center = new Location(world,x,yCenter, z);
         Material centerMat = center.getBlock().getType();
 
-        double yDownCenter = auxBiblio.searchGround(x, z, y-1, world) - 1;
+        double yDownCenter = auxBiblio.searchGround(x, z, y-1, world);
         Location downcenter = new Location(world,x,yDownCenter-1, z);
         Material downcenterMat = downcenter.getBlock().getType();
 
-        double yUP = auxBiblio.searchGround(x+1, z, y, world) - 1;
+        double yUP = auxBiblio.searchGround(x+1, z, y, world) ;
         Location up = new Location(world,x+1,yUP, z);
         Material upMat = up.getBlock().getType();
 
-        double yDown = auxBiblio.searchGround(x-1, z, y, world) - 1;
+        double yDown = auxBiblio.searchGround(x-1, z, y, world) ;
         Location down = new Location(world,x-1,yDown, z);
         Material downMat = down.getBlock().getType();
 
-        double yLeft = auxBiblio.searchGround(x, z+1, y, world) - 1;
+        double yLeft = auxBiblio.searchGround(x, z+1, y, world) ;
         Location left = new Location(world,x,yLeft, z+1);
         Material leftMat = left.getBlock().getType();
 
-        double yRight = auxBiblio.searchGround(x, z-1, y, world) - 1;
+        double yRight = auxBiblio.searchGround(x, z-1, y, world) ;
         Location right = new Location(world,x,yRight, z-1);
         Material rightMat = right.getBlock().getType();
 

@@ -4,7 +4,7 @@ package castSystem;
 import htt.ophabs.OPhabs;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
-import org.bukkit.entity.Player;
+import org.bukkit.entity.*;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
@@ -218,5 +218,26 @@ public class caster implements Listener {
         }
     }
 
+    @EventHandler(ignoreCancelled = true)
+    public void onProjectileHit(ProjectileHitEvent event) {
+        Projectile tridente = event.getEntity();
+        if (tridente instanceof Trident) {
+            if(hie_hie.tridents.contains(tridente)){
+                // Eliminar el tridente del mundo después de 3 segundos
+                hie_hie.tridents.remove(tridente);
+                Entity hitEnt = event.getHitEntity();
 
+                if(hitEnt != null){
+                    if(hitEnt instanceof LivingEntity){
+                        ((LivingEntity) hitEnt).damage(5);
+                        hie_hie.createIceBox(hitEnt);
+                    }
+                } else{
+                    event.getHitBlock().setType(Material.BLUE_ICE);
+                }
+
+                Bukkit.getScheduler().scheduleSyncDelayedTask(plugin, () -> tridente.remove(), 60L);
+            }
+        }
+    }
 }

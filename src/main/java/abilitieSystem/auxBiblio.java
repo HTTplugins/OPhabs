@@ -33,8 +33,15 @@ public class auxBiblio {
         Location loc = new Location(world,x,initialY,z);
 
         for(int i=0; i < 40; i++)
-            if(loc.getBlock().getRelative(0,-i,0).getType().isSolid())
-                return initialY - i + 1;
+            if(loc.getBlock().getRelative(0,-i,0).getType().isSolid()){
+                for(int j=0; j<5 && loc.getBlock().getRelative(0,j,0).getType().isSolid();j++ ){
+                    if(!loc.getBlock().getRelative(0,j+1,0).getType().isSolid())   {
+                        return loc.getBlock().getRelative(0,j,0).getY();
+                    }
+                }
+                return initialY - i;
+            }
+
 
         return initialY - 40;
     }

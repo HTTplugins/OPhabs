@@ -323,7 +323,7 @@ public class goro_goro extends logia {
                 for(double i=0; i < density; i++){
                     double x = generarNumeroAleatorio(player.getLocation().getX() - extension, player.getLocation().getX() + extension);
                     double z = generarNumeroAleatorio(player.getLocation().getZ() - extension, player.getLocation().getZ() + extension);
-                    double y = auxBiblio.searchGround(x,z,player.getLocation().getY(),world) + 0.2;
+                    double y = auxBiblio.searchGround(x,z,player.getLocation().getY(),world) + 1.2;
 
                     Location particle = new Location(world,x,y,z);
                     world.spawnParticle(Particle.ELECTRIC_SPARK,particle,0,0,0,0);
