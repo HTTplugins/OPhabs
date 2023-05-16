@@ -346,6 +346,8 @@ public class goru_goru extends paramecia {
         if(!user.getPlayer().isSneaking()) {
             if(storaged > 9) {
                 Entity entity = player.getWorld().spawnFallingBlock(currentPL.add(0,2,0), Material.GOLD_BLOCK.createBlockData());
+
+                entity.setGravity(false);
                 entity.setVelocity(direction);
                 repealEntity(entity, player);
                 storaged-=9;
@@ -360,6 +362,8 @@ public class goru_goru extends paramecia {
                     if (isGold(current.add(direction).getBlock()) || i > 15) {
                         if(current.getBlock().getType() != Material.AIR) {
                             Entity floatingBlock = Objects.requireNonNull(currentPL.getWorld()).spawnFallingBlock(current, current.getBlock().getBlockData());
+
+                            floatingBlock.setGravity(false);
                             current.getBlock().setType(Material.AIR);
                             catchEntity(floatingBlock, player);
                         }

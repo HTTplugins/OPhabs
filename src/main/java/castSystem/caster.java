@@ -11,6 +11,7 @@ import org.bukkit.event.block.Action;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.entity.*;
 import org.bukkit.event.player.*;
+import org.bukkit.event.entity.EntityDamageEvent.DamageCause;
 import abilitieSystem.*;
 import org.bukkit.scheduler.BukkitRunnable;
 import skin.skinsChanger;
@@ -96,7 +97,8 @@ public class caster implements Listener {
         if(users.containsKey(event.getEntity().getName())) {
             abilityUser user = users.get(event.getEntity().getName());
             user.onEntityDamage(event);
-            user.onFall(event);
+            if(event.getCause() == DamageCause.FALL)
+                user.onFall(event);
         }
     }
 

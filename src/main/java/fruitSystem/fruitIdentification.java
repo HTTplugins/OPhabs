@@ -22,7 +22,8 @@ public class fruitIdentification {
             fruitItemNameOpe = "ope ope no mi",
             fruitItemNameZushi = "zushi zushi no mi",
             fruitItemNameSuke = "Suke suke no mi",
-            fruitItemNameHie = "Hie hie no mi";
+            fruitItemNameHie = "Hie hie no mi",
+            fruitItemNameBane = "Bane bane no mi";
 
 
     public final static String
@@ -40,7 +41,8 @@ public class fruitIdentification {
             fruitCommandNameOpe = "ope_ope",
             fruitCommandNameZushi = "zushi_zushi",
             fruitCommandNameSuke = "suke_suke",
-            fruitCommandNameHie = "hie_hie";
+            fruitCommandNameHie = "hie_hie",
+            fruitCommandNameBane = "bane_bane";
 
     /**
      * @brief Obtains the fruit name from the command name.
@@ -94,6 +96,9 @@ public class fruitIdentification {
                 break;
             case fruitCommandNameHie:
                 fruitItemName = fruitItemNameHie;
+                break;
+            case fruitCommandNameBane:
+                fruitItemName = fruitItemNameBane;
                 break;
             default:
                 fruitItemName = null;
@@ -154,6 +159,9 @@ public class fruitIdentification {
                 break;
             case fruitItemNameHie:
                 fruitCommandName = fruitCommandNameHie;
+                break;
+            case fruitItemNameBane:
+                fruitCommandName = fruitCommandNameBane;
                 break;
             default:
                 fruitCommandName = null;

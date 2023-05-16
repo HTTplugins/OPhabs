@@ -248,6 +248,7 @@ public class ishi_ishi extends paramecia {
                     public void run() {
                         if (isStone(current.add(direction).getBlock()) || i > 8) {
                             Entity floatingBlock = currentPL.getWorld().spawnFallingBlock(current, current.getBlock().getBlockData());
+                            floatingBlock.setGravity(false);
                             current.getBlock().setType(Material.AIR);
                             catchEntity(floatingBlock, player);
                             cancelTask();
