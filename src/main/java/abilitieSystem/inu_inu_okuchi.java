@@ -12,7 +12,6 @@ import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.EntityDamageEvent.DamageCause;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.entity.LivingEntity;
-;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
 

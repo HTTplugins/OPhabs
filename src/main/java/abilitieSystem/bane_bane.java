@@ -3,19 +3,13 @@ package abilitieSystem;
 import htt.ophabs.OPhabs;
 import castSystem.castIdentification;
 import fruitSystem.fruitIdentification;
-import java.util.ArrayList;
-import java.util.Random;
 import org.bukkit.*;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
-import org.bukkit.entity.Projectile;
-import org.bukkit.potion.PotionEffectType;
-import org.bukkit.potion.PotionEffect;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.util.Vector;
-import static abilitieSystem.OPHLib.*;
 import static java.lang.Math.*;
 
 /**
@@ -24,7 +18,6 @@ import static java.lang.Math.*;
  */
 public class bane_bane extends paramecia {
     private boolean resort;
-    private Vector fallVelocity;
     // ---------------------------------------------- CONSTRUCTORS ---------------------------------------------------------------------
     /**
      * @brief bane_bane constructor.
@@ -63,8 +56,6 @@ public class bane_bane extends paramecia {
             new BukkitRunnable() {
                 Player player = user.getPlayer();
                 float jumpVelocity = 0;
-                double high = 0;
-                boolean down = false;
                 @Override
                 public void run() {
                     if(!resort){

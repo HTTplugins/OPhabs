@@ -3,3 +3,8 @@ Makefile
 target/
 html/
 latex/
+/bin/
+.vim/
+.settings/
+.project
+.classpath

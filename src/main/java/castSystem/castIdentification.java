@@ -4,7 +4,7 @@ import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
-import java.util.Objects;
+import java.lang.String;
 
 /**
  * @brief Cast identification class. We initialize here caster materials and caster item names.
