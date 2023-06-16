@@ -195,6 +195,7 @@ public class caster implements Listener {
     @EventHandler
     public void onEntityChangeBlock(EntityChangeBlockEvent event){
         yami_yami.onEntityChangeBlock(event);
+        bane_bane.onEntityChangeBlock(event);
     }
  
     /**
