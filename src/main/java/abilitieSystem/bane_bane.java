@@ -4,20 +4,26 @@ import htt.ophabs.OPhabs;
 import castSystem.castIdentification;
 import fruitSystem.fruitIdentification;
 import org.bukkit.*;
+import org.bukkit.block.data.BlockData;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
+import org.bukkit.entity.ArmorStand;
+import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.util.Vector;
 import static java.lang.Math.*;
 import org.bukkit.event.entity.EntityChangeBlockEvent;
+import org.bukkit.util.EulerAngle;
 /**
  * @brief Bane bane no mi ability Class.
  * @author Vaelico786.
  */
 public class bane_bane extends paramecia {
     private boolean resort;
+    private ItemStack glove;
     // ---------------------------------------------- CONSTRUCTORS ---------------------------------------------------------------------
     /**
      * @brief bane_bane constructor.
@@ -34,7 +40,12 @@ public class bane_bane extends paramecia {
         abilitiesCD.add(0);
 
 
-        resort=false;
+
+        // Crear el ItemStack con el objeto "raw iron"
+        glove = new ItemStack(Material.RAW_IRON);
+        ItemMeta itemMeta = glove.getItemMeta();
+        itemMeta.setCustomModelData(1); // Establecer el Custom Model Data a 1
+        glove.setItemMeta(itemMeta);
     }
 
     // ---------------------------------------------- AB 1 ---------------------------------------------------------------------
@@ -121,15 +132,30 @@ public class bane_bane extends paramecia {
      * @author Vaelico786.
      */
     public void resortPunch(Location loc) {
-        new BukkitRunnable(){
-            Entity entity = user.getPlayer().getWorld().spawnFallingBlock(loc, Material.SLIME_BLOCK.createBlockData());
 
+            ArmorStand armorStand = user.getPlayer().getWorld().spawn(user.getPlayer().getLocation().add(0,-0.5,0), ArmorStand.class);
+            // Establecer el objeto con Custom Model Data en la mano del armor stand
+            armorStand.getEquipment().setItemInMainHand(glove);
+
+            armorStand.setRightArmPose(new EulerAngle(Math.toRadians(-90), 0, 0));
+            armorStand.setVisible(false);
+            armorStand.setGravity(false);
+            armorStand.setArms(true);
+            armorStand.setCustomName("gloveStandBaneBaneNoMi");
+        new BukkitRunnable(){
+
+            // Configurar las propiedades del armor stand
+
+            Entity entity = armorStand;
             Location origin=entity.getLocation();
 
             Particle.DustOptions particle = new Particle.DustOptions(Color.fromRGB(128, 128, 128),0.5F);
             int ticks = 0;
             boolean first = true, back=false;
             Vector dir = user.getPlayer().getEyeLocation().getDirection(), aux;
+            double distancePerTick = 5.0 / 10.0, distanceFromPlayer = 0;
+            
+            // Calcula la distancia total que el ArmorStand debe recorrer
             @Override
             public void run() {
                 if(first){
@@ -137,6 +163,9 @@ public class bane_bane extends paramecia {
                     entity.setVelocity(dir);
                     first=false;
                 }
+                distanceFromPlayer+=distancePerTick;
+                Vector movement = dir.clone().multiply(distanceFromPlayer);
+                entity.teleport(origin.clone().add(movement));
 
                 entity.getWorld().getNearbyEntities(entity.getLocation(), 2,2,2).forEach(ent -> {
                     if(ent instanceof LivingEntity && ent != user.getPlayer() && entity != ent) {
@@ -148,18 +177,18 @@ public class bane_bane extends paramecia {
 
 
                 if(aux.length() < 4 && !back){
-                circleEyeVector(0.4,0.1,-2,particle, Particle.REDSTONE,user.getPlayer(), entity.getLocation());
-                circleEyeVector(0.4,0.1,-1.8,particle, Particle.REDSTONE, user.getPlayer(), entity.getLocation());
-                circleEyeVector(0.4,0.1,-1.6,particle, Particle.REDSTONE, user.getPlayer(), entity.getLocation());
-                circleEyeVector(0.4,0.1,-1.4,particle, Particle.REDSTONE, user.getPlayer(), entity.getLocation());
-                circleEyeVector(0.4,0.1,-1.2,particle, Particle.REDSTONE, user.getPlayer(), entity.getLocation());
-                circleEyeVector(0.4,0.1,-1,particle, Particle.REDSTONE, user.getPlayer(), entity.getLocation());
-                circleEyeVector(0.4,0.1,-0.8,particle, Particle.REDSTONE, user.getPlayer(), entity.getLocation());
-                circleEyeVector(0.4,0.1,-0.6,particle, Particle.REDSTONE, user.getPlayer(), entity.getLocation());
-                circleEyeVector(0.4,0.1,-0.4,particle, Particle.REDSTONE, user.getPlayer(), entity.getLocation());
-                 circleEyeVector(0.4,0.1,-0.2,particle, Particle.REDSTONE, user.getPlayer(), entity.getLocation());
-                circleEyeVector(0.4,0.1,0,particle, Particle.REDSTONE, user.getPlayer(), entity.getLocation());
-
+                    Location temp = entity.getLocation().add(0,0.3,0);
+                    circleEyeVector(0.4,0.1,-2,particle, Particle.REDSTONE,user.getPlayer(), temp);
+                    circleEyeVector(0.4,0.1,-1.8,particle, Particle.REDSTONE, user.getPlayer(), temp);
+                    circleEyeVector(0.4,0.1,-1.6,particle, Particle.REDSTONE, user.getPlayer(), temp);
+                    circleEyeVector(0.4,0.1,-1.4,particle, Particle.REDSTONE, user.getPlayer(), temp);
+                    circleEyeVector(0.4,0.1,-1.2,particle, Particle.REDSTONE, user.getPlayer(), temp);
+                    circleEyeVector(0.4,0.1,-1,particle, Particle.REDSTONE, user.getPlayer(), temp);
+                    circleEyeVector(0.4,0.1,-0.8,particle, Particle.REDSTONE, user.getPlayer(), temp);
+                    circleEyeVector(0.4,0.1,-0.6,particle, Particle.REDSTONE, user.getPlayer(), temp);
+                    circleEyeVector(0.4,0.1,-0.4,particle, Particle.REDSTONE, user.getPlayer(), temp);
+                    circleEyeVector(0.4,0.1,-0.2,particle, Particle.REDSTONE, user.getPlayer(), temp);
+                    circleEyeVector(0.4,0.1,0,particle, Particle.REDSTONE, user.getPlayer(), temp);
                }
 
                 if(entity.isDead()){
@@ -168,13 +197,13 @@ public class bane_bane extends paramecia {
                     cancelTask();
                 }
                 if(aux.length() > 7 ){//|| aux.length() < 1)
-                    entity.setVelocity(dir.multiply(-1));
+                    distancePerTick*=-1;
                     
                     // entity.getLocation().add(dir).getBlock().breakNaturally();
                     back=true;
                 }
 
-                if(aux.length() < 0.5 && ticks>5 || ticks > 20){
+                if(aux.length() < 0.5 && ticks>10 || ticks > 40){
                     
                     entity.remove();
                     // entity.getLocation().getBlock().breakNaturally();
@@ -188,7 +217,7 @@ public class bane_bane extends paramecia {
             public void cancelTask() {
                 Bukkit.getScheduler().cancelTask(this.getTaskId());
             }
-        }.runTaskTimer(plugin, 2, 2);
+        }.runTaskTimer(plugin, 2, 1);
     }
 
 
@@ -373,7 +402,7 @@ public class bane_bane extends paramecia {
      * @author RedRiotTank.
      */
     public static void onEntityChangeBlock(EntityChangeBlockEvent event) {
-        if(event.getBlock().getType().equals(Material.SLIME_BLOCK)) {
+        if(event.getBlock().getType().equals(Material.STONE)) {
             event.setCancelled(true);
         }
     }

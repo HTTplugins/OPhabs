@@ -4,8 +4,10 @@ package castSystem;
 import htt.ophabs.OPhabs;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
+import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
+import org.bukkit.entity.ArmorStand;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.block.BlockBreakEvent;
@@ -57,8 +59,9 @@ public class caster implements Listener {
                 String casterItemName = event.getItem().getItemMeta().getDisplayName();
                 Material casterMaterial = event.getMaterial();
 
-                if ((action == Action.RIGHT_CLICK_AIR || action == Action.RIGHT_CLICK_BLOCK))
+                if ((action == Action.RIGHT_CLICK_AIR || action == Action.RIGHT_CLICK_BLOCK)){
                     user.abilityActive();
+                }
 
 
                 //else
@@ -311,4 +314,45 @@ public class caster implements Listener {
     }
 
 
+    /**
+     * @brief Event that is triggered when a player tries to put the caster on a frame.
+     * @author RedRiotTank, MiixZ, Vaelico786.
+     */
+    @EventHandler
+    public void onPlayerInteract(PlayerInteractEvent event) {
+
+        if(users.containsKey(event.getPlayer().getName())) {
+            abilityUser user = users.get(event.getPlayer().getName());
+
+            if (event.getAction() == Action.RIGHT_CLICK_BLOCK) {
+                Block clickedBlock = event.getClickedBlock();
+                
+                if (event.getItem() != null && castIdentification.itemIsCaster(event.getItem(), event.getPlayer()) && user.hasFruit()) {
+                    if (clickedBlock != null && clickedBlock.getType() == Material.ITEM_FRAME) {
+                    event.setCancelled(true); // Cancelar la colocación del objeto en el item frame
+                    }
+                }
+            }
+        }
+    }
+    
+
+    @EventHandler
+    public void onPlayerInteractEntity(PlayerInteractEntityEvent event) {
+
+        if(users.containsKey(event.getPlayer().getName())) {
+            abilityUser user = users.get(event.getPlayer().getName());
+            if (event.getRightClicked() instanceof ArmorStand) {
+                ArmorStand armorStand = (ArmorStand) event.getRightClicked();
+                Player player = event.getPlayer();
+                
+                //Comprobar si tienes i
+                if (player.getInventory().getItemInMainHand() != null && castIdentification.itemIsCaster(player.getInventory().getItemInMainHand(), event.getPlayer()) && user.hasFruit()) {
+                    event.setCancelled(true); // Cancelar la interacción del jugador con el ArmorStand
+                }
+            }
+        }
+    }
+    
 }
+
