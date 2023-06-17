@@ -14,10 +14,14 @@ import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.util.Vector;
-import static java.lang.Math.*;
 import org.bukkit.event.entity.EntityChangeBlockEvent;
 import org.bukkit.util.EulerAngle;
+import org.bukkit.attribute.AttributeModifier;
+import org.bukkit.attribute.Attribute;
+import org.bukkit.inventory.EquipmentSlot;
 
+import java.util.UUID;
+import static java.lang.Math.*;
 import java.util.ArrayList;
 import java.util.Objects;
 
@@ -51,6 +55,13 @@ public class bane_bane extends paramecia {
         glove = new ItemStack(Material.RAW_IRON);
         ItemMeta itemMeta = glove.getItemMeta();
         itemMeta.setCustomModelData(1); // Establecer el Custom Model Data a 1
+    
+        //Sometimes on ability 2 player changes the caster with this object so set the same meta for fix it
+        itemMeta.setDisplayName(castIdentification.castItemNameBane);
+        AttributeModifier modifier = new AttributeModifier(UUID.randomUUID(), "generic.attackDamage", 6, AttributeModifier.Operation.ADD_NUMBER, EquipmentSlot.HAND);
+        itemMeta.addAttributeModifier(Attribute.GENERIC_ATTACK_DAMAGE, modifier);
+        AttributeModifier modifier2 = new AttributeModifier(UUID.randomUUID(), "generic.attackSpeed", 1.8, AttributeModifier.Operation.ADD_NUMBER, EquipmentSlot.HAND);
+        itemMeta.addAttributeModifier(Attribute.GENERIC_ATTACK_SPEED, modifier2);
         glove.setItemMeta(itemMeta);
     }
 
