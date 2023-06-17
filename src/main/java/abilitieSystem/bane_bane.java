@@ -17,6 +17,10 @@ import org.bukkit.util.Vector;
 import static java.lang.Math.*;
 import org.bukkit.event.entity.EntityChangeBlockEvent;
 import org.bukkit.util.EulerAngle;
+
+import java.util.ArrayList;
+import java.util.Objects;
+
 /**
  * @brief Bane bane no mi ability Class.
  * @author Vaelico786.
@@ -24,6 +28,8 @@ import org.bukkit.util.EulerAngle;
 public class bane_bane extends paramecia {
     private boolean resort;
     private ItemStack glove;
+
+    private int UltimateAttackCD = 2;
     // ---------------------------------------------- CONSTRUCTORS ---------------------------------------------------------------------
     /**
      * @brief bane_bane constructor.
@@ -40,8 +46,6 @@ public class bane_bane extends paramecia {
         abilitiesCD.add(0);
         abilitiesNames.add("Ultimate Attack");
         abilitiesCD.add(0);
-
-
 
         // Crear el ItemStack con el objeto "raw iron"
         glove = new ItemStack(Material.RAW_IRON);
