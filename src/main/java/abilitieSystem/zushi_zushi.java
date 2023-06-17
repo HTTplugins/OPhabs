@@ -25,7 +25,7 @@ import static java.lang.Math.*;
  * @brief Zushi Zushi no mi ability Class.
  * @author RedRiotTank
  */
-public class zushi_zushi extends paramecia{
+public class zushi_zushi extends paramecia {
     private boolean exploded = false;   //To control meteor explosion.
     private static List<Entity> heavyEntity = null;
     private static List<Player> togglePlayer = new ArrayList<>();

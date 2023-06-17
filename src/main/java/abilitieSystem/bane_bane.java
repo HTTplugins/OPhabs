@@ -38,6 +38,8 @@ public class bane_bane extends paramecia {
         abilitiesCD.add(0);
         abilitiesNames.add("Resort Punch Storm");
         abilitiesCD.add(0);
+        abilitiesNames.add("Ultimate Attack");
+        abilitiesCD.add(0);
 
 
 
@@ -64,7 +66,7 @@ public class bane_bane extends paramecia {
      * @author Vaelico786.
      */
     public void resort() {
-        if(!resort){
+        if (!resort) {
             resort = true;
             user.getPlayer().sendMessage("Resort mode activated");
             new BukkitRunnable() {
@@ -87,10 +89,10 @@ public class bane_bane extends paramecia {
                     
                     if(player.isOnGround() && !player.isSneaking()){
                         Vector velocity = player.getVelocity();
-                        if(jumpVelocity > 0)
+                        if (jumpVelocity > 0)
                             velocity.setY(jumpVelocity);
                         
-                        if(player.isOnGround() && player.getFallDistance() > 0){
+                        if (player.isOnGround() && player.getFallDistance() > 0) {
                                 double v = (-3+sqrt(9-8*(-(player.getFallDistance()))))/4;
                                 velocity.setY(v);
                         }
@@ -107,8 +109,7 @@ public class bane_bane extends paramecia {
                 }
             }.runTaskTimer(plugin, 0, 2);
             
-        }
-        else{
+        } else {
             user.getPlayer().sendMessage("Resort mode deactivated");
             resort = false;
         }
@@ -149,7 +150,7 @@ public class bane_bane extends paramecia {
             Entity entity = armorStand;
             Location origin=entity.getLocation();
 
-            Particle.DustOptions particle = new Particle.DustOptions(Color.fromRGB(128, 128, 128),0.5F);
+            final Particle.DustOptions particle = new Particle.DustOptions(Color.fromRGB(128, 128, 128),0.5F);
             int ticks = 0;
             boolean first = true, back=false;
             Vector dir = user.getPlayer().getEyeLocation().getDirection(), aux;
@@ -191,7 +192,7 @@ public class bane_bane extends paramecia {
                     circleEyeVector(0.4,0.1,0,particle, Particle.REDSTONE, user.getPlayer(), temp);
                }
 
-                if(entity.isDead()){
+                if (entity.isDead()) {
                     entity.getLocation().getBlock().setType(Material.AIR);
                     // entity.getLocation().add(dir).getBlock().breakNaturally();
                     cancelTask();
@@ -208,7 +209,6 @@ public class bane_bane extends paramecia {
                     entity.remove();
                     // entity.getLocation().getBlock().breakNaturally();
 
-                    
                     cancelTask();
                 }
                 
@@ -220,45 +220,6 @@ public class bane_bane extends paramecia {
         }.runTaskTimer(plugin, 2, 1);
     }
 
-
-    /*
-    public void springAnimation(double radius, double loops, double prof, Particle.DustOptions dustOption,
-                                       Particle particle, Player player, Vector direction) {
-        double separation = 0.1;
-        final Location playerLoc = player.getLocation();
-        double x,y, xY, yY, zY, xX, yX, zX,xL,yL,zL;
-        final double yaw = -(asin(direction.getX()) + acos(direction.getZ())),
-                pitch = asin(direction.getY());
-        final World world = player.getWorld();
-
-        for(double i=0; i<2*PI*loops; i+= separation) {
-            x = sin(i)/radius;
-            y = cos(i)/radius;
-
-            //Vertically (Arround X)
-            xX = x;
-            yX = cos(toRadians(pitch))* y - sin(toRadians(pitch))+ i*separation;
-            zX = sin(toRadians(pitch))* y + cos(toRadians(pitch))* i*separation;
-
-            //horizontally (Arround Y)
-            xY = cos(toRadians(yaw))*xX + sin(toRadians(yaw))*zX;
-            yY =  yX;
-            zY = -sin(toRadians(yaw))*xX + cos(toRadians(yaw))*zX;
-
-            //Final (sum of player position)
-            xL = playerLoc.getX() + xY;
-            yL = 1 + playerLoc.getY() + yY;
-            zL = playerLoc.getZ() + zY;
-
-            Location partLoc = new Location(world, xL, yL, zL);
-            
-
-            world.spawnParticle(particle,partLoc,0,0,0,0,dustOption);
-        }
-    }
-    */
-
-    
     // ---------------------------------------------- AB 3 ---------------------------------------------------------------------
     /**
      * @brief Ability 3: "Resort punch storm".
@@ -268,14 +229,16 @@ public class bane_bane extends paramecia {
     public void ability3() {
         if(abilitiesCD.get(2) == 0) {
             new BukkitRunnable(){
-                int attacks=7, count=0;
+                final int attacks=7;
+                int count=0;
                 double x,y, xY, yY, zY, xX, yX, zX,xL,yL,zL;
 
-                Location loc = user.getPlayer().getLocation();
+                final Location loc = user.getPlayer().getLocation();
                 final double yaw = -loc.getYaw(),
                         pitch = loc.getPitch();
                 final World world = user.getPlayer().getWorld();
-                double separation=1, radius=0.4;
+                final double separation=1;
+                final double radius=0.4;
                 double i=0;
 
                 @Override
@@ -314,12 +277,109 @@ public class bane_bane extends paramecia {
                 }
             }.runTaskTimer(plugin, 2, 3);
 
-
-
             abilitiesCD.set(2, 50);
         }
     }
 
+    // ---------------------------------------------- AB 4 ---------------------------------------------------------------------
+    /**
+     * @brief Ability 4: "Ultimate Attack".
+     * @see bane_bane#UltimateAttack(Player)
+     * @author MiixZ.
+     */
+    public void ability4() {
+        if (abilitiesCD.get(3) == 0) {
+            UltimateAttack(user.getPlayer());
+            abilitiesCD.set(3, UltimateAttackCD);
+        }
+    }
+
+    /**
+     * @brief CORE ABILITY 4: "Ultimate Attack". Selecciona a todas las entidades en línea recta para hacerles un ataque frontal.
+     * @param player Jugador que usa la habilidad.
+     * @author MiixZ.
+     */
+    public void UltimateAttack(Player player) {
+        Location loc = player.getEyeLocation().clone();
+        ArrayList<LivingEntity> seleccionados = new ArrayList<>();
+
+        loc.add(0, -0.5, 0);
+
+        SeleccionarEntidad(Objects.requireNonNull(loc.getWorld()), loc, player, seleccionados);
+
+        player.setVelocity(new Vector(0, 1, 0).multiply(2));
+
+        ejecutarAtaque((ArrayList<LivingEntity>) seleccionados.clone(), player);
+
+        efectuarAtaque(seleccionados, player);
+    }
+
+    /**
+     * @brief Selecciona a las entidades de la línea recta (píxel actual).
+     * @param seleccionados Lista de entidades seleccionadas.
+     * @param player Jugador.
+     * @param loc Localización del píxel actual (línea recta).
+     * @param mundo Mundo en el que se encuentra el jugador.
+     * @author MiixZ
+     */
+    public void SeleccionarEntidad(World mundo, Location loc, Player player, ArrayList<LivingEntity> seleccionados) {
+        mundo.getNearbyEntities(loc, 20, 2, 20).forEach(entity -> {
+            if (!entity.getName().equals(player.getName()) && entity instanceof LivingEntity) {
+                seleccionados.add((LivingEntity) entity);
+            }
+        });
+    }
+
+    /**
+     * @brief Para cada entidad seleccionada, cargo un ataque, rebota en direcciones random y después efectúa el verdadero ataque.
+     * Se supone que es tan rápido que no se nota a simple vista.
+     * @param seleccionados Lista de entidades seleccionadas.
+     * @param player Jugador.
+     * @author MiixZ
+     */
+    public void ejecutarAtaque(ArrayList<LivingEntity> seleccionados, Player player) {
+        new BukkitRunnable() {
+            public void run() {
+                if (seleccionados.size() == 0)
+                    this.cancel();
+                else {
+                    final LivingEntity entity = seleccionados.get(0);
+                    seleccionados.remove(0);
+
+                    Vector direccion = entity.getLocation().toVector().subtract(player.getLocation().toVector());
+
+                    for (int i = 0; i < 10; i++)
+                        player.setVelocity(direccion);
+
+                    if (player.getLocation().distance(entity.getLocation()) < 5) {
+                        player.getWorld().createExplosion(entity.getLocation(), 10, false, false);
+                    }
+                }
+            }
+        }.runTaskTimer(plugin, 0, 10);
+    }
+
+    /**
+     * @brief Tepea al jugador hacia cada entidad de la lista seleccionada y genera una explosión..
+     * @param seleccionados Lista de entidades seleccionadas.
+     * @param player Jugador.
+     * @author MiixZ
+     */
+    public void efectuarAtaque(ArrayList<LivingEntity> seleccionados, Player player) {
+        new BukkitRunnable() {
+            public void run() {
+                if (seleccionados.size() == 0)
+                    this.cancel();
+                else {
+                    final LivingEntity entity = seleccionados.get(0);
+                    seleccionados.remove(0);
+
+                    player.teleport(entity.getLocation());
+                    player.getWorld().createExplosion(entity.getLocation(), 10, false, false);
+                }
+            }
+        }.runTaskTimer(plugin, 20, 20);
+    }
 
     /**
      * @brief Creates a circle of particles in the direction the player is looking at.
@@ -366,6 +426,7 @@ public class bane_bane extends paramecia {
             world.spawnParticle(particle,partLoc,0,0,0,0,dustOption);
         }
     }
+
     // ---------------------------------------------- PASSIVES ---------------------------------------------------------------------
     /**
      * @brief On fall listener.
