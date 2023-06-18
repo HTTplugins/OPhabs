@@ -20,6 +20,7 @@ import org.bukkit.util.EulerAngle;
 
 import java.util.ArrayList;
 import java.util.Objects;
+import java.util.Random;
 
 /**
  * @brief Bane bane no mi ability Class.
@@ -181,7 +182,7 @@ public class bane_bane extends paramecia {
                 aux = new Vector((entity.getLocation().getX()-origin.getX()), (entity.getLocation().getY()-origin.getY()), (entity.getLocation().getZ()-origin.getZ()));
 
 
-                if(aux.length() < 4 && !back){
+                if (aux.length() < 4 && !back) {
                     Location temp = entity.getLocation().add(0,0.3,0);
                     circleEyeVector(0.4,0.1,-2,particle, Particle.REDSTONE,user.getPlayer(), temp);
                     circleEyeVector(0.4,0.1,-1.8,particle, Particle.REDSTONE, user.getPlayer(), temp);
@@ -201,14 +202,15 @@ public class bane_bane extends paramecia {
                     // entity.getLocation().add(dir).getBlock().breakNaturally();
                     cancelTask();
                 }
-                if(aux.length() > 7 ){//|| aux.length() < 1)
+
+                if (aux.length() > 7 ){//|| aux.length() < 1)
                     distancePerTick*=-1;
                     
                     // entity.getLocation().add(dir).getBlock().breakNaturally();
                     back=true;
                 }
 
-                if(aux.length() < 0.5 && ticks>10 || ticks > 40){
+                if (aux.length() < 0.5 && ticks>10 || ticks > 40) {
                     
                     entity.remove();
                     // entity.getLocation().getBlock().breakNaturally();
@@ -343,24 +345,32 @@ public class bane_bane extends paramecia {
      */
     public void ejecutarAtaque(ArrayList<LivingEntity> seleccionados, Player player) {
         new BukkitRunnable() {
+            int k = 0;
+            final int randomSeleccionados = new Random().nextInt(seleccionados.size() % 20 + 5);
+            final Vector direccion = new Vector(new Random().nextInt(10) - 5,
+                    new Random().nextInt(10) - 5,
+                    new Random().nextInt(10) - 5);
+
             public void run() {
-                if (seleccionados.size() == 0)
+                if (k == randomSeleccionados)
                     this.cancel();
                 else {
-                    final LivingEntity entity = seleccionados.get(0);
-                    seleccionados.remove(0);
+                    if (k % 2 == 0)
+                        player.setVelocity(direccion.multiply(-3));
+                    else
+                        player.setVelocity(direccion.multiply(3));
 
-                    Vector direccion = entity.getLocation().toVector().subtract(player.getLocation().toVector());
-
-                    for (int i = 0; i < 10; i++)
-                        player.setVelocity(direccion);
-
-                    if (player.getLocation().distance(entity.getLocation()) < 5) {
-                        player.getWorld().createExplosion(entity.getLocation(), 10, false, false);
+                    // Cada 3, cambiamos la dirección por otra random.
+                    if (k % 3 == 0) {
+                        direccion.setX(new Random().nextInt(10) - 5);
+                        direccion.setY(new Random().nextInt(10) - 5);
+                        direccion.setZ(new Random().nextInt(10) - 5);
                     }
+
+                    k++;
                 }
             }
-        }.runTaskTimer(plugin, 0, 10);
+        }.runTaskTimer(plugin, 0, 5);
     }
 
     /**
@@ -379,10 +389,11 @@ public class bane_bane extends paramecia {
                     seleccionados.remove(0);
 
                     player.teleport(entity.getLocation());
-                    player.getWorld().createExplosion(entity.getLocation(), 10, false, false);
+                    entity.damage(20, player);
+                    entity.setVelocity(new Vector(1, 1, 1).multiply(2));
                 }
             }
-        }.runTaskTimer(plugin, 20, 20);
+        }.runTaskTimer(plugin, 40, 20);
     }
 
     /**
@@ -457,8 +468,6 @@ public class bane_bane extends paramecia {
        } 
     }
 
-
-
     /**
      * @brief Cancels fallingblock --> block change to make the absorbing effect, and saves the blocks materials information.
      * @param event EntityChangeBlockEvent that Minecraft client sends to server to convert blocks.
@@ -471,5 +480,4 @@ public class bane_bane extends paramecia {
             event.setCancelled(true);
         }
     }
-
 }
