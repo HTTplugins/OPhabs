@@ -14,10 +14,14 @@ import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.util.Vector;
-import static java.lang.Math.*;
 import org.bukkit.event.entity.EntityChangeBlockEvent;
 import org.bukkit.util.EulerAngle;
+import org.bukkit.attribute.AttributeModifier;
+import org.bukkit.attribute.Attribute;
+import org.bukkit.inventory.EquipmentSlot;
 
+import java.util.UUID;
+import static java.lang.Math.*;
 import java.util.ArrayList;
 import java.util.Objects;
 import java.util.Random;
@@ -52,6 +56,13 @@ public class bane_bane extends paramecia {
         glove = new ItemStack(Material.RAW_IRON);
         ItemMeta itemMeta = glove.getItemMeta();
         itemMeta.setCustomModelData(1); // Establecer el Custom Model Data a 1
+
+        //Sometimes on ability 2 player changes the caster with this object so set the same meta for fix it
+        itemMeta.setDisplayName(castIdentification.castItemNameBane);
+        AttributeModifier modifier = new AttributeModifier(UUID.randomUUID(), "generic.attackDamage", 6, AttributeModifier.Operation.ADD_NUMBER, EquipmentSlot.HAND);
+        itemMeta.addAttributeModifier(Attribute.GENERIC_ATTACK_DAMAGE, modifier);
+        AttributeModifier modifier2 = new AttributeModifier(UUID.randomUUID(), "generic.attackSpeed", 1.8, AttributeModifier.Operation.ADD_NUMBER, EquipmentSlot.HAND);
+        itemMeta.addAttributeModifier(Attribute.GENERIC_ATTACK_SPEED, modifier2);
         glove.setItemMeta(itemMeta);
     }
 
@@ -129,7 +140,7 @@ public class bane_bane extends paramecia {
     public void ability2() {
         if(abilitiesCD.get(1) == 0) {
             resortPunch(user.getPlayer().getLocation().add(user.getPlayer().getEyeLocation().clone().getDirection()).add(new Vector(0,0.7,0)));
-            abilitiesCD.set(1, 10);
+            abilitiesCD.set(1, 5);
         }
     }
 
@@ -141,7 +152,7 @@ public class bane_bane extends paramecia {
 
             ArmorStand armorStand = user.getPlayer().getWorld().spawn(user.getPlayer().getLocation().add(0,-0.5,0), ArmorStand.class);
             // Establecer el objeto con Custom Model Data en la mano del armor stand
-            armorStand.getEquipment().setItemInMainHand(glove);
+            armorStand.getEquipment().setHelmet(glove);
 
             armorStand.setRightArmPose(new EulerAngle(Math.toRadians(-90), 0, 0));
             armorStand.setVisible(false);
@@ -159,14 +170,14 @@ public class bane_bane extends paramecia {
             int ticks = 0;
             boolean first = true, back=false;
             Vector dir = user.getPlayer().getEyeLocation().getDirection(), aux;
-            double distancePerTick = 5.0 / 10.0, distanceFromPlayer = 0;
+            double distancePerTick = 5.0 / 7.0, distanceFromPlayer = 0;
             
             // Calcula la distancia total que el ArmorStand debe recorrer
             @Override
             public void run() {
                 if(first){
                     entity.setGravity(false);
-                    entity.setVelocity(dir);
+                    // entity.setVelocity(dir);
                     first=false;
                 }
                 distanceFromPlayer+=distancePerTick;
@@ -182,8 +193,8 @@ public class bane_bane extends paramecia {
                 aux = new Vector((entity.getLocation().getX()-origin.getX()), (entity.getLocation().getY()-origin.getY()), (entity.getLocation().getZ()-origin.getZ()));
 
 
-                if (aux.length() < 4 && !back) {
-                    Location temp = entity.getLocation().add(0,0.3,0);
+                if(!back){
+                    Location temp = entity.getLocation().add(0,0.5,0);
                     circleEyeVector(0.4,0.1,-2,particle, Particle.REDSTONE,user.getPlayer(), temp);
                     circleEyeVector(0.4,0.1,-1.8,particle, Particle.REDSTONE, user.getPlayer(), temp);
                     circleEyeVector(0.4,0.1,-1.6,particle, Particle.REDSTONE, user.getPlayer(), temp);
@@ -283,7 +294,7 @@ public class bane_bane extends paramecia {
                 }
             }.runTaskTimer(plugin, 2, 3);
 
-            abilitiesCD.set(2, 50);
+            abilitiesCD.set(2, 30);
         }
     }
 
