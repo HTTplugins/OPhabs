@@ -515,7 +515,7 @@ public class magu_magu extends logia {
     public void ability3() {
         if (abilitiesCD.get(2) == 0) {
             GenerateSoldier(user.getPlayer());
-            abilitiesCD.set(2, 60); // Pon el cooldown en segundos
+            abilitiesCD.set(2, 2); // Pon el cooldown en segundos
         }
     }
     // ---------------------------------------------- AB 4 ---------------------------------------------------------------------
@@ -535,10 +535,39 @@ public class magu_magu extends logia {
         World world = player.getWorld();
 
         Zombie soldado = (Zombie) world.spawnEntity(loc, EntityType.ZOMBIE);
-        soldado.setCustomName("Soldado");
+        soldado.setCustomName("Lava Soldier.");
 
-        skinsChanger.setSkin("soldado", "https://www.minecraftskins.com/uploads/skins/2021/05/07/magma-zombie-17729024.png?v577");
-        skinsChanger.changeSkinSoldiers(soldado, "soldado");
+        soldado.setInvisible(true);
+        soldado.setTarget(null);
+
+        new BukkitRunnable() {
+            @Override
+            public void run() {
+                soldado.setFireTicks(-50);
+
+                for (double i = 0.5; i < 5; i += 0.1) {
+                    soldado.getWorld().spawnParticle(Particle.DRIP_LAVA, soldado.getLocation().add(i / 5,1,i/ 5),1, 0,1,0,0);
+                    soldado.getWorld().spawnParticle(Particle.DRIP_LAVA, soldado.getLocation().add(i/ 5,1,-i/ 5),1, 0,1,0,0);
+                    soldado.getWorld().spawnParticle(Particle.DRIP_LAVA, soldado.getLocation().add(-i/ 5,1,i/ 5),1, 0,1,0,0);
+                    soldado.getWorld().spawnParticle(Particle.DRIP_LAVA, soldado.getLocation().add(-i/ 5,1,-i/ 5),1, 0,1,0,0);
+                }
+
+                if (soldado.isDead()) {
+                    cancel();
+                }
+
+                for (Entity entity : soldado.getNearbyEntities(5, 5, 5)) {
+                    if (entity instanceof LivingEntity && !entity.getName().equals(user.getPlayer().getName()) &&
+                            !entity.getName().equals("Lava Soldier.")) {
+                        soldado.setTarget((LivingEntity) entity);
+                    }
+                }
+            }
+        }.runTaskTimer(plugin,0,0);
+
+        // Desprende partículas alrededor del soldado.
+        Particle.DustOptions dustOptions = new Particle.DustOptions(Color.fromRGB(255, 0, 0), 1);
+        world.spawnParticle(Particle.REDSTONE, loc, 100, 0.5, 0.5, 0.5, dustOptions);
 
         ItemStack espadaSoldado = new ItemStack(Material.STONE_SWORD);
         ItemMeta espadaMeta = espadaSoldado.getItemMeta();
