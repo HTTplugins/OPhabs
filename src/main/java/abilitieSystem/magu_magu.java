@@ -359,7 +359,7 @@ public class magu_magu extends logia {
                 if (numplarticles < 25 || reachTarget) {
                     world.createExplosion(ent.getLocation(),6);
 
-                    for (int i=0; i< 15; i++) {
+                    for (int i=0; i < 15; i++) {
                         double randX = rand.nextDouble() - rand.nextDouble() ;
                         double randY = rand.nextDouble() - rand.nextDouble();
                         double randZ = rand.nextDouble() - rand.nextDouble();
@@ -740,8 +740,7 @@ public class magu_magu extends logia {
 
                 if (TargetsGhast.size() > 0) {
                     if (TargetGhastActual == null || TargetGhastActual.isDead()) {
-                        assert TargetGhastActual != null;
-                        if (TargetGhastActual.isDead())
+                        if (TargetGhastActual != null && TargetGhastActual.isDead())
                             TargetsGhast.remove(TargetGhastActual);
 
                         if (TargetsGhast.size() > 0) {
@@ -750,12 +749,12 @@ public class magu_magu extends logia {
                     }
 
                     if (TargetGhastActual != null)
-                        sendMeteorite(ghast, TargetGhastActual);
+                        sendMeteoriteCustom(ghast, TargetGhastActual);
                 } else {
                     TargetGhastActual = null;
                 }
             }
-        }.runTaskTimer(plugin,40,20);
+        }.runTaskTimer(plugin,40,100);
     }
 
     public boolean checkSoldiers(Player player) {
