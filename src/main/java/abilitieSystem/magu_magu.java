@@ -4,16 +4,15 @@ import castSystem.castIdentification;
 import fruitSystem.fruitIdentification;
 import htt.ophabs.OPhabs;
 import org.bukkit.*;
-import org.bukkit.attribute.Attribute;
-import org.bukkit.attribute.AttributeModifier;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.*;
+import org.bukkit.event.EventHandler;
+import org.bukkit.event.entity.EntityShootBowEvent;
+import org.bukkit.event.entity.EntityTargetEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
-import org.bukkit.inventory.meta.SkullMeta;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.util.Vector;
-import skin.skinsChanger;
 
 import java.util.*;
 
@@ -27,6 +26,9 @@ public class magu_magu extends logia {
     public static Particle.DustOptions maguOrange = new Particle.DustOptions(Color.ORANGE,1.0F);
     public static Particle.DustOptions maguBlack = new Particle.DustOptions(Color.BLACK,1.0F);
     public static Particle.DustOptions maguRed = new Particle.DustOptions(Color.RED,1.0F);
+    public static ArrayList<LivingEntity> LavaSoldiers = new ArrayList<>();
+    public static ArrayList<LivingEntity> TargetsGhast = new ArrayList<>();
+    public static LivingEntity TargetGhastActual = null;
 
     public Random rand = new Random();
 
@@ -173,12 +175,12 @@ public class magu_magu extends logia {
                 livingEntities.add((LivingEntity) ent);
         }
 
-        for(int i=0; i<Players.size() && index < Maximum; i++){
+        for(int i=0; i<Players.size() && index < Maximum; i++) {
             sendMeteorite(player,Players.get(i));
             index++;
         }
 
-        for(int i=0; i<livingEntities.size() && index < Maximum; i++){
+        for(int i=0; i<livingEntities.size() && index < Maximum; i++) {
             sendMeteorite(player, livingEntities.get(i));
             index++;
         }
@@ -190,13 +192,13 @@ public class magu_magu extends logia {
      * @note It has a max of 3 meteors.
      * @author RedRiotTank.
      */
-    public void sendMeteorite(Player player, LivingEntity ent){
+    public void sendMeteorite(LivingEntity player, LivingEntity ent) {
         Location playerLoc = player.getLocation();
         Location upHead = playerLoc.add(0,7,0);
         World world = player.getWorld();
 
-        new BukkitRunnable(){
-            double x,y,z, xr,yr,zr;
+        new BukkitRunnable() {
+            double x, y, z, xr, yr, zr;
             final double tenPI = 10*PI;
             double angle, modAngle;
             Location spawnBallPos;
@@ -208,14 +210,15 @@ public class magu_magu extends logia {
             @Override
             public void run() {
                 numplarticles = 0;
-                Vector vec = new Vector(ent.getLocation().getX() - upHead.getX(), ent.getLocation().getY() - upHead.getY(), ent.getLocation().getZ() - upHead.getZ());
+                Vector vec = new Vector(ent.getLocation().getX() - upHead.getX(), ent.getLocation().getY() - upHead.getY(),
+                        ent.getLocation().getZ() - upHead.getZ());
                 vec.normalize();
 
                 double sumX = vec.getX();
                 double sumY = vec.getY();
                 double sumZ = vec.getZ();
 
-                for (double i = 0; i < 2*PI*4; i+=0.05){
+                for (double i = 0; i < 2*PI*4; i+=0.05) {
                     angle = i/10*PI;
                     modAngle = (i%10)*PI;
                     x = sin(angle);
@@ -266,7 +269,6 @@ public class magu_magu extends logia {
                     */
 
                     for(int i=0; i< 15; i++){
-
                         double randX = rand.nextDouble() - rand.nextDouble() ;
                         double randY = rand.nextDouble() - rand.nextDouble();
                         double randZ = rand.nextDouble() - rand.nextDouble();
@@ -280,17 +282,103 @@ public class magu_magu extends logia {
                             case 1: randomMaterial = Material.MAGMA_BLOCK; break;
                             case 2: randomMaterial = Material.COBBLESTONE; break;
                         }
-
                         (world.spawnFallingBlock(spawnBallPos,randomMaterial.createBlockData())).setVelocity(new Vector(randX,randY,randZ));
-
                     }
-
                     this.cancel();
                 }
 
             }
         }.runTaskTimer(plugin,0,1);
+    }
 
+    public void sendMeteoriteCustom(LivingEntity player, LivingEntity ent) {
+        user.getPlayer().sendMessage("METEORITE :D.");
+        Location playerLoc = player.getLocation();
+        Location upHead = playerLoc.add(0, -1, 0);
+        World world = player.getWorld();
+
+        new BukkitRunnable() {
+            double x, y, z, xr, yr, zr;
+            final double tenPI = 10*PI;
+            double angle, modAngle;
+            Location spawnBallPos;
+            final Vector direction = new Vector(0,0,0);
+            int numplarticles = 0;
+            boolean reachTarget = false;
+
+            @Override
+            public void run() {
+                numplarticles = 0;
+                Vector vec = new Vector(ent.getLocation().getX() - upHead.getX(), ent.getLocation().getY() - upHead.getY(),
+                        ent.getLocation().getZ() - upHead.getZ());
+                vec.normalize();
+
+                double sumX = vec.getX();
+                double sumY = vec.getY();
+                double sumZ = vec.getZ();
+
+                for (double i = 0; i < 2*PI*4; i += 0.05) {
+                    angle = i/10*PI;
+                    modAngle = (i%10)*PI;
+                    x = sin(angle);
+                    y = sin(modAngle) * cos(angle);
+                    z = cos(modAngle) * cos(angle);
+
+                    xr = upHead.getX() + x;
+                    yr = upHead.getY() + y;
+                    zr = upHead.getZ() + z;
+
+                    spawnBallPos = new Location(world, xr,yr,zr);
+
+                    spawnBallPos.add(direction);
+
+                    int option = rand.nextInt(3);
+
+                    Particle.DustOptions maguDO = new Particle.DustOptions(Color.PURPLE,1.0F);;
+
+                    switch (option) {
+                        case 0: maguDO = maguOrange; break;
+                        case 1: maguDO = maguBlack; break;
+                        case 2: maguDO = maguRed; break;
+                    }
+
+                    if (spawnBallPos.getBlock().getType().equals(Material.AIR)) {
+                        world.spawnParticle(Particle.REDSTONE, spawnBallPos, 0, 0, 0, 0,maguDO);
+                        numplarticles++;
+                    }
+                }
+
+                direction.add(new Vector(sumX,sumY,sumZ));
+
+                for (Entity ent : world.getNearbyEntities(spawnBallPos,2,2,2))
+                    if (ent instanceof LivingEntity && !player.equals(ent)) {
+                        ((LivingEntity)ent).damage(2);
+                        reachTarget = true;
+                    }
+
+                if (numplarticles < 25 || reachTarget) {
+                    world.createExplosion(ent.getLocation(),6);
+
+                    for (int i=0; i< 15; i++) {
+                        double randX = rand.nextDouble() - rand.nextDouble() ;
+                        double randY = rand.nextDouble() - rand.nextDouble();
+                        double randZ = rand.nextDouble() - rand.nextDouble();
+
+                        int option = rand.nextInt(3);
+
+                        Material randomMaterial = Material.AIR;
+
+                        switch (option) {
+                            case 0: randomMaterial = Material.LAVA; break;
+                            case 1: randomMaterial = Material.MAGMA_BLOCK; break;
+                            case 2: randomMaterial = Material.COBBLESTONE; break;
+                        }
+                        (world.spawnFallingBlock(spawnBallPos,randomMaterial.createBlockData())).setVelocity(new Vector(randX, randY, randZ));
+                    }
+                    this.cancel();
+                }
+            }
+        }.runTaskTimer(plugin,0,1);
     }
 
     // ---------------------------------------------- AB 2 ---------------------------------------------------------------------
@@ -327,7 +415,7 @@ public class magu_magu extends logia {
      * @param player User that creates the "Lava river".
      * @author RedRiotTank.
      */
-    public void lavaRiver(Player player){
+    public void lavaRiver(Player player) {
         new BukkitRunnable(){
             final Vector facingDirection = player.getLocation().getDirection();
             int index = 2;
@@ -380,9 +468,7 @@ public class magu_magu extends logia {
      * @param player User that creates the "Lava lake".
      * @author RedRiotTank.
      */
-    public void lavaLake(Player player ){
-
-
+    public void lavaLake(Player player ) {
         new BukkitRunnable(){
                 int index = 1;
 
@@ -422,7 +508,7 @@ public class magu_magu extends logia {
      * @param playerLoc Location of the player.
      * @author RedRiotTank.
      */
-    public void putLavaBlock(int x,int y, int z, double randomQuote, Location playerLoc){
+    public void putLavaBlock(int x,int y, int z, double randomQuote, Location playerLoc) {
         Random Rand = new Random();
         double aleatory = rand.nextDouble();
         double randMagmaBlock = rand.nextDouble();
@@ -465,8 +551,8 @@ public class magu_magu extends logia {
      * @todo change this function for .isSolid().
      * @author RedRiotTank.
      */
-    public boolean airOrSimilar(Material mat){
-        if(mat.equals(Material.AIR)
+    public boolean airOrSimilar(Material mat) {
+        return mat.equals(Material.AIR)
                 || mat.equals(Material.DEAD_BUSH)
                 || mat.equals(Material.POTTED_AZALEA_BUSH)
                 || mat.equals(Material.ROSE_BUSH)
@@ -501,25 +587,34 @@ public class magu_magu extends logia {
                 || mat.equals(Material.NETHER_SPROUTS)
                 || mat.equals(Material.AZALEA)
                 || mat.equals(Material.FLOWERING_AZALEA)
-                || mat.equals(Material.SPORE_BLOSSOM)
-        )return true;
-        else return false;
+                || mat.equals(Material.SPORE_BLOSSOM);
     }
 
     // ---------------------------------------------- AB 3 ---------------------------------------------------------------------
 
     /**
      * @brief Ability 3: "".
-     * @author -.
+     * @author MiixZ.
      */
     public void ability3() {
         if (abilitiesCD.get(2) == 0) {
-            GenerateSoldier(user.getPlayer());
-            abilitiesCD.set(2, 2); // Pon el cooldown en segundos
+            if (LavaSoldiers.size() < 3) {
+                GenerateSoldier(user.getPlayer());
+            } else {
+                GenerateLavaGhast(user.getPlayer());
+            }
+
+            if (LavaSoldiers.size() < 3) {
+                abilitiesNames.set(2, "Lava Soldiers");
+                abilitiesCD.set(2, 2); // Pon el cooldown en segundos
+            } else {
+                abilitiesNames.set(2, "LAVA GHAST");
+                abilitiesCD.set(2, 2); // Pon el cooldown en segundos
+            }
         }
     }
-    // ---------------------------------------------- AB 4 ---------------------------------------------------------------------
 
+    // ---------------------------------------------- AB 4 ---------------------------------------------------------------------
     /**
      * @brief Ability 4: "".
      * @author -.
@@ -535,30 +630,40 @@ public class magu_magu extends logia {
         World world = player.getWorld();
 
         Zombie soldado = (Zombie) world.spawnEntity(loc, EntityType.ZOMBIE);
-        soldado.setCustomName("Lava Soldier.");
+        soldado.setCustomName("Lava Soldier");
 
         soldado.setInvisible(true);
         soldado.setTarget(null);
+        soldado.setVelocity(user.getPlayer().getLocation().getDirection().normalize().multiply(2));
+
+        LavaSoldiers.add(soldado);
 
         new BukkitRunnable() {
             @Override
             public void run() {
+                if (soldado.isDead() || !checkSoldiers(player)) {
+                    if (soldado.isDead())
+                        LavaSoldiers.remove(soldado);
+
+                    cancel();
+                }
+
                 soldado.setFireTicks(-50);
 
                 for (double i = 0.5; i < 5; i += 0.1) {
-                    soldado.getWorld().spawnParticle(Particle.DRIP_LAVA, soldado.getLocation().add(i / 5,1,i/ 5),1, 0,1,0,0);
-                    soldado.getWorld().spawnParticle(Particle.DRIP_LAVA, soldado.getLocation().add(i/ 5,1,-i/ 5),1, 0,1,0,0);
-                    soldado.getWorld().spawnParticle(Particle.DRIP_LAVA, soldado.getLocation().add(-i/ 5,1,i/ 5),1, 0,1,0,0);
-                    soldado.getWorld().spawnParticle(Particle.DRIP_LAVA, soldado.getLocation().add(-i/ 5,1,-i/ 5),1, 0,1,0,0);
-                }
-
-                if (soldado.isDead()) {
-                    cancel();
+                    soldado.getWorld().spawnParticle(Particle.DRIP_LAVA, soldado.getLocation().add(i / 5,1,i/ 5),
+                            1, 0,1,0,0);
+                    soldado.getWorld().spawnParticle(Particle.DRIP_LAVA, soldado.getLocation().add(i/ 5,1,-i/ 5),
+                            1, 0,1,0,0);
+                    soldado.getWorld().spawnParticle(Particle.DRIP_LAVA, soldado.getLocation().add(-i/ 5,1,i/ 5),
+                            1, 0,1,0,0);
+                    soldado.getWorld().spawnParticle(Particle.DRIP_LAVA, soldado.getLocation().add(-i/ 5,1,-i/ 5),
+                            1, 0,1,0,0);
                 }
 
                 for (Entity entity : soldado.getNearbyEntities(5, 5, 5)) {
                     if (entity instanceof LivingEntity && !entity.getName().equals(user.getPlayer().getName()) &&
-                            !entity.getName().equals("Lava Soldier.")) {
+                            !entity.getName().equals("Lava Soldier")) {
                         soldado.setTarget((LivingEntity) entity);
                     }
                 }
@@ -579,10 +684,95 @@ public class magu_magu extends logia {
         espadaMeta.addEnchant(Enchantment.KNOCKBACK, 4, true);
         espadaSoldado.setItemMeta(espadaMeta);
 
-        soldado.getEquipment().setItemInMainHand(espadaSoldado);
+        Objects.requireNonNull(soldado.getEquipment()).setItemInMainHand(espadaSoldado);
+        soldado.getEquipment().setItemInMainHandDropChance(0);
 
-        AttributeModifier modifier = new AttributeModifier(UUID.randomUUID(), "invokerProtection", 0, AttributeModifier.Operation.ADD_NUMBER);
-        Objects.requireNonNull(soldado.getAttribute(Attribute.GENERIC_ATTACK_DAMAGE)).addModifier(modifier);
+        soldado.setCustomNameVisible(true);
+    }
+
+    public void GenerateLavaGhast(Player player) {
+        Location loc = player.getLocation();
+        World world = player.getWorld();
+
+        Ghast ghast = (Ghast) world.spawnEntity(loc, EntityType.GHAST);
+        ghast.setCustomName("Lava Ghast");
+
+        ghast.setInvisible(true);
+        ghast.setTarget(null);
+        ghast.setVelocity(new Vector(0,3,0));
+
+        new BukkitRunnable() {
+            @Override
+            public void run() {
+                if (ghast.isDead() || !player.isOnline()) {
+                    ghast.remove();
+                    cancel();
+                }
+
+                for (double i = 0.5; i < 10; i += 0.1) {
+                    ghast.getWorld().spawnParticle(Particle.LAVA, ghast.getLocation().add(i / 5,1,i / 5),
+                            1, 0,1,0,0);
+                    ghast.getWorld().spawnParticle(Particle.LAVA, ghast.getLocation().add(i / 5,1,-i/ 5),
+                            1, 0,1,0,0);
+                    ghast.getWorld().spawnParticle(Particle.LAVA, ghast.getLocation().add(-i / 5,1,i / 5),
+                            1, 0,1,0,0);
+                    ghast.getWorld().spawnParticle(Particle.LAVA, ghast.getLocation().add(-i / 5,1,-i / 5),
+                            1, 0,1,0,0);
+                }
+
+                for (Entity entity : ghast.getNearbyEntities(30, 30, 30)) {
+                    if (entity instanceof LivingEntity && !entity.getName().equals(user.getPlayer().getName()) &&
+                            !entity.getName().equals("Lava Soldier") && !entity.getName().equals("Lava Ghast")) {
+                        TargetsGhast.add((LivingEntity) entity);
+                    }
+                }
+            }
+        }.runTaskTimer(plugin,0,0);
+
+        new BukkitRunnable() {
+            @Override
+            public void run() {
+                if (ghast.isDead() || !player.isOnline()) {
+                    TargetsGhast.clear();
+                    TargetGhastActual = null;
+                    cancel();
+                }
+
+                if (TargetsGhast.size() > 0) {
+                    if (TargetGhastActual == null || TargetGhastActual.isDead()) {
+                        assert TargetGhastActual != null;
+                        if (TargetGhastActual.isDead())
+                            TargetsGhast.remove(TargetGhastActual);
+
+                        if (TargetsGhast.size() > 0) {
+                            TargetGhastActual = TargetsGhast.get(0);
+                        }
+                    }
+
+                    if (TargetGhastActual != null)
+                        sendMeteorite(ghast, TargetGhastActual);
+                } else {
+                    TargetGhastActual = null;
+                }
+            }
+        }.runTaskTimer(plugin,40,20);
+    }
+
+    public boolean checkSoldiers(Player player) {
+        if (!player.isOnline()) {
+            for (LivingEntity entity : LavaSoldiers) {
+                entity.setHealth(0);
+            }
+
+            return false;
+        }
+
+        for (LivingEntity entity : LavaSoldiers) {
+            if (entity.getLocation().distance(user.getPlayer().getLocation()) > 50) {
+                entity.setHealth(0);
+            }
+        }
+
+        return true;
     }
 }
-
