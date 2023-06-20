@@ -4,14 +4,18 @@ import castSystem.castIdentification;
 import fruitSystem.fruitIdentification;
 import htt.ophabs.OPhabs;
 import org.bukkit.*;
+import org.bukkit.attribute.Attribute;
+import org.bukkit.attribute.AttributeModifier;
+import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.*;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.ItemMeta;
+import org.bukkit.inventory.meta.SkullMeta;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.util.Vector;
+import skin.skinsChanger;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Random;
+import java.util.*;
 
 import static java.lang.Math.*;
 
@@ -31,12 +35,16 @@ public class magu_magu extends logia {
      * @param plugin OPhabs plugin.
      * @author RedRiotTank.
      */
-    public magu_magu(OPhabs plugin){
-        super(plugin, Particle.FLAME, castIdentification.castMaterialMagu, castIdentification.castItemNameMagu, fruitIdentification.fruitCommandNameMagu); 
+    public magu_magu(OPhabs plugin) {
+        super(plugin, Particle.FLAME, castIdentification.castMaterialMagu, castIdentification.castItemNameMagu,
+                fruitIdentification.fruitCommandNameMagu);
         abilitiesNames.add("Lava Meteors");
         abilitiesCD.add(0);
         abilitiesNames.add("Lava Ground");
         abilitiesCD.add(0);
+        abilitiesNames.add("Lava Soldiers");
+        abilitiesCD.add(0);
+
         this.runParticles();
     }
 
@@ -47,8 +55,7 @@ public class magu_magu extends logia {
     @Override
     public void runParticles() {
 
-        new BukkitRunnable(){
-
+        new BukkitRunnable() {
             int ticks = 0;
 
             Random random = new Random();
@@ -136,8 +143,8 @@ public class magu_magu extends logia {
      * @see magu_magu#lavaMeteors(Player)
      * @author RedRiotTank.
      */
-    public void ability1(){
-        if(abilitiesCD.get(0) == 0){
+    public void ability1() {
+        if (abilitiesCD.get(0) == 0) {
             lavaMeteors(user.getPlayer());
             abilitiesCD.set(0, 180); // Pon el cooldown en segundos
         }
@@ -150,7 +157,7 @@ public class magu_magu extends logia {
      * @note It has a max of 3 meteors.
      * @author RedRiotTank.
      */
-    public void lavaMeteors(Player player){
+    public void lavaMeteors(Player player) {
         final int Maximum = 3;
         int index = 0;
 
@@ -159,10 +166,10 @@ public class magu_magu extends logia {
         List<LivingEntity> Players = new ArrayList<>();
         List<LivingEntity> livingEntities = new ArrayList<>();
 
-        for(Entity ent : entityList){
-            if(ent instanceof Player)
+        for(Entity ent : entityList) {
+            if (ent instanceof Player)
                 Players.add((LivingEntity) ent);
-            else if(ent instanceof LivingEntity)
+            else if (ent instanceof LivingEntity)
                 livingEntities.add((LivingEntity) ent);
         }
 
@@ -293,7 +300,7 @@ public class magu_magu extends logia {
      * @see magu_magu#lavaGround(Player)
      * @author RedRiotTank.
      */
-    public void ability2(){
+    public void ability2() {
         if(abilitiesCD.get(1) == 0){
             lavaGround(user.getPlayer());
             abilitiesCD.set(1, 30); // Pon el cooldown en segundos
@@ -452,12 +459,12 @@ public class magu_magu extends logia {
             playerLoc.getWorld().playSound(putBlockLocation,Sound.BLOCK_LAVA_EXTINGUISH,1,1);
 
     }
+
     /**
      * @brief this function have to be changed.
      * @todo change this function for .isSolid().
      * @author RedRiotTank.
      */
-
     public boolean airOrSimilar(Material mat){
         if(mat.equals(Material.AIR)
                 || mat.equals(Material.DEAD_BUSH)
@@ -505,9 +512,10 @@ public class magu_magu extends logia {
      * @brief Ability 3: "".
      * @author -.
      */
-    public void ability3(){
-        if(abilitiesCD.get(2) == 0){
-            abilitiesCD.set(2, 180); // Pon el cooldown en segundos
+    public void ability3() {
+        if (abilitiesCD.get(2) == 0) {
+            GenerateSoldier(user.getPlayer());
+            abilitiesCD.set(2, 60); // Pon el cooldown en segundos
         }
     }
     // ---------------------------------------------- AB 4 ---------------------------------------------------------------------
@@ -516,10 +524,36 @@ public class magu_magu extends logia {
      * @brief Ability 4: "".
      * @author -.
      */
-    public void ability4(){
-        if(abilitiesCD.get(3) == 0){
+    public void ability4() {
+        if (abilitiesCD.get(3) == 0) {
             abilitiesCD.set(3, 180); // Pon el cooldown en segundos
         }
+    }
+
+    public void GenerateSoldier(Player player) {
+        Location loc = player.getLocation();
+        World world = player.getWorld();
+
+        Zombie soldado = (Zombie) world.spawnEntity(loc, EntityType.ZOMBIE);
+        soldado.setCustomName("Soldado");
+
+        skinsChanger.setSkin("soldado", "https://www.minecraftskins.com/uploads/skins/2021/05/07/magma-zombie-17729024.png?v577");
+        skinsChanger.changeSkinSoldiers(soldado, "soldado");
+
+        ItemStack espadaSoldado = new ItemStack(Material.STONE_SWORD);
+        ItemMeta espadaMeta = espadaSoldado.getItemMeta();
+
+        assert espadaMeta != null;
+        espadaMeta.addEnchant(Enchantment.FIRE_ASPECT, 4, true);
+        espadaMeta.addEnchant(Enchantment.DAMAGE_ALL, 4, true);
+        espadaMeta.addEnchant(Enchantment.DURABILITY, 4, true);
+        espadaMeta.addEnchant(Enchantment.KNOCKBACK, 4, true);
+        espadaSoldado.setItemMeta(espadaMeta);
+
+        soldado.getEquipment().setItemInMainHand(espadaSoldado);
+
+        AttributeModifier modifier = new AttributeModifier(UUID.randomUUID(), "invokerProtection", 0, AttributeModifier.Operation.ADD_NUMBER);
+        Objects.requireNonNull(soldado.getAttribute(Attribute.GENERIC_ATTACK_DAMAGE)).addModifier(modifier);
     }
 }
 

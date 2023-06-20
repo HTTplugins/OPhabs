@@ -460,15 +460,15 @@ public class bane_bane extends paramecia {
      * @author Vaelico786.
      */
     public void onFall(EntityDamageEvent event) {
-        if(active){
-            if(resort){
+        if (active) {
+            if (resort) {
                 event.setCancelled(true);
                 Player player = user.getPlayer();
-                if(!player.isSneaking()){
+                if (!player.isSneaking()) {
                     Vector velocity = player.getVelocity();
                     double v = (-3.7+sqrt(9-8*(-(player.getFallDistance()))))/4;
                     velocity.setY(v);
-                    if(player.isSprinting()){
+                    if (player.isSprinting()) {
                         velocity.setX(player.getEyeLocation().getDirection().getX() * 4);
                         velocity.setZ(player.getEyeLocation().getDirection().getZ() * 4);
                     }
@@ -476,7 +476,7 @@ public class bane_bane extends paramecia {
                 }
                 user.getPlayer().setFallDistance(0);
             }
-       } 
+       }
     }
 
     /**
