@@ -54,7 +54,12 @@ public class fruitAssociation implements Listener {
         }
 
         ArrayList<String> values = new ArrayList<>();
+        String aux;
         for(int i = 0; i < abilitiesList.size(); i++) {
+            aux = plugin.getConfig().getString("FruitAssociations." + abilitiesList.get(i).getName());
+            if(aux == null)
+                plugin.getConfig().set("FruitAssociations." +abilitiesList.get(i).getName(), "none");
+
             values.add(plugin.getConfig().getString("FruitAssociations." + abilitiesList.get(i).getName()));
             Names.add(fruitIdentification.getItemName(abilitiesList.get(i).getName()));
         }

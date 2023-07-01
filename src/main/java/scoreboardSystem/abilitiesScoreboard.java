@@ -37,7 +37,7 @@ public class abilitiesScoreboard {
         ArrayList<String> values = new ArrayList<>();
         for(abilityUser user : users.values()) {
             if (user.hasFruit())
-                if (!plugin.getConfig().getString("FruitAssociations." + user.getDFAbilities().getName()).equals("none"))
+                if (plugin.getConfig().getString("FruitAssociations." + user.getDFAbilities().getName()) != null && !plugin.getConfig().getString("FruitAssociations." + user.getDFAbilities().getName()).equals("none"))
                     values.add(plugin.getConfig().getString("FruitAssociations." + user.getDFAbilities().getName()));
         }
 
