@@ -1,6 +1,6 @@
 package castSystem;
 
-
+import htt.ophabs.fileSystem;
 import htt.ophabs.OPhabs;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
@@ -127,7 +127,7 @@ public class caster implements Listener {
 
     /**
      * @brief Event that is triggered when a  player toggles sneak (Shift default).
-     * @param event PlayerToggleSneakEvent event.
+     * @param e PlayerToggleSneakEvent event.
      * @author RedRiotTank, MiixZ, Vaelico786.
      */
     @EventHandler
@@ -297,7 +297,7 @@ public class caster implements Listener {
         String sukeUserName;
         Player sukeUser, other = event.getPlayer();
 
-        sukeUserName = plugin.getConfig().getString("FruitAssociations.suke_suke");
+        sukeUserName = fileSystem.getFruitLinkedUser("suke_suke");
         if(!sukeUserName.equals("none")) {
             sukeUser = Bukkit.getPlayer(sukeUserName);
 

@@ -234,7 +234,7 @@ public class abilityUser {
      * @brief Sets the haki abilities' experience.
      * @author Vaelico786.
      */
-    public void setHakiExp(double exp) {
+    public void setHakiExp(int exp) {
         if(hakiAbilities == null)
             return;
 

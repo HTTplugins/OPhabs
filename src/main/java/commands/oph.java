@@ -1,5 +1,6 @@
 package commands;
 
+import htt.ophabs.fileSystem;
 import abilitieSystem.*;
 import fruitSystem.devilFruit;
 import org.bukkit.Bukkit;
@@ -59,7 +60,7 @@ public class oph implements CommandExecutor, TabCompleter {
             if (order.equalsIgnoreCase("giveFruit")){
                 if(fruitCommands.contains(fruitCommandName))
                     if( targetPlayer != null) {
-                        if(plugin.getConfig().getString("FruitAssociations."+fruitCommandName).equals("none")){
+                        if(fileSystem.getFruitLinkedUser(fruitCommandName).equals("none")){
                             devilFruit devFruit = new devilFruit(fruitCommandName);
                             devFruit.playerObtainFruit(targetPlayer);
                         } else {player.sendMessage("The fruits has alredy been consumed");}

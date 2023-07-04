@@ -1,6 +1,7 @@
 package fruitSystem;
 
 import htt.ophabs.OPhabs;
+import htt.ophabs.fileSystem;
 import abilitieSystem.abilityUser;
 
 import org.bukkit.entity.Player;
@@ -45,7 +46,7 @@ public class loseFruit implements Listener {
         if (dfPlayers.containsKey(player.getName())) {
             abilityUser dfUser = users.get(player.getName());
             dfUser.onPlayerDeath(event);
-            plugin.getConfig().set(("FruitAssociations."+dfUser.getDFAbilities().getName()),"none");
+            fileSystem.updateFruitLinkedUser(dfUser.getDFAbilities().getName(),"none");
             plugin.saveConfig();
             dfPlayers.remove(player.getName());
             users.get(player.getName()).removeFruit();

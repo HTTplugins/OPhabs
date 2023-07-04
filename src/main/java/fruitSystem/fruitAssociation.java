@@ -2,6 +2,7 @@ package fruitSystem;
 
 import htt.ophabs.OPhabs;
 
+import htt.ophabs.fileSystem;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -56,11 +57,12 @@ public class fruitAssociation implements Listener {
         ArrayList<String> values = new ArrayList<>();
         String aux;
         for(int i = 0; i < abilitiesList.size(); i++) {
-            aux = plugin.getConfig().getString("FruitAssociations." + abilitiesList.get(i).getName());
-            if(aux == null)
-                plugin.getConfig().set("FruitAssociations." +abilitiesList.get(i).getName(), "none");
-
-            values.add(plugin.getConfig().getString("FruitAssociations." + abilitiesList.get(i).getName()));
+            aux = fileSystem.getFruitLinkedUser(abilitiesList.get(i).getName());
+            if(aux == null) {
+                fileSystem.updateFruitLinkedUser(abilitiesList.get(i).getName(),"none");
+                aux = "none";
+            }
+            values.add(aux);
             Names.add(fruitIdentification.getItemName(abilitiesList.get(i).getName()));
         }
         
@@ -149,8 +151,8 @@ public class fruitAssociation implements Listener {
                 df ability = abilitiesM.get(fruit.getItemMeta().getDisplayName());
                 fruitIdentification fruitID = new fruitIdentification();
                 addDevilFruitPlayer(event.getPlayer().getName(), new devilFruit(fruitID.getItemName(ability.getName())), ability);
-                
-                plugin.getConfig().set("FruitAssociations." + a.getName(), event.getPlayer().getName());
+
+                fileSystem.updateFruitLinkedUser(a.getName(),event.getPlayer().getName());
                 plugin.saveConfig();
                 scoreboard.addScoreboard(event.getPlayer().getName());
             }

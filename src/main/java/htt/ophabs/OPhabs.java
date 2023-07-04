@@ -1,6 +1,7 @@
 package htt.ophabs;
 
 
+import com.google.gson.JsonObject;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.Bukkit;
 import commands.*;
@@ -35,8 +36,13 @@ public final class OPhabs extends JavaPlugin {
         //---------------
         //Files
 
-        getConfig().options().copyDefaults();
-        saveDefaultConfig();
+            getConfig().options().copyDefaults();
+            saveDefaultConfig();
+
+        fileSystem.loadFileSystem();
+        fileSystem.addHakiUser("RedRiot",100,0);
+        fileSystem.addHakiUser("Vaelico",11,111);
+        fileSystem.updateHakiUser("RedRiot",0,9);
 
         //--------------
         //abilitieSystem

@@ -1,5 +1,6 @@
 package scoreboardSystem;
 
+import htt.ophabs.fileSystem;
 import fruitSystem.fruitIdentification;
 import castSystem.castIdentification;
 import htt.ophabs.OPhabs;
@@ -37,8 +38,8 @@ public class abilitiesScoreboard {
         ArrayList<String> values = new ArrayList<>();
         for(abilityUser user : users.values()) {
             if (user.hasFruit())
-                if (plugin.getConfig().getString("FruitAssociations." + user.getDFAbilities().getName()) != null && !plugin.getConfig().getString("FruitAssociations." + user.getDFAbilities().getName()).equals("none"))
-                    values.add(plugin.getConfig().getString("FruitAssociations." + user.getDFAbilities().getName()));
+                if (!fileSystem.getFruitLinkedUser(user.getDFAbilities().getName()).equals("none"))
+                    values.add(fileSystem.getFruitLinkedUser(user.getDFAbilities().getName()));
         }
 
         for(String value : values) {
@@ -62,7 +63,7 @@ public class abilitiesScoreboard {
 
     /**
      * @brief Adds an scoreboard to the scoreboards map.
-     * @param name Name of the player linked to the scoreboard.
+     * @param playerName Name of the player linked to the scoreboard.
      * @author RedRiotTank, Vaelico786.
      */
     public void addScoreboard(String playerName){
@@ -72,7 +73,7 @@ public class abilitiesScoreboard {
 
     /**
      * @brief Removes an scoreboard from the scoreboards map.
-     * @param name Name of the player linked to the scoreboard.
+     * @param player Name of the player linked to the scoreboard.
      * @author RedRiotTank, Vaelico786.
      */
     public void removeScoreboard(Player player){

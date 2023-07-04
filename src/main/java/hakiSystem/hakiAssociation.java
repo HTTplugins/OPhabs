@@ -1,10 +1,13 @@
 package hakiSystem;
 
 import htt.ophabs.OPhabs;
+import htt.ophabs.fileSystem;
 import org.bukkit.event.Listener;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Set;
+
 import abilitieSystem.*;
 import scoreboardSystem.abilitiesScoreboard;
 
@@ -30,11 +33,10 @@ public class hakiAssociation implements Listener {
     public hakiAssociation(OPhabs plugin) {
         this.plugin = plugin;
         this.users = plugin.users;
-
-        plugin.getConfig().getConfigurationSection("hakiPlayers").getKeys(false).forEach(key -> {
-            addHakiPlayer(key, plugin.getConfig().getInt("hakiPlayers." + key + ".Level"),
-                          plugin.getConfig().getInt("hakiPlayers." + key + ".Exp"));
-        });
+        Set<String> userKeys = fileSystem.getHakiUserKeys();
+        for(String username : userKeys){
+            addHakiPlayer(username,fileSystem.getHakiUserLevel(username),fileSystem.getHakiUserExp(username));
+        }
     }
 
     /**
@@ -52,14 +54,14 @@ public class hakiAssociation implements Listener {
             abilityUser user = users.get(name);
             if(!user.hasHaki()) {
                 user.setHaki(new haki(plugin, user, level, exp));
-                plugin.getConfig().set("hakiPlayers." + name + ".Level", level);
             }
         } else {
             abilityUser user = new abilityUser(name);
             user.setHaki(new haki(plugin, user, level, exp));
             users.put(name, user);
-            plugin.getConfig().set("hakiPlayers." + name + ".Level", level);
+
         }
+        fileSystem.addHakiUser(name,level,0);
     }
 
 }
