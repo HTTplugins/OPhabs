@@ -1,5 +1,6 @@
 package htt.ophabs;
 
+import abilitieSystem.abilityUser;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonObject;
@@ -12,6 +13,7 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.Collections;
 import java.util.Set;
+import java.util.Map;
 
 public class fileSystem {
 
@@ -248,5 +250,20 @@ public class fileSystem {
         }
 
         return Collections.emptySet();
+    }
+
+
+    public static void saveConfig(OPhabs plugin) {
+        for (Map.Entry<String, abilityUser> entry : plugin.users.entrySet()) {
+            String nombre = entry.getKey();
+            abilityUser user = entry.getValue();
+
+            if(user.hasHaki()){
+                updateHakiUser(nombre, user.getHakiLevel(), user.getHakiExp());
+            }
+            if(user.hasFruit()){
+                updateFruitLinkedUser(user.getFruit().getCommandFruitName(), nombre);
+            } 
+        }
     }
 }

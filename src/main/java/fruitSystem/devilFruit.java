@@ -120,6 +120,15 @@ public class devilFruit{
         return devilFruit.getItemMeta().getDisplayName();
     }
 
+     /**
+     * @brief gives the DevilFruit command name.
+     * @return gives the DevilFruit command name.
+     * @author Vaelico786.
+     */   
+    public String getCommandFruitName(){
+        return commandFruitName;
+    }
+
     /**
      * @brief Gives the devil fruit to a player.
      * @param player Player to give the Devil Fruit.

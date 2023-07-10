@@ -17,6 +17,9 @@ import java.util.Objects;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
 
 /**
  * @brief Main class of OPhabs plugin.
@@ -25,6 +28,7 @@ import java.util.Map;
 public final class OPhabs extends JavaPlugin {
     public static Map<String, abilityUser> users = new HashMap<>();
     public static ArrayList<df> abilitiesList = new ArrayList<>();
+    private ScheduledExecutorService scheduler; //Planificador guardar archivo
     /**
      * @brief Set up of the plugin (start configuration). Literally the main.
      * @author RedRiotTank, Vaelico786.
@@ -35,14 +39,7 @@ public final class OPhabs extends JavaPlugin {
 
         //---------------
         //Files
-
-            getConfig().options().copyDefaults();
-            saveDefaultConfig();
-
         fileSystem.loadFileSystem();
-        fileSystem.addHakiUser("RedRiot",100,0);
-        fileSystem.addHakiUser("Vaelico",11,111);
-        fileSystem.updateHakiUser("RedRiot",0,9);
 
         //--------------
         //abilitieSystem
@@ -96,6 +93,12 @@ public final class OPhabs extends JavaPlugin {
 
         registerCommands(abilitiesList, haki);
 
+        scheduler = Executors.newScheduledThreadPool(1);
+        Runnable task = () -> {
+            fileSystem.saveConfig(this);
+        };
+        scheduler.scheduleAtFixedRate(task, 0, 1, TimeUnit.MINUTES);
+
         //--------------
         Bukkit.getConsoleSender().sendMessage(ChatColor.GREEN + "" + ChatColor.BOLD +  "OPhabs started correctly.");
 
@@ -108,15 +111,8 @@ public final class OPhabs extends JavaPlugin {
      */
     @Override
     public void onDisable() {
-
-        for (abilityUser user : users.values()) {
-            if(user.hasHaki()){
-
-                getConfig().set("hakiPlayers." + user.getPlayerName() + ".Level", user.getHakiLevel());
-                getConfig().set("hakiPlayers." + user.getPlayerName() + ".Exp", user.getHakiExp());
-            }
-        }
-        saveConfig();
+        scheduler.shutdown();
+        fileSystem.saveConfig(this);
         Bukkit.getConsoleSender().sendMessage(ChatColor.DARK_RED + "" + ChatColor.BOLD + "HTTrolplay closed correctly.");
     }
 

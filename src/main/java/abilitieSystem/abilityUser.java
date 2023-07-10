@@ -223,7 +223,7 @@ public class abilityUser {
      * @brief Returns the haki abilities' experience.
      * @author Vaelico786.
      */
-    public double getHakiExp() {
+    public int getHakiExp() {
         if(hakiAbilities == null)
             return 0;
 

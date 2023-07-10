@@ -2,7 +2,6 @@ package abilitieSystem;
 
 
 import htt.ophabs.OPhabs;
-import htt.ophabs.fileSystem;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityShootBowEvent;
@@ -82,7 +81,7 @@ public class haki extends abilities {
      * @return Exp of the Haki.
      * @author Vaelico786.
      */
-    public double getExp(){
+    public int getExp(){
         return exp;
     }
 
@@ -120,8 +119,6 @@ public class haki extends abilities {
             upHealth();
             upArmor();
         }
-
-        fileSystem.updateHakiUser(user.getPlayerName(),level,exp);
     }
 
     /**
