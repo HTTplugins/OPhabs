@@ -81,7 +81,7 @@ public class hie_hie extends paramecia {    //fruit_fruit is the fruit whose abi
                         double convertProb = rand.nextDouble();
                         if(convertProb < convRate){
 
-                            Location blockLoc = new Location(world,i,auxBiblio.searchGround(i,j,yPlayer,world),j);
+                            Location blockLoc = new Location(world,i,OPHLib.searchGround(i,j,yPlayer,world),j);
                             blockLoc.getBlock().setType(Material.BLUE_ICE);
 
                         }
@@ -223,7 +223,12 @@ public class hie_hie extends paramecia {    //fruit_fruit is the fruit whose abi
         new BukkitRunnable(){
             @Override
             public void run() {
-                caster.setItemMeta(old);
+                for(ItemStack item : user.getPlayer().getInventory().getContents()){
+                    if(castIdentification.itemIsCaster(item, user.getPlayer())){
+                        item.setItemMeta(old);
+                        break;
+                    }
+                }
             }
         }.runTaskLater(plugin, 20*20);
     }

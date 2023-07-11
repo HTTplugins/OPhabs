@@ -4,10 +4,9 @@ import htt.ophabs.fileSystem;
 import htt.ophabs.OPhabs;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
+import org.bukkit.entity.*;
 import org.bukkit.block.Block;
-import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
-import org.bukkit.entity.ArmorStand;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.block.BlockBreakEvent;
@@ -322,6 +321,19 @@ public class caster implements Listener {
                 hie_hie.tridents.remove(tridente);
                 Entity hitEnt = event.getHitEntity();
 
+                if(hitEnt != null){
+                    if(hitEnt instanceof LivingEntity){
+                        ((LivingEntity) hitEnt).damage(5);
+                        hie_hie.createIceBox(hitEnt);
+                    }
+                } else{
+                    event.getHitBlock().setType(Material.BLUE_ICE);
+                }
+
+                Bukkit.getScheduler().scheduleSyncDelayedTask(plugin, () -> tridente.remove(), 60L);
+            }
+        }
+    }
     /**
      * @brief Event that is triggered when a player tries to put the caster on a frame.
      * @author RedRiotTank, MiixZ, Vaelico786.
@@ -347,11 +359,9 @@ public class caster implements Listener {
 
     @EventHandler
     public void onPlayerInteractEntity(PlayerInteractEntityEvent event) {
-
         if(users.containsKey(event.getPlayer().getName())) {
             abilityUser user = users.get(event.getPlayer().getName());
             if (event.getRightClicked() instanceof ArmorStand) {
-                ArmorStand armorStand = (ArmorStand) event.getRightClicked();
                 Player player = event.getPlayer();
                 
                 //Comprobar si tienes i
