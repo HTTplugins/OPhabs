@@ -1,17 +1,16 @@
 package abilitieSystem;
 
 import htt.ophabs.OPhabs;
-import org.bukkit.event.entity.EntityDamageEvent;
-import org.bukkit.event.entity.PlayerDeathEvent;
-import org.bukkit.event.entity.EntityShootBowEvent;
-import org.bukkit.event.entity.EntityPickupItemEvent;
+import org.bukkit.event.entity.*;
 import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.event.player.PlayerEggThrowEvent;
 import org.bukkit.event.player.PlayerToggleSneakEvent;
 import org.bukkit.event.player.PlayerItemConsumeEvent;
 import org.bukkit.event.player.PlayerRespawnEvent;
-import org.bukkit.event.inventory.InventoryClickEvent;
+import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerItemDamageEvent;
+import org.bukkit.event.inventory.InventoryClickEvent;
+import org.bukkit.event.block.BlockBreakEvent;
 
 import java.util.ArrayList;
 
@@ -21,7 +20,7 @@ import java.util.ArrayList;
  */
 
 public class abilities {
-    protected OPhabs plugin;
+    protected static OPhabs plugin;
     protected abilityUser user=null;
     public ArrayList<String> abilitiesNames = new ArrayList<>();
     public ArrayList<Integer> abilitiesCD = new ArrayList<>();
@@ -165,4 +164,48 @@ public class abilities {
      * @author Vaelico786.
      */
     public void onItemDamage(PlayerItemDamageEvent event) {}
-}
+
+    /**
+     * @brief Passive function when a player damages an entity.
+     * @param event Entity's damage event.
+     * @author Vaelico786.
+     */
+    public void onEntityDamageByUser(EntityDamageByEntityEvent event){}
+
+    /**
+     * @brief Passive function when an entity damages an player.
+     * @param event Entity's damage event.
+     * @author Vaelico786.
+     */
+    public void onUserDamageByEntity(EntityDamageByEntityEvent event) {}
+
+    /**
+     * @brief Passive function when a player joins to the server.
+     * @param event Player's join event.
+     * @author Vaelico786.
+     */
+    public void onPlayerJoin(PlayerJoinEvent event) {}
+
+    /**
+     * @brief Passive function when a player moves.
+     * @param event Player's moves event.
+     * @author Vaelico786.
+     */
+    public void onPlayerMove(PlayerMoveEvent event) {}
+
+    /**
+     * @brief Passive function when an entity toggles his glide.
+     * @param event Entity's glide event.
+     * @author Vaelico786.
+     */
+    public void onEntityToggleGlide(EntityToggleGlideEvent event) {}    
+
+
+    /**
+     * @brief Passive function that triggers when a block is broken
+     * @param event Block's breaks event.
+     * @author Vaelico786.
+     */
+    public void onBlockBreak(BlockBreakEvent event) {}
+
+    }

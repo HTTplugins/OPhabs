@@ -4,7 +4,6 @@ import castSystem.castIdentification;
 import htt.ophabs.OPhabs;
 import org.bukkit.*;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
@@ -16,8 +15,6 @@ import org.bukkit.potion.PotionEffectType;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.util.Vector;
 import fruitSystem.fruitIdentification;
-
-import static java.lang.Math.*;
 
 /**
  * @brief Goro goro no mi ability Class.
@@ -144,11 +141,11 @@ public class goro_goro extends logia {
             @Override
             public void run() {
                 for(double prof = 0.5; prof < fin; prof+=0.5) {
-                    auxBiblio.circleEyeVector(1,0.5,prof,null, element,true,true, user.getPlayer());
-                    auxBiblio.circleEyeVector(0.8,0.5,prof,null, element,true,true, user.getPlayer());
-                    auxBiblio.circleEyeVector(0.6,0.5,prof,null, element,true,true, user.getPlayer());
-                    auxBiblio.circleEyeVector(0.4,0.5,prof,null, element,true,true, user.getPlayer());
-                    auxBiblio.circleEyeVector(0.2,0.5,prof,null, element,true,true, user.getPlayer());
+                    OPHLib.circleEyeVector(1,0.5,prof,null, element,true,true, user.getPlayer());
+                    OPHLib.circleEyeVector(0.8,0.5,prof,null, element,true,true, user.getPlayer());
+                    OPHLib.circleEyeVector(0.6,0.5,prof,null, element,true,true, user.getPlayer());
+                    OPHLib.circleEyeVector(0.4,0.5,prof,null, element,true,true, user.getPlayer());
+                    OPHLib.circleEyeVector(0.2,0.5,prof,null, element,true,true, user.getPlayer());
                 }
                 tick++;
 
@@ -323,7 +320,7 @@ public class goro_goro extends logia {
                 for(double i=0; i < density; i++){
                     double x = generarNumeroAleatorio(player.getLocation().getX() - extension, player.getLocation().getX() + extension);
                     double z = generarNumeroAleatorio(player.getLocation().getZ() - extension, player.getLocation().getZ() + extension);
-                    double y = auxBiblio.searchGround(x,z,player.getLocation().getY(),world) + 1.2;
+                    double y = OPHLib.searchGround(x,z,player.getLocation().getY(),world) + 0.2;
 
                     Location particle = new Location(world,x,y,z);
                     world.spawnParticle(Particle.ELECTRIC_SPARK,particle,0,0,0,0);

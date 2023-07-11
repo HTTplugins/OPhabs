@@ -14,6 +14,7 @@ import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.util.Vector;
+import htt.ophabs.fileSystem;
 
 import java.util.ArrayList;
 import java.util.Random;
@@ -78,7 +79,7 @@ public class mera_mera extends logia {
     }
 
     public boolean comprobarUser(Player jugador) {
-        String nombre_user = plugin.getConfig().getString("FruitAssociations.mera_mera");
+        String nombre_user = fileSystem.getFruitLinkedUser("mera_mera");
         boolean es_user = false;
         Player user = Bukkit.getPlayerExact(nombre_user);
 

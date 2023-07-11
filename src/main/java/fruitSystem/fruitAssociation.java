@@ -2,6 +2,7 @@ package fruitSystem;
 
 import htt.ophabs.OPhabs;
 
+import htt.ophabs.fileSystem;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -31,22 +32,22 @@ import scoreboardSystem.abilitiesScoreboard;
  */
 public class fruitAssociation implements Listener {
     private final OPhabs plugin;
-    public static Map<String, abilityUser> dfPlayers = new HashMap<>(), users = new HashMap<>();
-    public static Map<String, df> abilitiesM = new HashMap<>();
+    public  Map<String, abilityUser> dfPlayers = new HashMap<>(), users = new HashMap<>();
+    public  Map<String, df> abilitiesM = new HashMap<>();
     public abilitiesScoreboard scoreboard = null;
     public ArrayList<String> Names = new ArrayList<>();
-    public ArrayList<df> abilityList = new ArrayList<>();
+    public ArrayList<df> abilitiesList = new ArrayList<>();
 
     /**
      * @brief Fruit assocaition constructor, links Players (who already have a fruit linked) and abilities on start.
      * @param plugin OPhabs plugin.
-     * @param abilitiesList List with all devil fruit abilities (abilitieSystem abilities).
-     * @param users Map of abilities by user.
      * @author Vaelico786.
      */
-    public fruitAssociation(OPhabs plugin, ArrayList<df> abilitiesList, Map<String, abilityUser> users) {
+    public fruitAssociation(OPhabs plugin) {
         this.plugin = plugin;
-        this.users = users;
+        this.users = plugin.users;
+        this.abilitiesList = plugin.abilitiesList;
+
 
         for (df ability : abilitiesList) {
             System.out.println(ability.getName());
@@ -54,8 +55,14 @@ public class fruitAssociation implements Listener {
         }
 
         ArrayList<String> values = new ArrayList<>();
+        String aux;
         for(int i = 0; i < abilitiesList.size(); i++) {
-            values.add(plugin.getConfig().getString("FruitAssociations." + abilitiesList.get(i).getName()));
+            aux = fileSystem.getFruitLinkedUser(abilitiesList.get(i).getName());
+            if(aux == null) {
+                fileSystem.updateFruitLinkedUser(abilitiesList.get(i).getName(),"none");
+                aux = "none";
+            }
+            values.add(aux);
             Names.add(fruitIdentification.getItemName(abilitiesList.get(i).getName()));
         }
         
@@ -66,7 +73,6 @@ public class fruitAssociation implements Listener {
 
             }
         }
-        abilityList = abilitiesList;
     }
 
     /**
@@ -119,9 +125,9 @@ public class fruitAssociation implements Listener {
                 if(fruit.getItemMeta().getDisplayName().equals(Names.get(i))) {
                     consumedFruit = consumedFruit(values.get(i),event);
                     values.set(i,event.getPlayer().getName());
-                    casterItemName = abilityList.get(i).getItemName();
-                    castMaterial = abilityList.get(i).getMaterial();
-                    a = abilityList.get(i);
+                    casterItemName = abilitiesList.get(i).getItemName();
+                    castMaterial = abilitiesList.get(i).getMaterial();
+                    a = abilitiesList.get(i);
                 }
             }
 
@@ -145,8 +151,8 @@ public class fruitAssociation implements Listener {
                 df ability = abilitiesM.get(fruit.getItemMeta().getDisplayName());
                 fruitIdentification fruitID = new fruitIdentification();
                 addDevilFruitPlayer(event.getPlayer().getName(), new devilFruit(fruitID.getItemName(ability.getName())), ability);
-                
-                plugin.getConfig().set("FruitAssociations." + a.getName(), event.getPlayer().getName());
+
+                fileSystem.updateFruitLinkedUser(a.getName(),event.getPlayer().getName());
                 plugin.saveConfig();
                 scoreboard.addScoreboard(event.getPlayer().getName());
             }

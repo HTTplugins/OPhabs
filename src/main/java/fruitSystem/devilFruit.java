@@ -93,6 +93,10 @@ public class devilFruit{
                 fruitItemName = fruitIdentification.fruitItemNameHie;
                 modelData = 15;
                 break;
+            case fruitIdentification.fruitCommandNameBane:
+                fruitItemName = fruitIdentification.fruitItemNameBane;
+                modelData = 17;
+                break;
             default:
                 fruitItemName  = "ERROR";
                 break;
@@ -114,6 +118,15 @@ public class devilFruit{
      */
     public String getFruitName(){
         return devilFruit.getItemMeta().getDisplayName();
+    }
+
+     /**
+     * @brief gives the DevilFruit command name.
+     * @return gives the DevilFruit command name.
+     * @author Vaelico786.
+     */   
+    public String getCommandFruitName(){
+        return commandFruitName;
     }
 
     /**

@@ -12,7 +12,6 @@ import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.EntityDamageEvent.DamageCause;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.entity.LivingEntity;
-;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
 
@@ -29,7 +28,7 @@ public class inu_inu_okuchi extends zoan {
     public boolean himo = false;
     public boolean atronar = false;
 
-    private ArrayList<LivingEntity> atronados = new ArrayList<>();
+    private final ArrayList<LivingEntity> atronados = new ArrayList<>();
 
     public inu_inu_okuchi(OPhabs plugin) {
         super(plugin, castIdentification.castMaterialInuOkuchi, castIdentification.castItemNameInuOkuchi,
@@ -213,7 +212,7 @@ public class inu_inu_okuchi extends zoan {
         new BukkitRunnable() {
             int k = 0;
             public void run() {
-                if(k > 30)
+                if (k > 30)
                     this.cancel();
 
                 loc.add(direccion);

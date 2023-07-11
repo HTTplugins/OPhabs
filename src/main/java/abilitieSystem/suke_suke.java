@@ -9,8 +9,9 @@ import org.bukkit.entity.Player;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import org.bukkit.scheduler.BukkitRunnable;
-import org.bukkit.util.RayTraceResult;
 import org.bukkit.util.Vector;
+import org.bukkit.event.entity.EntityDamageByEntityEvent;
+import org.bukkit.event.player.PlayerJoinEvent;
 
 import static java.lang.Math.PI;
 
@@ -232,10 +233,10 @@ public class suke_suke extends paramecia {
      */
     public void backStab(Player player) {
 
-        LivingEntity target = auxBiblio.rayCastLivEnt(player,2);
+        LivingEntity target = OPHLib.rayCastLivEnt(player,2);
 
         if (target != null) {
-            boolean backLooking = auxBiblio.isLookingBack(player, target);
+            boolean backLooking = OPHLib.isLookingBack(player, target);
 
             if (backLooking){
                 spawnParticleBehind(target);
@@ -294,5 +295,31 @@ public class suke_suke extends paramecia {
                 finishInvisibility(player);
             }
         }.runTaskLater(plugin, attackDuration);
+    }
+
+
+    // ---------------------------------------------- Event ---------------------------------------------------------------------
+    /**
+     * @brief Makes players visible when attacks and exploration is active.
+     * @param event Event that triggers the method.
+     * @see suke_suke#invisibleExploration(Player)
+     * @author Vaelico786.
+     */
+    public void onEntityDamageByUser(EntityDamageByEntityEvent event) {
+        if(exploration){
+            cancelStopInvisibleTask = true;
+            user.getPlayer().removePotionEffect(PotionEffectType.INVISIBILITY);
+            finishInvisibility(user.getPlayer());
+        }
+    }
+
+    /**
+     * @brief Removes player potion effect when player joins.
+     * @param event Event that triggers the method.
+     * @see suke_suke#invisibleExploration(Player)
+     * @author Vaelico786.
+     */
+    public void onPlayerJoin(PlayerJoinEvent event) {
+        user.getPlayer().removePotionEffect(PotionEffectType.INVISIBILITY);
     }
 }

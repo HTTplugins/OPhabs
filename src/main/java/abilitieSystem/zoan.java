@@ -57,15 +57,15 @@ public class zoan extends df{
      * @brief Transformation from normal to zoan (Skin changer).
      * @author Vaelico786.
      */
-    public void transformation(){
+    public void transformation() {
         Player player = user.getPlayer();
-        if(!transformed){
+        if(!transformed) {
             skinC.changeSkin(player, skinName);
             transformed = true;
         }
-        else{
-            transformed = !transformed;
-            skinC.resetSkin(player);
+        else {
+            transformed = false;
+            skinsChanger.resetSkin(player);
         }
     }
 
@@ -73,11 +73,11 @@ public class zoan extends df{
      * @brief CORE ABILITY: transforms the player in to his zoan transformation.
      * @author Vaelico786.
      */
-    public void ability1(){
+    public void ability1() {
         transformation();
     }
 
-    public void playerOnDeath(PlayerDeathEvent event){
+    public void playerOnDeath(PlayerDeathEvent event) {
         if(transformed){
             transformed = false;
             skinC.resetSkin(event.getEntity());

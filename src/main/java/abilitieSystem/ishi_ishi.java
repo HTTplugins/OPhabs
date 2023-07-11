@@ -17,22 +17,19 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.scheduler.BukkitRunnable;
-import org.bukkit.scheduler.BukkitTask;
 import org.bukkit.util.Vector;
 import org.bukkit.block.Block;
 import org.bukkit.inventory.Inventory;
 
 import java.lang.Math;
-
-import static abilitieSystem.auxBiblio.isSolidBlock;
+import static abilitieSystem.OPHLib.*;
 
 public class ishi_ishi extends paramecia {
-    final int radiusFloor = 3, radiusWall = 3;
+    final int radiusFloor = 3;
     public static Particle.DustOptions piedra = new Particle.DustOptions(Color.GRAY,1.0F);
     int storaged, maxStoraged;
     String nameAbility1 = "Absorb Stone";
     boolean opened;
-    private int repealAnimationCounter = 0;
 
     public ishi_ishi(OPhabs plugin) {
         super(plugin, castIdentification.castMaterialIshi, castIdentification.castItemNameIshi, fruitIdentification.fruitCommandNameIshi);
@@ -65,13 +62,14 @@ public class ishi_ishi extends paramecia {
         abilitiesCD.add(0);
         }
    
-    public void ability1(){
+    public void ability1() {
         if(storaged < maxStoraged){
             absorb(user.getPlayer());
             abilitiesNames.set(0, nameAbility1 + " (" + storaged + ")");
         }
     }
-    public void ability2(){
+
+    public void ability2() {
         if(!user.getPlayer().isSneaking()){
             stoneCreation(user.getPlayer());
         }
@@ -102,13 +100,15 @@ public class ishi_ishi extends paramecia {
         }
         abilitiesNames.set(0, nameAbility1 + " (" + storaged + ")");
     }
+
     public void ability3() {
-        if(abilitiesCD.get(2) == 0){
+        if(abilitiesCD.get(2) == 0) {
             controlStone(user.getPlayer());
         }
         abilitiesNames.set(0, nameAbility1 + " (" + storaged + ")");
 
     }
+
     public void ability4() {
         if(abilitiesCD.get(3) == 0){
             stoneRise(user.getPlayer());
@@ -118,11 +118,8 @@ public class ishi_ishi extends paramecia {
     }
 
     public Boolean isStone(Block block) {
-        boolean isStone = false;
-        if(block.getType().toString().contains("STONE") || (block.getType().toString().contains("ORE") && !block.getType().toString().contains("NETHERRACK"))) {
-            isStone=true;
-        }
-        return isStone;
+        return block.getType().toString().contains("STONE") || (block.getType().toString().contains("ORE") &&
+                !block.getType().toString().contains("NETHERRACK"));
     }
 
     public void controlStone(Player player) {
@@ -142,7 +139,6 @@ public class ishi_ishi extends paramecia {
     
     public void stoneRise(Player player) {
         Location currentPL = player.getLocation(), currentPL1, currentPL2;
-        int xDir = 1, zDir= 1;
         Vector direction = player.getEyeLocation().getDirection();
         
         if(!user.getPlayer().isSneaking()) {
@@ -158,7 +154,6 @@ public class ishi_ishi extends paramecia {
             }
             if(direction.getY() <= 0.5 && direction.getY() >= -0.5){
                 new BukkitRunnable() {
-                    Material type = Material.POINTED_DRIPSTONE;
                     int i = 0;
                     @Override
                     public void run() {
@@ -253,6 +248,7 @@ public class ishi_ishi extends paramecia {
                     public void run() {
                         if (isStone(current.add(direction).getBlock()) || i > 8) {
                             Entity floatingBlock = currentPL.getWorld().spawnFallingBlock(current, current.getBlock().getBlockData());
+                            floatingBlock.setGravity(false);
                             current.getBlock().setType(Material.AIR);
                             catchEntity(floatingBlock, player);
                             cancelTask();
@@ -742,138 +738,38 @@ public class ishi_ishi extends paramecia {
         storaged = 5;
     }
 
-    public Entity setFallingBlock(Location block) {
-    if(block.getBlock().getType() != Material.AIR && block.getBlock().getType() != Material.WATER) {
-      Material matFallingBlock = block.getBlock().getType();
-      block.getBlock().setType(Material.AIR);
-      return block.getWorld().spawnFallingBlock(block, matFallingBlock, (byte) 9);
-    }
-    return null;
-    }
-
+    /**
+     * @brief Gets blocks in a pool around the location given.
+     * @see gura_gura#positions(Location, Vector)
+     * @param loc Actual player's location.
+     * @param direction Direction player is looking at.
+     * @author Vaelico786.
+     */
     public ArrayList<Location> positions(Location loc, Vector direction) {
-    // if faces north
-    ArrayList<Location> blocks = new ArrayList<Location>();
+        // if faces north
+        ArrayList<Location> blocks = new ArrayList<>();
 
-    if (direction.getX() < -0.2 && direction.getX() > 0.2) {
-      blocks.add(loc.clone().add(1, 1, 0));
-      blocks.add(loc.clone().add(0, 1, 0));
-      blocks.add(loc.clone().add(-1, 1, 0));
-      blocks.add(loc.clone().add(1, 0, 0));
-      blocks.add(loc.clone().add(-1, 0, 0));
-      blocks.add(loc.clone().add(1, -1, 0));
-      blocks.add(loc.clone().add(0, -1, 0));
-      blocks.add(loc.clone().add(-1, -1, 0));
-    }
-    // if faces east
-    if (direction.getX() < -0.2 && direction.getX() > 0.2) {
-      blocks.add(loc.clone().add(0, 1, 1));
-      blocks.add(loc.clone().add(0, 1, 0));
-      blocks.add(loc.clone().add(0, 1, -1));
-      blocks.add(loc.clone().add(0, 0, 1));
-      blocks.add(loc.clone().add(0, 0, -1));
-      blocks.add(loc.clone().add(0, -1, 1));
-      blocks.add(loc.clone().add(0, -1, 0));
-      blocks.add(loc.clone().add(0, -1, -1));
-    }
-    return blocks;
-    }
-
-    //From Yami, modified forLivingVoidEntity
-    public void catchEntity(Entity ent, Player player) {
-
-        BukkitTask attract = new BukkitRunnable() {
-            Vector FirstVector;
-            boolean fV = false;
-            boolean entityInHand = false;
-            double vx,vy,vz;
-            int i = 0, j = 0;
-            Location loc = player.getLocation().add(0,1,0);
-            @Override
-            public void run() {
-
-                Location loc = player.getLocation().add(0,2,0);
-                if(player.isDead() || ent.isOnGround())
-                    this.cancel();
-
-                vx =  loc.getX() - ent.getLocation().getX();
-                vy =  loc.getY() - ent.getLocation().getY();
-                vz =  loc.getZ() - ent.getLocation().getZ();
-
-                Vector movement = loc.clone().toVector().subtract(ent.getLocation().toVector()).normalize();
-
-                if(!fV) {
-                    FirstVector = movement.clone();
-                    fV = true;
-                }
-
-                //Para levantar al mob si hay desnivel
-                if(loc.getY() > ent.getLocation().getY() && !entityInHand)
-                    movement.setY(movement.getY() + (player.getLocation().getY() - ent.getLocation().getY()) + 3);
-
-                if(!entityInHand) {
-                    ent.setVelocity(movement);
-                    i++;
-                }
-                else {
-                    ent.teleport(player.getLocation().add(0,2,0));
-                    ent.setVelocity(new Vector(0,0.042,0));
-                    j++;
-                }
-
-                if(Math.sqrt(Math.pow(vx,2) + Math.pow(vy,2) +  Math.pow(vz,2)) <= 1) {
-                    entityInHand = true;
-                    if(!player.isSneaking()) {
-                        this.cancel();
-                        repealEntity(ent,player);
-                    }
-                }
-
-                if(!player.isSneaking()) {
-                    this.cancel();
-                }
-            }
-        }.runTaskTimer(plugin,0,1);
-    }
-
-    //From Yami
-    public void repealEntity(Entity ent, Player player) {
-        repealAnimationCounter++;
-        World world = player.getWorld();
-
-        ent.getWorld().playSound(ent.getLocation(),Sound.BLOCK_REDSTONE_TORCH_BURNOUT,10,2);
-
-        Vector dir = player.getLocation().getDirection();
-        ent.setVelocity(dir.multiply(3));
-
-        //timer
-        new BukkitRunnable() {
-
-            Vector aux = dir;
-
-            Location loc = ent.getLocation();
-            int i = 0;
-            @Override
-            public void run() {
-                if(ent.getVelocity().getX() != aux.getX() || ent.getVelocity().getZ() != aux.getZ()) {
-                    aux = ent.getVelocity();
-
-                    ent.getWorld().getNearbyEntities(ent.getLocation(), 2,2,2).forEach(entity -> {
-                        if(entity instanceof LivingEntity && entity != player && entity != ent){
-                            ((LivingEntity) entity).damage(9);
-                        }
-                    });
-                }
-                if(ent.isOnGround()) {
-                    cancelTask();
-                }
-                i++;
-            }
-            public void cancelTask(){
-                Bukkit.getScheduler().cancelTask(this.getTaskId());
-            }
-        }.runTaskTimer(plugin, 0, 2);
+        if (direction.getX() < -0.2 && direction.getX() > 0.2) {
+            blocks.add(loc.clone().add(1, 1, 0));
+            blocks.add(loc.clone().add(0, 1, 0));
+            blocks.add(loc.clone().add(-1, 1, 0));
+            blocks.add(loc.clone().add(1, 0, 0));
+            blocks.add(loc.clone().add(-1, 0, 0));
+            blocks.add(loc.clone().add(1, -1, 0));
+            blocks.add(loc.clone().add(0, -1, 0));
+            blocks.add(loc.clone().add(-1, -1, 0));
+        }
+        // if faces east
+        if (direction.getX() < -0.2 && direction.getX() > 0.2) {
+            blocks.add(loc.clone().add(0, 1, 1));
+            blocks.add(loc.clone().add(0, 1, 0));
+            blocks.add(loc.clone().add(0, 1, -1));
+            blocks.add(loc.clone().add(0, 0, 1));
+            blocks.add(loc.clone().add(0, 0, -1));
+            blocks.add(loc.clone().add(0, -1, 1));
+            blocks.add(loc.clone().add(0, -1, 0));
+            blocks.add(loc.clone().add(0, -1, -1));
+        }
+        return blocks;
     }
 }
-
-

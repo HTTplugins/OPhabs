@@ -2,7 +2,6 @@ package abilitieSystem;
 
 
 import htt.ophabs.OPhabs;
-
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityShootBowEvent;
@@ -24,8 +23,9 @@ import java.util.Random;
 */
 public class haki extends abilities {
     private abilityUser user;
-    private int level;
-    private double exp, health, armor;
+    private int level, exp;
+    private double health, armor;
+
 
     /**
      * @brief Haki constructor.
@@ -81,7 +81,7 @@ public class haki extends abilities {
      * @return Exp of the Haki.
      * @author Vaelico786.
      */
-    public double getExp(){
+    public int getExp(){
         return exp;
     }
 
@@ -102,7 +102,7 @@ public class haki extends abilities {
      * @param exp Experience to add to the Haki.
      * @author Vaelico786.
      */
-    public void setExp(double exp){
+    public void setExp(int exp){
         this.exp = exp;
     }
 
@@ -119,8 +119,6 @@ public class haki extends abilities {
             upHealth();
             upArmor();
         }
-        plugin.getConfig().set("hakiPlayers."+user.getPlayerName()+".Level", level);
-        plugin.getConfig().set("hakiPlayers."+user.getPlayerName()+".Exp", exp);
     }
 
     /**
@@ -158,13 +156,12 @@ public class haki extends abilities {
     * @param event The event that was triggered
     * @author Vaelico786.
     */
-    public void onUserDamageAnotherEntity(EntityDamageByEntityEvent event){
+    public void onEntityDamageByUser(EntityDamageByEntityEvent event){
         if(level>=5){
             if(((Player)event.getDamager()).getInventory().getItemInMainHand().getType() == Material.AIR){
                 event.setDamage(event.getDamage()*5);
             }
             event.setDamage(event.getDamage()+(event.getDamage()*level)/10);
-
         }
 
         exp += event.getDamage();
@@ -185,7 +182,7 @@ public class haki extends abilities {
 
     /**
      * @brief Event listener that activates when the user is sneaking.
-     * @param event The event that was triggered
+     * @param e The event that was triggered
      * @author Vaelico786.
      */
     public void onPlayerToggleSneak(PlayerToggleSneakEvent e){}

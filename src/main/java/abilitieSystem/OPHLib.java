@@ -6,6 +6,7 @@ import org.bukkit.block.Container;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
+import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.util.RayTraceResult;
 import org.bukkit.util.Vector;
 
@@ -16,7 +17,7 @@ import static java.lang.Math.*;
  * Common class created to make easier the development of abilities.
  * In this class we put multiples parameterized functions that we create for a class and that we think other could use in theirs.
  */
-public class auxBiblio {
+public class OPHLib {
 
     /**
      * @brief Given a 2D position X Z, search the Y position that's the ground relative to an initial Y position.
@@ -29,7 +30,6 @@ public class auxBiblio {
      * @author RedRiotTank
      */
     public static double searchGround(double x, double z, double initialY, World world) {
-
         Location loc = new Location(world,x,initialY,z);
 
         for(int i=0; i < 40; i++)
@@ -193,8 +193,8 @@ public class auxBiblio {
      * block, and it has air above him.
      * @param loc Actual Location.
      * @param y Actual 'y' we want to compare with.
-     * @see auxBiblio#getSolidRelativeUpper(Location, int)
-     * @see auxBiblio#getSolidRelativeDown(Location, int)
+     * @see OPHLib#getSolidRelativeUpper(Location, int)
+     * @see OPHLib#getSolidRelativeDown(Location, int)
      * @author Vaelico786.
      */
     public static void getSolidRelativeY(Location loc, int y) {
@@ -244,8 +244,10 @@ public class auxBiblio {
      * @author Vaelico786.
      */
     public static Entity setFallingBlock(Location block) {
-        if (block.getBlock().getType() != Material.AIR && block.getBlock().getType() != Material.WATER && block.getBlock().getType() != Material.BEDROCK) {
-            if(block.getBlock().getState() instanceof Container){
+        if (block.getBlock().getType() != Material.AIR && block.getBlock().getType() != Material.WATER &&
+                block.getBlock().getType() != Material.BEDROCK) {
+
+            if(block.getBlock().getState() instanceof Container) {
                 block.getBlock().breakNaturally();
                 return null;
             }
@@ -254,5 +256,104 @@ public class auxBiblio {
             return block.getWorld().spawnFallingBlock(block, matFallingBlock, (byte) 9);
         }
         return null;
+    }
+
+    /**
+     * @brief Modified yami-yami's livingVoidForEntity function. ???
+     * @see yami_yami#livingVoidForEntity(Entity, Player)
+     * @param ent Entity wanted to be repealed.
+     * @param player Fruit's user.
+     * @author Vaelico786.
+     */
+    public static void catchEntity(Entity ent, Player player) {
+        new BukkitRunnable() {
+            Vector FirstVector;
+            boolean fV = false;
+            boolean entityInHand = false;
+            double vx,vy,vz;
+            int i = 0, j = 0;
+            @Override
+            public void run() {
+                Location loc = player.getLocation().add(0,2,0);
+                if(player.isDead() || ent.isOnGround())
+                    this.cancel();
+
+                vx =  loc.getX() - ent.getLocation().getX();
+                vy =  loc.getY() - ent.getLocation().getY();
+                vz =  loc.getZ() - ent.getLocation().getZ();
+
+                Vector movement = loc.clone().toVector().subtract(ent.getLocation().toVector()).normalize();
+
+                if(!fV) {
+                    FirstVector = movement.clone();
+                    fV = true;
+                }
+
+                //Para levantar al mob si hay desnivel
+                if(loc.getY() >= ent.getLocation().getY() && !entityInHand)
+                    movement.setY(movement.getY() + (player.getLocation().getY() - ent.getLocation().getY()) + 3);
+
+                if(!entityInHand) {
+                    ent.setVelocity(movement);
+                    i++;
+                }
+                else {
+                    ent.teleport(player.getLocation().add(0,2,0));
+                    ent.setVelocity(new Vector(0,0.042,0));
+                    j++;
+                }
+
+                if(Math.sqrt(Math.pow(vx,2) + Math.pow(vy,2) +  Math.pow(vz,2)) <= 1) {
+                    entityInHand = true;
+                    if(!player.isSneaking()) {
+                        this.cancel();
+                        repealEntity(ent,player);
+                    }
+                }
+
+                if(!player.isSneaking()) {
+                    this.cancel();
+                }
+            }
+        }.runTaskTimer(abilities.plugin,0,1);
+    }
+
+    /**
+     * @brief Modified yami-yami's repealEntity function. ???
+     * @see yami_yami#repealEntity(Entity, Player)
+     * @param ent Entity wanted to be repealed.
+     * @param player Fruit's user.
+     * @author Vaelico786.
+     */
+    public static void repealEntity(Entity ent, Player player) {
+        ent.getWorld().playSound(ent.getLocation(), Sound.BLOCK_REDSTONE_TORCH_BURNOUT,10,2);
+
+        Vector dir = player.getLocation().getDirection();
+        ent.setVelocity(dir.multiply(3));
+
+        //timer
+        new BukkitRunnable() {
+            Vector aux = dir;
+            int i = 0;
+            @Override
+            public void run() {
+                if(ent.getVelocity().getX() != aux.getX() || ent.getVelocity().getZ() != aux.getZ()) {
+                    aux = ent.getVelocity();
+
+                    ent.getWorld().getNearbyEntities(ent.getLocation(), 2,2,2).forEach(entity -> {
+                        if(entity instanceof LivingEntity && entity != player && entity != ent) {
+                            ((LivingEntity) entity).damage(14);
+                        }
+                    });
+                }
+                if(ent.isOnGround() || i >= 120) {
+                    cancelTask();
+                }
+                i++;
+            }
+            public void cancelTask(){
+                Bukkit.getScheduler().cancelTask(this.getTaskId());
+            }
+        }.runTaskTimer(abilities.plugin, 0, 2);
     }
 }

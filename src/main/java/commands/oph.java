@@ -1,8 +1,8 @@
 package commands;
 
+import htt.ophabs.fileSystem;
 import abilitieSystem.*;
 import fruitSystem.devilFruit;
-import fruitSystem.fruitIdentification;
 import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
 import org.bukkit.command.TabCompleter;
@@ -28,14 +28,13 @@ public class oph implements CommandExecutor, TabCompleter {
     /**
      * @brief Main Command constructor. Initialization of devil fruits and haki.
      * @param plugin OPhabs plugin.
-     * @param abilitiesList Devil fruit abilities list.
      * @param haki Haki Association.
      * @author Vaelico786.
      */
-    public oph(OPhabs plugin, ArrayList<df> abilitiesList, hakiAssociation haki){
+    public oph(OPhabs plugin, hakiAssociation haki){
 
         this.plugin = plugin;
-        for (df ability : abilitiesList){
+        for (df ability : plugin.abilitiesList){
             fruitCommands.add(ability.getName());
         }
         this.haki = haki;
@@ -61,7 +60,7 @@ public class oph implements CommandExecutor, TabCompleter {
             if (order.equalsIgnoreCase("giveFruit")){
                 if(fruitCommands.contains(fruitCommandName))
                     if( targetPlayer != null) {
-                        if(plugin.getConfig().getString("FruitAssociations."+fruitCommandName).equals("none")){
+                        if(fileSystem.getFruitLinkedUser(fruitCommandName).equals("none")){
                             devilFruit devFruit = new devilFruit(fruitCommandName);
                             devFruit.playerObtainFruit(targetPlayer);
                         } else {player.sendMessage("The fruits has alredy been consumed");}

@@ -1,6 +1,7 @@
 package htt.ophabs;
 
 
+import com.google.gson.JsonObject;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.Bukkit;
 import commands.*;
@@ -16,14 +17,18 @@ import java.util.Objects;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
 
 /**
  * @brief Main class of OPhabs plugin.
  * @author RedRiotTank, Vaelico786.
  */
 public final class OPhabs extends JavaPlugin {
-    public Map<String, abilityUser> users = new HashMap<>();
-
+    public static Map<String, abilityUser> users = new HashMap<>();
+    public static ArrayList<df> abilitiesList = new ArrayList<>();
+    private ScheduledExecutorService scheduler; //Planificador guardar archivo
     /**
      * @brief Set up of the plugin (start configuration). Literally the main.
      * @author RedRiotTank, Vaelico786.
@@ -34,13 +39,10 @@ public final class OPhabs extends JavaPlugin {
 
         //---------------
         //Files
-
-        getConfig().options().copyDefaults();
-        saveDefaultConfig();
+        fileSystem.loadFileSystem();
 
         //--------------
         //abilitieSystem
-        ArrayList<df> abilitiesList = new ArrayList<>();
 
         abilitiesList.add(new yami_yami(this));
         abilitiesList.add(new mera_mera(this));
@@ -57,17 +59,18 @@ public final class OPhabs extends JavaPlugin {
         abilitiesList.add(new zushi_zushi(this));
         abilitiesList.add(new suke_suke(this));
         abilitiesList.add(new hie_hie(this));
+        abilitiesList.add(new bane_bane(this));
 
         //--------------
         //FruitSystem
-        fruitAssociation fAssociation = new fruitAssociation(this, abilitiesList, users);
-        loseFruit lFruit = new loseFruit(this, fAssociation.dfPlayers, users);
+        fruitAssociation fAssociation = new fruitAssociation(this);
+        loseFruit lFruit = new loseFruit(this, fAssociation.dfPlayers);
         getServer().getPluginManager().registerEvents(fAssociation, this);
         getServer().getPluginManager().registerEvents(lFruit, this);
 
         //
         //HakiSystem
-        hakiAssociation haki = new hakiAssociation(this, users);
+        hakiAssociation haki = new hakiAssociation(this);
         getServer().getPluginManager().registerEvents(haki, this);
 
 
@@ -75,20 +78,26 @@ public final class OPhabs extends JavaPlugin {
 
         //--------------
         //CasterSystem
-        coolDown cooldown = new coolDown(this, users);
+        coolDown cooldown = new coolDown(this);
 
-        getServer().getPluginManager().registerEvents(new caster(cooldown,users,this), this);
+        getServer().getPluginManager().registerEvents(new caster(cooldown,this), this);
         getServer().getPluginManager().registerEvents(new noDropCaster(), this);
 
         //--------------
         //ScoreBoards
 
-        abilitiesScoreboard scoreboard = new abilitiesScoreboard(this, users);
+        abilitiesScoreboard scoreboard = new abilitiesScoreboard(this);
         scoreboard.ini();
         fAssociation.setScoreboard(scoreboard);
         lFruit.setScoreboard(scoreboard);
 
         registerCommands(abilitiesList, haki);
+
+        scheduler = Executors.newScheduledThreadPool(1);
+        Runnable task = () -> {
+            fileSystem.saveConfig(this);
+        };
+        scheduler.scheduleAtFixedRate(task, 0, 1, TimeUnit.MINUTES);
 
         //--------------
         Bukkit.getConsoleSender().sendMessage(ChatColor.GREEN + "" + ChatColor.BOLD +  "OPhabs started correctly.");
@@ -102,15 +111,8 @@ public final class OPhabs extends JavaPlugin {
      */
     @Override
     public void onDisable() {
-
-        for (abilityUser user : users.values()) {
-            if(user.hasHaki()){
-
-                getConfig().set("hakiPlayers." + user.getPlayerName() + ".Level", user.getHakiLevel());
-                getConfig().set("hakiPlayers." + user.getPlayerName() + ".Exp", user.getHakiExp());
-            }
-        }
-        saveConfig();
+        scheduler.shutdown();
+        fileSystem.saveConfig(this);
         Bukkit.getConsoleSender().sendMessage(ChatColor.DARK_RED + "" + ChatColor.BOLD + "HTTrolplay closed correctly.");
     }
 
@@ -119,8 +121,8 @@ public final class OPhabs extends JavaPlugin {
      * @author RedRiotTank, Vaelico786.
      */
     public void registerCommands(ArrayList<df> abilitiesList, hakiAssociation haki){
-        Objects.requireNonNull(this.getCommand("oph")).setExecutor(new oph(this, abilitiesList, haki));
-        Objects.requireNonNull(this.getCommand("oph")).setTabCompleter(new oph(this, abilitiesList, haki));
+        Objects.requireNonNull(this.getCommand("oph")).setExecutor(new oph(this, haki));
+        Objects.requireNonNull(this.getCommand("oph")).setTabCompleter(new oph(this, haki));
         Objects.requireNonNull(this.getCommand("weaponShop")).setExecutor(new weaponShop(this));
     }
 }

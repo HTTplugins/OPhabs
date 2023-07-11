@@ -14,8 +14,12 @@ import org.bukkit.potion.PotionEffectType;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.util.Vector;
-import static abilitieSystem.auxBiblio.*;
+import static abilitieSystem.OPHLib.*;
 
+/**
+ * @brief Gura gura no mi ability Class.
+ * @author Vaelico786.
+ */
 public class gura_gura extends paramecia {
     final int waveDistance = 8, radiusFloor = 4;
     final Material AIR = Material.AIR;
@@ -24,6 +28,7 @@ public class gura_gura extends paramecia {
     final int earthquakeDuration = 5;
     int numberOfWaves = 0;
     final int numberOfWavesMax = 5;
+
     // ---------------------------------------------- CONSTRUCTORS ---------------------------------------------------------------------
     /**
      * @brief gura_gura constructor.
@@ -346,7 +351,7 @@ public class gura_gura extends paramecia {
      * @see gura_gura#expansionWaveBlocks(Player)
      * @param l Actual player's location.
      * @param deep Deep point to get relative 'y' position.
-     * @see auxBiblio#getSolidRelativeY(Location, int)
+     * @see OPHLib#getSolidRelativeY(Location, int)
      * @author Vaelico786.
      */
     public void ExpansionWaveFallingBlock(Location l, int deep) {
@@ -370,7 +375,7 @@ public class gura_gura extends paramecia {
      * @brief Gets blocks in a pool around the location given.
      * @see gura_gura#expansionWaveBlocks(Player)
      * @param loc Actual player's location.
-     * @param direction Direction player is look at.
+     * @param direction Direction player is looking at.
      * @author Vaelico786.
      */
     public ArrayList<Location> positions(Location loc, Vector direction) {
