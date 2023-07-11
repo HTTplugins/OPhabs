@@ -5,6 +5,8 @@ import htt.ophabs.OPhabs;
 import org.bukkit.*;
 import org.bukkit.block.Block;
 import org.bukkit.entity.*;
+import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.util.Vector;
 
@@ -28,7 +30,7 @@ public class hie_hie extends paramecia {    //fruit_fruit is the fruit whose abi
         abilitiesCD.add(0);
         abilitiesNames.add("Partisan");
         abilitiesCD.add(0);
-        abilitiesNames.add("ab3");
+        abilitiesNames.add("MorphSword");
         abilitiesCD.add(0);
         abilitiesNames.add("ab4");
         abilitiesCD.add(0);
@@ -188,9 +190,45 @@ public class hie_hie extends paramecia {    //fruit_fruit is the fruit whose abi
     public void ability3(){
         if(abilitiesCD.get(2) == 0){
             //Here you call the ability
-            abilitiesCD.set(2, 0); // Second parameter is cooldown in seconds.
+            morphCaster();
+            abilitiesCD.set(2, 20); // Second parameter is cooldown in seconds.
+            
         }
     }
+
+    public void morphCaster(){
+        ItemStack caster;
+        //check which hand has the caster
+        if (castIdentification.itemIsCaster(user.getPlayer().getInventory().getItemInMainHand(), user.getPlayer()))
+            caster = user.getPlayer().getInventory().getItemInMainHand();
+        else
+            caster = user.getPlayer().getInventory().getItemInOffHand();
+
+        ItemMeta meta = caster.getItemMeta(), old = caster.getItemMeta().clone();
+
+        meta.setCustomModelData(2);
+
+        
+
+        /* Ejemplos modificar stats arma: 
+         * AttributeModifier modifier = new AttributeModifier(UUID.randomUUID(), "generic.attackDamage", 10, AttributeModifier.Operation.ADD_NUMBER, EquipmentSlot.HAND);
+         * meta.addAttributeModifier(Attribute.GENERIC_ATTACK_DAMAGE, modifier);
+         * AttributeModifier modifier2 = new AttributeModifier(UUID.randomUUID(), "generic.attackSpeed", 2, AttributeModifier.Operation.ADD_NUMBER, EquipmentSlot.HAND);
+         * meta.addAttributeModifier(Attribute.GENERIC_ATTACK_SPEED, modifier2);
+         */
+        
+        caster.setItemMeta(meta);
+        
+        // turn to custom model data(1) after 20 seconds
+        new BukkitRunnable(){
+            @Override
+            public void run() {
+                caster.setItemMeta(old);
+            }
+        }.runTaskLater(plugin, 20*20);
+    }
+
+
 
     // ---------------------------------------------- AB 4 ---------------------------------------------------------------------
 

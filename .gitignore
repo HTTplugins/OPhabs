@@ -3,3 +3,7 @@ Makefile
 target/
 html/
 latex/
+bin/
+.settings/
+.vim/
+.*
