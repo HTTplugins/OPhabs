@@ -39,6 +39,8 @@ public final class OPhabs extends JavaPlugin {
 
         //---------------
         //Files
+        saveDefaultConfig();
+        saveConfig();
         fileSystem.loadFileSystem();
 
         //--------------
