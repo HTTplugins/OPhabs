@@ -1,0 +1,253 @@
+package abilitieSystem;
+
+import htt.ophabs.OPhabs;
+import castSystem.castIdentification;
+import fruitSystem.fruitIdentification;
+
+import org.bukkit.*;
+import org.bukkit.entity.Player;
+import org.bukkit.potion.PotionEffect;
+import org.bukkit.potion.PotionEffectType;
+import org.bukkit.event.entity.EntityDamageEvent;
+import org.bukkit.event.entity.EntityDamageEvent.DamageCause;
+import org.bukkit.event.player.PlayerItemConsumeEvent;
+import org.bukkit.scheduler.BukkitRunnable;
+import org.bukkit.entity.LivingEntity;
+import org.bukkit.Material;
+import org.bukkit.inventory.ItemStack;
+
+import org.bukkit.util.Vector;
+
+import java.util.ArrayList;
+
+public class inu_inu_urufu extends zoan {
+    String regular = "regular_wolf", rage = "rage_wolf";
+    Boolean raged, crunch;
+    int rageTime = 60; // Seconds
+    private ArrayList<LivingEntity> golpeadosHabilidades = new ArrayList<>();
+
+    public inu_inu_urufu(OPhabs plugin) {
+        super(plugin, castIdentification.castMaterialInuUrufu, castIdentification.castItemNameInuUrufu,
+                fruitIdentification.fruitCommandNameInuUrufu,"http://novask.in/6399673459.png","regular_wolf");
+
+        abilitiesNames.add("Crunch");
+        abilitiesCD.add(0);
+        abilitiesNames.add("Multiple Crunches");
+        abilitiesCD.add(0);
+        abilitiesNames.add("Angry Roar");
+        abilitiesCD.add(0);
+
+        raged = false;
+        crunch = false;
+
+
+        skinC.setSkin(rage, "http://novask.in/6279193716.png");
+    }
+
+    public void ability2() {
+        if(abilitiesCD.get(1) == 0) {
+            abilitiesCD.set(1, 5);
+            frontCrunch();
+        }
+    }
+
+    public void ability3() {
+        if(abilitiesCD.get(2) == 0) {
+            abilitiesCD.set(2, 15);
+            multipleCrunch();
+        }
+    }
+
+    public void ability4() {
+        if(abilitiesCD.get(3) == 0) {
+            abilitiesCD.set(3, 10);
+            angryRoar();
+
+        }
+    }
+
+    public void transformation() {
+        super.transformation();
+
+        new BukkitRunnable() {
+            @Override
+            public void run() {
+                if(transformed) {
+                    user.getPlayer().addPotionEffect(new PotionEffect(PotionEffectType.SPEED, 999999, 1, false, false));
+                    user.getPlayer().addPotionEffect(new PotionEffect(PotionEffectType.JUMP, 999999, 2, false, false));
+                    user.getPlayer().addPotionEffect(new PotionEffect(PotionEffectType.INCREASE_DAMAGE, 999999, 3, false, false));
+                }
+                else {
+                    if(raged){
+                        raged = false;
+                        user.getPlayer().removePotionEffect(PotionEffectType.INCREASE_DAMAGE);
+                        user.getPlayer().removePotionEffect(PotionEffectType.SPEED);
+                        user.getPlayer().removePotionEffect(PotionEffectType.DAMAGE_RESISTANCE);
+                        user.getPlayer().removePotionEffect(PotionEffectType.REGENERATION);
+                        user.getPlayer().removePotionEffect(PotionEffectType.JUMP);
+                        user.getPlayer().removePotionEffect(PotionEffectType.NIGHT_VISION);
+                    }
+                    else{
+                        user.getPlayer().removePotionEffect(PotionEffectType.SPEED);
+                        user.getPlayer().removePotionEffect(PotionEffectType.JUMP);
+                        user.getPlayer().removePotionEffect(PotionEffectType.INCREASE_DAMAGE);
+                    }
+                }
+            }
+        }.runTaskLater(plugin, 20);
+        
+    }
+
+    public void multipleCrunch() {
+
+        new BukkitRunnable() {
+            int i = 0;
+            int nAttacks = 5, ticksPerAttack = 10;
+
+            @Override
+            public void run() {
+                if(i>nAttacks*ticksPerAttack || user == null || !user.getPlayer().isOnline()) {
+                    cancelTask();
+                }
+                if(i%ticksPerAttack == 0)
+                    frontCrunch();
+
+                i++;
+            }
+
+            public void cancelTask(){
+                Bukkit.getScheduler().cancelTask(this.getTaskId());
+            }
+        }.runTaskTimer(plugin, 5, 1);
+        
+    }
+   
+
+
+    //launch player in the looking direction
+    public void frontCrunch() {
+        Player player = user.getPlayer();
+        player.setVelocity(player.getLocation().getDirection().multiply(3));
+        crunch = true;
+
+        new BukkitRunnable() {
+            int i = 0;
+            @Override
+            public void run() {
+                if(i>5*8)
+                    cancelTask();
+
+                player.getWorld().getNearbyEntities(player.getEyeLocation(), 1,1,1).forEach(entity -> {
+                    if(!entity.getName().equals(player.getName()) && entity instanceof LivingEntity) {
+                        ((LivingEntity) entity).damage(15);
+                        new BukkitRunnable() {
+                            int i = 0;
+                            double remainingLive=((LivingEntity)entity).getHealth();
+                            @Override
+                            public void run() {
+                                if(((LivingEntity)entity).getHealth() > remainingLive || i > 20 || entity.isDead())
+                                    this.cancel();
+
+                                ((LivingEntity)entity).damage(1);
+                                OPHLib.spawnBloodParticles(entity);
+                            }
+                        }.runTaskTimer(plugin, 20, 20);
+                    }
+                });
+
+                player.getWorld().spawnParticle(Particle.CRIT, player.getEyeLocation(), 10, 0, 0, 0, 0);
+                i++;
+            }
+            public void cancelTask() {
+                crunch = false;
+                Bukkit.getScheduler().cancelTask(this.getTaskId());
+            }
+        }.runTaskTimer(plugin, 0, 1);
+        Vector direction = player.getLocation().getDirection();
+        player.setVelocity(direction.multiply(3));
+        golpeadosHabilidades.clear();
+    }
+
+    public void onEntityDamage(EntityDamageEvent event) {
+        if(event.getEntity() == user.getPlayer()) {
+            if(event.getCause() == DamageCause.FALL && crunch) {
+                event.setCancelled(true);
+            }
+
+            if(user.getPlayer().getHealth() < user.getPlayer().getMaxHealth()/2)
+                if(!raged)
+                    rageMode();
+        }
+    }
+
+    public void rageMode(){
+        raged = true;
+
+        skinC.changeSkin(user.getPlayer(), rage);
+        
+        new BukkitRunnable() {
+            @Override
+            public void run() {
+            user.getPlayer().addPotionEffect(new PotionEffect(PotionEffectType.INCREASE_DAMAGE, 999999, 6, false, false));
+            user.getPlayer().addPotionEffect(new PotionEffect(PotionEffectType.SPEED, 999999, 2, false, false));
+            user.getPlayer().addPotionEffect(new PotionEffect(PotionEffectType.DAMAGE_RESISTANCE, 999999, 4, false, false));
+            user.getPlayer().addPotionEffect(new PotionEffect(PotionEffectType.REGENERATION, 999999, 1, false, false));
+            user.getPlayer().addPotionEffect(new PotionEffect(PotionEffectType.JUMP, 999999, 3, false, false));
+            user.getPlayer().addPotionEffect(new PotionEffect(PotionEffectType.NIGHT_VISION, 999999, 2, false, false));
+            }
+        }.runTaskLater(plugin, 20);
+
+        //Turn off on 60 seconds
+
+        new BukkitRunnable() {
+            @Override
+            public void run() {
+                if(raged){
+                    raged = false;
+                    user.getPlayer().removePotionEffect(PotionEffectType.INCREASE_DAMAGE);
+                    user.getPlayer().removePotionEffect(PotionEffectType.SPEED);
+                    user.getPlayer().removePotionEffect(PotionEffectType.DAMAGE_RESISTANCE);
+                    user.getPlayer().removePotionEffect(PotionEffectType.REGENERATION);
+                    user.getPlayer().removePotionEffect(PotionEffectType.JUMP);
+                    user.getPlayer().removePotionEffect(PotionEffectType.NIGHT_VISION);
+
+                    transformed =false;
+                    transformation();
+                }
+            }
+        }.runTaskLater(plugin, rageTime*20);
+    }
+
+    public void onPlayerItemConsume(PlayerItemConsumeEvent event) {
+        Material material = event.getItem().getType();
+        if (material == Material.BEEF || 
+            material == Material.CHICKEN || 
+            material == Material.PORKCHOP ||
+            material == Material.RABBIT || 
+            material == Material.MUTTON) 
+            user.getPlayer().addPotionEffect(new PotionEffect(PotionEffectType.REGENERATION, 60, 1, false, false));
+    }
+
+    public void angryRoar(){
+       //Play sound roar 
+
+        //Effect sound particles
+        
+        
+        user.getPlayer().getWorld().spawnParticle(Particle.CLOUD, user.getPlayer().getLocation().add(0,1,0), 100, 1, 1, 1, 1);
+        user.getPlayer().getWorld().getNearbyEntities(user.getPlayer().getLocation(), 10, 10, 10).forEach(entity -> {
+            if(entity instanceof LivingEntity && entity!=user.getPlayer()) {
+                ((LivingEntity) entity).damage(10);
+                ((LivingEntity) entity).addPotionEffect(new PotionEffect(PotionEffectType.SLOW, 100, 1));
+                ((LivingEntity) entity).addPotionEffect(new PotionEffect(PotionEffectType.WEAKNESS, 100, 1));
+                ((LivingEntity) entity).addPotionEffect(new PotionEffect(PotionEffectType.CONFUSION, 20, 1));
+
+            }
+        });
+
+        user.getPlayer().getWorld().spawnParticle(Particle.CRIT, user.getPlayer().getLocation(), 10, 0, 0, 0, 0);
+        golpeadosHabilidades.clear();
+    }
+
+}
+

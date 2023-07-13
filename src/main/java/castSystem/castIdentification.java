@@ -21,6 +21,7 @@ public class castIdentification {
             castMaterialIshi = Material.FLINT,
             castMaterialGoru = Material.GOLD_INGOT,
             castMaterialInuOkuchi = Material.YELLOW_DYE,
+            castMaterialInuUrufu = Material.YELLOW_DYE,
             castMaterialRyuAllosaurs = Material.YELLOW_DYE,
             castMaterialOpe = Material.BRICK,
             castMaterialZushi = Material.ARROW,
@@ -38,6 +39,7 @@ public class castIdentification {
             castItemNameIshi = "Ishi Ishi caster",
             castItemNameGoru = "Goru Goru caster",
             castItemNameInuOkuchi = "Inu Inu Okuchi caster",
+            castItemNameInuUrufu = "Inu Inu Urufu caster",
             castItemNameRyuAllosaurs = "Ryu Ryu Allosaurs caster",
             castItemNameOpe = "Ope Ope caster",
             castItemNameZushi = "Zushi Zushi caster",
@@ -74,6 +76,7 @@ public class castIdentification {
                 || (itemName.equals(castIdentification.castItemNameIshi) && itemMaterial.equals(castIdentification.castMaterialIshi))
                 || (itemName.equals(castIdentification.castItemNameGoru) && itemMaterial.equals(castIdentification.castMaterialGoru))
                 || (itemName.equals(castIdentification.castItemNameInuOkuchi) && itemMaterial.equals(castIdentification.castMaterialInuOkuchi))
+                || (itemName.equals(castIdentification.castItemNameInuUrufu) && itemMaterial.equals(castIdentification.castMaterialInuUrufu))
                 || (itemName.equals(castIdentification.castItemNameRyuAllosaurs) && itemMaterial.equals(castIdentification.castMaterialRyuAllosaurs))
                 ||(itemName.equals(castIdentification.castItemNameOpe) && itemMaterial.equals(castIdentification.castMaterialOpe))
                 || (itemName.equals(castIdentification.castItemNameZushi) && itemMaterial.equals(castIdentification.castMaterialZushi))

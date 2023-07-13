@@ -255,9 +255,6 @@ public class goro_goro extends logia {
             }
         }.runTaskTimer(plugin,0,2);
 
-        // System.out.println(direction);
-        //System.out.println(movement);
-
         player.setVelocity(dir);
     }
 

@@ -136,10 +136,11 @@ public class oph implements CommandExecutor, TabCompleter {
             for (Player player : Bukkit.getServer().getOnlinePlayers() ) {
                 list.add(player.getName());
             }
-        }
-        if(args.length == 3){
-            for (Player player : Bukkit.getServer().getOnlinePlayers() ) {
-                list.add(player.getName());
+        }else{
+            if(args.length == 3 ){
+                for (Player player : Bukkit.getServer().getOnlinePlayers() ) {
+                    list.add(player.getName());
+                }
             }
         }
         return list;

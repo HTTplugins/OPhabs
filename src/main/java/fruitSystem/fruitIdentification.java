@@ -18,6 +18,7 @@ public class fruitIdentification {
             fruitItemNameIshi = "ishi ishi no mi",
             fruitItemNameGoru = "goru goru no mi",
             fruitItemNameInuOkuchi = "inu inu okuchi no makami",
+            fruitItemNameInuUrufu = "inu inu urufu no mi",
             fruitItemNameRyuAllosaurs = "ryu ryu allosaurs no mi",
             fruitItemNameOpe = "ope ope no mi",
             fruitItemNameZushi = "zushi zushi no mi",
@@ -37,6 +38,7 @@ public class fruitIdentification {
             fruitCommandNameIshi = "ishi_ishi",
             fruitCommandNameGoru = "goru_goru",
             fruitCommandNameInuOkuchi = "inu_inu_okuchi",
+            fruitCommandNameInuUrufu = "inu_inu_urufu",
             fruitCommandNameRyuAllosaurs = "ryu_ryu_allosaurs",
             fruitCommandNameOpe = "ope_ope",
             fruitCommandNameZushi = "zushi_zushi",
@@ -81,6 +83,9 @@ public class fruitIdentification {
                 break;
             case fruitCommandNameInuOkuchi:
                 fruitItemName = fruitItemNameInuOkuchi;
+                break;
+            case fruitCommandNameInuUrufu:
+                fruitItemName = fruitItemNameInuUrufu;
                 break;
             case fruitCommandNameRyuAllosaurs:
                 fruitItemName = fruitItemNameRyuAllosaurs;
@@ -144,6 +149,9 @@ public class fruitIdentification {
                 break;
             case fruitItemNameInuOkuchi:
                 fruitCommandName = fruitCommandNameInuOkuchi;
+                break;
+            case fruitItemNameInuUrufu:
+                fruitCommandName = fruitCommandNameInuUrufu;
                 break;
             case fruitItemNameRyuAllosaurs:
                 fruitCommandName = fruitCommandNameRyuAllosaurs;

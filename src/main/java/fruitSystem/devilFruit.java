@@ -72,6 +72,10 @@ public class devilFruit{
                 fruitItemName = fruitIdentification.fruitItemNameInuOkuchi;
                 modelData = 10;
                 break;
+            case fruitIdentification.fruitCommandNameInuUrufu:
+                fruitItemName = fruitIdentification.fruitItemNameInuUrufu;
+                modelData = 10;
+                break;
             case fruitIdentification.fruitCommandNameRyuAllosaurs:
                 fruitItemName = fruitIdentification.fruitItemNameRyuAllosaurs;
                 modelData = 11;

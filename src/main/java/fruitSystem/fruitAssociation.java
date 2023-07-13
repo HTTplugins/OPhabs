@@ -50,7 +50,6 @@ public class fruitAssociation implements Listener {
 
 
         for (df ability : abilitiesList) {
-            System.out.println(ability.getName());
             abilitiesM.put(fruitIdentification.getItemName(ability.getName()), ability);
         }
 
@@ -68,9 +67,8 @@ public class fruitAssociation implements Listener {
         
         for (int i = 0; i < values.size(); i++) {
             String value = values.get(i);
-            if(!values.equals("none")) {
+            if(!value.equals("none")) {
                 addDevilFruitPlayer(value, new devilFruit(Names.get(i)), abilitiesList.get(i));
-
             }
         }
     }
@@ -150,7 +148,7 @@ public class fruitAssociation implements Listener {
                 System.out.println("Player " + event.getPlayer().getName() + " has eaten a " + fruit.getItemMeta().getDisplayName() + " Size: " + abilitiesM.size());
                 df ability = abilitiesM.get(fruit.getItemMeta().getDisplayName());
                 fruitIdentification fruitID = new fruitIdentification();
-                addDevilFruitPlayer(event.getPlayer().getName(), new devilFruit(fruitID.getItemName(ability.getName())), ability);
+                addDevilFruitPlayer(event.getPlayer().getName(), new devilFruit(ability.getName()), ability);
 
                 fileSystem.updateFruitLinkedUser(a.getName(),event.getPlayer().getName());
                 plugin.saveConfig();

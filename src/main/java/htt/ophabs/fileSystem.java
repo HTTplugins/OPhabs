@@ -54,6 +54,7 @@ public class fileSystem {
         fruitAssociations.addProperty("ishi_ishi", "none");
         fruitAssociations.addProperty("goru_goru", "none");
         fruitAssociations.addProperty("inu_inu_okuchi", "none");
+        fruitAssociations.addProperty("inu_inu_urufu", "none");
         fruitAssociations.addProperty("ryu_ryu_allosaurs", "none");
         fruitAssociations.addProperty("ope_ope", "none");
         fruitAssociations.addProperty("zushi_zushi", "none");
@@ -125,13 +126,11 @@ public class fileSystem {
             JsonObject jsonObject = parser.parse(fileContent).getAsJsonObject();
 
             jsonObject.addProperty(fruit, linkedUser);
-
             Gson gson = new GsonBuilder().setPrettyPrinting().create();
             FileWriter fileWriter = new FileWriter(FRUIT_ASSOCIATION_PATH);
             fileWriter.write(gson.toJson(jsonObject));
             fileWriter.close();
 
-            System.out.println("El valor de linkedUser ha sido modificado.");
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -262,8 +261,9 @@ public class fileSystem {
                 updateHakiUser(nombre, user.getHakiLevel(), user.getHakiExp());
             }
             if(user.hasFruit()){
-                updateFruitLinkedUser(user.getFruit().getCommandFruitName(), nombre);
+                updateFruitLinkedUser(user.getDFAbilities().getName(), nombre);
             } 
         }
+        System.out.println("Config saved succesfully.");
     }
 }
