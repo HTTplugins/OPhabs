@@ -1,7 +1,5 @@
 package abilitieSystem;
 
-import castSystem.castIdentification;
-import fruitSystem.fruitIdentification;
 import htt.ophabs.OPhabs;
 import org.bukkit.*;
 import org.bukkit.entity.LivingEntity;
@@ -32,7 +30,7 @@ public class suke_suke extends paramecia {
      * @author RedRiotTank.
      */
     public suke_suke(OPhabs plugin) {
-        super(plugin, castIdentification.castMaterialSuke, castIdentification.castItemNameSuke, fruitIdentification.fruitCommandNameSuke);
+        super(plugin, 14, "suke_suke", "Suke Suke no Mi", "Suke Suke caster", 2, 1.6);
         abilitiesNames.add("Invisible Exploration");
         abilitiesCD.add(0);
         abilitiesNames.add("BackStab");

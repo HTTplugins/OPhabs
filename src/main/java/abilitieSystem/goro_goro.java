@@ -14,7 +14,6 @@ import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.util.Vector;
-import fruitSystem.fruitIdentification;
 
 /**
  * @brief Goro goro no mi ability Class.
@@ -28,7 +27,8 @@ public class goro_goro extends logia {
      * @author RedRiotTank.
      */
     public goro_goro(OPhabs plugin) {
-        super(plugin, Particle.ELECTRIC_SPARK, castIdentification.castMaterialGoro, castIdentification.castItemNameGoro, fruitIdentification.fruitCommandNameGoro);
+        super(plugin, Particle.ELECTRIC_SPARK, 7, "goro_goro", "Goro Goro no Mi", "Goro Goro caster",  6, 2);
+
         abilitiesNames.add("El THOR");
         abilitiesCD.add(0);
         abilitiesNames.add("ThunderStorm");
@@ -63,12 +63,12 @@ public class goro_goro extends logia {
                         ItemStack caster = null;
                         boolean isCaster = false;
                         if(player != null){
-                            if(castIdentification.itemIsCaster(player.getInventory().getItemInMainHand(), player)){
+                            if(castIdentification.itemIsCaster(player.getInventory().getItemInMainHand(), user)){
                                 caster = player.getInventory().getItemInMainHand();
                                 isCaster = true;
                             }
                             else{
-                                if(castIdentification.itemIsCaster(player.getInventory().getItemInOffHand(), player)){
+                                if(castIdentification.itemIsCaster(player.getInventory().getItemInOffHand(), user)){
                                     caster = player.getInventory().getItemInOffHand();
                                     isCaster = true;
                                 }

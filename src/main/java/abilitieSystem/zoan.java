@@ -28,27 +28,12 @@ public class zoan extends df{
      * @param skinName skin name for transformation.
      * @author Vaelico786.
      */
-    public zoan(OPhabs plugin, Material castMaterial, String castName, String commandName, String skinUrl, String skinName){
-        super(plugin, castMaterial, castName, commandName);
-        skinC.setSkin(skinName, skinUrl);
+    public zoan(OPhabs plugin, int id, String fruitCommandName, String fruitItemName, String casterName, double casterDamage, double casterSpeed, String skinUrl, String skinName){
+        super(plugin, id, fruitCommandName, fruitItemName, casterName, casterDamage, casterSpeed);
+        skinsChanger.setSkin(skinName, skinUrl);
         this.skinUrl = skinUrl;
         this.skinName = skinName;
 
-        abilitiesNames.add("Transform");
-        abilitiesCD.add(0);
-    }
-
-    /**
-     * @brief Zoan constructor (simplified and with user).
-     * @param plugin OPhabs plugin.
-     * @param castMaterial Material type of the caster.
-     * @param castName Name of the caster.
-     * @param commandName Name of that represents the fruit.
-     * @param user Zoan user.
-     * @author Vaelico786.
-     */
-    public zoan(OPhabs plugin, abilityUser user, Material castMaterial, String castName, String commandName) {
-        super(plugin, user, castMaterial, castName, commandName);
         abilitiesNames.add("Transform");
         abilitiesCD.add(0);
     }
@@ -60,7 +45,7 @@ public class zoan extends df{
     public void transformation() {
         Player player = user.getPlayer();
         if(!transformed) {
-            skinC.changeSkin(player, skinName);
+            skinsChanger.changeSkin(player, skinName);
             transformed = true;
         }
         else {
@@ -80,7 +65,7 @@ public class zoan extends df{
     public void playerOnDeath(PlayerDeathEvent event) {
         if(transformed){
             transformed = false;
-            skinC.resetSkin(event.getEntity());
+            skinsChanger.resetSkin(event.getEntity());
             super.user = null;
         }
     }

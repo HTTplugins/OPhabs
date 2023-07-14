@@ -1,7 +1,6 @@
 package abilitieSystem;
 
 import castSystem.castIdentification;
-import fruitSystem.fruitIdentification;
 import htt.ophabs.OPhabs;
 import org.bukkit.*;
 import org.bukkit.block.Block;
@@ -35,8 +34,7 @@ public class mera_mera extends logia {
     private ArrayList<LivingEntity> golpeadosFaiyabu = new ArrayList<>();
 
     public mera_mera(OPhabs plugin) {
-        super(plugin, Particle.FLAME, castIdentification.castMaterialMera, castIdentification.castItemNameMera, fruitIdentification.fruitCommandNameMera);
-        //
+        super(plugin, Particle.FLAME, 2, "mera_mera", "Mera Mera no Mi", "Mera Mera caster", 7, 1.7);
         //Nombres de las habilidades:
         abilitiesNames.add("Fire Pool");
         abilitiesCD.add(0);
@@ -474,18 +472,18 @@ public class mera_mera extends logia {
                         ItemStack caster = null;
                         boolean isCaster = false;
                         if(player != null){
-                            if(castIdentification.itemIsCaster(player.getInventory().getItemInMainHand(), player)){
+                            if(castIdentification.itemIsCaster(player.getInventory().getItemInMainHand(), user)){
                                 caster = player.getInventory().getItemInMainHand();
                                 isCaster = true;
                             }
                             else{
-                                if(castIdentification.itemIsCaster(player.getInventory().getItemInOffHand(), player)){
+                                if(castIdentification.itemIsCaster(player.getInventory().getItemInOffHand(), user)){
                                     caster = player.getInventory().getItemInOffHand();
                                     isCaster = true;
                                 }
                             }
                         }
-                        if(isCaster && caster.getItemMeta().getDisplayName().equals(castIdentification.castItemNameMera)){
+                        if(isCaster && caster.getItemMeta().getDisplayName().equals(fruit.getCasterName())){
                             double x = sin(i)/2;
                             double z = cos(i)/2;
                             double xr = player.getLocation().getX() + x;

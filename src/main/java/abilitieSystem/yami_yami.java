@@ -1,7 +1,6 @@
 package abilitieSystem;
 
 import htt.ophabs.OPhabs;
-import fruitSystem.fruitIdentification;
 import castSystem.castIdentification;
 
 import org.bukkit.*;
@@ -10,6 +9,8 @@ import org.bukkit.entity.Entity;
 import org.bukkit.entity.FallingBlock;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
+import org.bukkit.event.entity.EntityDamageEvent;
+import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityChangeBlockEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.scheduler.BukkitRunnable;
@@ -46,7 +47,7 @@ public class yami_yami extends logia {
      * @author RedRiotTank.
      */
     public yami_yami(OPhabs plugin){
-        super(plugin, Particle.REDSTONE, castIdentification.castMaterialYami, castIdentification.castItemNameYami, fruitIdentification.fruitCommandNameYami);
+        super(plugin, Particle.REDSTONE,  1, "yami_yami", "Yami Yami no Mi", "Yami Yami caster", 8, 1.6);
         abilitiesNames.add("Black Void");
         abilitiesCD.add(0);
         abilitiesNames.add("LiberateVoid");
@@ -77,19 +78,19 @@ public class yami_yami extends logia {
                         ItemStack caster = null;
                         boolean isCaster = false;
                         if(player != null){
-                            if(castIdentification.itemIsCaster(player.getInventory().getItemInMainHand(), player)){
+                            if(castIdentification.itemIsCaster(player.getInventory().getItemInMainHand(), user)){
                                 caster = player.getInventory().getItemInMainHand();
                                 isCaster = true;
                             }
                             else{
-                                if(castIdentification.itemIsCaster(player.getInventory().getItemInOffHand(), player)){
+                                if(castIdentification.itemIsCaster(player.getInventory().getItemInOffHand(), user)){
                                     caster = player.getInventory().getItemInOffHand();
                                     isCaster = true;
                                 }
                             }
                         }
 
-                        if(isCaster && caster.getItemMeta().getDisplayName().equals(castIdentification.castItemNameYami)){
+                        if(isCaster && caster.getItemMeta().getDisplayName().equals(fruit.getCasterName())){
 
                             double yaw = player.getLocation().getYaw();
                             double y = player.getLocation().getY();
@@ -671,4 +672,27 @@ public class yami_yami extends logia {
             }
         }.runTaskTimer(plugin,0,1);
     }
+
+
+    public void onEntityDamage(EntityDamageEvent event) {
+        super.superOnEntityDamage(event);
+        Player player;
+
+        if(event instanceof EntityDamageByEntityEvent && ((EntityDamageByEntityEvent)event).getDamager() instanceof Player){
+            Player damager = (Player) ((EntityDamageByEntityEvent)event).getDamager();
+            if(plugin.users.containsKey(damager.getName()) && plugin.users.get(damager.getName()).hasHaki())
+                return;
+        }
+
+        if(active){
+            if (event.getEntity() instanceof Player) {
+                player = (Player) event.getEntity();
+                if (!(player.getLocation().getBlock().isLiquid()) && (castIdentification.itemIsCaster(player.getInventory().getItemInMainHand(), user)) || castIdentification.itemIsCaster(player.getInventory().getItemInOffHand(), user)) {
+                    event.setCancelled(true);
+                    player.getWorld().spawnParticle(element,player.getLocation(), 10, 0, 1, 0, 0.1,yamiDO);
+                }
+            }
+        }
+    }
 }
+

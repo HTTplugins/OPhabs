@@ -81,6 +81,24 @@ public class abilities {
      */
 	public void ability6() {}
 
+    
+    /**
+     * @brief user setter.
+     * @author Vaelico786.
+     */
+    public void setUser(abilityUser user){
+        this.user = user;
+    }
+
+
+    /**
+     * @brief user setter.
+     * @author Vaelico786.
+     */
+    public abilityUser getUser(){
+        return user;
+    }
+
     /**
      * @brief Passive function when a player dies.
      * @param event Player's death event.

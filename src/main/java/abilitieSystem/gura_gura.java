@@ -1,8 +1,6 @@
 package abilitieSystem;
 
 import htt.ophabs.OPhabs;
-import castSystem.castIdentification;
-import fruitSystem.fruitIdentification;
 import java.util.ArrayList;
 import java.util.Random;
 import org.bukkit.*;
@@ -36,7 +34,7 @@ public class gura_gura extends paramecia {
      * @author Vaelico786.
      */
     public gura_gura(OPhabs plugin) {
-        super(plugin, castIdentification.castMaterialGura, castIdentification.castItemNameGura, fruitIdentification.fruitCommandNameGura);
+        super(plugin, 3, "gura_gura", "Gura Gura no Mi", "Gura Gura caster", 7, 1.5);
         abilitiesNames.add("Earthquake");
         abilitiesCD.add(0);
         abilitiesNames.add("CreateWave");
@@ -47,23 +45,6 @@ public class gura_gura extends paramecia {
         abilitiesCD.add(0);
     }
 
-    /**
-     * @brief gura_gura constructor.
-     * @param plugin OPhabs plugin.
-     * @param user Fruit's user.
-     * @author Vaelico786.
-     */
-    public gura_gura(OPhabs plugin, abilityUser user) {
-        super(plugin, user, castIdentification.castMaterialGura, castIdentification.castItemNameGura, fruitIdentification.fruitCommandNameGura);
-        abilitiesNames.add("Earthquake");
-        abilitiesCD.add(0);
-        abilitiesNames.add("CreateWave");
-        abilitiesCD.add(0);
-        abilitiesNames.add("HandVibration");
-        abilitiesCD.add(0);
-        abilitiesNames.add("ExpansionWave");
-        abilitiesCD.add(0);
-    }
 
     // ---------------------------------------------- AB 1 ---------------------------------------------------------------------
     /**

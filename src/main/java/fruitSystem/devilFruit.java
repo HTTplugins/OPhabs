@@ -11,107 +11,33 @@ import org.bukkit.inventory.meta.ItemMeta;
  */
 public class devilFruit{
     private ItemStack devilFruit;
-    private boolean inUse;
-    private String commandFruitName;
+    private String commandFruitName, fruitItemName, casterName;
+    private int id;
+    private double casterDamage, casterSpeed;
 
     /**
      * @brief Devil fruit constructor (creation of the DF).
      * @param fruitCommandName Command alias of the devil fruit.
      * @author RedRiotTank, Vaelico786.
      */
-    public devilFruit(String fruitCommandName){
-        String fruitItemName = null;
-        int modelData = 0;
+    public devilFruit(int id, String fruitCommandName, String fruitItemName, String casterName, double casterDamage, double casterSpeed){
+        this.id = id;
         ItemMeta metaDataDevilFruit = (new ItemStack(Material.APPLE)).getItemMeta().clone();
-        commandFruitName = fruitCommandName;
-        switch (fruitCommandName){
-            case fruitIdentification.fruitCommandNameYami:
-                fruitItemName = fruitIdentification.fruitItemNameYami;
-                modelData = 1;
-                break;
 
-            case fruitIdentification.fruitCommandNameMera:
-                fruitItemName  = fruitIdentification.fruitItemNameMera;
-                modelData = 2;
-                break;
+        this.commandFruitName = commandFruitName;
+        this.fruitItemName = fruitItemName;
 
-            case fruitIdentification.fruitCommandNameGura:
-                fruitItemName  = fruitIdentification.fruitItemNameGura;
-                modelData = 3;
-                break;
+        this.casterName = casterName;
+        this.casterDamage = casterDamage;
+        this.casterSpeed = casterSpeed;
 
-            case fruitIdentification.fruitCommandNameMoku:
-                fruitItemName  = fruitIdentification.fruitItemNameMoku;
-                modelData = 4;
-                break;
-            case fruitIdentification.fruitCommandNameNekoReoparudo:
-                fruitItemName  = fruitIdentification.fruitItemNameNekoReoparudo;
-                modelData = 5;
-                break;
+        
+        this.devilFruit = new ItemStack(Material.APPLE);
+        
 
-            case fruitIdentification.fruitCommandNameMagu :
-                fruitItemName = fruitIdentification.fruitItemNameMagu;
-                modelData = 6;
-                break;
-
-            case fruitIdentification.fruitCommandNameGoro:
-                fruitItemName = fruitIdentification.fruitItemNameGoro;
-                modelData = 7;
-                break;
-
-            case fruitIdentification.fruitCommandNameIshi:
-                fruitItemName = fruitIdentification.fruitItemNameIshi;
-                modelData = 8;
-                break;
-
-            case fruitIdentification.fruitCommandNameGoru:
-                fruitItemName = fruitIdentification.fruitItemNameGoru;
-                modelData = 9;
-                break;
-            case fruitIdentification.fruitCommandNameInuOkuchi:
-                fruitItemName = fruitIdentification.fruitItemNameInuOkuchi;
-                modelData = 10;
-                break;
-            case fruitIdentification.fruitCommandNameInuUrufu:
-                fruitItemName = fruitIdentification.fruitItemNameInuUrufu;
-                modelData = 10;
-                break;
-            case fruitIdentification.fruitCommandNameRyuAllosaurs:
-                fruitItemName = fruitIdentification.fruitItemNameRyuAllosaurs;
-                modelData = 11;
-                break;
-            case fruitIdentification.fruitCommandNameOpe:
-                fruitItemName = fruitIdentification.fruitItemNameOpe;
-                modelData = 12;
-                break;
-
-            case fruitIdentification.fruitCommandNameZushi:
-                fruitItemName = fruitIdentification.fruitItemNameZushi;
-                modelData = 13;
-                break;
-            case fruitIdentification.fruitCommandNameSuke:
-                fruitItemName = fruitIdentification.fruitItemNameSuke;
-                modelData = 14;
-                break;
-            case fruitIdentification.fruitCommandNameHie:
-                fruitItemName = fruitIdentification.fruitItemNameHie;
-                modelData = 15;
-                break;
-            case fruitIdentification.fruitCommandNameBane:
-                fruitItemName = fruitIdentification.fruitItemNameBane;
-                modelData = 17;
-                break;
-            default:
-                fruitItemName  = "ERROR";
-                break;
-        }
-
-        devilFruit = new ItemStack(Material.APPLE);
         metaDataDevilFruit.setDisplayName(fruitItemName);
-        metaDataDevilFruit.setCustomModelData(modelData);
+        metaDataDevilFruit.setCustomModelData(this.id);
         devilFruit.setItemMeta(metaDataDevilFruit);
-
-        inUse = false;
 
     }
 
@@ -121,7 +47,7 @@ public class devilFruit{
      * @author Vaelico786.
      */
     public String getFruitName(){
-        return devilFruit.getItemMeta().getDisplayName();
+        return fruitItemName;
     }
 
      /**
@@ -133,6 +59,14 @@ public class devilFruit{
         return commandFruitName;
     }
 
+     /**
+     * @brief gives the Caster name.
+     * @return gives the Caster name.
+     * @author Vaelico786.
+     */   
+    public String getCasterName(){
+        return casterName;
+    }
     /**
      * @brief Gives the devil fruit to a player.
      * @param player Player to give the Devil Fruit.
@@ -142,5 +76,30 @@ public class devilFruit{
         player.getInventory().addItem(devilFruit);
     }
 
+     /**
+     * @brief gives the Custom Model data id.
+     * @return gives the Custom Model data id.
+     * @author Vaelico786.
+     */   
+    public int getCustomModelDataId(){
+        return id;
+    }
 
+    /**
+     * @brief gives the caster damage.
+     * @return gives the caster damage value.
+     * @author Vaelico786.
+     */   
+    public double getCasterDamage(){
+        return casterDamage;
+    }
+
+    /**
+     * @brief gives the caster speed.
+     * @return gives the caster speed value.
+     * @author Vaelico786.
+     */   
+    public double getCasterSpeed(){
+        return casterSpeed;
+    }
 }

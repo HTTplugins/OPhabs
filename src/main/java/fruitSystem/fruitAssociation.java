@@ -3,6 +3,7 @@ package fruitSystem;
 import htt.ophabs.OPhabs;
 
 import htt.ophabs.fileSystem;
+import castSystem.castIdentification;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -35,7 +36,6 @@ public class fruitAssociation implements Listener {
     public  Map<String, abilityUser> dfPlayers = new HashMap<>(), users = new HashMap<>();
     public  Map<String, df> abilitiesM = new HashMap<>();
     public abilitiesScoreboard scoreboard = null;
-    public ArrayList<String> Names = new ArrayList<>();
     public ArrayList<df> abilitiesList = new ArrayList<>();
 
     /**
@@ -50,25 +50,25 @@ public class fruitAssociation implements Listener {
 
 
         for (df ability : abilitiesList) {
-            abilitiesM.put(fruitIdentification.getItemName(ability.getName()), ability);
+            abilitiesM.put(ability.getFruit().getFruitName(), ability);
         }
 
         ArrayList<String> values = new ArrayList<>();
         String aux;
         for(int i = 0; i < abilitiesList.size(); i++) {
+            System.out.println(abilitiesList.get(i).getName());
             aux = fileSystem.getFruitLinkedUser(abilitiesList.get(i).getName());
             if(aux == null) {
                 fileSystem.updateFruitLinkedUser(abilitiesList.get(i).getName(),"none");
                 aux = "none";
             }
             values.add(aux);
-            Names.add(fruitIdentification.getItemName(abilitiesList.get(i).getName()));
         }
         
         for (int i = 0; i < values.size(); i++) {
             String value = values.get(i);
             if(!value.equals("none")) {
-                addDevilFruitPlayer(value, new devilFruit(Names.get(i)), abilitiesList.get(i));
+                addDevilFruitPlayer(value, abilitiesList.get(i));
             }
         }
     }
@@ -80,13 +80,12 @@ public class fruitAssociation implements Listener {
      * @param ability ability of the Devil fruit to be linked with user.
      * @author Vaelico786.
      */
-    public void addDevilFruitPlayer(String name, devilFruit fruit, abilities ability) {
+    public void addDevilFruitPlayer(String name, df ability) {
         abilityUser user = new abilityUser(name);
-        user.setFruit(fruit, ability);
+        user.setFruit(ability);
         dfPlayers.put(name, user);
         if(users.containsKey(name)){
-            users.get(name).setFruit(fruit, ability);
-
+            users.get(name).setFruit(ability);
         } else {
             users.put(name, user);
         }
@@ -109,46 +108,50 @@ public class fruitAssociation implements Listener {
     @EventHandler(ignoreCancelled = true)
     public void onPlayerItemConsume(PlayerItemConsumeEvent event){
         ItemStack fruit = event.getItem();
-        if(fruitIdentification.isFruit(fruit.getItemMeta().getDisplayName())){
+        if(isFruit(fruit)){
             ArrayList<String> values = new ArrayList<>();
             for(df ability : abilitiesM.values()) {
                 values.add(ability.getName());
             }
             String casterItemName = null;
-            Material castMaterial = Material.STICK;
             Boolean consumedFruit = false;
-            df a = null;
+            df a = null; //Devil Fruit ability
+
             //iterate in all Names
-            for(int i = 0; i < Names.size(); i++) {
-                if(fruit.getItemMeta().getDisplayName().equals(Names.get(i))) {
+            for(int i = 0; i < abilitiesList.size(); i++) {
+                if(fruit.getItemMeta().getDisplayName().equals(abilitiesList.get(i).getFruit().getFruitName())) {
                     consumedFruit = consumedFruit(values.get(i),event);
                     values.set(i,event.getPlayer().getName());
-                    casterItemName = abilitiesList.get(i).getItemName();
-                    castMaterial = abilitiesList.get(i).getMaterial();
+                    casterItemName = abilitiesList.get(i).getCasterName();
                     a = abilitiesList.get(i);
                 }
             }
 
-            ItemStack caster = new ItemStack(castMaterial);
+            ItemStack caster = new ItemStack(castIdentification.castMaterial);
             ItemMeta casterItemMeta = caster.getItemMeta();
             casterItemMeta.setDisplayName(casterItemName);
-    //give caster to player with attribute
-            casterItemMeta.setCustomModelData(1);
-            AttributeModifier modifier = new AttributeModifier(UUID.randomUUID(), "generic.attackDamage", 6, AttributeModifier.Operation.ADD_NUMBER, EquipmentSlot.HAND);
+        
+            //give caster to player with attribute
+            casterItemMeta.setCustomModelData(a.getFruit().getCustomModelDataId());
+
+            AttributeModifier modifier = new AttributeModifier(UUID.randomUUID(), "generic.attackDamage", a.getFruit().getCasterDamage(), AttributeModifier.Operation.ADD_NUMBER, EquipmentSlot.HAND);
             casterItemMeta.addAttributeModifier(Attribute.GENERIC_ATTACK_DAMAGE, modifier);
-            AttributeModifier modifier2 = new AttributeModifier(UUID.randomUUID(), "generic.attackSpeed", 1.8, AttributeModifier.Operation.ADD_NUMBER, EquipmentSlot.HAND);
+            AttributeModifier modifier2 = new AttributeModifier(UUID.randomUUID(), "generic.attackSpeed", a.getFruit().getCasterSpeed(), AttributeModifier.Operation.ADD_NUMBER, EquipmentSlot.HAND);
             casterItemMeta.addAttributeModifier(Attribute.GENERIC_ATTACK_SPEED, modifier2);
 
             caster.setItemMeta(casterItemMeta);
             event.getPlayer().getInventory().addItem(caster);
+
+
             if(dfPlayers.containsKey(event.getPlayer().getName())){
                 event.getPlayer().getWorld().strikeLightningEffect(event.getPlayer().getLocation());
                 event.getPlayer().setHealth(0);
             } else{
                 System.out.println("Player " + event.getPlayer().getName() + " has eaten a " + fruit.getItemMeta().getDisplayName() + " Size: " + abilitiesM.size());
                 df ability = abilitiesM.get(fruit.getItemMeta().getDisplayName());
-                fruitIdentification fruitID = new fruitIdentification();
-                addDevilFruitPlayer(event.getPlayer().getName(), new devilFruit(ability.getName()), ability);
+
+                addDevilFruitPlayer(event.getPlayer().getName(), ability);
+
 
                 fileSystem.updateFruitLinkedUser(a.getName(),event.getPlayer().getName());
                 plugin.saveConfig();
@@ -191,6 +194,19 @@ public class fruitAssociation implements Listener {
         return in;
     }
     /**
+     * @brief Checks if an item is a DevilFruit.
+     * @param player player to check.
+     * @return true if the player is in seawater, false if not.
+     * @author Vaelico786.
+     */
+    public boolean isFruit(ItemStack fruit) {
+        boolean Fruit = false;
+            
+        if(fruit.getType() == Material.APPLE && fruit.getItemMeta().getDisplayName().contains("no Mi") && fruit.getItemMeta().getCustomModelData() != 0)
+            Fruit = true;
+        return Fruit;
+    }
+    /**
      * @brief Nerfs a Devil fruit user if he is in seawater.
      * @param event Player in water event.
      * @author Vaelico786.
@@ -210,4 +226,5 @@ public class fruitAssociation implements Listener {
         }
     }
 }
+
 

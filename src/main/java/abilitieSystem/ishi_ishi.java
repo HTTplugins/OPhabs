@@ -1,8 +1,6 @@
 package abilitieSystem;
 
 import htt.ophabs.OPhabs;
-import castSystem.castIdentification;
-import fruitSystem.fruitIdentification;
 import weapons.weaponsItems;
 
 import java.util.ArrayList;
@@ -13,7 +11,7 @@ import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
-;
+
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.scheduler.BukkitRunnable;
@@ -32,7 +30,7 @@ public class ishi_ishi extends paramecia {
     boolean opened;
 
     public ishi_ishi(OPhabs plugin) {
-        super(plugin, castIdentification.castMaterialIshi, castIdentification.castItemNameIshi, fruitIdentification.fruitCommandNameIshi);
+        super(plugin, 8, "ishi_ishi", "Ishi Ishi no Mi", "Ishi Ishi caster", 9, 1);
 
         storaged = 0;
         maxStoraged = 1024;
@@ -49,19 +47,6 @@ public class ishi_ishi extends paramecia {
         abilitiesCD.add(0);
     }
 
-    public ishi_ishi(OPhabs plugin, abilityUser user) {
-        super(plugin, user, castIdentification.castMaterialIshi, castIdentification.castItemNameIshi, fruitIdentification.fruitCommandNameIshi);
-        storaged = 5;
-        abilitiesNames.add(nameAbility1 + " (" + storaged + ")");
-        abilitiesCD.add(0);
-        abilitiesNames.add("Stone Creation");
-        abilitiesCD.add(0);
-        abilitiesNames.add("Control Stone");
-        abilitiesCD.add(0);
-        abilitiesNames.add("Stone Rise");
-        abilitiesCD.add(0);
-        }
-   
     public void ability1() {
         if(storaged < maxStoraged){
             absorb(user.getPlayer());
@@ -489,130 +474,87 @@ public class ishi_ishi extends paramecia {
     }
 
     public void onInventoryClick(InventoryClickEvent event) {
+        Boolean obtained = false;
+        Player player = (Player) event.getWhoClicked();
+
         if(opened) {
-            Player player = (Player) event.getWhoClicked();
             ItemStack clicked = event.getCurrentItem();
-            Inventory inventory = event.getInventory();
             event.setCancelled(true);
             if(clicked.getType() == Material.STONE) {
                 if(storaged >= 1*clicked.getAmount()) {
                     storaged -= 1*clicked.getAmount();
                     player.getInventory().addItem(clicked);
-                    player.closeInventory();
-                }
-                else {
-                    player.sendMessage("You don't have enough stone to buy this item");
-                    player.closeInventory();
+                    obtained=true;
                 }
             }
             if(clicked.getType() == Material.COBBLESTONE) {
                 if(storaged >= 1*clicked.getAmount()) {
                     storaged -= 1*clicked.getAmount();
                     player.getInventory().addItem(clicked);
-                    player.closeInventory();
-                }
-                else {
-                    player.sendMessage("You don't have enough stone to buy this item");
-                    player.closeInventory();
+                    obtained=true;
                 }
             }
             if(clicked.getType() == Material.COBBLESTONE_STAIRS) {
                 if(storaged >= 1*clicked.getAmount()) {
                     storaged -= 1*clicked.getAmount();
                     player.getInventory().addItem(clicked);
-                    player.closeInventory();
-                }
-                else {
-                    player.sendMessage("You don't have enough stone to buy this item");
-                    player.closeInventory();
+                    obtained=true;
                 }
             }
             if(clicked.getType() == Material.COBBLESTONE_SLAB) {
                 if(storaged >= 1*clicked.getAmount()){
                     storaged -= 1*clicked.getAmount();
                     player.getInventory().addItem(clicked);
-                    player.closeInventory();
-                }
-                else {
-                    player.sendMessage("You don't have enough stone to buy this item");
-                    player.closeInventory();
+                    obtained=true;
                 }
             }
             if(clicked.getType() == Material.COBBLESTONE_WALL) {
                 if(storaged >= 1*clicked.getAmount()){
                     storaged -= 1*clicked.getAmount();
                     player.getInventory().addItem(clicked);
-                    player.closeInventory();
-                }
-                else {
-                    player.sendMessage("You don't have enough stone to buy this item");
-                    player.closeInventory();
+                    obtained=true;
                 }
             }
             if(clicked.getType() == Material.STONE_STAIRS) {
                 if(storaged >= 1*clicked.getAmount()) {
                     storaged -= 1*clicked.getAmount();
                     player.getInventory().addItem(clicked);
-                    player.closeInventory();
-                }
-                else {
-                    player.sendMessage("You don't have enough stone to buy this item");
-                    player.closeInventory();
+                    obtained=true;
                 }
             }
             if(clicked.getType() == Material.STONE_SLAB) {
                 if(storaged >= 1*clicked.getAmount()) {
                     storaged -= 1*clicked.getAmount();
                     player.getInventory().addItem(clicked);
-                    player.closeInventory();
-                }
-                else {
-                    player.sendMessage("You don't have enough stone to buy this item");
-                    player.closeInventory();
+                    obtained=true;
                 }
             }
             if(clicked.getType() == Material.STONE_BRICKS) {
                 if(storaged >= 1*clicked.getAmount()) {
                     storaged -= 1*clicked.getAmount();
                     player.getInventory().addItem(clicked);
-                    player.closeInventory();
-                }
-                else {
-                    player.sendMessage("You don't have enough stone to buy this item");
-                    player.closeInventory();
+                    obtained=true;
                 }
             }
             if(clicked.getType() == Material.STONE_BRICK_STAIRS) {
                 if(storaged >= 1*clicked.getAmount()) {
                     storaged -= 1*clicked.getAmount();
                     player.getInventory().addItem(clicked);
-                    player.closeInventory();
-                }
-                else {
-                    player.sendMessage("You don't have enough stone to buy this item");
-                    player.closeInventory();
+                    obtained=true;
                 }
             }
             if(clicked.getType() == Material.STONE_BRICK_SLAB) {
                 if(storaged >= 1*clicked.getAmount()) {
                     storaged -= 1*clicked.getAmount();
                     player.getInventory().addItem(clicked);
-                    player.closeInventory();
-                }
-                else {
-                    player.sendMessage("You don't have enough stone to buy this item");
-                    player.closeInventory();
+                    obtained=true;
                 }
             }
             if(clicked.getType() == Material.STONE_BRICK_WALL) {
                 if(storaged >= 1*clicked.getAmount()) {
                     storaged -= 1*clicked.getAmount();
                     player.getInventory().addItem(clicked);
-                    player.closeInventory();
-                }
-                else {
-                    player.sendMessage("You don't have enough stone to buy this item");
-                    player.closeInventory();
+                    obtained=true;
                 }
             }
             if(clicked.getType() == Material.STONE_SWORD) {
@@ -620,22 +562,14 @@ public class ishi_ishi extends paramecia {
                     if(storaged >= 20*clicked.getAmount()) {
                         storaged -= 20*clicked.getAmount();
                         player.getInventory().addItem(clicked);
-                        player.closeInventory();
-                    }
-                    else {
-                        player.sendMessage("You don't have enough stone to buy this item");
-                        player.closeInventory();
+                        obtained=true;
                     }
                 }
                 else {
                     if(storaged >= 2*clicked.getAmount()) {
                         storaged -= 2*clicked.getAmount();
                         player.getInventory().addItem(clicked);
-                        player.closeInventory();
-                    }
-                    else {
-                        player.sendMessage("You don't have enough stone to buy this item");
-                        player.closeInventory();
+                        obtained=true;
                     }
                }
             }
@@ -644,22 +578,14 @@ public class ishi_ishi extends paramecia {
                     if(storaged >= 30*clicked.getAmount()) {
                         storaged -= 30*clicked.getAmount();
                         player.getInventory().addItem(clicked);
-                        player.closeInventory();
-                    }
-                    else {
-                        player.sendMessage("You don't have enough stone to buy this item");
-                        player.closeInventory();
+                        obtained=true;
                     }
                }
                 else {
                     if(storaged >= 3*clicked.getAmount()) {
                         storaged -= 3*clicked.getAmount();
                         player.getInventory().addItem(clicked);
-                        player.closeInventory();
-                    }
-                    else {
-                        player.sendMessage("You don't have enough stone to buy this item");
-                        player.closeInventory();
+                        obtained=true;
                     }
                }
             }
@@ -667,69 +593,49 @@ public class ishi_ishi extends paramecia {
                 if(storaged >= 3*clicked.getAmount()) {
                     storaged -= 3*clicked.getAmount();
                     player.getInventory().addItem(clicked);
-                    player.closeInventory();
-                }
-                else{
-                    player.sendMessage("You don't have enough stone to buy this item");
-                    player.closeInventory();
+                    obtained=true;
                 }
             }
             if(clicked.getType() == Material.STONE_SHOVEL) {
                 if(storaged >= 1*clicked.getAmount()) {
                     storaged -= 1*clicked.getAmount();
                     player.getInventory().addItem(clicked);
-                    player.closeInventory();
-                }
-                else{
-                    player.sendMessage("You don't have enough stone to buy this item");
-                    player.closeInventory();
+                    obtained=true;
                 }
             }
             if(clicked.getType() == Material.STONE_HOE) {
                 if(storaged >= 2*clicked.getAmount()) {
                     storaged -= 2*clicked.getAmount();
                     player.getInventory().addItem(clicked);
-                    player.closeInventory();
-                }
-                else {
-                    player.sendMessage("You don't have enough stone to buy this item");
-                    player.closeInventory();
+                    obtained=true;
                 }
             }
             if(clicked.getType() == Material.FURNACE) {
                 if(storaged >= 8*clicked.getAmount()) {
                     storaged -= 8*clicked.getAmount();
                     player.getInventory().addItem(clicked);
-                    player.closeInventory();
-                }
-                else {
-                    player.sendMessage("You don't have enough stone to buy this item");
-                    player.closeInventory();
+                    obtained=true;
                 }
             }
             if(clicked.getType() == Material.STONE_BUTTON) {
                 if(storaged >= 1*clicked.getAmount()) {
                     storaged -= 1*clicked.getAmount();
                     player.getInventory().addItem(clicked);
-                    player.closeInventory();
-                }
-                else {
-                    player.sendMessage("You don't have enough stone to buy this item");
-                    player.closeInventory();
+                    obtained=true;
                 }
             }
             if(clicked.getType() == Material.STONE_PRESSURE_PLATE) {
                 if(storaged >= 2*clicked.getAmount()) {
                     storaged -= 2*clicked.getAmount();
                     player.getInventory().addItem(clicked);
-                    player.closeInventory();
-                }
-                else {
-                    player.sendMessage("You don't have enough stone to buy this item");
-                    player.closeInventory();
+                    obtained=true;
                 }
             }
         }
+        if(!obtained)
+            player.sendMessage("You don't have enough stone to buy this item");
+
+        player.closeInventory();
         opened = false;
     }
 

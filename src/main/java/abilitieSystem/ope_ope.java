@@ -1,7 +1,5 @@
 package abilitieSystem;
 
-import castSystem.castIdentification;
-import fruitSystem.fruitIdentification;
 import htt.ophabs.OPhabs;
 import org.bukkit.*;
 import org.bukkit.entity.Entity;
@@ -38,7 +36,7 @@ public class ope_ope extends paramecia {
      * @author RedRiotTank.
      */
     public ope_ope(OPhabs plugin) {
-        super(plugin, castIdentification.castMaterialOpe, castIdentification.castItemNameOpe, fruitIdentification.fruitCommandNameOpe);
+        super(plugin, 12, "ope_ope", "Ope Ope no Mi", "Ope Ope caster", 5, 1.6);
 
         abilitiesNames.add("Room");
         abilitiesCD.add(0);
@@ -199,7 +197,7 @@ public class ope_ope extends paramecia {
         if(activeRoom){
             if(event.getEntity() instanceof Player){
                 if(((Player)event.getEntity()).getInventory().getItemInMainHand().getType() != Material.AIR){
-                    if(((Player)event.getEntity()).getInventory().getItemInMainHand().getItemMeta().getDisplayName().equals(castIdentification.castItemNameOpe)) {
+                    if(((Player)event.getEntity()).getInventory().getItemInMainHand().getItemMeta().getDisplayName().equals(fruit.getCasterName())) {
                         player = (Player) event.getEntity();
                         for (Entity ent : player.getPlayer().getWorld().getNearbyEntities(roomcenter, 13, 13, 13)) {
                             if(ent instanceof LivingEntity && !found){

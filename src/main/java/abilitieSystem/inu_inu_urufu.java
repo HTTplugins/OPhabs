@@ -1,8 +1,6 @@
 package abilitieSystem;
 
 import htt.ophabs.OPhabs;
-import castSystem.castIdentification;
-import fruitSystem.fruitIdentification;
 
 import org.bukkit.*;
 import org.bukkit.entity.Player;
@@ -14,7 +12,6 @@ import org.bukkit.event.player.PlayerItemConsumeEvent;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.Material;
-import org.bukkit.inventory.ItemStack;
 
 import org.bukkit.util.Vector;
 
@@ -27,8 +24,7 @@ public class inu_inu_urufu extends zoan {
     private ArrayList<LivingEntity> golpeadosHabilidades = new ArrayList<>();
 
     public inu_inu_urufu(OPhabs plugin) {
-        super(plugin, castIdentification.castMaterialInuUrufu, castIdentification.castItemNameInuUrufu,
-                fruitIdentification.fruitCommandNameInuUrufu,"http://novask.in/6399673459.png","regular_wolf");
+        super(plugin, 17, "inu_inu_urufu", "Inu Inu no Mi Moderu Urufu", "Inu Inu Urufu caster", 7, 2,"http://novask.in/6399673459.png","regular_wolf");
 
         abilitiesNames.add("Crunch");
         abilitiesCD.add(0);
@@ -140,18 +136,7 @@ public class inu_inu_urufu extends zoan {
                 player.getWorld().getNearbyEntities(player.getEyeLocation(), 1,1,1).forEach(entity -> {
                     if(!entity.getName().equals(player.getName()) && entity instanceof LivingEntity) {
                         ((LivingEntity) entity).damage(15);
-                        new BukkitRunnable() {
-                            int i = 0;
-                            double remainingLive=((LivingEntity)entity).getHealth();
-                            @Override
-                            public void run() {
-                                if(((LivingEntity)entity).getHealth() > remainingLive || i > 20 || entity.isDead())
-                                    this.cancel();
-
-                                ((LivingEntity)entity).damage(1);
-                                OPHLib.spawnBloodParticles(entity);
-                            }
-                        }.runTaskTimer(plugin, 20, 20);
+                        Sangrado(((LivingEntity) entity), 200);
                     }
                 });
 

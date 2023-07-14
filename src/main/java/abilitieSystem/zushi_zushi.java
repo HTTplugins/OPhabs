@@ -1,8 +1,7 @@
 package abilitieSystem;
 
-import castSystem.castIdentification;
 import htt.ophabs.OPhabs;
-import fruitSystem.fruitIdentification;
+
 import org.bukkit.*;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Entity;
@@ -37,7 +36,7 @@ public class zushi_zushi extends paramecia {
      * @author RedRiotTank.
      */
     public zushi_zushi(OPhabs plugin){
-        super(plugin, castIdentification.castMaterialZushi,castIdentification.castItemNameZushi,fruitIdentification.fruitCommandNameZushi);
+        super(plugin, 13, "zushi_zushi", "Zushi Zushi no Mi", "Zushi Zushi caster", 7, 1.8);
         abilitiesNames.add("Heavy Field");
         abilitiesCD.add(0);
         abilitiesNames.add("Meteor");

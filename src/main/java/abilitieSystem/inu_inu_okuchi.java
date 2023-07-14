@@ -2,7 +2,6 @@ package abilitieSystem;
 
 import htt.ophabs.OPhabs;
 import castSystem.castIdentification;
-import fruitSystem.fruitIdentification;
 
 import org.bukkit.*;
 import org.bukkit.entity.Player;
@@ -22,7 +21,6 @@ import java.util.ArrayList;
 import static java.lang.Math.*;
 
 public class inu_inu_okuchi extends zoan {
-    private final ItemStack iceBlock = new ItemStack(Material.PACKED_ICE);
     public double iceArmor = 0.0;
     public boolean creatingIceArmor = false;
     public boolean himo = false;
@@ -31,8 +29,7 @@ public class inu_inu_okuchi extends zoan {
     private final ArrayList<LivingEntity> atronados = new ArrayList<>();
 
     public inu_inu_okuchi(OPhabs plugin) {
-        super(plugin, castIdentification.castMaterialInuOkuchi, castIdentification.castItemNameInuOkuchi,
-                fruitIdentification.fruitCommandNameInuOkuchi,"http://novask.in/4672583547.png","white_wolf");
+        super(plugin, 10, "inu_inu_okuchi", "Inu Inu no Mi Moderu Okuchi no Makami", "Inu Inu Okuchi caster", 7, 2,"http://novask.in/4672583547.png","white_wolf");
 
         abilitiesNames.add("Himorogiri");
         abilitiesCD.add(0);
@@ -340,19 +337,19 @@ public class inu_inu_okuchi extends zoan {
                         ItemStack caster = null;
                         boolean isCaster = false;
                         if(player != null) {
-                            if(castIdentification.itemIsCaster(player.getInventory().getItemInMainHand(), player)) {
+                            if(castIdentification.itemIsCaster(player.getInventory().getItemInMainHand(), user)) {
                                 caster = player.getInventory().getItemInMainHand();
                                 isCaster = true;
                             }
                             else {
-                                if(castIdentification.itemIsCaster(player.getInventory().getItemInOffHand(), player)) {
+                                if(castIdentification.itemIsCaster(player.getInventory().getItemInOffHand(), user)) {
                                     caster = player.getInventory().getItemInOffHand();
                                     isCaster = true;
                                 }
                             }
                         }
 
-                        if(isCaster && caster.getItemMeta().getDisplayName().equals(castIdentification.castItemNameInuOkuchi)) {
+                        if(isCaster && caster.getItemMeta().getDisplayName().equals(fruit.getCasterName())) {
                             if(!creatingIceArmor && iceArmor < 14 && transformed){
                                 creatingIceArmor = true;
                                 createIceArmor();

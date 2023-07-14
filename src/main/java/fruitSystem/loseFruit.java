@@ -3,6 +3,7 @@ package fruitSystem;
 import htt.ophabs.OPhabs;
 import htt.ophabs.fileSystem;
 import abilitieSystem.abilityUser;
+import castSystem.noDropCaster;
 
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -42,7 +43,7 @@ public class loseFruit implements Listener {
     @EventHandler(ignoreCancelled = true)
     public void onPlayerDeath(PlayerDeathEvent event) {
         Player player = event.getEntity();
-
+        noDropCaster.onPlayerDeath(event);
         if (dfPlayers.containsKey(player.getName())) {
             abilityUser dfUser = users.get(player.getName());
             dfUser.onPlayerDeath(event);

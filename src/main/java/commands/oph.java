@@ -14,6 +14,8 @@ import org.bukkit.entity.Player;
 
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.List;
 
 /**
@@ -22,7 +24,7 @@ import java.util.List;
  */
 public class oph implements CommandExecutor, TabCompleter {
     private  final OPhabs plugin;
-    public ArrayList<String> fruitCommands = new ArrayList<String>();
+    public Map<String, df> fruitCommands = new HashMap<>();
     public hakiAssociation haki;
 
     /**
@@ -35,7 +37,7 @@ public class oph implements CommandExecutor, TabCompleter {
 
         this.plugin = plugin;
         for (df ability : plugin.abilitiesList){
-            fruitCommands.add(ability.getName());
+            fruitCommands.put(ability.getName(), ability);
         }
         this.haki = haki;
     }
@@ -58,15 +60,18 @@ public class oph implements CommandExecutor, TabCompleter {
             Player targetPlayer = Bukkit.getServer().getPlayerExact(args[2]);
 
             if (order.equalsIgnoreCase("giveFruit")){
-                if(fruitCommands.contains(fruitCommandName))
+                if(fruitCommands.containsKey(fruitCommandName)){
+                    df ability = fruitCommands.get(fruitCommandName);
                     if( targetPlayer != null) {
-                        if(fileSystem.getFruitLinkedUser(fruitCommandName).equals("none")){
-                            devilFruit devFruit = new devilFruit(fruitCommandName);
+                        if(ability.getUser() == null ){
+                            devilFruit devFruit = ability.getFruit();
                             devFruit.playerObtainFruit(targetPlayer);
                         } else {player.sendMessage("The fruits has alredy been consumed");}
                     }else player.sendMessage("Unkown player");
+                }
                 else player.sendMessage("The fruit doesn't exist");
             }
+
             if(order.equalsIgnoreCase("setHakiLevel")){
                 if(targetPlayer != null){
                     if(haki.users.containsKey(args[2])){
@@ -128,7 +133,7 @@ public class oph implements CommandExecutor, TabCompleter {
             list.add("setHakiLevel");
         }
         if(args.length == 2 && args[0].equalsIgnoreCase("giveFruit")){
-            for (String fruitCommandName : fruitCommands){
+            for (String fruitCommandName : fruitCommands.keySet()){
                 list.add(fruitCommandName);
             }
         }

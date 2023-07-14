@@ -2,6 +2,7 @@ package abilitieSystem;
 
 
 import htt.ophabs.OPhabs;
+import fruitSystem.devilFruit;
 import castSystem.coolDown;
 
 import org.bukkit.event.entity.EntityDamageEvent;
@@ -12,7 +13,6 @@ import org.bukkit.entity.Player;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import org.bukkit.scheduler.BukkitRunnable;
-import org.bukkit.Material;
 
 import java.util.ArrayList;
 import java.util.Objects;
@@ -25,10 +25,9 @@ public class df extends abilities {
     protected String commandName;
     protected int actual;
     protected coolDown cd;
+    protected devilFruit fruit;
     public boolean active;
     
-    public Material caster;
-    public String casterName;
 
     // *********************************************** CONSTRUCTORS *******************************************************
 
@@ -41,31 +40,12 @@ public class df extends abilities {
      * @param commandName Name of that represents the fruit.
      * @author Vaelico786.
      */
-    public df(OPhabs plugin, abilityUser user, Material castMaterial, String castName, String commandName) {
-        super(plugin, user);
-        this.user = user;
-        this.actual = 0;
-        this.caster = castMaterial;
-        this.casterName = castName;
-        this.commandName = commandName;
-        this.active = true;
-    }
-
-    /**
-     * @brief Devil fruit constructor.
-     * @param plugin OPhabs plugin.
-     * @param castMaterial Material type of the caster.
-     * @param castName Name of the caster.
-     * @param commandName Name of that represents the fruit.
-     * @author Vaelico786.
-     */
-    public df(OPhabs plugin, Material castMaterial, String castName, String commandName) {
+    public df(OPhabs plugin, int id, String fruitCommandName, String fruitItemName, String casterName, double casterDamage, double casterSpeed) {
         super(plugin);
-        actual=0;
-        this.caster = castMaterial;
-        this.casterName = castName;
-        this.commandName = commandName;
+        this.actual = 0;
+        this.commandName = fruitCommandName;
         this.active = true;
+        fruit =  new devilFruit(id, fruitCommandName, fruitItemName, casterName, casterDamage, casterSpeed);
     }
 
     // *********************************************** SETTERS/GETTERS *******************************************************
@@ -74,16 +54,8 @@ public class df extends abilities {
      * @brief Returns caster's name.
      * @author Vaelico786.
      */
-    public String getItemName() {
-        return this.casterName;
-    }
-
-    /**
-     * @brief Returns fruit's caster.
-     * @author Vaelico786.
-     */
-    public Material getMaterial() {
-        return this.caster;
+    public String getCasterName() {
+        return this.fruit.getCasterName();
     }
 
     /**
@@ -153,4 +125,10 @@ public class df extends abilities {
     public void onPlayerDeath(PlayerDeathEvent event) {
         user = null;
     }
+
+    public devilFruit getFruit() {
+        return fruit;
+    }
+
 }
+

@@ -1,6 +1,8 @@
 package htt.ophabs;
 
 import abilitieSystem.abilityUser;
+import abilitieSystem.df;
+
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonObject;
@@ -44,23 +46,8 @@ public class fileSystem {
 
     private static void createDefaultFruitFile() {
         fruitAssociations = new JsonObject();
-        fruitAssociations.addProperty("yami_yami", "none");
-        fruitAssociations.addProperty("mera_mera", "none");
-        fruitAssociations.addProperty("gura_gura", "none");
-        fruitAssociations.addProperty("moku_moku", "none");
-        fruitAssociations.addProperty("neko_neko_reoparudo", "none");
-        fruitAssociations.addProperty("magu_magu", "none");
-        fruitAssociations.addProperty("goro_goro", "none");
-        fruitAssociations.addProperty("ishi_ishi", "none");
-        fruitAssociations.addProperty("goru_goru", "none");
-        fruitAssociations.addProperty("inu_inu_okuchi", "none");
-        fruitAssociations.addProperty("inu_inu_urufu", "none");
-        fruitAssociations.addProperty("ryu_ryu_allosaurs", "none");
-        fruitAssociations.addProperty("ope_ope", "none");
-        fruitAssociations.addProperty("zushi_zushi", "none");
-        fruitAssociations.addProperty("suke_suke", "none");
-        fruitAssociations.addProperty("hie_hie", "none");
-        fruitAssociations.addProperty("bane_bane", "none");
+        for(df a : OPhabs.abilitiesList)
+            fruitAssociations.addProperty(a.getName(), "none");
 
         Gson gson = new GsonBuilder().setPrettyPrinting().create();
         String json = gson.toJson(fruitAssociations);

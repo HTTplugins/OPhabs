@@ -8,7 +8,103 @@
             "predicate": {
 				"custom_model_data": 1
             },
+            "model": "custom/dark_hand"
+        },
+		{
+            "predicate": {
+				"custom_model_data": 2
+            },
+            "model": "custom/magma_hand"
+        },
+		{
+            "predicate": {
+				"custom_model_data": 3
+            },
             "model": "custom/vibe_hand"
+        },
+		{
+            "predicate": {
+				"custom_model_data": 4 
+            },
+            "model": "custom/smoke_hand "
+        },
+		{
+            "predicate": {
+				"custom_model_data": 5
+            },
+            "model": "custom/claws"
+        },
+		{
+            "predicate": {
+				"custom_model_data": 6
+            },
+            "model": "custom/magma_hand"
+        },
+		{
+            "predicate": {
+				"custom_model_data": 7
+            },
+            "model": "custom/lighting"
+        },
+        {
+            "predicate": {
+				"custom_model_data": 8
+            },
+            "model": "custom/stone_arm"
+        },
+		{
+            "predicate": {
+				"custom_model_data": 9
+            },
+            "model": "custom/staff"
+        },
+		{
+            "predicate": {
+				"custom_model_data": 10
+            },
+            "model": "custom/claws"
+        },
+		{
+            "predicate": {
+				"custom_model_data": 11
+            },
+            "model": "custom/claws"
+        },
+		{
+            "predicate": {
+				"custom_model_data": 12
+            },
+            "model": "custom/katana"
+        },
+		{
+            "predicate": {
+				"custom_model_data": 13
+            },
+            "model": "custom/katana"
+        },
+		{
+            "predicate": {
+				"custom_model_data": 14
+            },
+            "model": "custom/vibe_hand"
+        },
+		{
+            "predicate": {
+				"custom_model_data": 15
+            },
+            "model": "custom/boxing_glove"
+        },
+		{
+            "predicate": {
+				"custom_model_data": 16
+            },
+            "model": "custom/ice_arm"
+        },
+		{
+            "predicate": {
+				"custom_model_data": 17
+            },
+            "model": "custom/claws"
         }
     ]
 }

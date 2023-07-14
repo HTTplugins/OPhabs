@@ -54,10 +54,7 @@ public class caster implements Listener {
         if(users.containsKey(event.getPlayer().getName())) {
             abilityUser user = users.get(event.getPlayer().getName());
             Action action = event.getAction();
-            if (event.getItem() != null && castIdentification.itemIsCaster(event.getItem(), event.getPlayer()) && user.hasFruit()) {
-
-                String casterItemName = event.getItem().getItemMeta().getDisplayName();
-                Material casterMaterial = event.getMaterial();
+            if (event.getItem() != null && castIdentification.itemIsCaster(event.getItem(), user) && user.hasFruit()) {
 
                 if ((action == Action.RIGHT_CLICK_AIR || action == Action.RIGHT_CLICK_BLOCK)){
                     user.abilityActive();
@@ -79,7 +76,7 @@ public class caster implements Listener {
      */
     @EventHandler(ignoreCancelled = true)
     public void onPlayerDropItem(PlayerDropItemEvent event) {
-        if(castIdentification.itemIsCaster(event.getItemDrop().getItemStack(), event.getPlayer())){
+        if(castIdentification.itemIsCaster(event.getItemDrop().getItemStack(), users.get(event.getPlayer().getName()))){
             event.setCancelled(true);
 
             if(users.containsKey(event.getPlayer().getName())) {
@@ -327,7 +324,7 @@ public class caster implements Listener {
             if (event.getAction() == Action.RIGHT_CLICK_BLOCK) {
                 Block clickedBlock = event.getClickedBlock();
                 
-                if (event.getItem() != null && castIdentification.itemIsCaster(event.getItem(), event.getPlayer()) && user.hasFruit()) {
+                if (event.getItem() != null && castIdentification.itemIsCaster(event.getItem(), user) && user.hasFruit()) {
                     if (clickedBlock != null && clickedBlock.getType() == Material.ITEM_FRAME) {
                     event.setCancelled(true); // Cancelar la colocación del objeto en el item frame
                     }
@@ -343,11 +340,10 @@ public class caster implements Listener {
         if(users.containsKey(event.getPlayer().getName())) {
             abilityUser user = users.get(event.getPlayer().getName());
             if (event.getRightClicked() instanceof ArmorStand) {
-                ArmorStand armorStand = (ArmorStand) event.getRightClicked();
                 Player player = event.getPlayer();
                 
-                //Comprobar si tienes i
-                if (player.getInventory().getItemInMainHand() != null && castIdentification.itemIsCaster(player.getInventory().getItemInMainHand(), event.getPlayer()) && user.hasFruit()) {
+                //Comprobar si tienes el caster en la mano
+                if (player.getInventory().getItemInMainHand() != null && castIdentification.itemIsCaster(player.getInventory().getItemInMainHand(), user) && user.hasFruit()) {
                     event.setCancelled(true); // Cancelar la interacción del jugador con el ArmorStand
                 }
             }

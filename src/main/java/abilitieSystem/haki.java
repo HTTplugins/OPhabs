@@ -49,15 +49,7 @@ public class haki extends abilities {
     public ArrayList<String> getAbilitiesNames(){
         return abilitiesNames;
     }
-    
-    /**
-     * @brief user setter.
-     * @author Vaelico786.
-     */
-    public void setUser(abilityUser user){
-        this.user = user;
-    }
-    
+
     /**
      * @brief Name getter.
      * @return "Haki".

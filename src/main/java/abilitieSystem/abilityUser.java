@@ -26,7 +26,8 @@ public class abilityUser {
     private final String playerName;
     public int actual;
     private devilFruit fruit;
-    private abilities dfAbilities, hakiAbilities;
+    private df dfAbilities; 
+    private haki hakiAbilities;
 
     // *********************************************** CONSTRUCTORS *******************************************************
 
@@ -69,10 +70,10 @@ public class abilityUser {
      * @brief Set the actual player's fruit.
      * @author Vaelico786.
      */
-    public void setFruit(devilFruit fruit, abilities dfAbilities) {
-        this.fruit = fruit;
+    public void setFruit(df dfAbilities) {
+        this.fruit = dfAbilities.getFruit();
         this.dfAbilities = dfAbilities;
-        dfAbilities.user=this;
+        dfAbilities.setUser(this);
     }
 
     /**
@@ -88,7 +89,7 @@ public class abilityUser {
      * @author Vaelico786.
      */
     public df getDFAbilities() {
-        return (df) dfAbilities;
+        return dfAbilities;
     }
 
     /**
@@ -105,6 +106,7 @@ public class abilityUser {
      */
     public void removeFruit() {
         this.fruit = null;
+        dfAbilities.setUser(null);
         this.dfAbilities = null;
     }
 
@@ -176,9 +178,9 @@ public class abilityUser {
      * @brief Sets Haki abilities' kit.
      * @author Vaelico786.
      */
-    public void setHaki(abilities hakiAbilities) {
+    public void setHaki(haki hakiAbilities) {
         this.hakiAbilities = hakiAbilities;
-        this.hakiAbilities.user = this;
+        this.hakiAbilities.setUser(this);
     }
 
     /**

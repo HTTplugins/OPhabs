@@ -1,8 +1,6 @@
 package abilitieSystem;
 
 import htt.ophabs.OPhabs;
-import castSystem.castIdentification;
-import fruitSystem.fruitIdentification;
 
 import org.bukkit.*;
 import org.bukkit.entity.Player;
@@ -24,8 +22,7 @@ public class neko_neko_reoparudo extends zoan {
     private final ArrayList<LivingEntity> golpeadosHabilidades = new ArrayList<>();
 
     public neko_neko_reoparudo(OPhabs plugin) {
-        super(plugin, castIdentification.castMaterialNekoReoparudo, castIdentification.castItemNameNekoReoparudo,
-                fruitIdentification.fruitCommandNameNekoReoparudo,"https://s.namemc.com/i/18525c829f6918fe.png","reoparudo");
+        super(plugin, 5, "neko_neko_reoparudo", "Neko Neko no Mi Moderu Reoparudo", "Neko Neko Reoparudo caster", 7, 2,"https://s.namemc.com/i/18525c829f6918fe.png","reoparudo");
 
         abilitiesNames.add("FrontalAttack");
         abilitiesCD.add(0);

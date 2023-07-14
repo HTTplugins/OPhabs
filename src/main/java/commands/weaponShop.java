@@ -7,9 +7,6 @@ import org.bukkit.command.CommandSender;
 import htt.ophabs.*;
 import org.bukkit.entity.Player;
 
-import java.util.ArrayList;
-import java.util.List;
-
 /**
  * @brief OPhabs main command.
  * @author RedRiotTank, Vaelico786.

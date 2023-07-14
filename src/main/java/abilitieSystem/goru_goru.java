@@ -3,7 +3,6 @@ package abilitieSystem;
 import htt.ophabs.OPhabs;
 import weapons.weaponsItems;
 import castSystem.castIdentification;
-import fruitSystem.fruitIdentification;
 
 import java.util.ArrayList;
 import java.util.Objects;
@@ -53,31 +52,13 @@ public class goru_goru extends paramecia {
      * @author Vaelico786.
      */
     public goru_goru(OPhabs plugin) {
-        super(plugin, castIdentification.castMaterialGoru, castIdentification.castItemNameGoru, fruitIdentification.fruitCommandNameGoru);
+        super(plugin, 9, "goru_goru", "Goru Goru no Mi", "Goru Goru caster", 7, 1.8);
+
         storaged = 0;
         maxStoraged = 1024;
         opened = false;
 
         runParticles();
-        abilitiesNames.add(nameAbility1 + " (" + storaged + ")");
-        abilitiesCD.add(0);
-        abilitiesNames.add("Gold Creation");
-        abilitiesCD.add(0);
-        abilitiesNames.add("Control Gold");
-        abilitiesCD.add(0);
-        abilitiesNames.add("Gold Rise");
-        abilitiesCD.add(0);
-    }
-
-    /**
-     * @brief goru_goru constructor.
-     * @param plugin OPhabs plugin.
-     * @param user Fruit's user.
-     * @author Vaelico786.
-     */
-    public goru_goru(OPhabs plugin, abilityUser user) {
-        super(plugin, user, castIdentification.castMaterialGoru, castIdentification.castItemNameGoru, fruitIdentification.fruitCommandNameGoru);
-        storaged = 5;
         abilitiesNames.add(nameAbility1 + " (" + storaged + ")");
         abilitiesCD.add(0);
         abilitiesNames.add("Gold Creation");
@@ -434,7 +415,7 @@ public class goru_goru extends paramecia {
     public void absorbObject(Player player) {
         if(storaged < maxStoraged) {
             ItemStack hand=player.getInventory().getItemInOffHand();
-            if(castIdentification.itemIsCaster(player.getInventory().getItemInOffHand(), player))
+            if(castIdentification.itemIsCaster(player.getInventory().getItemInOffHand(), user))
                 hand=player.getInventory().getItemInMainHand();
 
             switch (hand.getType()) {
@@ -600,18 +581,18 @@ public class goru_goru extends paramecia {
                         ItemStack caster = null;
                         boolean isCaster = false;
                         if(player != null){
-                            if(castIdentification.itemIsCaster(player.getInventory().getItemInMainHand(), player)){
+                            if(castIdentification.itemIsCaster(player.getInventory().getItemInMainHand(), user)){
                                 caster = player.getInventory().getItemInMainHand();
                                 isCaster = true;
                             }
                             else {
-                                if(castIdentification.itemIsCaster(player.getInventory().getItemInOffHand(), player)){
+                                if(castIdentification.itemIsCaster(player.getInventory().getItemInOffHand(), user)){
                                     caster = player.getInventory().getItemInOffHand();
                                     isCaster = true;
                                 }
                             }
                         }
-                        if(isCaster && Objects.requireNonNull(caster.getItemMeta()).getDisplayName().equals(castIdentification.castItemNameGoru)){
+                        if(isCaster && Objects.requireNonNull(caster.getItemMeta()).getDisplayName().equals(fruit.getCasterName())){
                             if(!player.isFlying())
                                 player.setAllowFlight(true);
                             if(player.isFlying())
@@ -657,61 +638,42 @@ public class goru_goru extends paramecia {
         if(opened && event.getView().getTitle().contains("Gold Creation")){
             Player player = (Player) event.getWhoClicked();
             ItemStack clicked = event.getCurrentItem();
+            Boolean obtained = false;
             Inventory inventory = event.getInventory();
             event.setCancelled(true);
             if(clicked.getType() == Material.GOLD_NUGGET){
                 if(storaged >= 0.111*clicked.getAmount()){
                     storaged -= 0.111*clicked.getAmount();
                     player.getInventory().addItem(clicked);
-                    player.closeInventory();
-                }
-                else{
-                    player.sendMessage("You don't have enough gold to buy this item");
-                    player.closeInventory();
+                    obtained = true;
                 }
             }
             if(clicked.getType() == Material.GOLD_INGOT){
                 if(storaged >= clicked.getAmount()){
                     storaged -= clicked.getAmount();
                     player.getInventory().addItem(clicked);
-                    player.closeInventory();
-                }
-                else {
-                    player.sendMessage("You don't have enough gold to buy this item");
-                    player.closeInventory();
+                    obtained = true;
                 }
             }
             if(clicked.getType() == Material.GOLD_BLOCK) {
                 if(storaged >= 9*clicked.getAmount()) {
                     storaged -= 9*clicked.getAmount();
                     player.getInventory().addItem(clicked);
-                    player.closeInventory();
-                }
-                else {
-                    player.sendMessage("You don't have enough gold to buy this item");
-                    player.closeInventory();
+                    obtained = true;
                 }
             }
             if(clicked.getType() == Material.RAW_GOLD_BLOCK) {
                 if(storaged >= 18*clicked.getAmount()) {
                     storaged -= 18*clicked.getAmount();
                     player.getInventory().addItem(clicked);
-                    player.closeInventory();
-                }
-                else {
-                    player.sendMessage("You don't have enough gold to buy this item");
-                    player.closeInventory();
+                    obtained = true;
                 }
             }
             if(clicked.getType() == Material.LIGHT_WEIGHTED_PRESSURE_PLATE) {
                 if(storaged >= 2*clicked.getAmount()) {
                     storaged -= 2*clicked.getAmount();
                     player.getInventory().addItem(clicked);
-                    player.closeInventory();
-                }
-                else {
-                    player.sendMessage("You don't have enough gold to buy this item");
-                    player.closeInventory();
+                    obtained = true;
                 }
             }
             if(clicked.getType() == Material.GOLDEN_PICKAXE) {
@@ -719,22 +681,14 @@ public class goru_goru extends paramecia {
                     if(storaged >= 27) {
                         storaged -= 27;
                         player.getInventory().addItem(clicked);
-                        player.closeInventory();
-                    }
-                    else {
-                        player.sendMessage("You don't have enough gold to buy this item");
-                        player.closeInventory();
+                        obtained = true;
                     }
                 }
                 else{
                     if(storaged >= 3) {
                         storaged -= 3;
                         player.getInventory().addItem(clicked);
-                        player.closeInventory();
-                    }
-                    else {
-                        player.sendMessage("You don't have enough gold to buy this item");
-                        player.closeInventory();
+                        obtained = true;
                     }
                 }
             }
@@ -743,22 +697,14 @@ public class goru_goru extends paramecia {
                     if(storaged >= 27) {
                         storaged -= 27;
                         player.getInventory().addItem(clicked);
-                        player.closeInventory();
-                    }
-                    else {
-                        player.sendMessage("You don't have enough gold to buy this item");
-                        player.closeInventory();
+                        obtained = true;
                     }
                 }
                 else {
                     if(storaged >= 3) {
                         storaged -= 3;
                         player.getInventory().addItem(clicked);
-                        player.closeInventory();
-                    }
-                    else {
-                        player.sendMessage("You don't have enough gold to buy this item");
-                        player.closeInventory();
+                        obtained = true;
                     }
                 }
             }
@@ -766,11 +712,7 @@ public class goru_goru extends paramecia {
                 if(storaged >= clicked.getAmount()) {
                     storaged -= clicked.getAmount();
                     player.getInventory().addItem(clicked);
-                    player.closeInventory();
-                }
-                else {
-                    player.sendMessage("You don't have enough gold to buy this item");
-                    player.closeInventory();
+                    obtained = true;
                 }
             }
             if(clicked.getType() == Material.GOLDEN_SWORD) {
@@ -778,22 +720,14 @@ public class goru_goru extends paramecia {
                     if(storaged >= 18) {
                         storaged -= 18;
                         player.getInventory().addItem(clicked);
-                        player.closeInventory();
-                    }
-                    else {
-                        player.sendMessage("You don't have enough gold to buy this item");
-                        player.closeInventory();
+                        obtained = true;
                     }
                 }
                 else {
                     if(storaged >= 2) {
                         storaged -= 2;
                         player.getInventory().addItem(clicked);
-                        player.closeInventory();
-                    }
-                    else {
-                        player.sendMessage("You don't have enough gold to buy this item");
-                        player.closeInventory();
+                        obtained = true;
                     }
                 }
             }
@@ -802,22 +736,14 @@ public class goru_goru extends paramecia {
                     if(storaged >= 45){
                         storaged -= 45;
                         player.getInventory().addItem(clicked);
-                        player.closeInventory();
-                    }
-                    else {
-                        player.sendMessage("You don't have enough gold to buy this item");
-                        player.closeInventory();
+                        obtained = true;
                     }
                 }
                 else {
                     if(storaged >= 5) {
                         storaged -= 5;
                         player.getInventory().addItem(clicked);
-                        player.closeInventory();
-                    }
-                    else {
-                        player.sendMessage("You don't have enough gold to buy this item");
-                        player.closeInventory();
+                        obtained = true;
                     }
                 }
             }
@@ -826,22 +752,14 @@ public class goru_goru extends paramecia {
                     if(storaged >= 72){
                         storaged -= 72;
                         player.getInventory().addItem(clicked);
-                        player.closeInventory();
-                    }
-                    else{
-                        player.sendMessage("You don't have enough gold to buy this item");
-                        player.closeInventory();
+                        obtained = true;
                     }
                 }
                 else {
                     if(storaged >= 8) {
                         storaged -= 8;
                         player.getInventory().addItem(clicked);
-                        player.closeInventory();
-                    }
-                    else{
-                        player.sendMessage("You don't have enough gold to buy this item");
-                        player.closeInventory();
+                        obtained = true;
                     }
                 }
             }
@@ -850,22 +768,14 @@ public class goru_goru extends paramecia {
                     if(storaged >= 63){
                         storaged -= 63;
                         player.getInventory().addItem(clicked);
-                        player.closeInventory();
-                    }
-                    else {
-                        player.sendMessage("You don't have enough gold to buy this item");
-                        player.closeInventory();
+                        obtained = true;
                     }
                 }
                 else {
                     if(storaged >= 7) {
                         storaged -= 7;
                         player.getInventory().addItem(clicked);
-                        player.closeInventory();
-                    }
-                    else {
-                        player.sendMessage("You don't have enough gold to buy this item");
-                        player.closeInventory();
+                        obtained = true;
                     }
                 }
             }
@@ -874,22 +784,14 @@ public class goru_goru extends paramecia {
                     if(storaged >= 36){
                         storaged -= 36;
                         player.getInventory().addItem(clicked);
-                        player.closeInventory();
-                    }
-                    else{
-                        player.sendMessage("You don't have enough gold to buy this item");
-                        player.closeInventory();
+                        obtained = true;
                     }
                 }
                 else{
                     if(storaged >= 4){
                         storaged -= 4;
                         player.getInventory().addItem(clicked);
-                        player.closeInventory();
-                    }
-                    else{
-                        player.sendMessage("You don't have enough gold to buy this item");
-                        player.closeInventory();
+                        obtained = true;
                     }
                 }
             }
@@ -897,35 +799,26 @@ public class goru_goru extends paramecia {
                 if(storaged >= 4*clicked.getAmount()){
                     storaged -= 4*clicked.getAmount();
                     player.getInventory().addItem(clicked);
-                    player.closeInventory();
-                }
-                else{
-                    player.sendMessage("You don't have enough gold to buy this item");
-                    player.closeInventory();
+                    obtained = true;
                 }
             }
             if(clicked.getType() == GOLDEN_CARROT){
                 if(storaged >= 10*clicked.getAmount()){
                     storaged -= 10*clicked.getAmount();
                     player.getInventory().addItem(clicked);
-                    player.closeInventory();
-                }
-                else{
-                    player.sendMessage("You don't have enough gold to buy this item");
-                    player.closeInventory();
+                    obtained = true;
                 }
             }
             if(clicked.getType() == GOLDEN_APPLE){
                 if(storaged >= 15*clicked.getAmount()){
                     storaged -= 15*clicked.getAmount();
                     player.getInventory().addItem(clicked);
-                    player.closeInventory();
-                }
-                else{
-                    player.sendMessage("You don't have enough gold to buy this item");
-                    player.closeInventory();
+                    obtained = true;
                 }
             }
+            if(!obtained)
+                player.sendMessage("You don't have enough gold to buy this item");
+            player.closeInventory();
             opened = false;
         }
     }

@@ -1,8 +1,6 @@
 package abilitieSystem;
 
 import htt.ophabs.OPhabs;
-import castSystem.castIdentification;
-import fruitSystem.fruitIdentification;
 
 import org.bukkit.*;
 import org.bukkit.entity.Player;
@@ -20,8 +18,7 @@ public class ryu_ryu_allosaurs extends zoan {
     private ArrayList<LivingEntity> golpeadosHabilidades = new ArrayList<>();
 
     public ryu_ryu_allosaurs(OPhabs plugin) {
-        super(plugin, castIdentification.castMaterialRyuAllosaurs, castIdentification.castItemNameRyuAllosaurs,
-                fruitIdentification.fruitCommandNameRyuAllosaurs,"http://novask.in/5915273049.png","allosaurs");
+        super(plugin, 11, "ryu_ryu_allosaurs", "Ryu Ryu no Mi Moderu Allosaurs", "Ryu Ryu Allosaurs caster", 7, 2,"http://novask.in/5915273049.png","allosaurs");
 
         abilitiesNames.add("FrontalCrunch");
         abilitiesCD.add(0);

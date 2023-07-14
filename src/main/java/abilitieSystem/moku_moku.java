@@ -2,7 +2,6 @@ package abilitieSystem;
 
 
 import castSystem.castIdentification;
-import fruitSystem.fruitIdentification;
 import htt.ophabs.OPhabs;
 
 import org.bukkit.*;
@@ -19,15 +18,13 @@ import org.bukkit.entity.Vex;
 import java.util.Random;
 
 import static java.lang.Math.*;
-import static java.lang.Math.toRadians;
 
 public class moku_moku extends logia {
     final int numMaxSmokers=4;
     public int numSmokers=0;
 
     public moku_moku(OPhabs plugin) {
-        super(plugin, Particle.CLOUD, castIdentification.castMaterialMoku, castIdentification.castItemNameMoku,
-                fruitIdentification.fruitCommandNameMoku);
+        super(plugin, Particle.CLOUD, 4, "moku_moku", "Moku Moku no Mi", "Moku Moku caster", 5, 1.9);
 
         abilitiesNames.add("SmokeBody");
         abilitiesCD.add(0);
@@ -90,19 +87,19 @@ public class moku_moku extends logia {
                         ItemStack caster = null;
                         boolean isCaster = false;
                         if(player != null) {
-                            if(castIdentification.itemIsCaster(player.getInventory().getItemInMainHand(), player)) {
+                            if(castIdentification.itemIsCaster(player.getInventory().getItemInMainHand(), user)) {
                                 caster = player.getInventory().getItemInMainHand();
                                 isCaster = true;
                             }
                             else{
-                                if(castIdentification.itemIsCaster(player.getInventory().getItemInOffHand(), player)) {
+                                if(castIdentification.itemIsCaster(player.getInventory().getItemInOffHand(), user)) {
                                     caster = player.getInventory().getItemInOffHand();
                                     isCaster = true;
                                 }
                             }
                         }
 
-                        if(isCaster && caster.getItemMeta().getDisplayName().equals(castIdentification.castItemNameMoku)) {
+                        if(isCaster && caster.getItemMeta().getDisplayName().equals(fruit.getCasterName())) {
                             double x = sin(i)/2;
                             double z = cos(i)/2;
 

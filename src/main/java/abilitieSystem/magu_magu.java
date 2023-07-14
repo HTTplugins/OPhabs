@@ -1,7 +1,6 @@
 package abilitieSystem;
 
 import castSystem.castIdentification;
-import fruitSystem.fruitIdentification;
 import htt.ophabs.OPhabs;
 import org.bukkit.*;
 import org.bukkit.enchantments.Enchantment;
@@ -38,8 +37,7 @@ public class magu_magu extends logia {
      * @author RedRiotTank.
      */
     public magu_magu(OPhabs plugin) {
-        super(plugin, Particle.FLAME, castIdentification.castMaterialMagu, castIdentification.castItemNameMagu,
-                fruitIdentification.fruitCommandNameMagu);
+        super(plugin, Particle.FLAME, 6, "magu_magu", "Magu Magu no Mi", "Magu Magu caster", 9, 1);
         abilitiesNames.add("Lava Meteors");
         abilitiesCD.add(0);
         abilitiesNames.add("Lava Ground");
@@ -73,19 +71,19 @@ public class magu_magu extends logia {
                         ItemStack caster = null;
                         boolean isCaster = false;
                         if(player != null){
-                            if(castIdentification.itemIsCaster(player.getInventory().getItemInMainHand(), player)){
+                            if(castIdentification.itemIsCaster(player.getInventory().getItemInMainHand(), user)){
                                 caster = player.getInventory().getItemInMainHand();
                                 isCaster = true;
                             }
                             else{
-                                if(castIdentification.itemIsCaster(player.getInventory().getItemInOffHand(), player)){
+                                if(castIdentification.itemIsCaster(player.getInventory().getItemInOffHand(), user)){
                                     caster = player.getInventory().getItemInOffHand();
                                     isCaster = true;
                                 }
                             }
                         }
 
-                        if(isCaster && caster.getItemMeta().getDisplayName().equals(castIdentification.castItemNameMagu)){
+                        if(isCaster && caster.getItemMeta().getDisplayName().equals(fruit.getCasterName())){
                             double xdecimals = random.nextDouble();
                             double zdecimals = random.nextDouble();
 

@@ -2,9 +2,8 @@ package abilitieSystem;
 
 import htt.ophabs.OPhabs;
 import castSystem.castIdentification;
-import fruitSystem.fruitIdentification;
+
 import org.bukkit.*;
-import org.bukkit.block.data.BlockData;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
@@ -42,7 +41,7 @@ public class bane_bane extends paramecia {
      * @author Vaelico786.
      */
     public bane_bane(OPhabs plugin) {
-        super(plugin, castIdentification.castMaterialBane, castIdentification.castItemNameBane, fruitIdentification.fruitCommandNameBane);
+        super(plugin, 15, "bane_bane", "Bane Bane no Mi" ,"Bane Bane caster", 5, 2);
         abilitiesNames.add("Resort");
         abilitiesCD.add(0);
         abilitiesNames.add("Resort Punch");
@@ -53,15 +52,15 @@ public class bane_bane extends paramecia {
         abilitiesCD.add(0);
 
         // Crear el ItemStack con el objeto "raw iron"
-        glove = new ItemStack(Material.RAW_IRON);
+        glove = new ItemStack(castIdentification.castMaterial);
         ItemMeta itemMeta = glove.getItemMeta();
-        itemMeta.setCustomModelData(1); // Establecer el Custom Model Data a 1
+        itemMeta.setCustomModelData(getFruit().getCustomModelDataId()); // Establecer el Custom Model Data a 1
 
         //Sometimes on ability 2 player changes the caster with this object so set the same meta for fix it
-        itemMeta.setDisplayName(castIdentification.castItemNameBane);
-        AttributeModifier modifier = new AttributeModifier(UUID.randomUUID(), "generic.attackDamage", 6, AttributeModifier.Operation.ADD_NUMBER, EquipmentSlot.HAND);
+        itemMeta.setDisplayName(fruit.getCasterName());
+        AttributeModifier modifier = new AttributeModifier(UUID.randomUUID(), "generic.attackDamage", fruit.getCasterDamage(), AttributeModifier.Operation.ADD_NUMBER, EquipmentSlot.HAND);
         itemMeta.addAttributeModifier(Attribute.GENERIC_ATTACK_DAMAGE, modifier);
-        AttributeModifier modifier2 = new AttributeModifier(UUID.randomUUID(), "generic.attackSpeed", 1.8, AttributeModifier.Operation.ADD_NUMBER, EquipmentSlot.HAND);
+        AttributeModifier modifier2 = new AttributeModifier(UUID.randomUUID(), "generic.attackSpeed", fruit.getCasterSpeed(), AttributeModifier.Operation.ADD_NUMBER, EquipmentSlot.HAND);
         itemMeta.addAttributeModifier(Attribute.GENERIC_ATTACK_SPEED, modifier2);
         glove.setItemMeta(itemMeta);
     }

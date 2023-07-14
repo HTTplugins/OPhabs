@@ -25,8 +25,9 @@ public abstract class logia extends df{
      * @param commandName Name of that represents the fruit.
      * @author Vaelico786.
      */
-    public logia(OPhabs plugin, Particle element, Material castMaterial, String castName, String commandName) {
-        super(plugin, castMaterial, castName, commandName);
+
+    public logia(OPhabs plugin, Particle element, int id, String fruitCommandName, String fruitItemName, String casterName, double casterDamage, double casterSpeed) {
+        super(plugin, id, fruitCommandName, fruitItemName, casterName, casterDamage, casterSpeed);
         this.element = element;
     }
 
@@ -51,12 +52,17 @@ public abstract class logia extends df{
         if(active){
             if (event.getEntity() instanceof Player) {
                 player = (Player) event.getEntity();
-                if (!(player.getLocation().getBlock().isLiquid()) && (castIdentification.itemIsCaster(player.getInventory().getItemInMainHand(), player)) || castIdentification.itemIsCaster(player.getInventory().getItemInOffHand(), player)) {
+                if (!(player.getLocation().getBlock().isLiquid()) && (castIdentification.itemIsCaster(player.getInventory().getItemInMainHand(), user)) || castIdentification.itemIsCaster(player.getInventory().getItemInOffHand(), user)) {
                     event.setCancelled(true);
                     player.getWorld().spawnParticle(element,player.getLocation(), 10, 0, 1, 0, 0.1);
                 }
             }
         }
+    }
+
+//    @EventHandler(ignoreCancelled = true)
+    public void superOnEntityDamage(EntityDamageEvent event) {
+        super.onEntityDamage(event);
     }
 
     /**

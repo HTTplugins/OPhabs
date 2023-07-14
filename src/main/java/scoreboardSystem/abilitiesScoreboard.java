@@ -1,7 +1,6 @@
 package scoreboardSystem;
 
 import htt.ophabs.fileSystem;
-import fruitSystem.fruitIdentification;
 import castSystem.castIdentification;
 import htt.ophabs.OPhabs;
 import org.bukkit.Bukkit;
@@ -101,11 +100,6 @@ public class abilitiesScoreboard {
 
                 Objective objective = scoreboard.registerNewObjective("abilitiesScoreboard","dummy");
 
-                ItemStack caster = null;
-
-                if(player != null)
-                    caster = player.getInventory().getItemInMainHand();
-
                 ArrayList<String> abNames = new ArrayList<>(user.getAbilitiesNames());
                 String active = ChatColor.RED + "" + ChatColor.BOLD + "" + abNames.get(user.actual);
 
@@ -119,12 +113,12 @@ public class abilitiesScoreboard {
                 if(player != null) {
                         player.setScoreboard(Bukkit.getScoreboardManager().getNewScoreboard());
 
-                    if((castIdentification.itemIsCaster(player.getInventory().getItemInMainHand(), player)) ||
-                            castIdentification.itemIsCaster(player.getInventory().getItemInOffHand(), player)) {
+                    if((castIdentification.itemIsCaster(player.getInventory().getItemInMainHand(), user)) ||
+                            castIdentification.itemIsCaster(player.getInventory().getItemInOffHand(), user)) {
 
                         objective.setDisplaySlot(DisplaySlot.SIDEBAR);
 
-                        String fruit = fruitIdentification.getItemName(user.getDFAbilities().getName());
+                        String fruit = user.getFruit().getFruitName();
                         fruit = fruit.substring(0,1).toUpperCase() + fruit.substring(1);
 
                         objective.setDisplayName(ChatColor.BOLD + "" + fruit);
