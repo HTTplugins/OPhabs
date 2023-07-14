@@ -7,6 +7,7 @@ import org.bukkit.Bukkit;
 import commands.*;
 import fruitSystem.*;
 import hakiSystem.*;
+import rokushikiSystem.*;
 import abilitieSystem.*;
 import castSystem.*;
 import org.bukkit.ChatColor;
@@ -78,8 +79,10 @@ public final class OPhabs extends JavaPlugin {
         hakiAssociation haki = new hakiAssociation(this);
         getServer().getPluginManager().registerEvents(haki, this);
 
-
-
+        //
+        //RokushikiSystem
+        rokushikiAssociation rokushiki = new rokushikiAssociation(this, users);
+        getServer().getPluginManager().registerEvents(rokushiki, this);
 
         //--------------
         //CasterSystem
@@ -96,7 +99,7 @@ public final class OPhabs extends JavaPlugin {
         fAssociation.setScoreboard(scoreboard);
         lFruit.setScoreboard(scoreboard);
 
-        registerCommands(abilitiesList, haki);
+        registerCommands(abilitiesList, haki, rokushiki);
 
         scheduler = Executors.newScheduledThreadPool(1);
         Runnable task = () -> {
@@ -125,9 +128,9 @@ public final class OPhabs extends JavaPlugin {
      * @brief Registration of the commands.
      * @author RedRiotTank, Vaelico786.
      */
-    public void registerCommands(ArrayList<df> abilitiesList, hakiAssociation haki){
-        Objects.requireNonNull(this.getCommand("oph")).setExecutor(new oph(this, haki));
-        Objects.requireNonNull(this.getCommand("oph")).setTabCompleter(new oph(this, haki));
+    public void registerCommands(ArrayList<df> abilitiesList, hakiAssociation haki, rokushikiAssociation rokushiki){
+        Objects.requireNonNull(this.getCommand("oph")).setExecutor(new oph(this, abilitiesList, haki, rokushiki));
+        Objects.requireNonNull(this.getCommand("oph")).setTabCompleter(new oph(this, abilitiesList, haki, rokushiki));
         Objects.requireNonNull(this.getCommand("weaponShop")).setExecutor(new weaponShop(this));
     }
 }

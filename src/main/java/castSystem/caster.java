@@ -64,6 +64,8 @@ public class caster implements Listener {
                 //else
                 //user.switchAbility();
 
+            }else{
+                user.onPlayerInteract(event);
             }
         }
     }
@@ -140,6 +142,22 @@ public class caster implements Listener {
      * @param event PlayerToggleSneakEvent event.
      * @author RedRiotTank, MiixZ, Vaelico786.
      */   
+    @EventHandler
+    public void onPlayerToggleSprint(PlayerToggleSprintEvent e){
+        if(users.containsKey(e.getPlayer().getName())) {
+            abilityUser user = users.get(e.getPlayer().getName());
+            user.onPlayerToggleSprint(e);
+        }
+    }
+
+    @EventHandler
+    public void onPlayerToggleFlight(PlayerToggleFlightEvent e){
+        if(users.containsKey(e.getPlayer().getName())) {
+            abilityUser user = users.get(e.getPlayer().getName());
+            user.onPlayerToggleFlight(e);
+        }
+    }
+
     @EventHandler
     public void onPlayerItemConsume(PlayerItemConsumeEvent event){
         if(users.containsKey(event.getPlayer().getName())) {
@@ -291,6 +309,10 @@ public class caster implements Listener {
      */
     @EventHandler(ignoreCancelled = true)
     public void onPlayerJoin(PlayerJoinEvent event) {
+        if(users.containsKey(event.getPlayer().getName())) {
+            users.get(event.getPlayer().getName()).onPlayerJoin(event);
+        }
+
         String sukeUserName;
         Player sukeUser, other = event.getPlayer();
 

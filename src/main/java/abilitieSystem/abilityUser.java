@@ -1,18 +1,22 @@
 package abilitieSystem;
 
-import org.bukkit.entity.Player;
+
 import fruitSystem.devilFruit;
 import htt.ophabs.OPhabs;
 import org.bukkit.Bukkit;
 import org.bukkit.event.block.BlockBreakEvent;
+import org.bukkit.entity.Player;
 import org.bukkit.event.entity.*;
 import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.event.player.PlayerEggThrowEvent;
 import org.bukkit.event.player.PlayerToggleSneakEvent;
+import org.bukkit.event.player.PlayerToggleSprintEvent;
+import org.bukkit.event.player.PlayerToggleFlightEvent;
 import org.bukkit.event.player.PlayerItemConsumeEvent;
 import org.bukkit.event.player.PlayerRespawnEvent;
 import org.bukkit.event.player.PlayerItemDamageEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
+import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.inventory.InventoryClickEvent;
 
 import java.util.ArrayList;
@@ -29,6 +33,7 @@ public class abilityUser {
     private devilFruit fruit;
     private df dfAbilities; 
     private haki hakiAbilities;
+    private rokushiki rokushikiAbilities;
     private double damageBonus, armorBonus;
 
     // *********************************************** CONSTRUCTORS *******************************************************
@@ -43,6 +48,7 @@ public class abilityUser {
         this.dfAbilities = null;
         this.fruit = null;
         this.hakiAbilities = null;
+        this.rokushikiAbilities = null;
 
         damageBonus = 0;
         armorBonus = 0;
@@ -89,6 +95,7 @@ public class abilityUser {
     public devilFruit getFruit() {
         return fruit;
     }
+
 
     /**
      * @brief Gets the actual player fruit's abilities.
@@ -268,6 +275,24 @@ public class abilityUser {
 
         getHakiAbilities().setExp(exp);
     }
+
+    // *********************************************** Rokushiki *******************************************************
+
+    public void setRokushiki(rokushiki rokushikiAbilities){
+        this.rokushikiAbilities = rokushikiAbilities;
+        this.rokushikiAbilities.user=this;
+
+        reloadStats();
+    }
+
+    public rokushiki getRokushikiAbilities(){
+        return rokushiki rokushikiAbilities;
+    }
+
+    public boolean hasRokushiki(){
+        return rokushikiAbilities != null;
+    }
+
     
     // *********************************************** COMMON *******************************************************
 
@@ -311,9 +336,13 @@ public class abilityUser {
             hakiAbilities.onEntityDamage(event);
         if(dfAbilities != null)
             dfAbilities.onEntityDamage(event);
+        if(rokushikiAbilities != null)
+            rokushikiAbilities.onEntityDamage(event);
+
 
         if(armorBonus > 0)
             event.setDamage(event.getDamage()*(1 - 1/(100.0/armorBonus)));
+
     }
 
     /**
@@ -433,6 +462,8 @@ public class abilityUser {
     public void onPlayerRespawn(PlayerRespawnEvent event) {
         if(hakiAbilities != null)
             hakiAbilities.onPlayerRespawn(event);
+        if(rokushikiAbilities != null)
+            rokushikiAbilities.onPlayerRespawn(event);
     }
 
     /**
@@ -442,6 +473,7 @@ public class abilityUser {
     public void onEntityDamageByUser(EntityDamageByEntityEvent event) {
         if(hasHaki()) getHakiAbilities().onEntityDamageByUser(event);
         if(hasFruit()) getDFAbilities().onEntityDamageByUser(event);
+        if(hasRokushiki()) getRokushikiAbilities().onUserDamageAnotherEntity(event);
 
         if(event.getEntity() instanceof Player && OPhabs.users.containsKey(event.getEntity().getName())) {
             abilityUser damaged = OPhabs.users.get(event.getEntity().getName());
@@ -500,6 +532,8 @@ public class abilityUser {
      */
     public void onPlayerJoin(PlayerJoinEvent event) {
         if(hasFruit()) getDFAbilities().onPlayerJoin(event);
+        if(hasRokushiki()) getRokushikiAbilities().loadPlayer();
+        if(hasHaki()) getHakiAbilities().reloadPlayer();
     }
 
     /**
@@ -508,4 +542,17 @@ public class abilityUser {
      * @author Vaelico786, RedRiotTank
      */
     public void onBlockBreak(BlockBreakEvent event) {}
+
+    public void onPlayerToggleSprint(PlayerToggleSprintEvent event){
+        if(hasRokushiki()) getRokushikiAbilities().onPlayerToggleSprint(event);
+    }
+
+    public void onPlayerToggleFlight(PlayerToggleFlightEvent event){
+        if(hasRokushiki()) getRokushikiAbilities().onPlayerToggleFlight(event);
+    }
+
+    public void onPlayerInteract(PlayerInteractEvent event){
+        if(hasRokushiki()) getRokushikiAbilities().onPlayerInteract(event);
+    }
+
 }

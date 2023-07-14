@@ -10,6 +10,7 @@ import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import htt.ophabs.*;
 import hakiSystem.hakiAssociation;
+import rokushikiSystem.rokushikiAssociation;
 import org.bukkit.entity.Player;
 
 
@@ -25,7 +26,9 @@ import java.util.List;
 public class oph implements CommandExecutor, TabCompleter {
     private  final OPhabs plugin;
     public Map<String, df> fruitCommands = new HashMap<>();
+    public ArrayList<String> rokushikiNames = new ArrayList<>();
     public hakiAssociation haki;
+    public rokushikiAssociation rokushiki;
 
     /**
      * @brief Main Command constructor. Initialization of devil fruits and haki.
@@ -33,13 +36,21 @@ public class oph implements CommandExecutor, TabCompleter {
      * @param haki Haki Association.
      * @author Vaelico786.
      */
-    public oph(OPhabs plugin, hakiAssociation haki){
+    public oph(OPhabs plugin, hakiAssociation haki, rokushikiAssociation rokushiki) {
 
         this.plugin = plugin;
         for (df ability : plugin.abilitiesList){
             fruitCommands.put(ability.getName(), ability);
         }
+        rokushikiNames.add("Geppo");
+        rokushikiNames.add("Tekkai");
+        rokushikiNames.add("Shigan");
+        rokushikiNames.add("Rankyaku");
+        rokushikiNames.add("Soru");
+        rokushikiNames.add("Kamie");
+
         this.haki = haki;
+        this.rokushiki = rokushiki;
     }
 
     /**
@@ -55,63 +66,92 @@ public class oph implements CommandExecutor, TabCompleter {
         Player player = (Player) sender;
         String order = args[0];
 
-        if(args.length == 3){
-            String fruitCommandName = args[1];
-            Player targetPlayer = Bukkit.getServer().getPlayerExact(args[2]);
-
-            if (order.equalsIgnoreCase("giveFruit")){
-                if(fruitCommands.containsKey(fruitCommandName)){
-                    df ability = fruitCommands.get(fruitCommandName);
-                    if( targetPlayer != null) {
-                        if(ability.getUser() == null ){
-                            devilFruit devFruit = ability.getFruit();
-                            devFruit.playerObtainFruit(targetPlayer);
-                        } else {player.sendMessage("The fruits has alredy been consumed");}
-                    }else player.sendMessage("Unkown player");
-                }
-                else player.sendMessage("The fruit doesn't exist");
-            }
-
-            if(order.equalsIgnoreCase("setHakiLevel")){
-                if(targetPlayer != null){
-                    if(haki.users.containsKey(args[2])){
-                        abilityUser user = haki.users.get(args[2]);
-                        if(user.hasHaki()){
-                            user.getHakiAbilities().setLevel(Integer.parseInt(args[1]));
+        
+        if(args.length == 4){
+            //change level of a rokusiki ability
+            if (order.equalsIgnoreCase("setLvlRokushiki")){
+                if(args[3] != null){
+                    if(rokushiki.users.containsKey(args[3])){
+                        if(rokushikiNames.contains(args[1])){
+                            plugin.getConfig().set("rokushikiPlayers."+args[3]+"."+args[1]+".Level", Integer.parseInt(args[2]));
+                            rokushiki.users.get(args[3]).getRokushikiAbilities().loadPlayer();
                         }
                     }
-                } else player.sendMessage("Unkown player");
+                }
             }
-
         }
-        else {
-            if(args.length == 2){
-                if (order.equalsIgnoreCase("giveHaki")){
-                    if(Bukkit.getServer().getPlayerExact(args[1]) != null){
-                        haki.addHakiPlayer(args[1], 1, 0);
+        else{
+            if(args.length == 3){
+                String fruitCommandName = args[1];
+                Player targetPlayer = Bukkit.getServer().getPlayerExact(args[2]);
+                
+                //Give fruit to a player command.
+                if (order.equalsIgnoreCase("giveFruit")){
+                    if(fruitCommands.contains(fruitCommandName))
+                        if( targetPlayer != null) {
+                            if(plugin.getConfig().getString("FruitAssociations."+fruitCommandName).equals("none")){
+                                devilFruit devFruit = new devilFruit(fruitCommandName);
+                                devFruit.playerObtainFruit(targetPlayer);
+                            } else {player.sendMessage("The fruits has alredy been consumed");}
+                        }else player.sendMessage("Unkown player");
+                    else player.sendMessage("The fruit doesn't exist");
+                }else{
+                    //Rokushiki learn command
+                    if(order.equalsIgnoreCase("learnRokushiki")){
+                        if(targetPlayer != null){
+                            //if the user knows rokushiki
+                            if(rokushiki.rokushikiPlayers.containsKey(targetPlayer.getName())){
+                                abilityUser user = rokushiki.users.get(targetPlayer.getName());
+                                if(user.hasRokushiki()){
+                                    if(plugin.getConfig().getInt("rokushikiAssociations."+user.getPlayerName()+"."+fruitCommandName+".Level") == 0){
+                                        plugin.getConfig().set("rokushikiAssociations."+user.getPlayerName()+"."+fruitCommandName+".Level", 1);
+                                        user.getRokushikiAbilities().loadPlayer();
+                                    }
+                                }
+                            }
+                            else
+                                rokushiki.addRokushikiPlayer(targetPlayer.getName(), fruitCommandName);
+                        }
                     }
                 }
-                else if (order.equalsIgnoreCase("reloadHaki")){
-                    if(Bukkit.getServer().getPlayerExact(args[1]) != null){
-                        if(haki.users.containsKey(args[1])){
-                            abilityUser user = haki.users.get(args[1]);
+                //Haki set level command
+                if(order.equalsIgnoreCase("setHakiLevel")){
+                    if(targetPlayer != null){
+                        if(haki.users.containsKey(args[2])){
+                            abilityUser user = haki.users.get(args[2]);
                             if(user.hasHaki()){
-                                user.getPlayer().sendMessage("Reloading haki " + user.getPlayer().getName());
-                                user.getHakiAbilities().reloadPlayer();
+                                user.getHakiAbilities().setLevel(Integer.parseInt(args[1]));
+                            }
+                        }
+                    } else player.sendMessage("Unkown player");
+                }
+
+            }
+            else {
+                if(args.length == 2){
+                    if (order.equalsIgnoreCase("giveHaki")){
+                        if(Bukkit.getServer().getPlayerExact(args[1]) != null){
+                            haki.addHakiPlayer(args[1], 1, 0);
+                        }
+                    }
+                    else if (order.equalsIgnoreCase("reloadHaki")){
+                        if(Bukkit.getServer().getPlayerExact(args[1]) != null){
+                            if(haki.users.containsKey(args[1])){
+                                abilityUser user = haki.users.get(args[1]);
+                                if(user.hasHaki()){
+                                    user.getPlayer().sendMessage("Reloading haki " + user.getPlayer().getName());
+                                    user.getHakiAbilities().reloadPlayer();
+                                }
                             }
                         }
                     }
                 }
+                else 
+                    player.sendMessage("Unknown command");
             }
-            else 
-                player.sendMessage("Unknown command");
-            
         }
 
-
-
         return false;
-
     }
 
 
@@ -131,6 +171,8 @@ public class oph implements CommandExecutor, TabCompleter {
             list.add("giveHaki");
             list.add("reloadHaki");
             list.add("setHakiLevel");
+            list.add("learnRokushiki");
+            list.add("setLvlRokushiki");
         }
         if(args.length == 2 && args[0].equalsIgnoreCase("giveFruit")){
             for (String fruitCommandName : fruitCommands.keySet()){
@@ -141,11 +183,20 @@ public class oph implements CommandExecutor, TabCompleter {
             for (Player player : Bukkit.getServer().getOnlinePlayers() ) {
                 list.add(player.getName());
             }
-        }else{
-            if(args.length == 3 ){
-                for (Player player : Bukkit.getServer().getOnlinePlayers() ) {
-                    list.add(player.getName());
-                }
+        }
+        else if(args.length == 2 && (args[0].equalsIgnoreCase("setLvlRokushiki") || args[0].equalsIgnoreCase("learnRokushiki"))){
+            for (String rokushikiName : rokushikiNames){
+                list.add(rokushikiName);
+            }
+        }
+        if(args.length == 3 && !args[0].equalsIgnoreCase("setLvlRokushiki")){
+            for (Player player : Bukkit.getServer().getOnlinePlayers() ) {
+                list.add(player.getName());
+            }
+        }
+        if(args.length == 4 && args[0].equalsIgnoreCase("setLvlRokushiki")){
+            for (Player player : Bukkit.getServer().getOnlinePlayers() ) {
+                list.add(player.getName());
             }
         }
         return list;
