@@ -2,6 +2,8 @@ package abilitieSystem;
 
 
 import htt.ophabs.OPhabs;
+
+import org.bukkit.Bukkit;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityShootBowEvent;
@@ -24,7 +26,7 @@ import java.util.Random;
 public class haki extends abilities {
     private abilityUser user;
     private int level, exp;
-    private double health, armor;
+    private double health;
 
 
     /**
@@ -35,10 +37,12 @@ public class haki extends abilities {
      * @author Vaelico786.
      */
     public haki(OPhabs plugin, abilityUser user, int level, int exp) {
-        super(plugin);
+        super(plugin, 0, 0);
         this.user = user;
         this.level = level;
         this.exp = exp;
+
+        reloadPlayer(); 
     }
 
     /**
@@ -110,6 +114,8 @@ public class haki extends abilities {
             user.getPlayer().sendMessage("§a§lHaki§r§a level: "+level);
             upHealth();
             upArmor();
+            upDamage();
+            user.reloadStats();
         }
     }
 
@@ -128,8 +134,17 @@ public class haki extends abilities {
      */
     public void upArmor(){
         if(level>=2){
-            user.getPlayer().getAttribute(Attribute.GENERIC_ARMOR).setBaseValue(0+2*level);
-            armor = user.getPlayer().getAttribute(Attribute.GENERIC_ARMOR).getBaseValue();
+            armorBonus = (1.0*level)/2;
+        }
+    }
+
+    /**
+     * @brief Upgrades damage of the player accord with haki level.
+     * @author Vaelico786.
+     */
+    public void upDamage(){
+        if(level>=5){
+            damageBonus = (1.0*level)/2;
         }
     }
 
@@ -139,8 +154,9 @@ public class haki extends abilities {
      */
     public void reloadPlayer(){
         user.getPlayer().sendMessage("§a§lHaki§r§a level: "+level);
-        user.getPlayer().setMaxHealth(20+2*level);
-        user.getPlayer().getAttribute(Attribute.GENERIC_ARMOR).setBaseValue(0+2*level);
+        upHealth();
+        upArmor();
+        upDamage();
     }
 
     /**
@@ -151,9 +167,8 @@ public class haki extends abilities {
     public void onEntityDamageByUser(EntityDamageByEntityEvent event){
         if(level>=5){
             if(((Player)event.getDamager()).getInventory().getItemInMainHand().getType() == Material.AIR){
-                event.setDamage(event.getDamage()*5);
+                event.setDamage(event.getDamage()+5);
             }
-            event.setDamage(event.getDamage()+(event.getDamage()*level)/10);
         }
 
         exp += event.getDamage();
@@ -185,32 +200,10 @@ public class haki extends abilities {
     * @author Vaelico786.
     */
     public void onEntityDamage(EntityDamageEvent event){
-        //Level 4 Observation haki, chance to dodge
-        if(event instanceof EntityDamageByEntityEvent){
-            if(level >= 4){
-                if(((EntityDamageByEntityEvent) event).getDamager() instanceof Player){
-                    Player player = (Player) ((EntityDamageByEntityEvent) event).getDamager();
-                    //When damage is done by a player probability is determined by the life of the player(The more life the player has the stronger he is
-                    if(player.getMaxHealth() < user.getPlayer().getMaxHealth()){
-                        if(player.getHealth() < user.getPlayer().getHealth()/2){
-                            event.setDamage(0);
-                        }
-                        else{
-                            event.setDamage(event.getDamage()/(user.getPlayer().getMaxHealth()-player.getMaxHealth()));
-                        }
-                    }
-                    else{
-                        event.setDamage(event.getDamage()/(player.getMaxHealth()-user.getPlayer().getMaxHealth()));
-                    }
-                }
-                else{
-                    //If the entity its not a player then a probability based on player level will be used
-                    Random rand = new Random();
-                    if(rand.nextInt(200)/5 <= level){
-                        event.setDamage(0);
-                    }
-                }
-            }
+        //If the entity its not a player then a probability based on player level will be used
+        Random rand = new Random();
+        if(rand.nextInt(100) <= level){
+            event.setDamage(0);
         }
     }
 
@@ -226,9 +219,12 @@ public class haki extends abilities {
      * @param event The event that was triggered
      * @author Vaelico786.
      */
+    /*
     public void onPlayerRespawn(PlayerRespawnEvent event){
-        // user.getPlayer().setMaxHealth(health);
-        // user.getPlayer().getAttribute(Attribute.GENERIC_ARMOR).setBaseValue(armor);
+        Bukkit.getPlayer(user.getPlayerName()).setMaxHealth(health);
+
+        user.getPlayer().getAttribute(Attribute.GENERIC_ARMOR).setBaseValue(armorBonus);
     }
+    */
 
 }

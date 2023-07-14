@@ -27,7 +27,7 @@ public class goro_goro extends logia {
      * @author RedRiotTank.
      */
     public goro_goro(OPhabs plugin) {
-        super(plugin, Particle.ELECTRIC_SPARK, 7, "goro_goro", "Goro Goro no Mi", "Goro Goro caster",  6, 2);
+        super(plugin, 0, 0, Particle.ELECTRIC_SPARK, 7, "goro_goro", "Goro Goro no Mi", "Goro Goro caster",  6, 2);
 
         abilitiesNames.add("El THOR");
         abilitiesCD.add(0);

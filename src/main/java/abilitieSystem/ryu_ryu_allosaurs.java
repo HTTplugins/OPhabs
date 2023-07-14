@@ -18,7 +18,7 @@ public class ryu_ryu_allosaurs extends zoan {
     private ArrayList<LivingEntity> golpeadosHabilidades = new ArrayList<>();
 
     public ryu_ryu_allosaurs(OPhabs plugin) {
-        super(plugin, 11, "ryu_ryu_allosaurs", "Ryu Ryu no Mi Moderu Allosaurs", "Ryu Ryu Allosaurs caster", 7, 2,"http://novask.in/5915273049.png","allosaurs");
+        super(plugin, 6, 9, 11, "ryu_ryu_allosaurs", "Ryu Ryu no Mi Moderu Allosaurs", "Ryu Ryu Allosaurs caster", 7, 2,"http://novask.in/5915273049.png","allosaurs");
 
         abilitiesNames.add("FrontalCrunch");
         abilitiesCD.add(0);
@@ -57,13 +57,9 @@ public class ryu_ryu_allosaurs extends zoan {
             public void run() {
                 if(transformed){
                     user.getPlayer().addPotionEffect(new PotionEffect(PotionEffectType.SLOW, 999999, 1, false, false));
-                    user.getPlayer().addPotionEffect(new PotionEffect(PotionEffectType.INCREASE_DAMAGE, 999999, 4, false, false));
-                    user.getPlayer().addPotionEffect(new PotionEffect(PotionEffectType.DAMAGE_RESISTANCE, 999999, 2, false, false));
                 }
                 else{
                     user.getPlayer().removePotionEffect(PotionEffectType.SLOW);
-                    user.getPlayer().removePotionEffect(PotionEffectType.INCREASE_DAMAGE);
-                    user.getPlayer().removePotionEffect(PotionEffectType.DAMAGE_RESISTANCE);
                 }
             }
         }.runTaskLater(plugin, 20);

@@ -34,7 +34,7 @@ public class mera_mera extends logia {
     private ArrayList<LivingEntity> golpeadosFaiyabu = new ArrayList<>();
 
     public mera_mera(OPhabs plugin) {
-        super(plugin, Particle.FLAME, 2, "mera_mera", "Mera Mera no Mi", "Mera Mera caster", 7, 1.7);
+        super(plugin, 4, 0, Particle.FLAME, 2, "mera_mera", "Mera Mera no Mi", "Mera Mera caster", 7, 1.7);
         //Nombres de las habilidades:
         abilitiesNames.add("Fire Pool");
         abilitiesCD.add(0);

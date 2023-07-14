@@ -52,7 +52,7 @@ public class goru_goru extends paramecia {
      * @author Vaelico786.
      */
     public goru_goru(OPhabs plugin) {
-        super(plugin, 9, "goru_goru", "Goru Goru no Mi", "Goru Goru caster", 7, 1.8);
+        super(plugin, 0, 0, 9, "goru_goru", "Goru Goru no Mi", "Goru Goru caster", 7, 1.8);
 
         storaged = 0;
         maxStoraged = 1024;

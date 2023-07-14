@@ -32,7 +32,7 @@ public class abilitiesScoreboard {
      */
     public abilitiesScoreboard(OPhabs plugin) {
         this.plugin = plugin;
-        this.users = plugin.users;
+        this.users = OPhabs.users;
 
         ArrayList<String> values = new ArrayList<>();
         for(abilityUser user : users.values()) {

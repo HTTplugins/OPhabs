@@ -30,7 +30,7 @@ public class suke_suke extends paramecia {
      * @author RedRiotTank.
      */
     public suke_suke(OPhabs plugin) {
-        super(plugin, 14, "suke_suke", "Suke Suke no Mi", "Suke Suke caster", 2, 1.6);
+        super(plugin, 0, 0, 14, "suke_suke", "Suke Suke no Mi", "Suke Suke caster", 2, 1.6);
         abilitiesNames.add("Invisible Exploration");
         abilitiesCD.add(0);
         abilitiesNames.add("BackStab");

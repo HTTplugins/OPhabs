@@ -22,7 +22,7 @@ public class neko_neko_reoparudo extends zoan {
     private final ArrayList<LivingEntity> golpeadosHabilidades = new ArrayList<>();
 
     public neko_neko_reoparudo(OPhabs plugin) {
-        super(plugin, 5, "neko_neko_reoparudo", "Neko Neko no Mi Moderu Reoparudo", "Neko Neko Reoparudo caster", 7, 2,"https://s.namemc.com/i/18525c829f6918fe.png","reoparudo");
+        super(plugin, 4, 2, 5, "neko_neko_reoparudo", "Neko Neko no Mi Moderu Reoparudo", "Neko Neko Reoparudo caster", 7, 2,"https://s.namemc.com/i/18525c829f6918fe.png","reoparudo");
 
         abilitiesNames.add("FrontalAttack");
         abilitiesCD.add(0);
@@ -62,15 +62,11 @@ public class neko_neko_reoparudo extends zoan {
                 if(transformed) {
                     user.getPlayer().addPotionEffect(new PotionEffect(PotionEffectType.SPEED, 999999, 5, false, false));
                     user.getPlayer().addPotionEffect(new PotionEffect(PotionEffectType.JUMP, 999999, 3, false, false));
-                    user.getPlayer().addPotionEffect(new PotionEffect(PotionEffectType.INCREASE_DAMAGE, 999999, 2, false, false));
-                    user.getPlayer().addPotionEffect(new PotionEffect(PotionEffectType.DAMAGE_RESISTANCE, 999999, 1, false, false));
                     user.getPlayer().addPotionEffect(new PotionEffect(PotionEffectType.NIGHT_VISION, 999999, 1, false, false));
                 }
                 else {
                     user.getPlayer().removePotionEffect(PotionEffectType.SPEED);
                     user.getPlayer().removePotionEffect(PotionEffectType.JUMP);
-                    user.getPlayer().removePotionEffect(PotionEffectType.INCREASE_DAMAGE);
-                    user.getPlayer().removePotionEffect(PotionEffectType.DAMAGE_RESISTANCE);
                     user.getPlayer().removePotionEffect(PotionEffectType.NIGHT_VISION);
                 }
             }

@@ -30,7 +30,7 @@ public class loseFruit implements Listener {
      */
     public loseFruit(OPhabs plugin, Map<String, abilityUser> dfPlayers) {
         this.plugin = plugin;
-        this.users = plugin.users;
+        this.users = OPhabs.users;
         this.dfPlayers = dfPlayers;
     }
 

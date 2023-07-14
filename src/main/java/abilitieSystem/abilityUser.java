@@ -2,6 +2,7 @@ package abilitieSystem;
 
 import org.bukkit.entity.Player;
 import fruitSystem.devilFruit;
+import htt.ophabs.OPhabs;
 import org.bukkit.Bukkit;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.entity.*;
@@ -28,6 +29,7 @@ public class abilityUser {
     private devilFruit fruit;
     private df dfAbilities; 
     private haki hakiAbilities;
+    private double damageBonus, armorBonus;
 
     // *********************************************** CONSTRUCTORS *******************************************************
 
@@ -42,6 +44,8 @@ public class abilityUser {
         this.fruit = null;
         this.hakiAbilities = null;
 
+        damageBonus = 0;
+        armorBonus = 0;
         actual = 0;
     }
 
@@ -74,6 +78,8 @@ public class abilityUser {
         this.fruit = dfAbilities.getFruit();
         this.dfAbilities = dfAbilities;
         dfAbilities.setUser(this);
+
+        reloadStats();
     }
 
     /**
@@ -93,6 +99,22 @@ public class abilityUser {
     }
 
     /**
+     * @brief Gets the actual player damage.
+     * @author Vaelico786.
+     */
+    public double getDamage() {
+        return damageBonus;
+    }
+
+    /**
+     * @brief Gets the actual player resistance.
+     * @author Vaelico786.
+     */
+    public double getArmor() {
+        return armorBonus;
+    }
+
+    /**
      * @brief Returns true if player has a fruit.
      * @author Vaelico786.
      */
@@ -108,6 +130,8 @@ public class abilityUser {
         this.fruit = null;
         dfAbilities.setUser(null);
         this.dfAbilities = null;
+
+        reloadStats();
     }
 
     /**
@@ -181,6 +205,8 @@ public class abilityUser {
     public void setHaki(haki hakiAbilities) {
         this.hakiAbilities = hakiAbilities;
         this.hakiAbilities.setUser(this);
+        
+        // reloadStats();
     }
 
     /**
@@ -188,7 +214,7 @@ public class abilityUser {
      * @author Vaelico786.
      */
     public haki getHakiAbilities() {
-        return (haki) hakiAbilities;
+        return hakiAbilities;
     }
 
     /**
@@ -242,6 +268,36 @@ public class abilityUser {
 
         getHakiAbilities().setExp(exp);
     }
+    
+    // *********************************************** COMMON *******************************************************
+
+    public void reloadStats(){
+        double damage = 0;
+        double armor = 0;
+
+        if(dfAbilities != null){
+            damage += dfAbilities.getDamage();
+            armor += dfAbilities.getArmor();
+        }
+
+        if(hakiAbilities != null){
+            hakiAbilities.reloadPlayer();
+            damage += hakiAbilities.getDamage();
+            armor += hakiAbilities.getArmor();
+        }
+
+        damageBonus = damage;
+        armorBonus = armor;
+    }
+
+    public double calculateDamage(abilityUser damagedUser, double baseDamage){
+        return ((getDamage()-damagedUser.getArmor())*2+baseDamage);
+    }
+
+
+    public double calculateDamage(double baseDamage){
+        return getDamage()+baseDamage;
+    }
 
     // *********************************************** PASSIVES *******************************************************
 
@@ -255,6 +311,9 @@ public class abilityUser {
             hakiAbilities.onEntityDamage(event);
         if(dfAbilities != null)
             dfAbilities.onEntityDamage(event);
+
+        if(armorBonus > 0)
+            event.setDamage(event.getDamage()*(1 - 1/(100.0/armorBonus)));
     }
 
     /**
@@ -267,6 +326,7 @@ public class abilityUser {
             hakiAbilities.onPlayerDeath(event);
         if(dfAbilities != null)
             dfAbilities.onPlayerDeath(event);
+        reloadStats();
     }
 
     /**
@@ -382,6 +442,16 @@ public class abilityUser {
     public void onEntityDamageByUser(EntityDamageByEntityEvent event) {
         if(hasHaki()) getHakiAbilities().onEntityDamageByUser(event);
         if(hasFruit()) getDFAbilities().onEntityDamageByUser(event);
+
+        if(event.getEntity() instanceof Player && OPhabs.users.containsKey(event.getEntity().getName())) {
+            abilityUser damaged = OPhabs.users.get(event.getEntity().getName());
+            if(damaged.getArmor()>0)
+                event.setDamage(calculateDamage(damaged, event.getDamage()));
+            else
+                event.setDamage(calculateDamage(+event.getDamage()));
+        }else{
+            event.setDamage(calculateDamage(+event.getDamage()));
+        }
     }
 
     /**
@@ -391,6 +461,9 @@ public class abilityUser {
     public void onUserDamageByEntity(EntityDamageByEntityEvent event) {
         if(hasHaki()) getHakiAbilities().onUserDamageByEntity(event);
         if(hasFruit()) getDFAbilities().onUserDamageByEntity(event);
+
+        if(armorBonus > 0)
+            event.setDamage(event.getDamage()-armorBonus);
     }
 
     /**

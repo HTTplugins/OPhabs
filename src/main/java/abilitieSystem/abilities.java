@@ -24,25 +24,18 @@ public class abilities {
     protected abilityUser user=null;
     public ArrayList<String> abilitiesNames = new ArrayList<>();
     public ArrayList<Integer> abilitiesCD = new ArrayList<>();
+    protected double damageBonus, armorBonus;
 
-    /**
-     * @brief abilities constructor.
-     * @param plugin OPhabs plugin.
-     * @param user Fruit's user.
-     * @author Vaelico786.
-     */
-    public abilities(OPhabs plugin, abilityUser user) {
-        this.plugin = plugin;
-        this.user = user;
-    }
-
+    
     /**
      * @brief abilities constructor.
      * @param plugin OPhabs plugin.
      * @author Vaelico786.
      */
-    public abilities(OPhabs plugin) {
+    public abilities(OPhabs plugin, double damageBonus, double armorBonus) {
         this.plugin = plugin;
+        this.damageBonus = damageBonus;
+        this.armorBonus = armorBonus;
     }
 
     /**
@@ -90,13 +83,44 @@ public class abilities {
         this.user = user;
     }
 
+    /**
+     * @brief Damage setter.
+     * @author Vaelico786.
+     */
+    public void setDamage(double damageBonus){
+        this.damageBonus = damageBonus;
+    }
 
     /**
-     * @brief user setter.
+     * @brief Armor setter.
+     * @author Vaelico786.
+     */
+    public void setArmor(double armorBonus){
+        this.armorBonus = armorBonus;
+    }
+
+    /**
+     * @brief user getter.
      * @author Vaelico786.
      */
     public abilityUser getUser(){
         return user;
+    }
+
+    /**
+     * @brief Damage bonus getter.
+     * @author Vaelico786.
+     */
+    public double getDamage(){
+        return damageBonus;
+    }
+
+    /**
+     * @brief Damage bonus getter.
+     * @author Vaelico786.
+     */
+    public double getArmor(){
+        return armorBonus;
     }
 
     /**

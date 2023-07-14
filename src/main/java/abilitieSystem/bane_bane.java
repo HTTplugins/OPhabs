@@ -41,7 +41,7 @@ public class bane_bane extends paramecia {
      * @author Vaelico786.
      */
     public bane_bane(OPhabs plugin) {
-        super(plugin, 15, "bane_bane", "Bane Bane no Mi" ,"Bane Bane caster", 5, 2);
+        super(plugin, 4, 3, 15, "bane_bane", "Bane Bane no Mi" ,"Bane Bane caster", 5, 2);
         abilitiesNames.add("Resort");
         abilitiesCD.add(0);
         abilitiesNames.add("Resort Punch");

@@ -32,7 +32,7 @@ public class hakiAssociation implements Listener {
      */
     public hakiAssociation(OPhabs plugin) {
         this.plugin = plugin;
-        this.users = plugin.users;
+        this.users = OPhabs.users;
         Set<String> userKeys = fileSystem.getHakiUserKeys();
         for(String username : userKeys){
             addHakiPlayer(username,fileSystem.getHakiUserLevel(username),fileSystem.getHakiUserExp(username));

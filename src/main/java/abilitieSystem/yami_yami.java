@@ -47,7 +47,7 @@ public class yami_yami extends logia {
      * @author RedRiotTank.
      */
     public yami_yami(OPhabs plugin){
-        super(plugin, Particle.REDSTONE,  1, "yami_yami", "Yami Yami no Mi", "Yami Yami caster", 8, 1.6);
+        super(plugin, 0, 0, Particle.REDSTONE,  1, "yami_yami", "Yami Yami no Mi", "Yami Yami caster", 8, 1.6);
         abilitiesNames.add("Black Void");
         abilitiesCD.add(0);
         abilitiesNames.add("LiberateVoid");
@@ -680,7 +680,7 @@ public class yami_yami extends logia {
 
         if(event instanceof EntityDamageByEntityEvent && ((EntityDamageByEntityEvent)event).getDamager() instanceof Player){
             Player damager = (Player) ((EntityDamageByEntityEvent)event).getDamager();
-            if(plugin.users.containsKey(damager.getName()) && plugin.users.get(damager.getName()).hasHaki())
+            if(OPhabs.users.containsKey(damager.getName()) && OPhabs.users.get(damager.getName()).hasHaki())
                 return;
         }
 

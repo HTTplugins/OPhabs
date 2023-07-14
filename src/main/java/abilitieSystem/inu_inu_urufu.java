@@ -24,7 +24,7 @@ public class inu_inu_urufu extends zoan {
     private ArrayList<LivingEntity> golpeadosHabilidades = new ArrayList<>();
 
     public inu_inu_urufu(OPhabs plugin) {
-        super(plugin, 17, "inu_inu_urufu", "Inu Inu no Mi Moderu Urufu", "Inu Inu Urufu caster", 7, 2,"http://novask.in/6399673459.png","regular_wolf");
+        super(plugin, 3.5, 2, 17, "inu_inu_urufu", "Inu Inu no Mi Moderu Urufu", "Inu Inu Urufu caster", 7, 2,"http://novask.in/6399673459.png","regular_wolf");
 
         abilitiesNames.add("Crunch");
         abilitiesCD.add(0);
@@ -71,14 +71,11 @@ public class inu_inu_urufu extends zoan {
                 if(transformed) {
                     user.getPlayer().addPotionEffect(new PotionEffect(PotionEffectType.SPEED, 999999, 1, false, false));
                     user.getPlayer().addPotionEffect(new PotionEffect(PotionEffectType.JUMP, 999999, 2, false, false));
-                    user.getPlayer().addPotionEffect(new PotionEffect(PotionEffectType.INCREASE_DAMAGE, 999999, 3, false, false));
                 }
                 else {
                     if(raged){
                         raged = false;
-                        user.getPlayer().removePotionEffect(PotionEffectType.INCREASE_DAMAGE);
                         user.getPlayer().removePotionEffect(PotionEffectType.SPEED);
-                        user.getPlayer().removePotionEffect(PotionEffectType.DAMAGE_RESISTANCE);
                         user.getPlayer().removePotionEffect(PotionEffectType.REGENERATION);
                         user.getPlayer().removePotionEffect(PotionEffectType.JUMP);
                         user.getPlayer().removePotionEffect(PotionEffectType.NIGHT_VISION);
@@ -86,7 +83,6 @@ public class inu_inu_urufu extends zoan {
                     else{
                         user.getPlayer().removePotionEffect(PotionEffectType.SPEED);
                         user.getPlayer().removePotionEffect(PotionEffectType.JUMP);
-                        user.getPlayer().removePotionEffect(PotionEffectType.INCREASE_DAMAGE);
                     }
                 }
             }
@@ -173,9 +169,7 @@ public class inu_inu_urufu extends zoan {
         new BukkitRunnable() {
             @Override
             public void run() {
-            user.getPlayer().addPotionEffect(new PotionEffect(PotionEffectType.INCREASE_DAMAGE, 999999, 6, false, false));
             user.getPlayer().addPotionEffect(new PotionEffect(PotionEffectType.SPEED, 999999, 2, false, false));
-            user.getPlayer().addPotionEffect(new PotionEffect(PotionEffectType.DAMAGE_RESISTANCE, 999999, 4, false, false));
             user.getPlayer().addPotionEffect(new PotionEffect(PotionEffectType.REGENERATION, 999999, 1, false, false));
             user.getPlayer().addPotionEffect(new PotionEffect(PotionEffectType.JUMP, 999999, 3, false, false));
             user.getPlayer().addPotionEffect(new PotionEffect(PotionEffectType.NIGHT_VISION, 999999, 2, false, false));
@@ -189,9 +183,7 @@ public class inu_inu_urufu extends zoan {
             public void run() {
                 if(raged){
                     raged = false;
-                    user.getPlayer().removePotionEffect(PotionEffectType.INCREASE_DAMAGE);
                     user.getPlayer().removePotionEffect(PotionEffectType.SPEED);
-                    user.getPlayer().removePotionEffect(PotionEffectType.DAMAGE_RESISTANCE);
                     user.getPlayer().removePotionEffect(PotionEffectType.REGENERATION);
                     user.getPlayer().removePotionEffect(PotionEffectType.JUMP);
                     user.getPlayer().removePotionEffect(PotionEffectType.NIGHT_VISION);

@@ -30,7 +30,7 @@ public class ishi_ishi extends paramecia {
     boolean opened;
 
     public ishi_ishi(OPhabs plugin) {
-        super(plugin, 8, "ishi_ishi", "Ishi Ishi no Mi", "Ishi Ishi caster", 9, 1);
+        super(plugin, 2, 10, 8, "ishi_ishi", "Ishi Ishi no Mi", "Ishi Ishi caster", 9, 1);
 
         storaged = 0;
         maxStoraged = 1024;

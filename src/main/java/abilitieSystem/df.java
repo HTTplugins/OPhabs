@@ -40,8 +40,8 @@ public class df extends abilities {
      * @param commandName Name of that represents the fruit.
      * @author Vaelico786.
      */
-    public df(OPhabs plugin, int id, String fruitCommandName, String fruitItemName, String casterName, double casterDamage, double casterSpeed) {
-        super(plugin);
+    public df(OPhabs plugin, double damageBonus, double armorBonus, int id, String fruitCommandName, String fruitItemName, String casterName, double casterDamage, double casterSpeed) {
+        super(plugin, damageBonus, armorBonus);
         this.actual = 0;
         this.commandName = fruitCommandName;
         this.active = true;

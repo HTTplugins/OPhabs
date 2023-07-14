@@ -40,7 +40,7 @@ public class caster implements Listener {
      */
     public caster(coolDown cooldown, OPhabs plugin){
         this.plugin = plugin; 
-        this.users = plugin.users;
+        this.users = OPhabs.users;
     }
 
     /**

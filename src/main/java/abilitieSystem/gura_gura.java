@@ -34,7 +34,7 @@ public class gura_gura extends paramecia {
      * @author Vaelico786.
      */
     public gura_gura(OPhabs plugin) {
-        super(plugin, 3, "gura_gura", "Gura Gura no Mi", "Gura Gura caster", 7, 1.5);
+        super(plugin, 8, 0, 3, "gura_gura", "Gura Gura no Mi", "Gura Gura caster", 7, 1.5);
         abilitiesNames.add("Earthquake");
         abilitiesCD.add(0);
         abilitiesNames.add("CreateWave");

@@ -36,7 +36,7 @@ public class ope_ope extends paramecia {
      * @author RedRiotTank.
      */
     public ope_ope(OPhabs plugin) {
-        super(plugin, 12, "ope_ope", "Ope Ope no Mi", "Ope Ope caster", 5, 1.6);
+        super(plugin, 0, 0, 12, "ope_ope", "Ope Ope no Mi", "Ope Ope caster", 5, 1.6);
 
         abilitiesNames.add("Room");
         abilitiesCD.add(0);

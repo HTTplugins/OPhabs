@@ -37,7 +37,7 @@ public class magu_magu extends logia {
      * @author RedRiotTank.
      */
     public magu_magu(OPhabs plugin) {
-        super(plugin, Particle.FLAME, 6, "magu_magu", "Magu Magu no Mi", "Magu Magu caster", 9, 1);
+        super(plugin, 0, 0, Particle.FLAME, 6, "magu_magu", "Magu Magu no Mi", "Magu Magu caster", 9, 1);
         abilitiesNames.add("Lava Meteors");
         abilitiesCD.add(0);
         abilitiesNames.add("Lava Ground");

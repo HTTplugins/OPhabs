@@ -5,7 +5,7 @@ public class hie_hie extends paramecia {    //fruit_fruit is the fruit whose abi
 
     public hie_hie(OPhabs plugin){
 
-        super(plugin, 16, "hie_hie", "Hie Hie no Mi", "Hie Hie caster", 8, 1.7);    //Here you associate with  df Casting material, name and command.
+        super(plugin, 3, 3, 16, "hie_hie", "Hie Hie no Mi", "Hie Hie caster", 8, 1.7);    //Here you associate with  df Casting material, name and command.
 
         abilitiesNames.add("ab1");
         abilitiesCD.add(0);

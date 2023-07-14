@@ -24,7 +24,7 @@ public class moku_moku extends logia {
     public int numSmokers=0;
 
     public moku_moku(OPhabs plugin) {
-        super(plugin, Particle.CLOUD, 4, "moku_moku", "Moku Moku no Mi", "Moku Moku caster", 5, 1.9);
+        super(plugin, 0, 0, Particle.CLOUD, 4, "moku_moku", "Moku Moku no Mi", "Moku Moku caster", 5, 1.9);
 
         abilitiesNames.add("SmokeBody");
         abilitiesCD.add(0);

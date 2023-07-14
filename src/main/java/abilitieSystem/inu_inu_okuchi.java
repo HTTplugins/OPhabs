@@ -29,7 +29,7 @@ public class inu_inu_okuchi extends zoan {
     private final ArrayList<LivingEntity> atronados = new ArrayList<>();
 
     public inu_inu_okuchi(OPhabs plugin) {
-        super(plugin, 10, "inu_inu_okuchi", "Inu Inu no Mi Moderu Okuchi no Makami", "Inu Inu Okuchi caster", 7, 2,"http://novask.in/4672583547.png","white_wolf");
+        super(plugin, 5, 3, 10, "inu_inu_okuchi", "Inu Inu no Mi Moderu Okuchi no Makami", "Inu Inu Okuchi caster", 7, 2,"http://novask.in/4672583547.png","white_wolf");
 
         abilitiesNames.add("Himorogiri");
         abilitiesCD.add(0);
@@ -78,12 +78,10 @@ public class inu_inu_okuchi extends zoan {
                 if(transformed) {
                     user.getPlayer().addPotionEffect(new PotionEffect(PotionEffectType.SPEED, 999999, 5, false, false));
                     user.getPlayer().addPotionEffect(new PotionEffect(PotionEffectType.JUMP, 999999, 3, false, false));
-                    user.getPlayer().addPotionEffect(new PotionEffect(PotionEffectType.INCREASE_DAMAGE, 999999, 5, false, false));
                 }
                 else {
                     user.getPlayer().removePotionEffect(PotionEffectType.SPEED);
                     user.getPlayer().removePotionEffect(PotionEffectType.JUMP);
-                    user.getPlayer().removePotionEffect(PotionEffectType.INCREASE_DAMAGE);
                 }
             }
         }.runTaskLater(plugin, 20);

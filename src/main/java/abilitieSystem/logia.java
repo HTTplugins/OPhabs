@@ -26,8 +26,8 @@ public abstract class logia extends df{
      * @author Vaelico786.
      */
 
-    public logia(OPhabs plugin, Particle element, int id, String fruitCommandName, String fruitItemName, String casterName, double casterDamage, double casterSpeed) {
-        super(plugin, id, fruitCommandName, fruitItemName, casterName, casterDamage, casterSpeed);
+    public logia(OPhabs plugin, double damageBonus, double armorBonus, Particle element, int id, String fruitCommandName, String fruitItemName, String casterName, double casterDamage, double casterSpeed) {
+        super(plugin, damageBonus, armorBonus, id, fruitCommandName, fruitItemName, casterName, casterDamage, casterSpeed);
         this.element = element;
     }
 
@@ -45,7 +45,7 @@ public abstract class logia extends df{
 
         if(event instanceof EntityDamageByEntityEvent && ((EntityDamageByEntityEvent)event).getDamager() instanceof Player){
             Player damager = (Player) ((EntityDamageByEntityEvent)event).getDamager();
-            if(plugin.users.containsKey(damager.getName()) && plugin.users.get(damager.getName()).hasHaki())
+            if(OPhabs.users.containsKey(damager.getName()) && OPhabs.users.get(damager.getName()).hasHaki())
                 return;
         }
 

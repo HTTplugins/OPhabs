@@ -16,8 +16,8 @@ public class paramecia extends df {
      * @param commandName Name of that represents the fruit.
      * @author Vaelico786.
      */
-    public paramecia(OPhabs plugin, int id, String fruitCommandName, String fruitItemName, String casterName, double casterDamage, double casterSpeed){
-        super(plugin, id, fruitCommandName, fruitItemName, casterName, casterDamage, casterSpeed);
+    public paramecia(OPhabs plugin, double damageBonus, double armorBonus, int id, String fruitCommandName, String fruitItemName, String casterName, double casterDamage, double casterSpeed){
+        super(plugin, damageBonus, armorBonus, id, fruitCommandName, fruitItemName, casterName, casterDamage, casterSpeed);
     }
 
 }

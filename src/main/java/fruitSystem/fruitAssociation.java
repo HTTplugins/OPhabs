@@ -45,8 +45,8 @@ public class fruitAssociation implements Listener {
      */
     public fruitAssociation(OPhabs plugin) {
         this.plugin = plugin;
-        this.users = plugin.users;
-        this.abilitiesList = plugin.abilitiesList;
+        this.users = OPhabs.users;
+        this.abilitiesList = OPhabs.abilitiesList;
 
 
         for (df ability : abilitiesList) {

@@ -36,7 +36,7 @@ public class zushi_zushi extends paramecia {
      * @author RedRiotTank.
      */
     public zushi_zushi(OPhabs plugin){
-        super(plugin, 13, "zushi_zushi", "Zushi Zushi no Mi", "Zushi Zushi caster", 7, 1.8);
+        super(plugin, 8, 0, 13, "zushi_zushi", "Zushi Zushi no Mi", "Zushi Zushi caster", 7, 1.8);
         abilitiesNames.add("Heavy Field");
         abilitiesCD.add(0);
         abilitiesNames.add("Meteor");

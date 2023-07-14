@@ -97,6 +97,17 @@ public class fileSystem {
 
             JsonParser parser = new JsonParser();
             JsonObject jsonObject = parser.parse(fileContent).getAsJsonObject();
+            if(!jsonObject.has(fruit)){
+                fruitAssociations.addProperty(fruit, "none");        
+                Gson gson = new GsonBuilder().setPrettyPrinting().create();
+                String json = gson.toJson(fruitAssociations);
+                
+                try (FileWriter fileWriter = new FileWriter(FRUIT_ASSOCIATION_PATH)) {
+                    fileWriter.write(json);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
 
             return jsonObject.get(fruit).getAsString();
 
@@ -166,7 +177,7 @@ public class fileSystem {
                 fileWriter.write(gson.toJson(jsonObject));
                 fileWriter.close();
 
-                System.out.println("Se ha actualizado el usuario " + nombre + " en el fichero de HAKI.");
+                // System.out.println("Se ha actualizado el usuario " + nombre + " en el fichero de HAKI.");
             } else {
                 System.out.println("El usuario " + nombre + " no está registrado en el fichero de HAKI.");
             }

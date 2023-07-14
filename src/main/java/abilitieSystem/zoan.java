@@ -28,14 +28,15 @@ public class zoan extends df{
      * @param skinName skin name for transformation.
      * @author Vaelico786.
      */
-    public zoan(OPhabs plugin, int id, String fruitCommandName, String fruitItemName, String casterName, double casterDamage, double casterSpeed, String skinUrl, String skinName){
-        super(plugin, id, fruitCommandName, fruitItemName, casterName, casterDamage, casterSpeed);
+    public zoan(OPhabs plugin, double damageBonus, double armorBonus, int id, String fruitCommandName, String fruitItemName, String casterName, double casterDamage, double casterSpeed, String skinUrl, String skinName){
+        super(plugin, damageBonus, armorBonus, id, fruitCommandName, fruitItemName, casterName, casterDamage, casterSpeed);
         skinsChanger.setSkin(skinName, skinUrl);
         this.skinUrl = skinUrl;
         this.skinName = skinName;
 
         abilitiesNames.add("Transform");
         abilitiesCD.add(0);
+
     }
 
     /**
@@ -47,11 +48,16 @@ public class zoan extends df{
         if(!transformed) {
             skinsChanger.changeSkin(player, skinName);
             transformed = true;
+            setDamage(damageBonus*2);
+            setArmor(armorBonus*2);
         }
         else {
             transformed = false;
             skinsChanger.resetSkin(player);
+            setDamage(damageBonus/2);
+            setArmor(armorBonus/2);
         }
+        user.reloadStats();
     }
 
     /**
