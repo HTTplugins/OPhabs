@@ -11,6 +11,7 @@ import org.bukkit.entity.ArmorStand;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.block.BlockBreakEvent;
+import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.entity.*;
 import org.bukkit.event.player.*;
 import org.bukkit.event.entity.EntityDamageEvent.DamageCause;
@@ -102,6 +103,9 @@ public class caster implements Listener {
             if(event.getCause() == DamageCause.FALL)
                 user.onFall(event);
         }
+
+        if(event.getDamage()<=0)
+            event.setCancelled(true);
     }
 
     /**
@@ -121,6 +125,9 @@ public class caster implements Listener {
                 user.onUserDamageByEntity(event);
             }
         }
+
+        if(event.getDamage()<=0)
+            event.setCancelled(true);
 
     }
 
@@ -369,6 +376,15 @@ public class caster implements Listener {
                     event.setCancelled(true); // Cancelar la interacción del jugador con el ArmorStand
                 }
             }
+        }
+    }
+
+    @EventHandler
+    public void onPlayerLogin(PlayerLoginEvent event) {
+
+        if(users.containsKey(event.getPlayer().getName())) {
+            abilityUser user = users.get(event.getPlayer().getName());
+            user.onPlayerLogin(event);
         }
     }
     

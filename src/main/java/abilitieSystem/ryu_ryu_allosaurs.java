@@ -4,6 +4,7 @@ import htt.ophabs.OPhabs;
 
 import org.bukkit.*;
 import org.bukkit.entity.Player;
+import org.bukkit.entity.Entity;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import org.bukkit.scheduler.BukkitRunnable;
@@ -79,7 +80,7 @@ public class ryu_ryu_allosaurs extends zoan {
 
                 player.getWorld().getNearbyEntities(player.getEyeLocation(), 1,1,1).forEach(entity -> {
                     if(!entity.getName().equals(player.getName()) && entity instanceof LivingEntity && !golpeadosHabilidades.contains(entity)) {
-                        ((LivingEntity) entity).damage(15);
+                        ((LivingEntity) entity).damage(15, (Entity) user.getPlayer());
                         ((LivingEntity) entity).addPotionEffect(new PotionEffect(PotionEffectType.SLOW, 100, 1));
                         golpeadosHabilidades.add((LivingEntity) entity);
                     }
@@ -104,7 +105,7 @@ public class ryu_ryu_allosaurs extends zoan {
 
         player.getWorld().getNearbyEntities(player.getLocation(), 3,1,3).forEach(entity -> {
             if(!entity.getName().equals(player.getName()) && entity instanceof LivingEntity)
-                ((LivingEntity) entity).damage(15);
+                ((LivingEntity) entity).damage(15, (Entity) user.getPlayer());
         });
 
         int radius = 3, particleAmount = 3;
@@ -164,7 +165,7 @@ public class ryu_ryu_allosaurs extends zoan {
                 Vector dir = new Vector(entity.getLocation().getX() - loc.getX(), entity.getLocation().getY() - loc.getY(),
                                         entity.getLocation().getZ() - loc.getZ()).normalize();
 
-                ((LivingEntity) entity).damage(10);
+                ((LivingEntity) entity).damage(10, (Entity) user.getPlayer());
                 entity.setVelocity(dir.add(new Vector(0, 2, 0)));
                 ((LivingEntity) entity).addPotionEffect(new PotionEffect(PotionEffectType.SLOW, 100, 3));
                 ((LivingEntity) entity).addPotionEffect(new PotionEffect(PotionEffectType.WEAKNESS, 200, 3));

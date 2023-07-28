@@ -4,6 +4,7 @@ import htt.ophabs.OPhabs;
 
 import org.bukkit.*;
 import org.bukkit.entity.Player;
+import org.bukkit.entity.Entity;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import org.bukkit.event.entity.EntityDamageEvent;
@@ -131,7 +132,7 @@ public class inu_inu_urufu extends zoan {
 
                 player.getWorld().getNearbyEntities(player.getEyeLocation(), 1,1,1).forEach(entity -> {
                     if(!entity.getName().equals(player.getName()) && entity instanceof LivingEntity) {
-                        ((LivingEntity) entity).damage(15);
+                        ((LivingEntity) entity).damage(15,(Entity) user.getPlayer());
                         Sangrado(((LivingEntity) entity), 200);
                     }
                 });
@@ -214,7 +215,7 @@ public class inu_inu_urufu extends zoan {
         user.getPlayer().getWorld().spawnParticle(Particle.CLOUD, user.getPlayer().getLocation().add(0,1,0), 100, 1, 1, 1, 1);
         user.getPlayer().getWorld().getNearbyEntities(user.getPlayer().getLocation(), 10, 10, 10).forEach(entity -> {
             if(entity instanceof LivingEntity && entity!=user.getPlayer()) {
-                ((LivingEntity) entity).damage(10);
+                ((LivingEntity) entity).damage(10,(Entity) user.getPlayer());
                 ((LivingEntity) entity).addPotionEffect(new PotionEffect(PotionEffectType.SLOW, 100, 1));
                 ((LivingEntity) entity).addPotionEffect(new PotionEffect(PotionEffectType.WEAKNESS, 100, 1));
                 ((LivingEntity) entity).addPotionEffect(new PotionEffect(PotionEffectType.CONFUSION, 20, 1));

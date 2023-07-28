@@ -4,6 +4,7 @@ import htt.ophabs.OPhabs;
 import org.bukkit.*;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
+import org.bukkit.entity.Entity;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import org.bukkit.scheduler.BukkitRunnable;
@@ -240,7 +241,7 @@ public class suke_suke extends paramecia {
                 spawnParticleBehind(target);
                 player.getWorld().playSound(target.getLocation(),"swordcut",1,1);
                 if(exploration) finishInvisibility(player);
-                target.damage(5);
+                target.damage(5, (Entity) user.getPlayer());
             } else
                 failedBackstab = true;
         } else

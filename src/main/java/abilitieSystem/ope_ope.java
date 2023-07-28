@@ -207,7 +207,7 @@ public class ope_ope extends paramecia {
                                     ent.teleport(event.getEntity());
                                     event.getEntity().teleport(auxTeleport);
 
-                                    ((LivingEntity) ent).damage(event.getDamage());
+                                    ((LivingEntity) ent).damage(event.getDamage(), (Entity) user.getPlayer());
                                     event.setCancelled(true);
                                 }
                             }
@@ -321,7 +321,7 @@ public class ope_ope extends paramecia {
             } else {
                 availableSqueezes--;
 
-                currentHearth.damage(2);
+                currentHearth.damage(2, (Entity) user.getPlayer());
                 currentHearth.getWorld().playSound(currentHearth.getLocation(),"swordcut",1,1);
                 player.getWorld().playSound(player.getLocation(),"swordcut",1,1);
                 currentHearth.getWorld().spawnParticle(Particle.DAMAGE_INDICATOR,currentHearth.getLocation().add(0,currentHearth.getHeight(),0),4);

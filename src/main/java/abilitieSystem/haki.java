@@ -90,7 +90,11 @@ public class haki extends abilities {
     public void setLevel(int level){
         if(level > 0){
             this.level = level;
-            reloadPlayer();
+            user.reloadStats();
+
+            if(user.getPlayer().isOnline()){
+                user.getPlayer().sendMessage("§a§lHaki§r§a level: "+level);
+            }
         }
     }
 
@@ -111,12 +115,12 @@ public class haki extends abilities {
         if(exp>=(400+level*100)){
             exp = exp - (400+level*100);
             level++;
-            user.getPlayer().sendMessage("§a§lHaki§r§a level up!");
-            user.getPlayer().sendMessage("§a§lHaki§r§a level: "+level);
-            upHealth();
-            upArmor();
-            upDamage();
-            user.reloadStats();
+            if(user.getPlayer().isOnline()){
+                user.getPlayer().sendMessage("§a§lHaki§r§a level up!");
+                user.getPlayer().sendMessage("§a§lHaki§r§a level: "+level);
+            }
+                user.reloadStats();
+
         }
     }
 
@@ -154,10 +158,13 @@ public class haki extends abilities {
      * @author Vaelico786.
      */
     public void reloadPlayer(){
-        user.getPlayer().sendMessage("§a§lHaki§r§a level: "+level);
-        upHealth();
+        if(user.getPlayer() != null && user.getPlayer().isOnline()){
+            upHealth();
+        }
         upArmor();
         upDamage();
+
+
     }
 
     /**

@@ -1,6 +1,7 @@
 package rokushikiSystem;
 
 import htt.ophabs.OPhabs;
+import htt.ophabs.fileSystem;
 
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
@@ -22,6 +23,7 @@ import java.util.UUID;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Set;
 import abilitieSystem.*;
 import scoreboardSystem.abilitiesScoreboard;
 
@@ -31,7 +33,7 @@ import scoreboardSystem.abilitiesScoreboard;
  */
 public class rokushikiAssociation implements Listener {
     private final OPhabs plugin;
-    public static Map<String, abilityUser>  rokushikiPlayers = new HashMap<>(), users = new HashMap<>();
+    public Map<String, abilityUser> users = new HashMap<>();
     public abilitiesScoreboard scoreboard = null;
     public ArrayList<abilities> abilityList = new ArrayList<>();
 
@@ -41,15 +43,13 @@ public class rokushikiAssociation implements Listener {
      * @param users All abilityUsers.
      * @author Vaelico786
      */
-    public rokushikiAssociation(OPhabs plugin, Map<String, abilityUser> users) {
+    public rokushikiAssociation(OPhabs plugin) {
         this.plugin = plugin;
-        this.users = users;
+        this.users = OPhabs.users;
 
-        if(plugin.getConfig().getConfigurationSection("rokushikiPlayers") != null){
-            plugin.getConfig().getConfigurationSection("rokushikiPlayers").getKeys(false).forEach(key -> {
-                System.out.println(key);
-                loadRokushikiPlayer(key);
-            });
+        Set<String> userKeys = fileSystem.getRokushikiUsersKeys();
+        for(String username : userKeys){
+            addRokushikiPlayer(username,fileSystem.getRokushikiAbilities(username));
         }
     }
 
@@ -59,40 +59,67 @@ public class rokushikiAssociation implements Listener {
      * @author Vaelico786
      */
     public void addRokushikiPlayer(String name, String ability) {
+        abilityUser user;
         if(users.containsKey(name)){
-            abilityUser user = users.get(name);
+            user = users.get(name);
             if(!user.hasRokushiki()) {
-                user.setRokushiki(new rokushiki(plugin, user));
-                plugin.getConfig().set("rokushikiPlayers." + name + "." + ability + ".Level", 1);
-                user.getRokushikiAbilities().loadPlayer();
+                user.setRokushiki(new rokushiki(plugin));
             }
         } else {
-            abilityUser user = new abilityUser(name);
-            user.setRokushiki(new rokushiki(plugin, user));
+            user = new abilityUser(name, plugin);
+            user.setRokushiki(new rokushiki(plugin));
             users.put(name, user);
-            plugin.getConfig().set("rokushikiPlayers." + name + "." + ability + ".Level", 1);
-            user.getRokushikiAbilities().loadPlayer();
         }
+
+        user.getRokushikiAbilities().learnAbility(ability);
+        fileSystem.addRokushikiUser(name, ability, 1, 0);
     }
 
     /**
-     * @brief This method is used to add a new rokushikiPlayer.
+     * @brief This method is used to load the stats of a rokushikiPlayer.
      * @param name The name of the player.
      * @author Vaelico786
      */
-    public void loadRokushikiPlayer(String name) {
+    public void addRokushikiPlayer(String name, Map<String, stat> stats) {
+        abilityUser user;
         if(users.containsKey(name)){
-            abilityUser user = users.get(name);
+            user = users.get(name);
             if(!user.hasRokushiki()) {
-                user.setRokushiki(new rokushiki(plugin, user));
-                user.getRokushikiAbilities().loadPlayer();
+                user.setRokushiki(new rokushiki(plugin));
             }
         } else {
-            abilityUser user = new abilityUser(name);
-            user.setRokushiki(new rokushiki(plugin, user));
-            user.getRokushikiAbilities().loadPlayer();
+            user = new abilityUser(name, plugin);
+            user.setRokushiki(new rokushiki(plugin));
             users.put(name, user);
         }
+
+        user.getRokushikiAbilities().loadPlayer(stats);
+
+        fileSystem.addRokushikiUser(name, stats);
+    }
+
+
+    /**
+     * @brief This method is used to load the stats of a rokushikiPlayer.
+     * @param name The name of the player.
+     * @author Vaelico786
+     */
+    public void addRokushikiPlayerAbility(String name, String ability) {
+        abilityUser user;
+        if(users.containsKey(name)){
+            user = users.get(name);
+            if(!user.hasRokushiki()) {
+                user.setRokushiki(new rokushiki(plugin));
+            }
+        }
+        else {
+            System.out.println("Doesn't exist this rokushikiplayer.");
+            return;
+        }
+
+
+        user.getRokushikiAbilities().learnAbility(ability);
+        fileSystem.addRokushikiAbilityToUser(name, ability, 1, 0);
     }
 
     public void setScoreboard(abilitiesScoreboard scoreboard){

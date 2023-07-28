@@ -162,7 +162,7 @@ public class OPHLib {
             if(harms)
                 for(Entity ent : world.getNearbyEntities(partLoc,2,2,2))
                     if(ent instanceof LivingEntity && !player.equals(ent))
-                        ((LivingEntity)ent).damage(100);
+                        ((LivingEntity)ent).damage(100,(Entity) player);
 
             world.spawnParticle(particle,partLoc,0,0,0,0,dustOption);
         }
@@ -335,7 +335,7 @@ public class OPHLib {
 
                     ent.getWorld().getNearbyEntities(ent.getLocation(), 2,2,2).forEach(entity -> {
                         if(entity instanceof LivingEntity && entity != player && entity != ent) {
-                            ((LivingEntity) entity).damage(14);
+                            ((LivingEntity) entity).damage(14, (Entity) player);
                         }
                     });
                 }

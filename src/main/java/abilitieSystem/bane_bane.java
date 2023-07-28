@@ -185,7 +185,7 @@ public class bane_bane extends paramecia {
 
                 entity.getWorld().getNearbyEntities(entity.getLocation(), 2,2,2).forEach(ent -> {
                     if(ent instanceof LivingEntity && ent != user.getPlayer() && entity != ent) {
-                        ((LivingEntity) ent).damage(14);
+                        ((LivingEntity) ent).damage(14,(Entity) user.getPlayer());
                     }
                 });
 

@@ -56,12 +56,13 @@ public class hakiAssociation implements Listener {
                 user.setHaki(new haki(plugin, user, level, exp));
             }
         } else {
-            abilityUser user = new abilityUser(name);
+            abilityUser user = new abilityUser(name, plugin);
             user.setHaki(new haki(plugin, user, level, exp));
             users.put(name, user);
 
         }
-        fileSystem.addHakiUser(name,level,0);
+        fileSystem.addHakiUser(name,level,exp);
+
     }
 
 }

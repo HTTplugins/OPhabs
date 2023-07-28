@@ -252,7 +252,7 @@ public class magu_magu extends logia {
 
                 for(Entity ent : world.getNearbyEntities(spawnBallPos,2,2,2))
                     if(ent instanceof LivingEntity && !player.equals(ent)){
-                        ((LivingEntity)ent).damage(2);
+                        ((LivingEntity)ent).damage(2,(Entity) user.getPlayer());
                         reachTarget = true;
                     }
 
@@ -350,7 +350,7 @@ public class magu_magu extends logia {
 
                 for (Entity ent : world.getNearbyEntities(spawnBallPos,2,2,2))
                     if (ent instanceof LivingEntity && !player.equals(ent)) {
-                        ((LivingEntity)ent).damage(2);
+                        ((LivingEntity)ent).damage(2,(Entity) user.getPlayer());
                         reachTarget = true;
                     }
 

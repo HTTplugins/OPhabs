@@ -14,10 +14,12 @@ import org.bukkit.event.player.PlayerToggleSprintEvent;
 import org.bukkit.event.player.PlayerToggleFlightEvent;
 import org.bukkit.event.player.PlayerItemConsumeEvent;
 import org.bukkit.event.player.PlayerRespawnEvent;
+import org.bukkit.event.player.PlayerLoginEvent;
 import org.bukkit.event.player.PlayerItemDamageEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.inventory.InventoryClickEvent;
+import org.bukkit.scheduler.BukkitRunnable;
 
 import java.util.ArrayList;
 
@@ -28,6 +30,7 @@ import java.util.ArrayList;
  */
 
 public class abilityUser {
+    private OPhabs plugin;
     private final String playerName;
     public int actual;
     private devilFruit fruit;
@@ -43,7 +46,8 @@ public class abilityUser {
      * @param playerName Player's name.
      * @author Vaelico786.
      */
-    public abilityUser(String playerName) {
+    public abilityUser(String playerName, OPhabs plugin) {
+        this.plugin = plugin;
         this.playerName = playerName;
         this.dfAbilities = null;
         this.fruit = null;
@@ -213,7 +217,7 @@ public class abilityUser {
         this.hakiAbilities = hakiAbilities;
         this.hakiAbilities.setUser(this);
         
-        // reloadStats();
+        reloadStats();
     }
 
     /**
@@ -280,13 +284,13 @@ public class abilityUser {
 
     public void setRokushiki(rokushiki rokushikiAbilities){
         this.rokushikiAbilities = rokushikiAbilities;
-        this.rokushikiAbilities.user=this;
+        this.rokushikiAbilities.setUser(this);
 
         reloadStats();
     }
 
     public rokushiki getRokushikiAbilities(){
-        return rokushiki rokushikiAbilities;
+        return rokushikiAbilities;
     }
 
     public boolean hasRokushiki(){
@@ -304,13 +308,18 @@ public class abilityUser {
             damage += dfAbilities.getDamage();
             armor += dfAbilities.getArmor();
         }
-
         if(hakiAbilities != null){
             hakiAbilities.reloadPlayer();
             damage += hakiAbilities.getDamage();
             armor += hakiAbilities.getArmor();
         }
 
+
+        if(rokushikiAbilities != null){
+            rokushikiAbilities.reloadPlayer();
+            damage += rokushikiAbilities.getDamage();
+            armor += rokushikiAbilities.getArmor();
+        }
         damageBonus = damage;
         armorBonus = armor;
     }
@@ -355,7 +364,6 @@ public class abilityUser {
             hakiAbilities.onPlayerDeath(event);
         if(dfAbilities != null)
             dfAbilities.onPlayerDeath(event);
-        reloadStats();
     }
 
     /**
@@ -473,16 +481,18 @@ public class abilityUser {
     public void onEntityDamageByUser(EntityDamageByEntityEvent event) {
         if(hasHaki()) getHakiAbilities().onEntityDamageByUser(event);
         if(hasFruit()) getDFAbilities().onEntityDamageByUser(event);
-        if(hasRokushiki()) getRokushikiAbilities().onUserDamageAnotherEntity(event);
+        if(hasRokushiki()) getRokushikiAbilities().onEntityDamageByUser(event);
 
         if(event.getEntity() instanceof Player && OPhabs.users.containsKey(event.getEntity().getName())) {
             abilityUser damaged = OPhabs.users.get(event.getEntity().getName());
-            if(damaged.getArmor()>0)
+            if(damaged.getArmor()>0){
                 event.setDamage(calculateDamage(damaged, event.getDamage()));
-            else
-                event.setDamage(calculateDamage(+event.getDamage()));
+            }
+            else{
+                event.setDamage(calculateDamage(event.getDamage()));
+            }
         }else{
-            event.setDamage(calculateDamage(+event.getDamage()));
+            event.setDamage(calculateDamage(event.getDamage()));
         }
     }
 
@@ -493,7 +503,6 @@ public class abilityUser {
     public void onUserDamageByEntity(EntityDamageByEntityEvent event) {
         if(hasHaki()) getHakiAbilities().onUserDamageByEntity(event);
         if(hasFruit()) getDFAbilities().onUserDamageByEntity(event);
-
         if(armorBonus > 0)
             event.setDamage(event.getDamage()-armorBonus);
     }
@@ -532,7 +541,7 @@ public class abilityUser {
      */
     public void onPlayerJoin(PlayerJoinEvent event) {
         if(hasFruit()) getDFAbilities().onPlayerJoin(event);
-        if(hasRokushiki()) getRokushikiAbilities().loadPlayer();
+        // if(hasRokushiki()) getRokushikiAbilities().loadPlayer();
         if(hasHaki()) getHakiAbilities().reloadPlayer();
     }
 
@@ -553,6 +562,22 @@ public class abilityUser {
 
     public void onPlayerInteract(PlayerInteractEvent event){
         if(hasRokushiki()) getRokushikiAbilities().onPlayerInteract(event);
+    }
+
+
+    /**
+     * @brief Event listener that activates when a player respawns.
+     * @param event The event that was triggered
+     * @author Vaelico786.
+     */
+    public void onPlayerLogin(PlayerLoginEvent event){
+
+        new BukkitRunnable() {
+            @Override
+            public void run() {
+                reloadStats();
+            }
+        }.runTaskLater(plugin, 5);
     }
 
 }

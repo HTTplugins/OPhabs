@@ -3,6 +3,7 @@ package abilitieSystem;
 import htt.ophabs.OPhabs;
 import org.bukkit.*;
 import org.bukkit.entity.LivingEntity;
+import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.scheduler.BukkitRunnable;
@@ -89,7 +90,7 @@ public class zoan extends df{
             public void run() {
                 if(i > ticks/20)
                     this.cancel();
-                entity.damage(2);
+                entity.damage(2, (Entity) user.getPlayer());
 
                 for(int i = 0; i < 4; i++)
                     if(!entity.isDead()) {

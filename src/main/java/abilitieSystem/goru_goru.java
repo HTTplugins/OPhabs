@@ -57,6 +57,7 @@ public class goru_goru extends paramecia {
         storaged = 0;
         maxStoraged = 1024;
         opened = false;
+        setCanFly(true);
 
         runParticles();
         abilitiesNames.add(nameAbility1 + " (" + storaged + ")");
@@ -575,7 +576,7 @@ public class goru_goru extends paramecia {
             public void run() {
                 Player player = null;
                 if(user != null)
-                    if(user.getPlayer() != null){
+                    if(user.getPlayer() != null && user.getPlayer().isOnline()){
                         player = user.getPlayer();
 
                         ItemStack caster = null;
@@ -613,15 +614,21 @@ public class goru_goru extends paramecia {
      * @author Vaelico786.
      */
     public void summonParticles(Player player) {
-    Location loc = player.getLocation();
-        for (int radius = 1; radius >= 0; radius--) {
-            for (double x = -radius; x <= radius; x += 0.3) {
-                for (double z = -Math.sqrt(radius*radius - x*x); z <= Math.sqrt(radius*radius - x*x); z += 0.3) {
-                    loc.add(x, 0, z);
-                    for (int i = 0; i < 7; i++) {
-                       player.spawnParticle(Particle.REDSTONE, loc, 1, 0, 0, 0, gold);
-                    }
-                    loc.subtract(x, 0, z);
+        Location playerLocation = player.getLocation();
+
+        // Crear el círculo de partículas
+        double radius = 1.1; // Radio del círculo
+        double density = 0.3; // Ajusta la densidad de partículas, valores más bajos llenarán el círculo más densamente
+
+        for (double x = -radius; x <= radius; x += density) {
+            for (double z = -radius; z <= radius; z += density) {
+                double distanceSquared = x * x + z * z;
+                if (distanceSquared <= radius * radius) {
+                    double y = playerLocation.getY(); // Aseguramos que las partículas estén a la altura de los pies del jugador
+
+                    // Mostrar la partícula en la ubicación
+                    Location particleLocation = new Location(player.getWorld(), playerLocation.getX() + x, y, playerLocation.getZ() + z);
+                    player.getWorld().spawnParticle(Particle.REDSTONE, particleLocation, 0, 0, 0, 0, 1,gold);
                 }
             }
         }
@@ -640,7 +647,9 @@ public class goru_goru extends paramecia {
             ItemStack clicked = event.getCurrentItem();
             Boolean obtained = false;
             Inventory inventory = event.getInventory();
+            if(clicked == null) return;
             event.setCancelled(true);
+
             if(clicked.getType() == Material.GOLD_NUGGET){
                 if(storaged >= 0.111*clicked.getAmount()){
                     storaged -= 0.111*clicked.getAmount();
@@ -841,21 +850,23 @@ public class goru_goru extends paramecia {
     public void onEntityDamage(EntityDamageEvent event){
         super.onEntityDamage(event);
         double damage = event.getDamage(), finalDamage;
-        if(storaged > 0){
-            finalDamage = damage/2 - storaged;
-            if(finalDamage <= 0) {
-                finalDamage = 0;
-                storaged = storaged - (int) damage/2;
-                event.setCancelled(true);
-            }
-            else {
+        if(damage > 0){
+            if(storaged > 0){
                 finalDamage = damage/2 - storaged;
-                storaged = 0;
-                event.setDamage(finalDamage);
-            }
-            ((Player) event.getEntity()).spawnParticle(Particle.REDSTONE, event.getEntity().getLocation(), 100, 0, 1, 0, gold);
+                if(finalDamage <= 0) {
+                    finalDamage = 0;
+                    storaged = storaged - (int) damage/2;
+                    event.setCancelled(true);
+                }
+                else {
+                    finalDamage = damage/2 - storaged;
+                    storaged = 0;
+                    event.setDamage(finalDamage);
+                }
+                ((Player) event.getEntity()).spawnParticle(Particle.REDSTONE, event.getEntity().getLocation(), 100, 0, 1, 0, gold);
 
-            abilitiesNames.set(0, nameAbility1 + " (" + storaged + ")");
+                abilitiesNames.set(0, nameAbility1 + " (" + storaged + ")");
+            }
         }
     }
 }

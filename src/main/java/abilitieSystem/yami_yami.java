@@ -173,7 +173,7 @@ public class yami_yami extends logia {
             public void run() {
                 for(LivingEntity livEnt : player.getWorld().getLivingEntities())
                     if (livEnt != player && livEnt.getLocation().getBlock().getRelative(0,-1,0).getType().equals(voidMaterial))
-                        livEnt.damage(damageAmount);
+                        livEnt.damage(damageAmount, (Entity) user.getPlayer());
 
 
                 for(double x = playerLocation.getX() - maxRadiusAmplification; x < playerLocation.getX() + maxRadiusAmplification; x++ ){
@@ -661,7 +661,7 @@ public class yami_yami extends logia {
 
                 for(Entity ent : world.getNearbyEntities(spawnBallPos,2,2,2))
                     if(ent instanceof LivingEntity && !player.equals(ent))
-                        ((LivingEntity)ent).damage(10);
+                        ((LivingEntity)ent).damage(10, (Entity) user.getPlayer());
 
                 direction.add(new Vector(sumX,sumY,sumZ));
 

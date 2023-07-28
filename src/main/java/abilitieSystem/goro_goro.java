@@ -96,7 +96,7 @@ public class goro_goro extends logia {
 
                                 for(Entity ent : player.getWorld().getNearbyEntities(loc,0.5,0.5,0.5))
                                     if (ent instanceof LivingEntity)
-                                            ((LivingEntity) ent).damage(1);
+                                            ((LivingEntity) ent).damage(1,(Entity) user.getPlayer());
 
                             }
                             player.setAllowFlight(true);
@@ -290,7 +290,7 @@ public class goro_goro extends logia {
                     int ticks = 0;
                     @Override
                     public void run() {
-                        ((LivingEntity) ent).damage(0.5);
+                        ((LivingEntity) ent).damage(0.5,(Entity) user.getPlayer());
                         world.spawnParticle(Particle.ELECTRIC_SPARK,ent.getLocation(), 20, 0.5, 0.5, 0.5, 0.1);
                         if(ticks == 5) this.cancel();
                         ticks++;

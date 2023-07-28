@@ -4,6 +4,7 @@ import htt.ophabs.OPhabs;
 
 import org.bukkit.*;
 import org.bukkit.entity.Player;
+import org.bukkit.entity.Entity;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import org.bukkit.event.entity.EntityDamageEvent;
@@ -88,7 +89,7 @@ public class neko_neko_reoparudo extends zoan {
 
                 player.getWorld().getNearbyEntities(player.getLocation(), 1,2,1).forEach(entity -> {
                     if(!entity.getName().equals(player.getName()) && entity instanceof LivingEntity && !golpeadosHabilidades.contains(entity)) {
-                        ((LivingEntity) entity).damage(15);
+                        ((LivingEntity) entity).damage(15, (Entity) user.getPlayer());
                         Sangrado((LivingEntity) entity, 100);
                         golpeadosHabilidades.add((LivingEntity) entity);
                     }
@@ -118,7 +119,7 @@ public class neko_neko_reoparudo extends zoan {
                 Vector dir = new Vector(entity.getLocation().getX() - loc.getX(), entity.getLocation().getY() - loc.getY(),
                         entity.getLocation().getZ() - loc.getZ()).normalize();
 
-                ((LivingEntity) entity).damage(15);
+                ((LivingEntity) entity).damage(15, (Entity) user.getPlayer());
 
                 player.getWorld().playSound(loc, Sound.ENTITY_CAT_PURREOW, 100, 10);
 

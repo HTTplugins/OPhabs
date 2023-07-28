@@ -121,7 +121,7 @@ public class gura_gura extends paramecia {
 
                     // Damage all entities in the area of the wave
                     for (LivingEntity entity : entities)
-                        if (entity != player) entity.damage(earthquakeDamage);
+                        if (entity != player) entity.damage(earthquakeDamage,(Entity) user.getPlayer());
                 }
                 i++;
             }
@@ -162,7 +162,7 @@ public class gura_gura extends paramecia {
         }
         for (Entity entity : player.getWorld().getNearbyEntities(player.getLocation(), waveDistance, waveDistance, waveDistance)) {
             if (entity instanceof LivingEntity)
-                if (entity != player) ((LivingEntity) entity).damage(createWaveDamage);
+                if (entity != player) ((LivingEntity) entity).damage(createWaveDamage,(Entity) user.getPlayer());
             else if (entity instanceof Projectile)
                 entity.setVelocity(new Vector(0, 0, 0));
         }
@@ -322,7 +322,7 @@ public class gura_gura extends paramecia {
             l.getWorld().getNearbyEntities(l, 1, 4, 1).forEach((entity) -> {
                 entity.setVelocity(new Vector(0, 2, 0));
                 if(entity instanceof LivingEntity)
-                    ((LivingEntity) entity).damage(waveDamage);
+                    ((LivingEntity) entity).damage(waveDamage,(Entity) user.getPlayer());
             });
         }
     }
@@ -339,7 +339,7 @@ public class gura_gura extends paramecia {
         l.getWorld().getNearbyEntities(l, 1, 4, 1).forEach((entity) -> {
             if(entity instanceof LivingEntity) {
                 if(!entity.getName().equals(user.getPlayer().getName()))
-                    ((LivingEntity) entity).damage(waveDamage/2);
+                    ((LivingEntity) entity).damage(waveDamage/2,(Entity) user.getPlayer());
             }
         });
 

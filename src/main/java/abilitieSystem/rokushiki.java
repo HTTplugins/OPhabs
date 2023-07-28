@@ -2,7 +2,8 @@ package abilitieSystem;
 
 
 import htt.ophabs.OPhabs;
-import abilitieSystem.auxBiblio;
+import abilitieSystem.OPHLib;
+import abilitieSystem.stat;
 
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
@@ -12,6 +13,7 @@ import org.bukkit.event.player.PlayerToggleSprintEvent;
 import org.bukkit.event.player.PlayerToggleFlightEvent;
 import org.bukkit.event.player.PlayerRespawnEvent;
 import org.bukkit.event.player.PlayerItemDamageEvent;
+import org.bukkit.event.player.PlayerLoginEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.Entity;
@@ -26,10 +28,10 @@ import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.util.Vector;
 
 import java.util.ArrayList;
+import java.util.Map;
+import java.util.HashMap;
 import java.util.Random;
-import java.util.Collection;
-
-
+import java.util.Collection; 
 
 /**
 * @brief Class that contains haki skills --> Ability subtype.
@@ -37,20 +39,19 @@ import java.util.Collection;
 */
 public class rokushiki extends abilities {
     private abilityUser user;
-    private int lGeppo, lTekkai, lShigan, lRankyaku, lSoru, lKamie;
+    private Map<String, stat> stats = new HashMap<>();
     private boolean activeShigan, activeGeppo, activeRankyaku, activeSoru;
     private int geppoJumps, soruDashes;
-    private double expGeppo, expTekkai, expShigan, expRankyaku, expSoru, expKamie;
 
     /**
      * @brief rokushiki constructor.
      * @param user User of the ability.
-     * @param lGeppo Level of geppo.
-     * @param lTekkai Level of tekkai.
-     * @param lShigan Level of shigan.
-     * @param lRankyaku Level of rankyaku.
-     * @param lSoru Level of soru.
-     * @param lKamie Level of kamie.
+     * @param stats.get("Geppo").getLevel() Level of geppo.
+     * @param stats.get("Tekkai").getLevel() Level of tekkai.
+     * @param stats.get("Shigan").getLevel() Level of shigan.
+     * @param stats.get("Rankyaku").getLevel() Level of rankyaku.
+     * @param stats.get("Soru").getLevel() Level of soru.
+     * @param stats.get("Kamie").getLevel() Level of kamie.
      * @param expGeppo Experience of geppo.
      * @param expTekkai Experience of tekkai.
      * @param expShigan Experience of shigan.
@@ -59,52 +60,15 @@ public class rokushiki extends abilities {
      * @param expKamie Experience of kamie.
      * @author Vaelico786.
      */
-    public rokushiki(OPhabs plugin, abilityUser user, int lGeppo, int lTekkai, int lShigan, int lRankyaku, int lSoru, int lKamie, double expGeppo, double expTekkai, double expShigan, double expRankyaku, double expSoru, double expKamie) {
-        super(plugin);
-        this.user = user;
-        this.lGeppo = lGeppo;
-        this.lTekkai = lTekkai;
-        this.lShigan = lShigan;
-
-        this.lRankyaku = lRankyaku;
-        this.lSoru = lSoru;
-        this.lKamie = lKamie;
-        this.expGeppo = expGeppo;
-        this.expTekkai = expTekkai;
-        this.expShigan = expShigan;
-        this.expRankyaku = expRankyaku;
-        this.expSoru = expSoru;
-        this.expKamie = expKamie;
-
-        soruDashes = 0;
-        geppoJumps = 0;
-        activeShigan = true;
-        activeGeppo = true;
-        activeRankyaku = true;
-        activeSoru = true;
-    }
-
 
     /**
      * @brief rokushiki constructor.
      * @param user User of the ability.
      * @author Vaelico786.
      */
-    public rokushiki(OPhabs plugin, abilityUser user) {
-        super(plugin);
-        this.user = user;
-        this.lGeppo = 0;
-        this.lTekkai = 0;
-        this.lShigan = 0;
-        this.lRankyaku = 0;
-        this.lSoru = 0;
-        this.lKamie = 0;
-        this.expGeppo = 0;
-        this.expTekkai = 0;
-        this.expShigan = 0;
-        this.expRankyaku = 0;
-        this.expSoru = 0;
-        this.expKamie = 0;
+    public rokushiki(OPhabs plugin) {
+        super(plugin, 0, 0);
+        this.user = null;
 
         soruDashes = 0;
         geppoJumps = 0;
@@ -114,6 +78,7 @@ public class rokushiki extends abilities {
         activeSoru = true;
     }
     
+
     /**
      * @brief user setter.
      * @author Vaelico786.
@@ -123,299 +88,97 @@ public class rokushiki extends abilities {
     }
 
     /**
-     * @brief Level getter for geppo abilitie.
-     * @return Level of the Geppo skill.
+     * @brief Level getter.
+     * @param ability Ability name.
+     * @return Level of the ability skill.
      * @author Vaelico786.
      */
-    public int getLevelGeppo(){
-        return lGeppo;
-    }
-
-    /**
-     * @brief Level getter for tekkai abilitie.
-     * @return Level of the Tekkai skill.
-     * @author Vaelico786.
-     */
-    public int getLevelTekkai(){
-        return lTekkai;
-    }
-
-    /**
-     * @brief Level getter for shigan abilitie.
-     * @return Level of the Shigan skill.
-     * @author Vaelico786.
-     */
-    public int getLevelShigan(){
-        return lShigan;
-    }
-
-    /**
-     * @brief Level getter for rankyaku abilitie.
-     * @return Level of the Rankyaku skill.
-     * @author Vaelico786.
-     */
-    public int getLevelRankyaku(){
-        return lRankyaku;
-    }
-
-    /**
-     * @brief Level getter for soru abilitie.
-     * @return Level of the Soru skill.
-     * @author Vaelico786.
-     */
-    public int getLevelSoru(){
-        return lSoru;
-    }
-
-    /**
-     * @brief Level getter for kamie abilitie.
-     * @return Level of the Kamie skill.
-     * @author Vaelico786.
-     */
-    public int getLevelKamie(){
-        return lKamie;
-    }
-
-    /**
-     * @brief Experience getter for geppo abilitie.
-     * @return Experience of the Geppo skill.
-     * @author Vaelico786.
-     */
-    public double getExpGeppo(){
-        return expGeppo;
-    }
-
-    /**
-     * @brief Experience getter for tekkai abilitie.
-     * @return Experience of the Tekkai skill.
-     * @author Vaelico786.
-     */
-    public double getExpTekkai(){
-        return expTekkai;
-    }
-
-    /**
-     * @brief Experience getter for shigan abilitie.
-     * @return Experience of the Shigan skill.
-     * @author Vaelico786.
-     */
-    public double getExpShigan(){
-        return expShigan;
-    }
-
-    /**
-     * @brief Experience getter for rankyaku abilitie.
-     * @return Experience of the Rankyaku skill.
-     * @author Vaelico786.
-     */
-    public double getExpRankyaku(){
-        return expRankyaku;
-    }
-
-    /**
-     * @brief Experience getter for soru abilitie.
-     * @return Experience of the Soru skill.
-     * @author Vaelico786.
-     */
-    public double getExpSoru(){
-        return expSoru;
-    }
-
-    /**
-     * @brief Experience getter for kamie abilitie.
-     * @return Experience of the Kamie skill.
-     * @author Vaelico786.
-     */
-    public double getExpKamie(){
-        return expKamie;
-    }
-
-    /**
-     * @brief Geppo learn method.
-     * @author Vaelico786.
-     */
-    public void learnGeppo(){
-        this.lGeppo = 1;
-        user.getPlayer().sendMessage("§b§You have learned Geppo!§b§");
-        user.getPlayer().setAllowFlight(true);
-    }
-
-    /**
-     * @brief Tekkai learn method.
-     * @author Vaelico786.
-     */
-    public void learnTekkai(){
-        this.lTekkai = 1;
-        user.getPlayer().sendMessage("§b§You have learned Tekkai!§b§");
-    }
-
-    /**
-     * @brief Shigan learn method.
-     * @author Vaelico786.
-     */
-    public void learnShigan(){
-        this.lShigan = 1;
-        user.getPlayer().sendMessage("§b§You have learned Shigan!§b§");
-    }
-
-    /**
-     * @brief Rankyaku learn method.
-     * @author Vaelico786.
-     */
-    public void learnRankyaku(){
-        this.lRankyaku = 1;
-        user.getPlayer().sendMessage("§b§You have learned Rankyaku!§b§");
-    }
-
-    /**
-     * @brief Soru learn method.
-     * @author Vaelico786.
-     */
-    public void learnSoru(){
-        this.lSoru = 1;
-        user.getPlayer().sendMessage("§b§You have learned Soru!§b§");
-    }
-
-    /**
-     * @brief Kamie learn method.
-     * @author Vaelico786.
-     */
-    public void learnKamie(){
-        this.lKamie = 1;
-        user.getPlayer().sendMessage("§b§You have learned Kamie!§b§");
-    }
-
-    /**
-     * @brief Geppo level up method.
-     * @param exp Experience to add.
-     * @return true if the level up is done, false if not.
-     * @author Vaelico786.
-     */
-    public boolean levelUpGeppo(double exp){
-        if(this.lGeppo>0){
-            this.expGeppo += exp;
-            if(this.expGeppo >= 100*this.lGeppo/2){
-                this.expGeppo -= 100*this.lGeppo/2;
-                this.lGeppo++;
-                user.getPlayer().sendMessage("§a§Geppo§r§a level up!");
-                user.getPlayer().sendMessage("§a§Geppo§r§a level: "+lGeppo);
-                plugin.getConfig().set("rokushikiPlayers."+user.getPlayerName()+".Geppo.Level", lGeppo);
-                plugin.getConfig().set("rokushikiPlayers."+user.getPlayerName()+".Geppo.Exp", expGeppo);
-
-                return true;
-            }
+    public int getLevel(String ability){
+        if(stats.get(ability)!=null)
+            return stats.get(ability).getLevel();
+        else{
+            return -1;
         }
-        return false;
     }
 
     /**
-     * @brief Tekkai level up method.
-     * @param exp Experience to add.
-     * @return true if the level up is done, false if not.
+     * @brief Experience getter .
+     * @param ability Ability name.
+     * @return Experience of the ability skill.
      * @author Vaelico786.
      */
-    public boolean levelUpTekkai(double exp){
-        if(this.lTekkai>0){
-            this.expTekkai += exp;
-            if(this.expTekkai >= 100*this.lTekkai/2){
-                this.expTekkai -= 100*this.lTekkai/2;
-                this.lTekkai++;
-                user.getPlayer().sendMessage("§a§Tekkai§r§a level up!");
-                user.getPlayer().sendMessage("§a§Tekkai§r§a level: "+lTekkai);
-                plugin.getConfig().set("rokushikiPlayers."+user.getPlayerName()+".Tekkai.Level", lTekkai);
-                plugin.getConfig().set("rokushikiPlayers."+user.getPlayerName()+".Tekkai.Exp", expTekkai);
-
-                return true;
-            }
+    public double getExp(String ability){
+        if(stats.get(ability)!=null)
+            return stats.get(ability).getExp();
+        else{
+            return -1;
         }
-        return false;
+    }
+/**
+     * @brief Level setter.
+     * @param ability Ability name.
+     * @param level level value.
+     * @return Level of the ability skill.
+     * @author Vaelico786.
+     */
+    public void setLevel(String ability, int level){
+        if(stats.get(ability)!=null)
+            stats.get(ability).setLevel(level);
+        else
+            System.out.println("El usuario no posee la habilidad " + ability);
     }
 
     /**
-     * @brief Shigan level up method.
-     * @param exp Experience to add.
-     * @return true if the level up is done, false if not.
+     * @brief Experience setter .
+     * @param ability Ability name.
+     * @param exp experience value.
+     * @return Experience of the ability skill.
      * @author Vaelico786.
      */
-    public boolean levelUpShigan(double exp){
-        if(this.lShigan>0){
-            this.expShigan += exp;
-            if(this.expShigan >= 100*this.lShigan/2){
-                this.expShigan -= 100*this.lShigan/2;
-                this.lShigan++;
-                user.getPlayer().sendMessage("§a§Shigan§r§a level up!");
-                user.getPlayer().sendMessage("§a§Shigan§r§a level: "+lShigan);
-                plugin.getConfig().set("rokushikiPlayers."+user.getPlayerName()+".Shigan.Level", lShigan);
-                plugin.getConfig().set("rokushikiPlayers."+user.getPlayerName()+".Shigan.Exp", expShigan);
+    public void setExp(String ability, double exp){
+        if(stats.get(ability)!=null)
+            stats.get(ability).setExp(exp);
+        else
+            System.out.println("El usuario no posee la habilidad " + ability);
+    }
 
-                return true;
-            }
+    /**
+     * @brief Learn ability method.
+     * @param ability Ability name.
+     * @author Vaelico786.
+     */
+    public void learnAbility(String ability){
+        if(user.getPlayer() != null && user.getPlayer().isOnline()){
+            stats.put(ability, new stat());
+            user.getPlayer().sendMessage("§b§ You have learned " + ability + "!§b§");
+            reloadPlayer();
+        }else{
+            System.out.println("User doesn't exist");
         }
-        return false;
     }
 
     /**
-     * @brief Rankyaku level up method.
+     * @brief level up method.
+     * @param ability Ability name.
      * @param exp Experience to add.
      * @return true if the level up is done, false if not.
      * @author Vaelico786.
      */
-    public boolean levelUpRankyaku(double exp){
-        if(this.lRankyaku>0){
-            this.expRankyaku += exp;
-            if(this.expRankyaku >= 100*this.lRankyaku/2){
-                this.expRankyaku -= 100*this.lRankyaku/2;
-                this.lRankyaku++;
-                user.getPlayer().sendMessage("§a§Rankyaku§r§a level up!");
-                user.getPlayer().sendMessage("§a§Rankyaku§r§a level: "+lRankyaku);
-                plugin.getConfig().set("rokushikiPlayers."+user.getPlayerName()+".Rankyaku.Level", lRankyaku);
-                plugin.getConfig().set("rokushikiPlayers."+user.getPlayerName()+".Rankyaku.Exp", expRankyaku);
+    public boolean levelUpAbility(String ability, double exp){
+        stat current = stats.get(ability);
+        if(current != null && current.getLevel()>0){
+            current.setExp(stats.get(ability).getExp()+exp);
 
-                return true;
-            }
-        }
-        return false;
-    }
+            if(current.getExp() >= 100*current.getLevel()/2){
+                current.setExp(current.getExp() - 100*current.getLevel()/2);
+                current.setLevel(current.getLevel()+1);
+                if(user.getPlayer().isOnline()){
+                    user.getPlayer().sendMessage("§a§ " + ability + "§r§a level up!");
+                    user.getPlayer().sendMessage("§a§ " + ability + "§r§a level: "+current.getLevel());
+                }
 
-    /**
-     * @brief Soru level up method.
-     * @param exp Experience to add.
-     * @return true if the level up is done, false if not.
-     * @author Vaelico786.
-     */
-    public boolean levelUpSoru(double exp){
-        if(this.lSoru>0){
-            this.expSoru += exp;
-            if(this.expSoru >= 100*this.lSoru/2){
-                this.expSoru -= 100*this.lSoru/2;
-                this.lSoru++;
-                user.getPlayer().sendMessage("§a§Soru§r§a level up!");
-                user.getPlayer().sendMessage("§a§Soru§r§a level: "+lSoru);
-                plugin.getConfig().set("rokushikiPlayers."+user.getPlayerName()+".Soru.Level", lSoru);
-                plugin.getConfig().set("rokushikiPlayers."+user.getPlayerName()+".Soru.Exp", expSoru);
-
-                return true;
-            }
-        }
-        return false;
-    }
-
-    /**
-     * @brief Kamie level up method.
-     * @param exp Experience to add.
-     * @return true if the level up is done, false if not.
-     * @author Vaelico786.
-     */
-    public boolean levelUpKamie(double exp){
-        if(this.lKamie>0){
-            this.expKamie += exp;
-            if(this.expKamie >= 100*this.lKamie/2){
-                this.expKamie -= 100*this.lKamie/2;
-                this.lKamie++;
-                user.getPlayer().sendMessage("§a§Kami-e§r§a level up!");
-                user.getPlayer().sendMessage("§a§Kami-e§r§a level: "+lKamie);
-                plugin.getConfig().set("rokushikiPlayers."+user.getPlayerName()+".Kamie.Level", lKamie);
-                plugin.getConfig().set("rokushikiPlayers."+user.getPlayerName()+".Kamie.Exp", expKamie);
+                // plugin.getConfig().set("rokushikiPlayers."+user.getPlayerName()+"." + ability + ".Level", level.get(ability));
+                // plugin.getConfig().set("rokushikiPlayers."+user.getPlayerName()+"." + ability + ".Exp", this.exp.get(ability));
 
                 return true;
             }
@@ -427,65 +190,43 @@ public class rokushiki extends abilities {
      * @brief Loads player's stats from configs.
      * @author Vaelico786.
      */
-    public void loadPlayer(){
-        this.lGeppo = plugin.getConfig().getInt("rokushikiPlayers."+user.getPlayerName()+".Geppo.Level");
-        this.expGeppo = plugin.getConfig().getDouble("rokushikiPlayers."+user.getPlayerName()+".Geppo.Exp");
-
-        this.lTekkai = plugin.getConfig().getInt("rokushikiPlayers."+user.getPlayerName()+".Tekkai.Level");
-        this.expTekkai = plugin.getConfig().getDouble("rokushikiPlayers."+user.getPlayerName()+".Tekkai.Exp");
-        
-        this.lShigan = plugin.getConfig().getInt("rokushikiPlayers."+user.getPlayerName()+".Shigan.Level");
-        this.expShigan = plugin.getConfig().getDouble("rokushikiPlayers."+user.getPlayerName()+".Shigan.Exp");
-
-        
-        this.lRankyaku = plugin.getConfig().getInt("rokushikiPlayers."+user.getPlayerName()+".Rankyaku.Level");
-        this.expRankyaku = plugin.getConfig().getDouble("rokushikiPlayers."+user.getPlayerName()+".Rankyaku.Exp");
-        
-        this.lSoru = plugin.getConfig().getInt("rokushikiPlayers."+user.getPlayerName()+".Soru.Level");
-        this.expSoru = plugin.getConfig().getDouble("rokushikiPlayers."+user.getPlayerName()+".Soru.Exp");
-        
-        this.lKamie = plugin.getConfig().getInt("rokushikiPlayers."+user.getPlayerName()+".Kamie.Level");
-        this.expKamie = plugin.getConfig().getDouble("rokushikiPlayers."+user.getPlayerName()+".Kamie.Exp");
-
-         if(user.getPlayer()!=null){
-            user.getPlayer().sendMessage("§a§lGeppo§r§a level: "+lGeppo);
-            user.getPlayer().sendMessage("§a§lTekkai§r§a level: "+lTekkai);
-            user.getPlayer().sendMessage("§a§lShigan§r§a level: "+lShigan);
-            user.getPlayer().sendMessage("§a§lSoru§r§a level: "+lSoru);
-            user.getPlayer().sendMessage("§a§lRankyaku§r§a level: "+lRankyaku);
-            user.getPlayer().sendMessage("§a§lKami-e§r§a level: "+lKamie);
-            if(lGeppo>0){
-                user.getPlayer().setAllowFlight(true);
-            }
-        }
+    public void loadPlayer(Map<String, stat> stats){
+        this.stats = stats;
+        reloadPlayer();
     }
 
     /**
      * @brief Saves player's stats to configs.
      * @author Vaelico786.
      */
-    public void savePlayer(){
-        plugin.getConfig().set("rokushikiPlayers."+user.getPlayerName()+".Geppo.Level", lGeppo);
-        plugin.getConfig().set("rokushikiPlayers."+user.getPlayerName()+".Geppo.Exp", expGeppo);
-
-        plugin.getConfig().set("rokushikiPlayers."+user.getPlayerName()+".Tekkai.Level", lTekkai);
-        plugin.getConfig().set("rokushikiPlayers."+user.getPlayerName()+".Tekkai.Exp", expTekkai);
-
-        plugin.getConfig().set("rokushikiPlayers."+user.getPlayerName()+".Shigan.Level", lShigan);
-        plugin.getConfig().set("rokushikiPlayers."+user.getPlayerName()+".Shigan.Exp", expShigan);
-
-        plugin.getConfig().set("rokushikiPlayers."+user.getPlayerName()+".Rankyaku.Level", lRankyaku);
-        plugin.getConfig().set("rokushikiPlayers."+user.getPlayerName()+".Rankyaku.Exp", expRankyaku);
-
-        plugin.getConfig().set("rokushikiPlayers."+user.getPlayerName()+".Soru.Level", lSoru);
-        plugin.getConfig().set("rokushikiPlayers."+user.getPlayerName()+".Soru.Exp", expSoru);
-
-        plugin.getConfig().set("rokushikiPlayers."+user.getPlayerName()+".Kamie.Level", lKamie);
-        plugin.getConfig().set("rokushikiPlayers."+user.getPlayerName()+".Kamie.Exp", expKamie);
-
-        plugin.saveConfig();
+    public Map<String, stat> getRokushikiStats(){
+        return stats; 
     }
 
+    /**
+     * @brief Reloads player's stats from configs.
+     * @author Vaelico786.
+     */
+    public void reloadPlayer(){
+        new BukkitRunnable() {
+            @Override
+            public void run() {
+                activeShigan = true;
+                if(getLevel("Geppo")>0 && user.getPlayer() != null && user.getPlayer().isOnline()){
+                    user.getPlayer().setAllowFlight(true);
+                }
+                
+                soruDashes = 0;
+                geppoJumps = 0;
+                activeShigan = true;
+                activeGeppo = true;
+                activeRankyaku = true;
+                activeSoru = true;
+
+            }
+        }.runTaskLater(plugin, 5);
+
+    }
 
     /**
      * @brief Skill action shigan, crit hit with cooldown 10 seconds.
@@ -496,9 +237,9 @@ public class rokushiki extends abilities {
      */
     private double shigan(double damage, Entity entity){
         if(activeShigan){
-            damage = damage * lShigan/3.0 * 1.25;
+            damage = damage * getLevel("Shigan")/3.0 * 1.25;
             activeShigan = false;
-            user.getPlayer().sendMessage("§a§lShigan§r§a");
+            user.getPlayer().sendMessage("§a§" + " Shigan " + "§r§a");
 
             entity.getWorld().spawnParticle(Particle.CRIT, entity.getLocation(), 10);
             //runnable reactive on 10 seconds
@@ -508,7 +249,7 @@ public class rokushiki extends abilities {
                     activeShigan = true;
                 }
             }.runTaskLater(plugin, 200);
-            levelUpShigan(damage);
+            levelUpAbility("Shigan", damage);
 
             return damage;
         }
@@ -516,7 +257,7 @@ public class rokushiki extends abilities {
     }
     
     /**
-     * @brief Skill action rankyaku, level 5 combinated with haki.
+     * @brief Skill action tobu shigan, level 5 combinated with haki.
      * @author Vaelico786.
      */
     public void tobuShigan(){
@@ -534,7 +275,7 @@ public class rokushiki extends abilities {
                     }else{
                         for(Entity e: current.getWorld().getNearbyEntities(current, 1, 1, 1)){
                             if(e instanceof LivingEntity && e != user.getPlayer()){
-                                ((LivingEntity)e).damage(lShigan+user.getHakiLevel());
+                                ((LivingEntity)e).damage(getLevel("Shigan")+user.getHakiLevel(), (Entity) user.getPlayer());
                             }
                         }
                         
@@ -560,13 +301,13 @@ public class rokushiki extends abilities {
      * @author Vaelico786.
      */
     private void soru(){
-        if(soruDashes < lSoru){
+        if(soruDashes < getLevel("Soru")){
             Location loc = user.getPlayer().getLocation();
             loc.setY(loc.getY()-1);
             if(loc.getBlock().getType() != Material.AIR){
                 user.getPlayer().setVelocity(user.getPlayer().getLocation().getDirection().multiply(2));
                 soruDashes++;
-                levelUpSoru(1);
+                levelUpAbility("Soru", 1);
                 new BukkitRunnable() {
                     @Override
                     public void run() {
@@ -578,17 +319,17 @@ public class rokushiki extends abilities {
     }
 
     /**
-     * @brief Skill action geppo, double jump with limit on lGeppo jumps.
+     * @brief Skill action geppo, double jump with limit on stats.get("Geppo").getLevel() jumps.
      * @author Vaelico786.
      */
     private void geppo(){
-        if(geppoJumps < lGeppo){
+        if(geppoJumps < getLevel("Geppo")){
             Location loc = user.getPlayer().getLocation();
             loc.setY(loc.getY()-1);
             user.getPlayer().setVelocity(user.getPlayer().getLocation().getDirection().multiply(0.5).setY(1));
             user.getPlayer().getWorld().spawnParticle(Particle.CLOUD, loc, 10, 0, 0, 0, 0.1);
             geppoJumps++;
-            levelUpGeppo(1);
+            levelUpAbility("Geppo", 1);
             new BukkitRunnable() {
                 @Override
                 public void run() {
@@ -617,7 +358,7 @@ public class rokushiki extends abilities {
      */
     private void rankyaku(){
         if(activeRankyaku){
-            user.getPlayer().sendMessage("§a§lRankyaku§r§a");
+            user.getPlayer().sendMessage("§a§" + getLevel("Rankyaku") + "§r§a");
 
             new BukkitRunnable() {
                 Vector direction = user.getPlayer().getEyeLocation().getDirection().normalize().multiply(2);
@@ -670,7 +411,7 @@ public class rokushiki extends abilities {
                     if(!sentinel){
                         for(Entity e: entities){
                             if(e instanceof LivingEntity && e != user.getPlayer()){
-                                ((LivingEntity)e).damage(5+lRankyaku/2);
+                                ((LivingEntity)e).damage(5+getLevel("Rankyaku")/2, (Entity) user.getPlayer());
                             }
                         }
                         
@@ -696,8 +437,8 @@ public class rokushiki extends abilities {
     * @param event The event that was triggered
     * @author Vaelico786.
     */
-    public void onUserDamageAnotherEntity(EntityDamageByEntityEvent event){
-        if(lShigan>=1){
+    public void onEntityDamageByUser(EntityDamageByEntityEvent event){
+        if(getLevel("Shigan")>=1){
             if(((Player)event.getDamager()).getInventory().getItemInMainHand().getType() == Material.AIR){
                 event.setDamage(shigan(event.getDamage(), event.getEntity()));
             }
@@ -711,7 +452,7 @@ public class rokushiki extends abilities {
      */
     public void onPlayerToggleSprint(PlayerToggleSprintEvent event){
         if(event.isSprinting()){
-            if(lSoru>=1){
+            if(getLevel("Soru")>=1){
                 soru();
             }
         }
@@ -723,9 +464,9 @@ public class rokushiki extends abilities {
      * @author Vaelico786.
      */
     public void onPlayerToggleFlight(PlayerToggleFlightEvent event){
-        if(!user.hasFruit() && user.getPlayer().getGameMode() == GameMode.SURVIVAL){
+        if((!user.hasFruit() || (user.hasFruit() && !user.getDFAbilities().getCanFly()))  && user.getPlayer().getGameMode() == GameMode.SURVIVAL){ 
             if(event.isFlying()){
-                if(lGeppo>=1){
+                if(getLevel("Geppo")>=1){
                     geppo();
                 }
                 event.setCancelled(true);
@@ -740,17 +481,17 @@ public class rokushiki extends abilities {
     */
     public void onEntityDamage(EntityDamageEvent event){
         if(event instanceof EntityDamageByEntityEvent){
-            if(lTekkai>=1){
-                if(event.getDamage()<=lTekkai){
+            if(getLevel("Tekkai")>=1){
+                if(event.getDamage()<=getLevel("Tekkai")){
                     event.setCancelled(true);
                 }
-                levelUpTekkai(0.5);
+                levelUpAbility("Tekkai", 0.5);
             }
             else{
-                if(lKamie>=1){
+                if(getLevel("Kamie")>=1){
                     //If the entity its not a player then a probability based on player level will be used
                     Random rand = new Random();
-                    if(rand.nextInt(200)/5 <= lKamie){
+                    if(rand.nextInt(200)/5 <= getLevel("Kamie")){
                         event.setCancelled(true);
                     }
                 }
@@ -768,14 +509,14 @@ public class rokushiki extends abilities {
             if(!event.getPlayer().isSneaking()){
                 if(event.getPlayer().getInventory().getItemInMainHand().getType() == Material.AIR){
                     if(user.hasHaki()){
-                        if(lShigan>=3 && user.getHakiLevel()>=5){
+                        if(getLevel("Shigan")>=3 && user.getHakiLevel()>=5){
                             tobuShigan();
                         }
                     }
                 }
             }else{
                 if(event.getPlayer().getInventory().getItemInMainHand().getType() == Material.AIR){
-                    if(lRankyaku>=1 && user.getHakiLevel()>=1){
+                    if(getLevel("Rankyaku")>=1 && user.getHakiLevel()>=1){
                         rankyaku();
                     }
                 }
@@ -793,11 +534,10 @@ public class rokushiki extends abilities {
         new BukkitRunnable() {
             @Override
             public void run() {
-                if(lGeppo>=1){
-                    user.getPlayer().setAllowFlight(true);
-                }
+                reloadPlayer();
             }
         }.runTaskLater(plugin, 5);
     }
+    
 
 }

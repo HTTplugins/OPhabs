@@ -29,6 +29,7 @@ public abstract class logia extends df{
     public logia(OPhabs plugin, double damageBonus, double armorBonus, Particle element, int id, String fruitCommandName, String fruitItemName, String casterName, double casterDamage, double casterSpeed) {
         super(plugin, damageBonus, armorBonus, id, fruitCommandName, fruitItemName, casterName, casterDamage, casterSpeed);
         this.element = element;
+        setCanFly(true);
     }
 
     /**

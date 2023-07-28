@@ -27,6 +27,7 @@ public class df extends abilities {
     protected coolDown cd;
     protected devilFruit fruit;
     public boolean active;
+    public boolean canFly;
     
 
     // *********************************************** CONSTRUCTORS *******************************************************
@@ -45,6 +46,7 @@ public class df extends abilities {
         this.actual = 0;
         this.commandName = fruitCommandName;
         this.active = true;
+        this.canFly = false;
         fruit =  new devilFruit(id, fruitCommandName, fruitItemName, casterName, casterDamage, casterSpeed);
     }
 
@@ -67,20 +69,29 @@ public class df extends abilities {
     }
 
     /**
-     * @brief Sets fruit's user.
-     * @author Vaelico786.
-     */
-    public void setUser(abilityUser user) {
-        this.user = user;
-    }
-
-    /**
      * @brief Gets fruit's name.
      * @author Vaelico786.
      */
     public String getName() {
         return commandName;
     }
+
+     /**
+     * @brief Gets fly capability.
+     * @author Vaelico786.
+     */
+    public boolean getCanFly() {
+        return canFly;
+    }   
+
+    /**
+     * @brief Sets fly capability.
+     * @author Vaelico786.
+     */
+    public void setCanFly(boolean canFly) {
+        this.canFly = canFly;
+    }
+
 
     // *********************************************** PASSIVES *******************************************************
 

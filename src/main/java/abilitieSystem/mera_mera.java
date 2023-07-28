@@ -3,6 +3,7 @@ package abilitieSystem;
 import castSystem.castIdentification;
 import htt.ophabs.OPhabs;
 import org.bukkit.*;
+import org.bukkit.entity.Entity;
 import org.bukkit.block.Block;
 import org.bukkit.entity.*;
 import org.bukkit.event.entity.*;
@@ -161,51 +162,51 @@ public class mera_mera extends logia {
                     RADIO_PARTICULAS, RADIO_PARTICULAS, RADIO_PARTICULAS);
     }
 
-    public void onPlayerDeath(PlayerDeathEvent event) {
-        Player jugador = event.getEntity();
+    // public void onPlayerDeath(PlayerDeathEvent event) {
+    //     Player jugador = event.getEntity();
 
-        if(comprobarUser(jugador)) {
-            World mundo = jugador.getWorld();
-            Location loc = jugador.getLocation();
+    //     if(comprobarUser(jugador)) {
+    //         World mundo = jugador.getWorld();
+    //         Location loc = jugador.getLocation();
 
-            if(BERSERK) {
-                event.setDeathMessage("\n\n" + "MERA MERA USER: BY THE POWER OF THE UNDERWORLD... DESTROY THEM!! FROM NOW ON, don't u dare to " +
-                        " feed yourself so much...!! \n");
-                event.setKeepInventory(true);
-                event.setKeepLevel(true);
+    //         if(BERSERK) {
+    //             event.setDeathMessage("\n\n" + "MERA MERA USER: BY THE POWER OF THE UNDERWORLD... DESTROY THEM!! FROM NOW ON, don't u dare to " +
+    //                     " feed yourself so much...!! \n");
+    //             event.setKeepInventory(true);
+    //             event.setKeepLevel(true);
 
-                mundo.createExplosion(loc, ExplosionRadius * ExplosionRadius);
-                createAbilitie1Effect(loc);
-                mundo.playSound(jugador, Sound.MUSIC_NETHER_SOUL_SAND_VALLEY, SoundCategory.HOSTILE, ExplosionRadius * ExplosionRadius * ExplosionRadius,
-                        100);
+    //             mundo.createExplosion(loc, ExplosionRadius * ExplosionRadius);
+    //             createAbilitie1Effect(loc);
+    //             mundo.playSound(jugador, Sound.MUSIC_NETHER_SOUL_SAND_VALLEY, SoundCategory.HOSTILE, ExplosionRadius * ExplosionRadius * ExplosionRadius,
+    //                     100);
 
-                jugador.setHealth(RESPAWN_HEALTH);
-                jugador.setFoodLevel(RESPAWN_FOOD);
-                BerserkEffects(jugador);
+    //             jugador.setHealth(RESPAWN_HEALTH);
+    //             jugador.setFoodLevel(RESPAWN_FOOD);
+    //             BerserkEffects(jugador);
 
-                new BukkitRunnable(){
-                    @Override
-                    public void run(){
-                        if(BERSERK)
-                            cancelTask();
+    //             new BukkitRunnable(){
+    //                 @Override
+    //                 public void run(){
+    //                     if(BERSERK)
+    //                         cancelTask();
 
-                        mundo.spawnParticle(PARTICULA_FUEGO, jugador.getLocation(), N_PARTICULAS, RADIO_PARTICULAS,
-                                            RADIO_PARTICULAS, RADIO_PARTICULAS, 0.05);
-                    }
-                    public void cancelTask(){
-                        Bukkit.getScheduler().cancelTask(this.getTaskId());
-                    }
-                }.runTaskTimer(plugin, 0, 5);
+    //                     mundo.spawnParticle(PARTICULA_FUEGO, jugador.getLocation(), N_PARTICULAS, RADIO_PARTICULAS,
+    //                                         RADIO_PARTICULAS, RADIO_PARTICULAS, 0.05);
+    //                 }
+    //                 public void cancelTask(){
+    //                     Bukkit.getScheduler().cancelTask(this.getTaskId());
+    //                 }
+    //             }.runTaskTimer(plugin, 0, 5);
 
-                event.getDrops().clear();
-                BERSERK = false;
-            } else {
-                event.setKeepInventory(false);
-                event.setKeepLevel(false);
-                BERSERK = true;
-            }
-        }
-    }
+    //             event.getDrops().clear();
+    //             BERSERK = false;
+    //         } else {
+    //             event.setKeepInventory(false);
+    //             event.setKeepLevel(false);
+    //             BERSERK = true;
+    //         }
+    //     }
+    // }
 
     public void onEntityPickupItem(EntityPickupItemEvent event) {
         Item objeto = event.getItem();
@@ -339,7 +340,7 @@ public class mera_mera extends logia {
     public void efectoFaiyabu(World mundo, Location loc, Player player) {
         mundo.getNearbyEntities(loc, 1, 1, 1).forEach(entity -> {
             if(!entity.getName().equals(player.getName()) && entity instanceof LivingEntity && !golpeadosFaiyabu.contains((LivingEntity) entity)) {
-                ((LivingEntity) entity).damage(10);
+                ((LivingEntity) entity).damage(10, (Entity) user.getPlayer());
                 entity.setFireTicks(100);
                 mundo.createExplosion(entity.getLocation().add(1, 1, 1), ExplosionRadius/2);
                 mundo.playSound(entity.getLocation(), Sound.ENTITY_DRAGON_FIREBALL_EXPLODE, 100, 10);
@@ -409,7 +410,7 @@ public class mera_mera extends logia {
 
         mundo.getNearbyEntities(loc, 4, 4, 4).forEach(entity -> {
             if(!entity.getName().equals(player.getName()) && entity instanceof LivingEntity) {
-                ((LivingEntity) entity).damage(5);
+                ((LivingEntity) entity).damage(5,(Entity) user.getPlayer());
                 entity.setFireTicks(50);
             }
         });

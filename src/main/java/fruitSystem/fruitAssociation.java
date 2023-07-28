@@ -56,7 +56,6 @@ public class fruitAssociation implements Listener {
         ArrayList<String> values = new ArrayList<>();
         String aux;
         for(int i = 0; i < abilitiesList.size(); i++) {
-            System.out.println(abilitiesList.get(i).getName());
             aux = fileSystem.getFruitLinkedUser(abilitiesList.get(i).getName());
             if(aux == null) {
                 fileSystem.updateFruitLinkedUser(abilitiesList.get(i).getName(),"none");
@@ -81,7 +80,7 @@ public class fruitAssociation implements Listener {
      * @author Vaelico786.
      */
     public void addDevilFruitPlayer(String name, df ability) {
-        abilityUser user = new abilityUser(name);
+        abilityUser user = new abilityUser(name, plugin);
         user.setFruit(ability);
         dfPlayers.put(name, user);
         if(users.containsKey(name)){

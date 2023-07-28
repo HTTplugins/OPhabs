@@ -66,7 +66,6 @@ public final class OPhabs extends JavaPlugin {
         saveDefaultConfig();
         saveConfig();
         fileSystem.loadFileSystem();
-        System.out.println("Pasada declaracion, n: " + abilitiesList.size());
         //--------------
         //FruitSystem
         fruitAssociation fAssociation = new fruitAssociation(this);
@@ -81,7 +80,7 @@ public final class OPhabs extends JavaPlugin {
 
         //
         //RokushikiSystem
-        rokushikiAssociation rokushiki = new rokushikiAssociation(this, users);
+        rokushikiAssociation rokushiki = new rokushikiAssociation(this);
         getServer().getPluginManager().registerEvents(rokushiki, this);
 
         //--------------
@@ -129,8 +128,8 @@ public final class OPhabs extends JavaPlugin {
      * @author RedRiotTank, Vaelico786.
      */
     public void registerCommands(ArrayList<df> abilitiesList, hakiAssociation haki, rokushikiAssociation rokushiki){
-        Objects.requireNonNull(this.getCommand("oph")).setExecutor(new oph(this, abilitiesList, haki, rokushiki));
-        Objects.requireNonNull(this.getCommand("oph")).setTabCompleter(new oph(this, abilitiesList, haki, rokushiki));
+        Objects.requireNonNull(this.getCommand("oph")).setExecutor(new oph(this, haki, rokushiki));
+        Objects.requireNonNull(this.getCommand("oph")).setTabCompleter(new oph(this, haki, rokushiki));
         Objects.requireNonNull(this.getCommand("weaponShop")).setExecutor(new weaponShop(this));
     }
 }

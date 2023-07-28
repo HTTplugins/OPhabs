@@ -174,7 +174,7 @@ public class ishi_ishi extends paramecia {
                                     currentPL.getBlock().setType(Material.POINTED_DRIPSTONE);
                                     currentPL.getWorld().getNearbyEntities(currentPL,1,1,1).forEach(entity -> {
                                         if(entity instanceof LivingEntity){
-                                            ((LivingEntity) entity).damage(5);
+                                            ((LivingEntity) entity).damage(5,(Entity) user.getPlayer());
                                         }
                                     });
                                 }
@@ -190,7 +190,7 @@ public class ishi_ishi extends paramecia {
                                     currentPL1.getBlock().setType(Material.POINTED_DRIPSTONE);
                                     currentPL1.getWorld().getNearbyEntities(currentPL1,1,1,1).forEach(entity -> {
                                         if(entity instanceof LivingEntity) {
-                                            ((LivingEntity) entity).damage(5);
+                                            ((LivingEntity) entity).damage(5,(Entity) user.getPlayer());
                                         }
                                     });
                                 }
@@ -207,7 +207,7 @@ public class ishi_ishi extends paramecia {
                                     currentPL2.getBlock().setType(Material.POINTED_DRIPSTONE);
                                     currentPL2.getWorld().getNearbyEntities(currentPL2,1,1,1).forEach(entity -> {
                                         if(entity instanceof LivingEntity){
-                                            ((LivingEntity) entity).damage(5);
+                                            ((LivingEntity) entity).damage(5,(Entity) user.getPlayer());
                                         }
                                     });
                                 }
@@ -479,6 +479,7 @@ public class ishi_ishi extends paramecia {
 
         if(opened) {
             ItemStack clicked = event.getCurrentItem();
+            if(clicked == null) return;
             event.setCancelled(true);
             if(clicked.getType() == Material.STONE) {
                 if(storaged >= 1*clicked.getAmount()) {
