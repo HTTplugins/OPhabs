@@ -53,7 +53,7 @@ public abstract class logia extends df{
         if(active){
             if (event.getEntity() instanceof Player) {
                 player = (Player) event.getEntity();
-                if (!(player.getLocation().getBlock().isLiquid()) && (castIdentification.itemIsCaster(player.getInventory().getItemInMainHand(), user)) || castIdentification.itemIsCaster(player.getInventory().getItemInOffHand(), user)) {
+                if (!(player.getLocation().getBlock().isLiquid()) && (castIdentification.itemIsCaster(player.getInventory().getItemInMainHand(), user) || castIdentification.itemIsCaster(player.getInventory().getItemInOffHand(), user) || logiaBodyON)) {
                     event.setCancelled(true);
                     player.getWorld().spawnParticle(element,player.getLocation(), 10, 0, 1, 0, 0.1);
                 }

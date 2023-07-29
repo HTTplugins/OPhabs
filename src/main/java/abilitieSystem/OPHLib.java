@@ -11,7 +11,7 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.util.RayTraceResult;
 import org.bukkit.util.Vector;
-import org.bukkit.util.EulerAngle;
+
 
 
 import static java.lang.Math.*;
@@ -167,6 +167,52 @@ public class OPHLib {
                 for(Entity ent : world.getNearbyEntities(partLoc,2,2,2))
                     if(ent instanceof LivingEntity && !player.equals(ent))
                         ((LivingEntity)ent).damage(100,(Entity) player);
+
+            world.spawnParticle(particle,partLoc,0,0,0,0,dustOption);
+        }
+    }
+
+    /**
+     * @brief Creates a circle of particles in the direction the player is looking at.
+     * @param radius Radius of the circle.
+     * @param separation Separation between the particles.
+     * @param prof How far away from the player you want the circle to appear.
+     * @param dustOption Dust Option of the particle. Set it to null if your particle don't use dust options.
+     * @param particle ParticleType of the circle.
+     * @param player player that generates the circle next to.
+     * @param loc center of the circle
+     *
+     * @see OPHLib#circleEyeVector()
+     * @author RedRiotTank / Vaelico786
+     */
+    public static void circleEyeVector(double radius, double separation, double prof, Particle.DustOptions dustOption,
+                                       Particle particle, Player player, Location loc) {
+
+        double x,y, xY, yY, zY, xX, yX, zX,xL,yL,zL;
+        final double yaw = -player.getLocation().getYaw(),
+                pitch = player.getLocation().getPitch();
+        final World world = player.getWorld();
+
+        for(double i=0; i<2*PI; i+= separation) {
+            x = radius*cos(i);
+            y = radius*sin(i);
+
+            //Vertically (Arround X)
+            xX = x;
+            yX = cos(toRadians(pitch))* y - sin(toRadians(pitch))* prof;
+            zX = sin(toRadians(pitch))* y + cos(toRadians(pitch))* prof;
+
+            //horizontally (Arround Y)
+            xY = cos(toRadians(yaw))*xX + sin(toRadians(yaw))*zX;
+            yY =  yX;
+            zY = -sin(toRadians(yaw))*xX + cos(toRadians(yaw))*zX;
+
+            //Final (sum of player position)
+            xL = loc.getX() + xY;
+            yL = 0.3 + loc.getY() + yY;
+            zL = loc.getZ() + zY;
+
+            Location partLoc = new Location(world, xL, yL, zL);
 
             world.spawnParticle(particle,partLoc,0,0,0,0,dustOption);
         }
@@ -358,15 +404,14 @@ public class OPHLib {
      * @brief Generates an item on an invisible invulnerable stand
      * @author Vaelico786.
      */
-    public static ArmorStand generateCustomFloatingItem(Location loc, ItemStack item, EulerAngle pose, boolean gravity){
+    public static ArmorStand generateCustomFloatingItem(Location loc, ItemStack item, boolean gravity){
             ArmorStand armorStand = loc.getWorld().spawn(loc, ArmorStand.class);
             // Establecer el objeto con Custom Model Data en la mano del armor stand
             armorStand.getEquipment().setHelmet(item);
 
-            armorStand.setRightArmPose(pose);
             armorStand.setVisible(false);
             armorStand.setGravity(gravity);
-            armorStand.setArms(true);
+            armorStand.setArms(false);
             armorStand.setInvulnerable(true);
 
             return armorStand;

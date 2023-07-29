@@ -120,7 +120,7 @@ public class zoan extends df{
 
         entity.getWorld().spawnParticle(Particle.CLOUD, entity.getLocation().add(0,1,0), 100, 1, 1, 1, 1);
         entity.getNearbyEntities(10, 10, 10).forEach(ent -> {
-            if(ent instanceof LivingEntity && entity!=user.getPlayer()) {
+            if(ent instanceof LivingEntity && ent!=entity) {
                 ((LivingEntity) ent).damage(damage,entity);
                 effects.forEach(effect -> ((LivingEntity) ent).addPotionEffect(effect));
             }

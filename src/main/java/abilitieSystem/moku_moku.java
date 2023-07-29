@@ -11,25 +11,45 @@ import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.entity.Vex;
+import org.bukkit.entity.ArmorStand;
+import org.bukkit.event.entity.EntityAirChangeEvent;
+import org.bukkit.event.entity.EntityDamageEvent;
+import org.bukkit.util.Vector;;
 import java.util.Random;
 
 import static java.lang.Math.*;
+import java.util.ArrayList;
 
 public class moku_moku extends logia {
-    final int numMaxSmokers=4;
+    final int numMaxSmokers=4, smokeWorldAmplitude=7, smokeWorldTicks=400;
+    static ArrayList<LivingEntity> smokeWorldEntities = new ArrayList<>();
+    static boolean smokeWorldON = false;
+
     public int numSmokers=0;
+    private ItemStack fist;
+    
 
     public moku_moku(OPhabs plugin) {
         super(plugin, 0, 0, Particle.CLOUD, 4, "moku_moku", "Moku Moku no Mi", "Moku Moku caster", 5, 1.9);
 
-        abilitiesNames.add("SmokeBody");
+        abilitiesNames.add("Smoke Body");
         abilitiesCD.add(0);
-        abilitiesNames.add("SummonSmoker");
+        abilitiesNames.add("Summon Smoker");
         abilitiesCD.add(0);
+        abilitiesNames.add("Smoke Punch");
+        abilitiesCD.add(0);
+        abilitiesNames.add("Smoke World");
+        abilitiesCD.add(0);
+
+        fist = new ItemStack(castIdentification.castMaterial);
+        ItemMeta itemMeta = fist.getItemMeta();
+        itemMeta.setCustomModelData(getFruit().getCustomModelDataId()); // Establecer el Custom Model Data
+        fist.setItemMeta(itemMeta);
         runParticles();
     }
 
@@ -46,9 +66,22 @@ public class moku_moku extends logia {
         }
     }
 
+    public void ability3() {
+        if(abilitiesCD.get(2)==0) {
+            smokePunch(user.getPlayer().getLocation().add(user.getPlayer().getEyeLocation().clone().getDirection()).add(new Vector(0,0.7,0)));
+            abilitiesCD.set(2, 2);
+        }
+    }
+
+    public void ability4() {
+        if(abilitiesCD.get(3)==0) {
+            smokeWorld();
+            abilitiesCD.set(3, 30);
+        }
+    }
+
     public void toggleFly(Player player) {
-        if (logiaBodyON){
-        } else {
+        if (!logiaBodyON){
             player.setAllowFlight(false);
             player.setFlying(false);
         }
@@ -115,8 +148,10 @@ public class moku_moku extends logia {
                             player.setAllowFlight(true);
 
                         } else {
-                            player.setAllowFlight(false);
-                            player.setFlying(false);
+                            if(!logiaBodyON){
+                                player.setAllowFlight(false);
+                                player.setFlying(false);
+                            }
                         }
                     }
                 i+= 0.5;
@@ -211,6 +246,131 @@ public class moku_moku extends logia {
                     Bukkit.getScheduler().cancelTask(this.getTaskId());
                 }
             }.runTaskTimer(plugin, 0, 3); 
+        }
+    }
+
+
+
+    /**
+     * @brief CORE ABILITY 3: "Smoke Punch". Unleash a punch in front of the player that deals extra damage.
+     * @author Vaelico786.
+     */
+    public void smokePunch(Location loc) {
+
+            ArmorStand armorStand = OPHLib.generateCustomFloatingItem(user.getPlayer().getLocation().add(0,-0.5,0), fist, false);
+
+
+        new BukkitRunnable(){
+
+            // Configurar las propiedades del armor stand
+
+            Entity entity = armorStand;
+            Location origin=entity.getLocation();
+
+
+            int ticks = 0;
+            boolean first = true;
+            Vector dir = user.getPlayer().getEyeLocation().getDirection(), aux;
+            double distancePerTick = 1.0 / 2.0, distanceFromPlayer = 0;
+            
+            // Calcula la distancia total que el ArmorStand debe recorrer
+            @Override
+            public void run() {
+                distanceFromPlayer+=distancePerTick;
+                Vector movement = dir.clone().multiply(distanceFromPlayer);
+                entity.teleport(origin.clone().add(movement));
+
+                entity.getWorld().getNearbyEntities(entity.getLocation(), 2,2,2).forEach(ent -> {
+                    if(ent instanceof LivingEntity && ent != user.getPlayer() && entity != ent && !(ent instanceof ArmorStand) && !(ent instanceof Vex && ent.getCustomName().equals("Smoker"))) {
+                        ((LivingEntity) ent).damage(14,(Entity) user.getPlayer());
+                    }
+                });
+
+                aux = new Vector((entity.getLocation().getX()-origin.getX()), (entity.getLocation().getY()-origin.getY()), (entity.getLocation().getZ()-origin.getZ()));
+
+
+
+                for(double i = -2; i<0; i+=0.2)
+                    OPHLib.circleEyeVector
+                        (0.4,1,i,null,element,user.getPlayer(), entity.getLocation().add(0,1,0));
+
+
+                if (entity.isDead()) {
+                    entity.getLocation().getBlock().setType(Material.AIR);
+                    cancelTask();
+                }
+
+                if (aux.length() < 0.5 && ticks>10 || ticks > 20) {
+                    entity.remove();
+                    cancelTask();
+                }
+                
+                ticks++;
+            }
+            public void cancelTask() {
+                Bukkit.getScheduler().cancelTask(this.getTaskId());
+            }
+        }.runTaskTimer(plugin, 2, 1);
+    }
+
+
+    public void smokeWorld(){
+        int period = 5;
+        smokeWorldON=true;
+        Player player = user.getPlayer();
+        new BukkitRunnable() {
+            int tickCount=0;
+            @Override
+            public void run() {
+
+                smokeWorldEntities.clear();
+                if ( player.isDead() || tickCount > smokeWorldTicks / period){
+                    cancelTask();
+                }
+
+                player.getWorld().spawnParticle(element,
+                                                player.getLocation(), 
+                                                400, 
+                                                smokeWorldAmplitude, smokeWorldAmplitude/2, smokeWorldAmplitude, 
+                                                0);
+
+                player.getNearbyEntities(smokeWorldAmplitude, smokeWorldAmplitude/2, smokeWorldAmplitude).forEach(ent -> {
+                    if(ent instanceof LivingEntity && ent != player){
+                        // ((LivingEntity)ent).addPotionEffect(new PotionEffect(PotionEffectType.SLOW, period*2, 3, false));
+                        ((LivingEntity)ent).addPotionEffect(new PotionEffect(PotionEffectType.WEAKNESS, period+2, 2, false));
+                        smokeWorldEntities.add((LivingEntity) ent);
+
+
+                        // Redice air
+                        if(((LivingEntity)ent).getRemainingAir() == ((LivingEntity) ent).getMaximumAir())
+                            ((LivingEntity) ent).setRemainingAir(300);
+                    }
+
+                });
+
+                tickCount++;
+            }
+            public void cancelTask() {
+                smokeWorldON=false;
+                Bukkit.getScheduler().cancelTask(this.getTaskId());
+            }
+        }.runTaskTimer(plugin, 0, period); 
+    }
+
+    public static void onEntityAirChangeEvent(EntityAirChangeEvent event){
+        if(smokeWorldEntities.contains(event.getEntity()) && event.getAmount()>0){
+            if(smokeWorldON){
+                LivingEntity entity = (LivingEntity) event.getEntity();
+                if(entity.getRemainingAir() == 0){
+                    entity.damage(1);
+                    event.setCancelled(true);
+                }
+                else{
+                    event.setAmount(entity.getRemainingAir()-2);
+                }
+            }
+            else
+                smokeWorldEntities.clear();
         }
     }
 }

@@ -220,7 +220,6 @@ public class caster implements Listener {
     @EventHandler
     public void onEntityChangeBlock(EntityChangeBlockEvent event){
         yami_yami.onEntityChangeBlock(event);
-        bane_bane.onEntityChangeBlock(event);
     }
  
     /**
@@ -355,7 +354,7 @@ public class caster implements Listener {
                 
                 if (event.getItem() != null && castIdentification.itemIsCaster(event.getItem(), user) && user.hasFruit()) {
                     if (clickedBlock != null && clickedBlock.getType() == Material.ITEM_FRAME) {
-                    event.setCancelled(true); // Cancelar la colocación del objeto en el item frame
+                        event.setCancelled(true); // Cancelar la colocación del objeto en el item frame
                     }
                 }
             }
@@ -386,6 +385,11 @@ public class caster implements Listener {
             abilityUser user = users.get(event.getPlayer().getName());
             user.onPlayerLogin(event);
         }
+    }
+
+    @EventHandler
+    public void onEntityAirChangeEvent(EntityAirChangeEvent event){
+        moku_moku.onEntityAirChangeEvent(event);
     }
     
 }

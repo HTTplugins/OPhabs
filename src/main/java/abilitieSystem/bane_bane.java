@@ -14,7 +14,6 @@ import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.util.Vector;
 import org.bukkit.event.entity.EntityChangeBlockEvent;
-import org.bukkit.util.EulerAngle;
 import org.bukkit.attribute.AttributeModifier;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.inventory.EquipmentSlot;
@@ -54,14 +53,7 @@ public class bane_bane extends paramecia {
         // Crear el ItemStack con el objeto "raw iron"
         glove = new ItemStack(castIdentification.castMaterial);
         ItemMeta itemMeta = glove.getItemMeta();
-        itemMeta.setCustomModelData(getFruit().getCustomModelDataId()); // Establecer el Custom Model Data a 1
-
-        //Sometimes on ability 2 player changes the caster with this object so set the same meta for fix it
-        itemMeta.setDisplayName(fruit.getCasterName());
-        AttributeModifier modifier = new AttributeModifier(UUID.randomUUID(), "generic.attackDamage", fruit.getCasterDamage(), AttributeModifier.Operation.ADD_NUMBER, EquipmentSlot.HAND);
-        itemMeta.addAttributeModifier(Attribute.GENERIC_ATTACK_DAMAGE, modifier);
-        AttributeModifier modifier2 = new AttributeModifier(UUID.randomUUID(), "generic.attackSpeed", fruit.getCasterSpeed(), AttributeModifier.Operation.ADD_NUMBER, EquipmentSlot.HAND);
-        itemMeta.addAttributeModifier(Attribute.GENERIC_ATTACK_SPEED, modifier2);
+        itemMeta.setCustomModelData(getFruit().getCustomModelDataId()); // Establecer el Custom Model Data
         glove.setItemMeta(itemMeta);
     }
 
@@ -149,7 +141,7 @@ public class bane_bane extends paramecia {
      */
     public void resortPunch(Location loc) {
 
-            ArmorStand armorStand = OPHLib.generateCustomFloatingItem(user.getPlayer().getLocation().add(0,-0.5,0), glove, new EulerAngle(Math.toRadians(-90), 0, 0), false);
+            ArmorStand armorStand = OPHLib.generateCustomFloatingItem(user.getPlayer().getLocation().add(0,-0.5,0), glove, false);
 
 
         new BukkitRunnable(){
@@ -168,11 +160,6 @@ public class bane_bane extends paramecia {
             // Calcula la distancia total que el ArmorStand debe recorrer
             @Override
             public void run() {
-                if(first){
-                    entity.setGravity(false);
-                    // entity.setVelocity(dir);
-                    first=false;
-                }
                 distanceFromPlayer+=distancePerTick;
                 Vector movement = dir.clone().multiply(distanceFromPlayer);
                 entity.teleport(origin.clone().add(movement));
@@ -189,27 +176,22 @@ public class bane_bane extends paramecia {
                 if(!back){
                     Location temp = entity.getLocation().add(0,1,0);
                     for(double i = -2; i<0; i+=0.2)
-                        circleEyeVector(0.4,0.4,i,particle, Particle.REDSTONE,user.getPlayer(), temp);
+                        OPHLib.circleEyeVector(0.4,0.4,i,particle, Particle.REDSTONE,user.getPlayer(), temp);
                }
 
                 if (entity.isDead()) {
                     entity.getLocation().getBlock().setType(Material.AIR);
-                    // entity.getLocation().add(dir).getBlock().breakNaturally();
+
                     cancelTask();
                 }
 
                 if (aux.length() > 7 ){//|| aux.length() < 1)
                     distancePerTick*=-1;
-                    
-                    // entity.getLocation().add(dir).getBlock().breakNaturally();
                     back=true;
                 }
 
                 if (aux.length() < 0.5 && ticks>10 || ticks > 40) {
-                    
                     entity.remove();
-                    // entity.getLocation().getBlock().breakNaturally();
-
                     cancelTask();
                 }
                 
@@ -362,112 +344,6 @@ public class bane_bane extends paramecia {
     }
 
 
-    /**
-     * @brief Para cada entidad seleccionada, cargo un ataque, rebota en direcciones random y después efectúa el verdadero ataque.
-     * Se supone que es tan rápido que no se nota a simple vista.
-     * @param seleccionados Lista de entidades seleccionadas.
-     * @param player Jugador.
-     * @author MiixZ
-     */
-    public void ejecutarAtaque(ArrayList<LivingEntity> seleccionados, Player player) {
-        new BukkitRunnable() {
-            int k = 0;
-            final int randomSeleccionados = new Random().nextInt(seleccionados.size() % 20 + 5);
-            final Vector direccion = new Vector(new Random().nextInt(10) - 5,
-                    new Random().nextInt(10) - 5,
-                    new Random().nextInt(10) - 5);
-
-            public void run() {
-                if (k == randomSeleccionados)
-                    this.cancel();
-                else {
-                    if (k % 2 == 0)
-                        player.setVelocity(direccion.multiply(-3));
-                    else
-                        player.setVelocity(direccion.multiply(3));
-
-                    // Cada 3, cambiamos la dirección por otra random.
-                    if (k % 3 == 0) {
-                        direccion.setX(new Random().nextInt(10) - 5);
-                        direccion.setY(new Random().nextInt(10) - 5);
-                        direccion.setZ(new Random().nextInt(10) - 5);
-                    }
-
-                    k++;
-                }
-            }
-        }.runTaskTimer(plugin, 0, 5);
-    }
-
-    /**
-     * @brief Tepea al jugador hacia cada entidad de la lista seleccionada y genera una explosión..
-     * @param seleccionados Lista de entidades seleccionadas.
-     * @param player Jugador.
-     * @author MiixZ
-     */
-    public void efectuarAtaque(ArrayList<LivingEntity> seleccionados, Player player) {
-        new BukkitRunnable() {
-            public void run() {
-                if (seleccionados.size() == 0)
-                    this.cancel();
-                else {
-                    final LivingEntity entity = seleccionados.get(0);
-                    seleccionados.remove(0);
-
-                    player.teleport(entity.getLocation());
-                    entity.damage(20, player);
-                    entity.setVelocity(new Vector(1, 1, 1).multiply(2));
-                }
-            }
-        }.runTaskTimer(plugin, 40, 20);
-    }
-
-    /**
-     * @brief Creates a circle of particles in the direction the player is looking at.
-     * @param radius Radius of the circle.
-     * @param separation Separation between the particles.
-     * @param prof How far away from the player you want the circle to appear.
-     * @param dustOption Dust Option of the particle. Set it to null if your particle don't use dust options.
-     * @param particle ParticleType of the circle.
-     * @param player player that generates the circle next to.
-     * @param loc center of the circle
-     *
-     * @see OPHLib#circleEyeVector()
-     * @author RedRiotTank / Vaelico786
-     */
-    public static void circleEyeVector(double radius, double separation, double prof, Particle.DustOptions dustOption,
-                                       Particle particle, Player player, Location loc) {
-
-        double x,y, xY, yY, zY, xX, yX, zX,xL,yL,zL;
-        final double yaw = -player.getLocation().getYaw(),
-                pitch = player.getLocation().getPitch();
-        final World world = player.getWorld();
-
-        for(double i=0; i<2*PI; i+= separation) {
-            x = radius*cos(i);
-            y = radius*sin(i);
-
-            //Vertically (Arround X)
-            xX = x;
-            yX = cos(toRadians(pitch))* y - sin(toRadians(pitch))* prof;
-            zX = sin(toRadians(pitch))* y + cos(toRadians(pitch))* prof;
-
-            //horizontally (Arround Y)
-            xY = cos(toRadians(yaw))*xX + sin(toRadians(yaw))*zX;
-            yY =  yX;
-            zY = -sin(toRadians(yaw))*xX + cos(toRadians(yaw))*zX;
-
-            //Final (sum of player position)
-            xL = loc.getX() + xY;
-            yL = 0.3 + loc.getY() + yY;
-            zL = loc.getZ() + zY;
-
-            Location partLoc = new Location(world, xL, yL, zL);
-
-            world.spawnParticle(particle,partLoc,0,0,0,0,dustOption);
-        }
-    }
-
     // ---------------------------------------------- PASSIVES ---------------------------------------------------------------------
     /**
      * @brief On fall listener.
@@ -494,16 +370,4 @@ public class bane_bane extends paramecia {
        }
     }
 
-    /**
-     * @brief Cancels fallingblock --> block change to make the absorbing effect, and saves the blocks materials information.
-     * @param event EntityChangeBlockEvent that Minecraft client sends to server to convert blocks.
-     * @see bane_bane#resortPunch(boolean)
-     * @note Called in his correspondent in the caster, as a listener.
-     * @author RedRiotTank.
-     */
-    public static void onEntityChangeBlock(EntityChangeBlockEvent event) {
-        if(event.getBlock().getType().equals(Material.STONE)) {
-            event.setCancelled(true);
-        }
-    }
 }
