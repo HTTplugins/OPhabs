@@ -6,9 +6,13 @@ import org.bukkit.block.Container;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
+import org.bukkit.entity.ArmorStand;
+import org.bukkit.inventory.ItemStack;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.util.RayTraceResult;
 import org.bukkit.util.Vector;
+import org.bukkit.util.EulerAngle;
+
 
 import static java.lang.Math.*;
 
@@ -348,5 +352,23 @@ public class OPHLib {
                 Bukkit.getScheduler().cancelTask(this.getTaskId());
             }
         }.runTaskTimer(abilities.plugin, 0, 2);
+    }
+
+    /**
+     * @brief Generates an item on an invisible invulnerable stand
+     * @author Vaelico786.
+     */
+    public static ArmorStand generateCustomFloatingItem(Location loc, ItemStack item, EulerAngle pose, boolean gravity){
+            ArmorStand armorStand = loc.getWorld().spawn(loc, ArmorStand.class);
+            // Establecer el objeto con Custom Model Data en la mano del armor stand
+            armorStand.getEquipment().setHelmet(item);
+
+            armorStand.setRightArmPose(pose);
+            armorStand.setVisible(false);
+            armorStand.setGravity(gravity);
+            armorStand.setArms(true);
+            armorStand.setInvulnerable(true);
+
+            return armorStand;
     }
 }

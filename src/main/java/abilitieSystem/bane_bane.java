@@ -149,15 +149,9 @@ public class bane_bane extends paramecia {
      */
     public void resortPunch(Location loc) {
 
-            ArmorStand armorStand = user.getPlayer().getWorld().spawn(user.getPlayer().getLocation().add(0,-0.5,0), ArmorStand.class);
-            // Establecer el objeto con Custom Model Data en la mano del armor stand
-            armorStand.getEquipment().setHelmet(glove);
+            ArmorStand armorStand = OPHLib.generateCustomFloatingItem(user.getPlayer().getLocation().add(0,-0.5,0), glove, new EulerAngle(Math.toRadians(-90), 0, 0), false);
 
-            armorStand.setRightArmPose(new EulerAngle(Math.toRadians(-90), 0, 0));
-            armorStand.setVisible(false);
-            armorStand.setGravity(false);
-            armorStand.setArms(true);
-            armorStand.setCustomName("gloveStandBaneBaneNoMi");
+
         new BukkitRunnable(){
 
             // Configurar las propiedades del armor stand
@@ -184,7 +178,7 @@ public class bane_bane extends paramecia {
                 entity.teleport(origin.clone().add(movement));
 
                 entity.getWorld().getNearbyEntities(entity.getLocation(), 2,2,2).forEach(ent -> {
-                    if(ent instanceof LivingEntity && ent != user.getPlayer() && entity != ent) {
+                    if(ent instanceof LivingEntity && ent != user.getPlayer() && entity != ent && !(ent instanceof ArmorStand)) {
                         ((LivingEntity) ent).damage(14,(Entity) user.getPlayer());
                     }
                 });
@@ -193,18 +187,9 @@ public class bane_bane extends paramecia {
 
 
                 if(!back){
-                    Location temp = entity.getLocation().add(0,0.5,0);
-                    circleEyeVector(0.4,0.1,-2,particle, Particle.REDSTONE,user.getPlayer(), temp);
-                    circleEyeVector(0.4,0.1,-1.8,particle, Particle.REDSTONE, user.getPlayer(), temp);
-                    circleEyeVector(0.4,0.1,-1.6,particle, Particle.REDSTONE, user.getPlayer(), temp);
-                    circleEyeVector(0.4,0.1,-1.4,particle, Particle.REDSTONE, user.getPlayer(), temp);
-                    circleEyeVector(0.4,0.1,-1.2,particle, Particle.REDSTONE, user.getPlayer(), temp);
-                    circleEyeVector(0.4,0.1,-1,particle, Particle.REDSTONE, user.getPlayer(), temp);
-                    circleEyeVector(0.4,0.1,-0.8,particle, Particle.REDSTONE, user.getPlayer(), temp);
-                    circleEyeVector(0.4,0.1,-0.6,particle, Particle.REDSTONE, user.getPlayer(), temp);
-                    circleEyeVector(0.4,0.1,-0.4,particle, Particle.REDSTONE, user.getPlayer(), temp);
-                    circleEyeVector(0.4,0.1,-0.2,particle, Particle.REDSTONE, user.getPlayer(), temp);
-                    circleEyeVector(0.4,0.1,0,particle, Particle.REDSTONE, user.getPlayer(), temp);
+                    Location temp = entity.getLocation().add(0,1,0);
+                    for(double i = -2; i<0; i+=0.2)
+                        circleEyeVector(0.4,0.4,i,particle, Particle.REDSTONE,user.getPlayer(), temp);
                }
 
                 if (entity.isDead()) {
