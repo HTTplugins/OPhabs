@@ -25,9 +25,7 @@ public class inu_inu_okuchi extends zoan {
     public double iceArmor = 0.0;
     public boolean creatingIceArmor = false;
     public boolean himo = false;
-    public boolean atronar = false;
 
-    private final ArrayList<LivingEntity> atronados = new ArrayList<>();
 
     public inu_inu_okuchi(OPhabs plugin) {
         super(plugin, 5, 3, 10, "inu_inu_okuchi", "Inu Inu no Mi Moderu Okuchi no Makami", "Inu Inu Okuchi caster", 7, 2,"http://novask.in/4672583547.png","white_wolf");
@@ -36,7 +34,7 @@ public class inu_inu_okuchi extends zoan {
         abilitiesCD.add(0);
         abilitiesNames.add("Namuji hyoga");
         abilitiesCD.add(0);
-        abilitiesNames.add("Atrocity");
+        abilitiesNames.add("Angry Roar");
         abilitiesCD.add(0);
 
         runIceArmor();
@@ -58,15 +56,8 @@ public class inu_inu_okuchi extends zoan {
 
     public void ability4() {
         if(abilitiesCD.get(3) == 0) {
-            abilitiesCD.set(3, 15);
-
-            if(!atronar)
-                Atrocity(user.getPlayer());
-            else {
-                Colapse(user.getPlayer());
-                abilitiesNames.remove(3);
-                abilitiesNames.add("Atrocity");
-            }
+            angryRoar();
+            abilitiesCD.set(3, 15); 
         }
     }
 
@@ -198,108 +189,13 @@ public class inu_inu_okuchi extends zoan {
         }
     }
 
-    public void Atrocity(Player player) {
-        Location loc = player.getEyeLocation().clone();
-        Vector direccion = loc.getDirection();
-        World mundo = player.getWorld();
+    public void angryRoar(){
+        ArrayList<PotionEffect> effects = new ArrayList<>();
+        effects.add(new PotionEffect(PotionEffectType.SLOW, 200, 2));
+        effects.add(new PotionEffect(PotionEffectType.WEAKNESS, 200, 3));
+        effects.add(new PotionEffect(PotionEffectType.CONFUSION, 200, 1));
 
-        loc.add(0, -0.5, 0);
-
-        new BukkitRunnable() {
-            int k = 0;
-            public void run() {
-                if (k > 30)
-                    this.cancel();
-
-                loc.add(direccion);
-                animacionAtrocity(mundo, loc);
-                efectoAtrocity(mundo, loc, player);
-
-                k++;
-            }
-        }.runTaskTimer(plugin, 0, 0);
-    }
-
-    public void efectoAtrocity(World mundo, Location loc, Player player) {
-        mundo.getNearbyEntities(loc, 1, 1, 1).forEach(entity -> {
-            if(!entity.getName().equals(player.getName()) && entity instanceof LivingEntity) {
-                if(!atronar) {
-                    atronar = true;
-                    abilitiesNames.remove(3);
-                    abilitiesNames.add("Colapse");
-                }
-
-                ((LivingEntity) entity).damage(2, player);
-                atronados.add((LivingEntity) entity);
-                Atormentar((LivingEntity) entity);
-            }
-        });
-    }
-
-    public void animacionAtrocity(World mundo, Location loc) {
-
-        Particle particula = Particle.ELECTRIC_SPARK;
-
-        for(double i = -2*PI; i < 2*PI; i+=0.2) {
-            double  x = sin(i)/5,
-                    y = cos(i)/5,
-                    z = 0;
-
-            mundo.spawnParticle(particula, loc.clone().add(x, y, z), 0, 0, 0, 0);
-            mundo.spawnParticle(particula, loc.clone().add(z, y, x), 0, 0, 0, 0);
-            mundo.spawnParticle(particula, loc.clone().add(z, -y, -x), 0, 0, 0, 0);
-            mundo.spawnParticle(particula, loc.clone().add(-x, -y, z), 0, 0, 0, 0);
-            mundo.spawnParticle(particula, loc.clone().add(x, y, x/2), 0, 0, 0, 0);
-            mundo.spawnParticle(particula, loc.clone().add(x/2, y, x), 0, 0, 0, 0);
-            mundo.spawnParticle(particula, loc.clone().add(-x, -y, -x/2), 0, 0, 0, 0);
-            mundo.spawnParticle(particula, loc.clone().add(-x/2, -y, -x), 0, 0, 0, 0);
-            mundo.spawnParticle(particula, loc.clone().add(x, y, -x/2), 0, 0, 0, 0);
-            mundo.spawnParticle(particula, loc.clone().add(-x/2, y, x), 0, 0, 0, 0);
-            mundo.spawnParticle(particula, loc.clone().add(-x, -y, x/2), 0, 0, 0, 0);
-            mundo.spawnParticle(particula, loc.clone().add(x/2, -y, -x), 0, 0, 0, 0);
-        }
-    }
-
-    public void Atormentar(LivingEntity entity) {
-        new BukkitRunnable() {
-            @Override
-            public void run() {
-                entity.getWorld().spawnParticle(Particle.ELECTRIC_SPARK, entity.getEyeLocation(), 3, 1, 1, 1);
-
-                if(!atronar)
-                    this.cancel();
-            }
-        }.runTaskTimer(plugin, 0, 10);
-    }
-
-    public void Colapse(Player player) {
-        if(!atronados.isEmpty()) {
-            for(LivingEntity entity : atronados) {
-                Subyugar(entity);
-            }
-        }
-
-        atronar = false;
-        atronados.clear();
-    }
-
-    public void Subyugar(LivingEntity entity) {
-        new BukkitRunnable() {
-            int j = 0;
-            @Override
-            public void run() {
-                if(j > 5)
-                    this.cancel();
-
-                entity.getWorld().spawnParticle(Particle.ELECTRIC_SPARK, entity.getLocation(), 5, 1, 1, 1);
-                entity.setVelocity(new Vector(0, 1, 0));
-                entity.damage(5, user.getPlayer());
-                j++;
-            }
-        }.runTaskTimer(plugin, 0, 20);
-
-        entity.getWorld().spawnParticle(Particle.ELECTRIC_SPARK, entity.getLocation(), 10, 5, 5, 5);
-        entity.damage(7.5, user.getPlayer());
+        roar(user.getPlayer(), 20, effects);
     }
 
     public void onEntityDamage(EntityDamageEvent event) {

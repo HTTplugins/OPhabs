@@ -2,13 +2,16 @@ package abilitieSystem;
 
 import htt.ophabs.OPhabs;
 import org.bukkit.*;
+import org.bukkit.potion.PotionEffect;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.entity.PlayerDeathEvent;
+import org.bukkit.potion.PotionEffect;
 import org.bukkit.scheduler.BukkitRunnable;
 import skin.skinsChanger;
 
+import java.util.ArrayList;
 
 /**
  * @brief Zoan --> Devil fruit Subtype.
@@ -104,6 +107,26 @@ public class zoan extends df{
                 i++;
             }
         }.runTaskTimer(plugin, 0, 20);
+    }
+
+    /**
+     * @brief General roar function for zoans type.
+     * @param entity entity that's going to roar.
+     * @param effects array list of effects to be applied on targets
+     * @author MiixZ.
+     */
+    public void roar(LivingEntity entity, int damage, ArrayList<PotionEffect> effects){
+       //Play sound roar 
+
+        entity.getWorld().spawnParticle(Particle.CLOUD, entity.getLocation().add(0,1,0), 100, 1, 1, 1, 1);
+        entity.getNearbyEntities(10, 10, 10).forEach(ent -> {
+            if(ent instanceof LivingEntity && entity!=user.getPlayer()) {
+                ((LivingEntity) ent).damage(damage,entity);
+                effects.forEach(effect -> ((LivingEntity) ent).addPotionEffect(effect));
+            }
+        });
+
+        entity.getWorld().spawnParticle(Particle.CRIT, entity.getLocation(),  10, 0, 0, 0, 0);
     }
 }
 

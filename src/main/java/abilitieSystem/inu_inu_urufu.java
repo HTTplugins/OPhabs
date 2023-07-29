@@ -207,24 +207,12 @@ public class inu_inu_urufu extends zoan {
     }
 
     public void angryRoar(){
-       //Play sound roar 
+        ArrayList<PotionEffect> effects = new ArrayList<>();
+        effects.add(new PotionEffect(PotionEffectType.SLOW, 100, 1));
+        effects.add(new PotionEffect(PotionEffectType.WEAKNESS, 100, 1));
+        effects.add(new PotionEffect(PotionEffectType.CONFUSION, 100, 1));
 
-        //Effect sound particles
-        
-        
-        user.getPlayer().getWorld().spawnParticle(Particle.CLOUD, user.getPlayer().getLocation().add(0,1,0), 100, 1, 1, 1, 1);
-        user.getPlayer().getWorld().getNearbyEntities(user.getPlayer().getLocation(), 10, 10, 10).forEach(entity -> {
-            if(entity instanceof LivingEntity && entity!=user.getPlayer()) {
-                ((LivingEntity) entity).damage(10,(Entity) user.getPlayer());
-                ((LivingEntity) entity).addPotionEffect(new PotionEffect(PotionEffectType.SLOW, 100, 1));
-                ((LivingEntity) entity).addPotionEffect(new PotionEffect(PotionEffectType.WEAKNESS, 100, 1));
-                ((LivingEntity) entity).addPotionEffect(new PotionEffect(PotionEffectType.CONFUSION, 20, 1));
-
-            }
-        });
-
-        user.getPlayer().getWorld().spawnParticle(Particle.CRIT, user.getPlayer().getLocation(), 10, 0, 0, 0, 0);
-        golpeadosHabilidades.clear();
+        roar(user.getPlayer(), 10, effects);
     }
 
 }
