@@ -33,7 +33,7 @@ public class bane_bane extends paramecia {
     private boolean resort;
     private ItemStack glove;
 
-    private int UltimateAttackCD = 2;
+    private int resortPersecutionCD = 20;
     // ---------------------------------------------- CONSTRUCTORS ---------------------------------------------------------------------
     /**
      * @brief bane_bane constructor.
@@ -48,7 +48,7 @@ public class bane_bane extends paramecia {
         abilitiesCD.add(0);
         abilitiesNames.add("Resort Punch Storm");
         abilitiesCD.add(0);
-        abilitiesNames.add("Ultimate Attack");
+        abilitiesNames.add("Resort Persecution");
         abilitiesCD.add(0);
 
         // Crear el ItemStack con el objeto "raw iron"
@@ -284,52 +284,83 @@ public class bane_bane extends paramecia {
 
     // ---------------------------------------------- AB 4 ---------------------------------------------------------------------
     /**
-     * @brief Ability 4: "Ultimate Attack".
-     * @see bane_bane#UltimateAttack(Player)
+     * @brief Ability 4: "Resort Persecution".
+     * @see bane_bane#resortPersecution(Player)
      * @author MiixZ.
      */
     public void ability4() {
         if (abilitiesCD.get(3) == 0) {
-            UltimateAttack(user.getPlayer());
-            abilitiesCD.set(3, UltimateAttackCD);
+            resortPersecution(user.getPlayer());
+            abilitiesCD.set(3, resortPersecutionCD);
         }
     }
 
     /**
-     * @brief CORE ABILITY 4: "Ultimate Attack". Selecciona a todas las entidades en línea recta para hacerles un ataque frontal.
-     * @param player Jugador que usa la habilidad.
-     * @author MiixZ.
+     * @brief CORE ABILITY 4: "Resort Persecution". Selecciona a todas las entidades en línea recta para hacerles un ataque frontal.
+     * @param player User player
+     * @author MiixZ, Vaelico786.
      */
-    public void UltimateAttack(Player player) {
+    public void resortPersecution(Player player) {
         Location loc = player.getEyeLocation().clone();
-        ArrayList<LivingEntity> seleccionados = new ArrayList<>();
+        ArrayList<LivingEntity> selected = new ArrayList<>();
 
         loc.add(0, -0.5, 0);
 
-        SeleccionarEntidad(Objects.requireNonNull(loc.getWorld()), loc, player, seleccionados);
 
-        player.setVelocity(new Vector(0, 1, 0).multiply(2));
-
-        ejecutarAtaque((ArrayList<LivingEntity>) seleccionados.clone(), player);
-
-        efectuarAtaque(seleccionados, player);
-    }
-
-    /**
-     * @brief Selecciona a las entidades de la línea recta (píxel actual).
-     * @param seleccionados Lista de entidades seleccionadas.
-     * @param player Jugador.
-     * @param loc Localización del píxel actual (línea recta).
-     * @param mundo Mundo en el que se encuentra el jugador.
-     * @author MiixZ
-     */
-    public void SeleccionarEntidad(World mundo, Location loc, Player player, ArrayList<LivingEntity> seleccionados) {
-        mundo.getNearbyEntities(loc, 20, 2, 20).forEach(entity -> {
-            if (!entity.getName().equals(player.getName()) && entity instanceof LivingEntity) {
-                seleccionados.add((LivingEntity) entity);
+        player.getWorld().getNearbyEntities(loc, 20, 2, 20).forEach(entity -> {
+            if (!entity.getName().equals(player.getName()) && entity instanceof LivingEntity && !(entity instanceof ArmorStand)) {
+                selected.add((LivingEntity) entity);
             }
         });
+
+
+        player.setVelocity(new Vector(0, 1, 0));
+        
+        if(selected.size()>0)
+        new BukkitRunnable() {
+            int time = 0;
+            int timeOut=8;
+            LivingEntity entity = selected.remove(0);
+            public void run() {
+                if (selected.size() == 0 || entity == null)
+                    this.cancel();
+                if(entity.isDead())
+                    entity = selected.remove(0);
+
+                Vector dir = entity.getLocation().toVector().subtract(player.getLocation().toVector());
+                dir.normalize();
+                player.setVelocity(dir.clone().multiply(2));
+                for(Entity ent : player.getNearbyEntities(2, 3, 2)){
+                    if(ent instanceof LivingEntity && ent != player && !(entity instanceof ArmorStand)){
+                        ((LivingEntity) ent).damage(20, player);
+
+                        if(ent == entity){
+                            if(selected.size()>0)
+                                entity = selected.remove(0);
+                            else
+                                entity = null;
+                        }
+                        else{
+                            if(selected.contains(ent)){
+                                if(selected.size()>0)
+                                    selected.remove(ent);
+                            }
+                        }
+                    }
+                    time = 0;
+                }
+                if(entity != null){
+                    if(player.getLocation().add(dir).getBlock().getType() != Material.AIR || time == timeOut){
+                        if(selected.size()>0)
+                            entity = selected.remove(0);
+                        time = 0;
+                    }
+                }
+                time++;
+            }
+        }.runTaskTimer(plugin, 20, 1);
     }
+
 
     /**
      * @brief Para cada entidad seleccionada, cargo un ataque, rebota en direcciones random y después efectúa el verdadero ataque.
