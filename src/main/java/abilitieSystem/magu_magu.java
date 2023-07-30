@@ -7,6 +7,7 @@ import org.bukkit.*;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.*;
 import org.bukkit.event.EventHandler;
+import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.EntityShootBowEvent;
 import org.bukkit.event.entity.EntityTargetEvent;
 import org.bukkit.inventory.ItemStack;
@@ -773,5 +774,14 @@ public class magu_magu extends logia {
         }
 
         return true;
+    }
+
+    public void onEntityDamage(EntityDamageEvent event){
+        super.onEntityDamage(event);
+
+        if(active && event.getCause().equals(EntityDamageEvent.DamageCause.LAVA)){
+            event.setCancelled(true);
+        }
+
     }
 }

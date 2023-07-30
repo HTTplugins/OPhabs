@@ -1,12 +1,18 @@
 package abilitieSystem;
 import castSystem.castIdentification;
 import fruitSystem.fruitIdentification;
+import htt.layeredstructures.LayeredStructuresAPI;
 import htt.ophabs.OPhabs;
 import org.bukkit.*;
 import org.bukkit.block.Block;
+import org.bukkit.block.BlockFace;
 import org.bukkit.entity.*;
+import org.bukkit.event.entity.EntityDamageEvent;
+import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
+import org.bukkit.potion.PotionEffect;
+import org.bukkit.potion.PotionEffectType;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.util.Vector;
 
@@ -14,9 +20,14 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
-public class hie_hie extends paramecia {    //fruit_fruit is the fruit whose abilities you are going to program (command name).
 
+
+
+public class hie_hie extends paramecia {    //fruit_fruit is the fruit whose abilities you are going to program (command name).
     Random rand = new Random();
+    boolean usingDrake = false;
+
+
     static boolean iceAge = false;
 
     public static List<Trident> tridents = new ArrayList<>();
@@ -32,7 +43,7 @@ public class hie_hie extends paramecia {    //fruit_fruit is the fruit whose abi
         abilitiesCD.add(0);
         abilitiesNames.add("MorphSword");
         abilitiesCD.add(0);
-        abilitiesNames.add("ab4");
+        abilitiesNames.add("Ice Dragon");
         abilitiesCD.add(0);
     }
 
@@ -63,6 +74,8 @@ public class hie_hie extends paramecia {    //fruit_fruit is the fruit whose abi
     public void iceAge(Player player){
        
         iceAge = true;
+
+        player.getWorld().playSound(player.getLocation(),"icecrack",1,1);
 
         new BukkitRunnable() {
             final World world = player.getWorld();
@@ -146,6 +159,7 @@ public class hie_hie extends paramecia {    //fruit_fruit is the fruit whose abi
     public void partisan(Player player) {
         player.getWorld().playSound(player.getLocation(),"icepartisan",1,1);
 
+
         Location headPos = player.getEyeLocation();
         Vector dir = headPos.getDirection();
 
@@ -190,14 +204,15 @@ public class hie_hie extends paramecia {    //fruit_fruit is the fruit whose abi
     public void ability3(){
         if(abilitiesCD.get(2) == 0){
             //Here you call the ability
-            morphCaster();
+            morphCaster(user.getPlayer());
             abilitiesCD.set(2, 20); // Second parameter is cooldown in seconds.
             
         }
     }
 
-    public void morphCaster(){
+    public void morphCaster(Player player){
         ItemStack caster;
+        player.getWorld().playSound(player.getLocation(),"icecrack",1,1);
         //check which hand has the caster
         if (castIdentification.itemIsCaster(user.getPlayer().getInventory().getItemInMainHand(), user.getPlayer()))
             caster = user.getPlayer().getInventory().getItemInMainHand();
@@ -208,13 +223,11 @@ public class hie_hie extends paramecia {    //fruit_fruit is the fruit whose abi
 
         meta.setCustomModelData(2);
 
-        
-
-        /* Ejemplos modificar stats arma: 
-         * AttributeModifier modifier = new AttributeModifier(UUID.randomUUID(), "generic.attackDamage", 10, AttributeModifier.Operation.ADD_NUMBER, EquipmentSlot.HAND);
-         * meta.addAttributeModifier(Attribute.GENERIC_ATTACK_DAMAGE, modifier);
-         * AttributeModifier modifier2 = new AttributeModifier(UUID.randomUUID(), "generic.attackSpeed", 2, AttributeModifier.Operation.ADD_NUMBER, EquipmentSlot.HAND);
-         * meta.addAttributeModifier(Attribute.GENERIC_ATTACK_SPEED, modifier2);
+        /*
+        AttributeModifier modifier = new AttributeModifier(UUID.randomUUID(), "generic.attackDamage", 10, AttributeModifier.Operation.ADD_NUMBER, EquipmentSlot.HAND);
+        meta.addAttributeModifier(Attribute.GENERIC_ATTACK_DAMAGE, modifier);
+        AttributeModifier modifier2 = new AttributeModifier(UUID.randomUUID(), "generic.attackSpeed", 2, AttributeModifier.Operation.ADD_NUMBER, EquipmentSlot.HAND);
+        meta.addAttributeModifier(Attribute.GENERIC_ATTACK_SPEED, modifier2);
          */
         
         caster.setItemMeta(meta);
@@ -233,14 +246,65 @@ public class hie_hie extends paramecia {    //fruit_fruit is the fruit whose abi
         }.runTaskLater(plugin, 20*20);
     }
 
-
-
     // ---------------------------------------------- AB 4 ---------------------------------------------------------------------
 
     public void ability4() {
         if (abilitiesCD.get(3) == 0) {
-            //Here you call the ability
+
+
+            drake(user.getPlayer());
+
             abilitiesCD.set(3, 0); // Second parameter is cooldown in seconds.
         }
     }
+
+    public void drake(Player player){
+        usingDrake = true;
+
+        BlockFace facing = player.getFacing();
+
+
+        player.getWorld().playSound(player.getLocation(),"icecrack",1,1);
+        LayeredStructuresAPI.generateLayeredStructure("iceDrake", player.getLocation(),facing.toString(),0,2);
+
+        new BukkitRunnable() {
+            @Override
+            public void run() {
+                usingDrake = false;
+            }
+        }.runTaskLater(plugin,180); //180 = 40 + 140 (breath duration + blocks construction)
+
+
+
+        OPHLib.breath(user,new Vector(0,14,0), new Vector(0,-0.9,0),40,18,140,2,0.7,30,2,2,"icebreathdrake" );
+
+    }
+
+    public void onPlayerMove(PlayerMoveEvent event) {
+        super.onPlayerMove(event);
+
+        World world = event.getPlayer().getWorld();
+        double x = event.getFrom().getX();
+        double y = event.getFrom().getY();
+        double z = event.getFrom().getZ();
+        float pitch = event.getTo().getPitch();
+        float yaw = event.getTo().getYaw();
+
+
+        if(usingDrake){
+            event.setTo(new Location(world,x,y,z,yaw,pitch));
+
+        }
+
+    }
+
+    public void onEntityDamage(EntityDamageEvent event){
+        super.onEntityDamage(event);
+
+        if(active && event.getCause().equals(EntityDamageEvent.DamageCause.FREEZE)){
+            event.setCancelled(true);
+        }
+
+    }
+
 }

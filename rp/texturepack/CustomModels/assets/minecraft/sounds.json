@@ -68,6 +68,17 @@
 		"sounds": [
 			"icepartisan"
 		]
+	},
+	"icebreathdrake": {
+		"sounds": [
+			"icebreathdrake"
+		]
+	},
+	"icecrack": {
+		"sounds": [
+			"icecrack"
+		]
 	}
-}
 
+
+}

@@ -2,6 +2,9 @@ package htt.ophabs;
 
 
 import com.google.gson.JsonObject;
+import htt.layeredstructures.LayeredStructuresAPI;
+import org.bukkit.Material;
+import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.Bukkit;
 import commands.*;
@@ -36,9 +39,13 @@ public final class OPhabs extends JavaPlugin {
     @Override
     public void onEnable(){
 
+       // Plugin ls = Bukkit.getPluginManager().getPlugin("LayeredStructures");
+        LayeredStructuresAPI.initialize(Bukkit.getPluginManager().getPlugin("LayeredStructures"));
 
         //---------------
         //Files
+        getConfig().options().copyDefaults();
+        saveDefaultConfig();
         fileSystem.loadFileSystem();
 
         //--------------

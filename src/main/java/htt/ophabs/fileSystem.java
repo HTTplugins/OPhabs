@@ -1,16 +1,18 @@
 package htt.ophabs;
 
 import abilitieSystem.abilityUser;
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
-import com.google.gson.JsonObject;
-import com.google.gson.JsonParser;
+import com.google.gson.*;
+import org.bukkit.Location;
+import org.bukkit.Material;
+import org.bukkit.World;
+import org.bukkit.block.Block;
 
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Set;
 import java.util.Map;
@@ -19,6 +21,8 @@ public class fileSystem {
 
     private static final String FRUIT_ASSOCIATION_PATH = "plugins/OPhabs/fruitAssociation.json";
     private static final String HAKI_ASSOCIATION_PATH = "plugins/OPhabs/hakiAssociation.json";
+
+    private static final String LAYERED_BUILDINGS_PATH = "plugins/OPhabs/";
     private static JsonObject fruitAssociations, hakiAssociations;
 
     public static void loadFileSystem() {
@@ -265,5 +269,147 @@ public class fileSystem {
                 updateFruitLinkedUser(user.getFruit().getCommandFruitName(), nombre);
             } 
         }
+    }
+
+
+
+   public static class layedBlock{
+        private int x;
+        private int y;
+        private int z;
+        private Material blockMaterial;
+
+       public int getX() {
+           return x;
+       }
+
+       public int getY() {
+           return y;
+       }
+
+       public int getZ() {
+           return z;
+       }
+
+       public Material getBlockMaterial() {
+           return blockMaterial;
+       }
+
+       layedBlock(int x, int y, int z, String material){
+            this.x = x;
+            this.y = y;
+            this.z = z;
+            this.blockMaterial = Material.matchMaterial(material);
+
+
+        }
+    }
+
+
+    public static ArrayList<ArrayList<layedBlock>> loadLayers(String buildingJSON) {
+        ArrayList<ArrayList<layedBlock>> layersArray = new ArrayList<>();
+
+        try {
+            String fileContent = new String(Files.readAllBytes(Paths.get(LAYERED_BUILDINGS_PATH + buildingJSON)));
+            JsonParser parser = new JsonParser();
+            JsonObject document = parser.parse(fileContent).getAsJsonObject();
+
+            int numLayers = document.get("numLayers").getAsInt();
+
+            for (int i = 0; i < numLayers; i++) {
+
+                JsonObject layerObject = document.getAsJsonObject("Layers").getAsJsonObject(Integer.toString(i));
+
+                int numBlocks = layerObject.get("numBlocks").getAsInt();
+                JsonArray blocks = layerObject.getAsJsonArray("blocks");
+
+                ArrayList<layedBlock> layer = new ArrayList<>();
+
+                for (int j = 0; j < numBlocks; j++) {
+                    JsonArray blockArray = blocks.get(j).getAsJsonArray();
+
+                    int x = blockArray.get(0).getAsInt();
+                    int y = blockArray.get(1).getAsInt();
+                    int z = blockArray.get(2).getAsInt();
+                    String blockType = blockArray.get(3).getAsString();
+
+                    layedBlock block = new layedBlock(x,y,z,blockType);
+                    layer.add(block);
+
+                }
+
+                layersArray.add(layer);
+
+
+
+
+
+            }
+            return layersArray;
+
+        } catch (IOException e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+
+    public static ArrayList<Block> saveLayerStructure(Location loc1, Location loc2, int layerNumber, ArrayList<Block> previsLayer) {
+        World world = loc1.getWorld();
+        double minX, maxX, minY, maxY, minZ, maxZ;
+        ArrayList<Block> newLayer = new ArrayList<>();
+
+        if (previsLayer != null && layerNumber != 0) {
+            for (Block block : previsLayer) {
+                block.setType(Material.AIR);
+            }
+        }
+
+        if (loc1.getX() < loc2.getX()) {
+            minX = loc1.getX();
+            maxX = loc2.getX();
+        } else {
+            minX = loc2.getX();
+            maxX = loc1.getX();
+        }
+
+        if (loc1.getY() < loc2.getY()) {
+            minY = loc1.getY();
+            maxY = loc2.getY();
+
+        } else {
+            minY = loc2.getY();
+            maxY = loc1.getY();
+        }
+
+        if(loc1.getZ() < loc2.getZ()) {
+            minZ = loc1.getZ();
+            maxZ = loc2.getZ();
+        } else {
+            minZ = loc2.getZ();
+            maxZ = loc1.getZ();
+        }
+
+        for(double x = minX; x <= maxX; x++){
+            for(double y = minY; y <= maxY; y++){
+                for(double z = minZ; z <= maxZ; z++){
+                    Block block = world.getBlockAt((int)x, (int)y, (int)z);
+                    if(block.getType() != Material.AIR){
+                        newLayer.add(block);
+                    }
+
+
+
+
+
+                }
+            }
+        }
+
+
+
+
+
+        return null;
     }
 }

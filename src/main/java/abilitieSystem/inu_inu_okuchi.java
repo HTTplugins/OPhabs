@@ -158,34 +158,9 @@ public class inu_inu_okuchi extends zoan {
    
     public void namujiHyoga() {
         Player player = user.getPlayer();
-        new BukkitRunnable() {
-            int i = 0;
-            @Override
-            public void run() {
-                if(i>10*2 || user == null) {
-                    cancelTask();
-                }
-                Vector direction = player.getEyeLocation().getDirection();
-                Location location = player.getEyeLocation();
-                for(int j = 0; j<=i; j++) {
-                    location.add(direction);
-                    player.getWorld().spawnParticle(Particle.BLOCK_CRACK, location, 100, 0.5, 0.5, 0.5,
-                                                0.1*j, Material.PACKED_ICE.createBlockData());
 
-                    location.getWorld().getNearbyEntities(location, 0.5, 0.5, 0.5).forEach(entity -> {
-                        if(entity instanceof LivingEntity && !entity.getName().equals(player.getName())) {
-                            LivingEntity livingEntity = (LivingEntity) entity;
-                            livingEntity.damage(10, player);
-                        }
-                    });
-                }
-                i++;
-            }
 
-            public void cancelTask(){
-                Bukkit.getScheduler().cancelTask(this.getTaskId());
-            }
-        }.runTaskTimer(plugin, 0, 4);
+        OPHLib.breath(user, new Vector(0,0,0), new Vector(0,0,0),0,12, 100,4,0.5,40,1.5,4,"none");
     }
 
     public void createIceArmor() {
