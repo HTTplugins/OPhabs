@@ -71,6 +71,18 @@ public class caster implements Listener {
         }
     }
 
+    @EventHandler(ignoreCancelled = true)
+    public void onProjectileHit(ProjectileHitEvent event){
+
+        if(event.getEntity().getShooter() instanceof Player){
+            if(users.containsKey(((Player) event.getEntity().getShooter()).getName())) {
+                abilityUser user = users.get(((Player) event.getEntity().getShooter()).getName());
+                user.onProjectileHit(event);
+            }
+        }
+
+    }
+
     /**
      * @brief Event that is triggered when a player drops an item.
      * This is where we change the ability of the caster.(Q case default)
@@ -146,7 +158,7 @@ public class caster implements Listener {
 
     /**
      * @brief Event that is triggered when a player toggles sneak (Shift default).
-     * @param event PlayerToggleSneakEvent event.
+     * @param e PlayerToggleSneakEvent event.
      * @author RedRiotTank, MiixZ, Vaelico786.
      */   
     @EventHandler

@@ -250,4 +250,6 @@ public class abilities {
      */
     public void onBlockBreak(BlockBreakEvent event) {}
 
+    public void onProjectileHit(ProjectileHitEvent event) {}
+
     }

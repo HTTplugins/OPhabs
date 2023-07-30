@@ -7,6 +7,7 @@ import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
 import org.bukkit.entity.*;
 import org.bukkit.event.entity.EntityDamageEvent;
+import org.bukkit.event.entity.ProjectileHitEvent;
 import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
@@ -169,6 +170,10 @@ public class hie_hie extends paramecia {    //fruit_fruit is the fruit whose abi
         Trident tridentLeft = (Trident) player.getWorld().spawnEntity(left, EntityType.TRIDENT);
         Trident tridentRight = (Trident) player.getWorld().spawnEntity(right, EntityType.TRIDENT);
 
+        tridentCenter.setShooter(player);
+        tridentLeft.setShooter(player);
+        tridentRight.setShooter(player);
+
         tridents.add(tridentCenter);
         tridents.add(tridentRight);
         tridents.add(tridentLeft);
@@ -189,7 +194,7 @@ public class hie_hie extends paramecia {    //fruit_fruit is the fruit whose abi
                 tridentRight.getWorld().spawnParticle(Particle.BLOCK_DUST, tridentRight.getLocation(), 10,  Material.BLUE_ICE.createBlockData());
                 if(tridents.isEmpty()) this.cancel();
 
-                if(ticks > 1000) this.cancel();
+                if(ticks > 200) this.cancel();
             }
         }.runTaskTimer(plugin,0,1);
 
@@ -307,6 +312,29 @@ public class hie_hie extends paramecia {    //fruit_fruit is the fruit whose abi
             event.setCancelled(true);
         }
 
+    }
+
+    public void onProjectileHit(ProjectileHitEvent event) {
+
+        Projectile tridente = event.getEntity();
+        if (tridente instanceof Trident) {
+            if(hie_hie.tridents.contains(tridente)){
+                // Eliminar el tridente del mundo después de 3 segundos
+                hie_hie.tridents.remove(tridente);
+                Entity hitEnt = event.getHitEntity();
+
+                if(hitEnt != null){
+                    if(hitEnt instanceof LivingEntity){
+                        ((LivingEntity) hitEnt).damage(5);
+                        hie_hie.createIceBox(hitEnt);
+                    }
+                } else{
+                    event.getHitBlock().setType(Material.BLUE_ICE);
+                }
+
+                Bukkit.getScheduler().scheduleSyncDelayedTask(plugin, () -> tridente.remove(), 60L);
+            }
+        }
     }
 
 }

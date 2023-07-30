@@ -565,6 +565,10 @@ public class abilityUser {
     }
 
 
+    public void onProjectileHit(ProjectileHitEvent event){
+        if(hasFruit()) getDFAbilities().onProjectileHit(event);
+    }
+
     /**
      * @brief Event listener that activates when a player respawns.
      * @param event The event that was triggered
