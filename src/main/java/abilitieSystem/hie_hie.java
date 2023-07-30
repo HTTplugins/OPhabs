@@ -221,6 +221,7 @@ public class hie_hie extends paramecia {    //fruit_fruit is the fruit whose abi
 
         ItemMeta meta = caster.getItemMeta(), old = caster.getItemMeta().clone();
 
+        old.setCustomModelData(1);
         meta.setCustomModelData(2);
 
         /*
@@ -237,7 +238,8 @@ public class hie_hie extends paramecia {    //fruit_fruit is the fruit whose abi
             @Override
             public void run() {
                 for(ItemStack item : user.getPlayer().getInventory().getContents()){
-                    if(castIdentification.itemIsCaster(item, user.getPlayer())){
+
+                    if(item !=null && castIdentification.itemIsCaster(item, user.getPlayer())){
                         item.setItemMeta(old);
                         break;
                     }
