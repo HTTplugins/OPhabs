@@ -78,6 +78,31 @@
 		"sounds": [
 			"icecrack"
 		]
+	},
+	"roar": {
+		"sounds": [
+			"roar"
+		]
+	},
+	"zoantrasform": {
+		"sounds": [
+			"zoantrasform"
+		]
+	},
+	"icebreathnamuji": {
+		"sounds": [
+			"icebreathnamuji"
+		]
+	},
+	"firebreath": {
+		"sounds": [
+			"firebreath"
+		]
+	},
+	"resort": {
+		"sounds": [
+			"resort"
+		]
 	}
 
 
