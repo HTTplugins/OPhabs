@@ -46,8 +46,12 @@ public abstract class logia extends df{
 
         if(event instanceof EntityDamageByEntityEvent && ((EntityDamageByEntityEvent)event).getDamager() instanceof Player){
             Player damager = (Player) ((EntityDamageByEntityEvent)event).getDamager();
-            if(OPhabs.users.containsKey(damager.getName()) && OPhabs.users.get(damager.getName()).hasHaki())
-                return;
+            if(OPhabs.users.containsKey(damager.getName())){
+                abilityUser userDamager = OPhabs.users.get(damager.getName());
+                if(userDamager.hasHaki() || (userDamager.hasFruit() && userDamager.getDFAbilities() instanceof logia)){
+                    return;
+                }
+            }
         }
 
         if(active){

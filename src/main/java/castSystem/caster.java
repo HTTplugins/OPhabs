@@ -127,6 +127,8 @@ public class caster implements Listener {
      */
     @EventHandler
     public void onEntityDamageByEntityEvent(EntityDamageByEntityEvent event){
+        if(event.getDamager().getCustomName() != null &&  event.getDamager().getCustomName().equals("Smoker"))
+            moku_moku.onEntityDamageBySmoker(event);
         if(event.getDamager() instanceof Player &&  users.containsKey(event.getDamager().getName())) {
             abilityUser user = users.get(event.getDamager().getName());
             user.onEntityDamageByUser(event);
@@ -376,7 +378,6 @@ public class caster implements Listener {
 
     @EventHandler
     public void onPlayerInteractEntity(PlayerInteractEntityEvent event) {
-
         if(users.containsKey(event.getPlayer().getName())) {
             abilityUser user = users.get(event.getPlayer().getName());
             if (event.getRightClicked() instanceof ArmorStand) {

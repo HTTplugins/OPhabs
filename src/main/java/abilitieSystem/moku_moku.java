@@ -10,6 +10,7 @@ import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.bukkit.event.entity.PlayerDeathEvent;
+import org.bukkit.event.entity.EntityDamageEvent.DamageModifier;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.potion.PotionEffect;
@@ -18,7 +19,9 @@ import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.entity.Vex;
 import org.bukkit.entity.ArmorStand;
 import org.bukkit.event.entity.EntityAirChangeEvent;
+import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
+import org.bukkit.event.entity.EntityDamageEvent.DamageCause;
 import org.bukkit.util.Vector;;
 import java.util.Random;
 
@@ -223,7 +226,7 @@ public class moku_moku extends logia {
             Location loc = player.getLocation();
             Vex smoker = ((Vex) player.getWorld().spawnEntity(loc,EntityType.VEX));
             smoker.setCustomName("Smoker");
-            smoker.setHealth(0.5);            
+            smoker.setHealth(0.5);
             numSmokers++;
             smoker.addPotionEffect(new PotionEffect(PotionEffectType.INVISIBILITY, 9999999, 2, false, false));
             smoker.getEquipment().setItemInMainHand(null); 
@@ -358,19 +361,31 @@ public class moku_moku extends logia {
     }
 
     public static void onEntityAirChangeEvent(EntityAirChangeEvent event){
-        if(smokeWorldEntities.contains(event.getEntity()) && event.getAmount()>0){
-            if(smokeWorldON){
-                LivingEntity entity = (LivingEntity) event.getEntity();
-                if(entity.getRemainingAir() == 0){
-                    entity.damage(1);
-                    event.setCancelled(true);
+        Player player = plugin.abilitiesList.get(3).getUser().getPlayer();
+        if(player != null){
+            if(smokeWorldEntities.contains(event.getEntity()) && event.getAmount()>0){
+                if(smokeWorldON){
+                    LivingEntity entity = (LivingEntity) event.getEntity();
+                    if(entity.getRemainingAir() == 0){
+                        entity.damage(1, player);
+                        event.setCancelled(true);
+                    }
+                    else{
+                        event.setAmount(entity.getRemainingAir()-2);
+                    }
                 }
-                else{
-                    event.setAmount(entity.getRemainingAir()-2);
-                }
+                else
+                    smokeWorldEntities.clear();
             }
-            else
-                smokeWorldEntities.clear();
         }
     }
+
+    public static void onEntityDamageBySmoker(EntityDamageByEntityEvent event){
+        Player player = OPhabs.abilitiesList.get(3).getUser().getPlayer();
+        if(player != null){
+            ((LivingEntity) event.getEntity()).damage(3, player);
+            event.setCancelled(true);
+        }
+    }
+
 }
