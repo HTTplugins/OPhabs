@@ -12,7 +12,7 @@ import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.util.RayTraceResult;
 import org.bukkit.util.Vector;
 
-
+import java.util.Objects;
 
 import static java.lang.Math.*;
 
@@ -37,8 +37,15 @@ public class OPHLib {
         Location loc = new Location(world,x,initialY,z);
 
         for(int i=0; i < 40; i++)
-            if(loc.getBlock().getRelative(0,-i,0).getType().isSolid())
-                return initialY - i + 1;
+            if(loc.getBlock().getRelative(0,-i,0).getType().isSolid()){
+                for(int j=0; j<5 && loc.getBlock().getRelative(0,j,0).getType().isSolid();j++ ){
+                    if(!loc.getBlock().getRelative(0,j+1,0).getType().isSolid())   {
+                        return loc.getBlock().getRelative(0,j,0).getY();
+                    }
+                }
+                return initialY - i;
+            }
+
 
         return initialY - 40;
     }
@@ -400,6 +407,82 @@ public class OPHLib {
         }.runTaskTimer(abilities.plugin, 0, 2);
     }
 
+    public static void breath(abilityUser user,Vector pos,Vector dir, int delay, int maxLength, int maxTicks, int dmg,double startAmpl, int startAmountParticles, double maxAmplitude, int period, String sound) {
+
+
+        int iterations = maxTicks/period;
+
+
+
+        new BukkitRunnable() {
+            double density = startAmountParticles/startAmpl;
+            double amplitude = startAmpl;
+            double distance = 0;
+            Player player = user.getPlayer();
+            World world = player.getWorld();
+
+
+            double particleAmount;
+            int i = 0;
+            @Override
+            public void run() {
+
+                Vector direction = player.getEyeLocation().getDirection().add(dir);
+                Location location = player.getEyeLocation().add(pos);
+
+                if(i==0 && !Objects.equals(sound, "none"))    //Play sound on first iteration
+                    world.playSound(location, sound, 1, 1);
+
+
+
+                if(i>iterations || user == null) {
+                    cancelTask();
+                }
+
+
+
+
+
+                for(int j = 1; j<=distance; j++) {
+
+                    if(amplitude < maxAmplitude)
+                        amplitude += maxAmplitude /maxLength;
+
+
+                    location.add(direction);
+                    particleAmount = density * amplitude;
+                    world.spawnParticle(Particle.BLOCK_CRACK, location, (int) particleAmount ,amplitude ,amplitude ,amplitude ,
+                            0, Material.PACKED_ICE.createBlockData());
+
+
+
+                    world.getNearbyEntities(location, amplitude, amplitude, amplitude).forEach(entity -> {
+                        if(entity instanceof LivingEntity && !entity.getName().equals(player.getName())) {
+                            LivingEntity livingEntity = (LivingEntity) entity;
+                            livingEntity.damage(dmg, player);
+                            if(livingEntity.getFreezeTicks() <= 0){
+                                livingEntity.setFreezeTicks(600);
+
+                            }
+                        }
+                    });
+
+                }
+
+                amplitude = startAmpl;
+
+                System.out.println(distance);
+                if(distance < maxLength)
+                    distance+= ((double) maxLength)/(((double) iterations)/6.0);
+
+                i++;
+
+            }
+
+            public void cancelTask(){
+                Bukkit.getScheduler().cancelTask(this.getTaskId());
+            }
+        }.runTaskTimer(abilities.plugin, delay, period);
     /**
      * @brief Generates an item on an invisible invulnerable stand
      * @author Vaelico786.

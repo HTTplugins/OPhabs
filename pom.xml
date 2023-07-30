@@ -66,6 +66,12 @@
 
     <dependencies>
         <dependency>
+            <groupId>htt</groupId>
+            <artifactId>LayeredStructures</artifactId>
+            <version>1.0</version>
+        </dependency>
+
+        <dependency>
             <groupId>org.spigotmc</groupId>
             <artifactId>spigot-api</artifactId>
             <version>1.19.2-R0.1-SNAPSHOT</version>

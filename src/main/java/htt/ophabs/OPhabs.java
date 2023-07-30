@@ -2,6 +2,9 @@ package htt.ophabs;
 
 
 import com.google.gson.JsonObject;
+import htt.layeredstructures.LayeredStructuresAPI;
+import org.bukkit.Material;
+import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.Bukkit;
 import commands.*;
@@ -37,6 +40,10 @@ public final class OPhabs extends JavaPlugin {
     @Override
     public void onEnable(){
 
+       // Plugin ls = Bukkit.getPluginManager().getPlugin("LayeredStructures");
+        LayeredStructuresAPI.initialize(Bukkit.getPluginManager().getPlugin("LayeredStructures"));
+    public void onEnable(){
+
 
 
         //--------------
@@ -63,9 +70,11 @@ public final class OPhabs extends JavaPlugin {
 
         //---------------
         //Files
+        getConfig().options().copyDefaults();
         saveDefaultConfig();
         saveConfig();
         fileSystem.loadFileSystem();
+
         //--------------
         //FruitSystem
         fruitAssociation fAssociation = new fruitAssociation(this);
@@ -110,7 +119,7 @@ public final class OPhabs extends JavaPlugin {
         Bukkit.getConsoleSender().sendMessage(ChatColor.GREEN + "" + ChatColor.BOLD +  "OPhabs started correctly.");
 
 
-    }
+        }
 
     /**
      * @brief settings configuration on shutdown.
