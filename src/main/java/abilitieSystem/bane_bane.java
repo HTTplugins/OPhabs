@@ -96,8 +96,10 @@ public class bane_bane extends paramecia {
                     
                     if(player.isOnGround() && !player.isSneaking()){
                         Vector velocity = player.getVelocity();
-                        if (jumpVelocity > 0)
+                        if (jumpVelocity > 0) {
+                            player.getWorld().playSound(player.getLocation(), "resort", 1, 1);
                             velocity.setY(jumpVelocity);
+                        }
                         
                         if (player.isOnGround() && player.getFallDistance() > 0) {
                                 double v = (-3+sqrt(9-8*(-(player.getFallDistance()))))/4;
@@ -143,6 +145,7 @@ public class bane_bane extends paramecia {
 
             ArmorStand armorStand = OPHLib.generateCustomFloatingItem(user.getPlayer().getLocation().add(0,-0.5,0), glove, false);
 
+        user.getPlayer().getWorld().playSound(user.getPlayer().getLocation(), "resort", 1, 1);
 
         new BukkitRunnable(){
 
@@ -306,8 +309,10 @@ public class bane_bane extends paramecia {
             public void run() {
                 if (selected.size() == 0 || entity == null)
                     this.cancel();
-                if(entity.isDead())
+                if(entity.isDead()) {
                     entity = selected.remove(0);
+                    user.getPlayer().getWorld().playSound(user.getPlayer().getLocation(), "resort", 1, 1);
+                }
 
                 Vector dir = entity.getLocation().toVector().subtract(player.getLocation().toVector());
                 dir.normalize();
@@ -317,15 +322,19 @@ public class bane_bane extends paramecia {
                         ((LivingEntity) ent).damage(20, player);
 
                         if(ent == entity){
-                            if(selected.size()>0)
+                            if(selected.size()>0) {
+                                user.getPlayer().getWorld().playSound(user.getPlayer().getLocation(), "resort", 1, 1);
                                 entity = selected.remove(0);
+                            }
                             else
                                 entity = null;
                         }
                         else{
                             if(selected.contains(ent)){
-                                if(selected.size()>0)
+                                if(selected.size()>0) {
+                                    user.getPlayer().getWorld().playSound(user.getPlayer().getLocation(), "resort", 1, 1);
                                     selected.remove(ent);
+                                }
                             }
                         }
                     }
@@ -333,8 +342,10 @@ public class bane_bane extends paramecia {
                 }
                 if(entity != null){
                     if(player.getLocation().add(dir).getBlock().getType() != Material.AIR || time == timeOut){
-                        if(selected.size()>0)
+                        if(selected.size()>0) {
+                            user.getPlayer().getWorld().playSound(user.getPlayer().getLocation(), "resort", 1, 1);
                             entity = selected.remove(0);
+                        }
                         time = 0;
                     }
                 }
@@ -356,6 +367,7 @@ public class bane_bane extends paramecia {
                 event.setCancelled(true);
                 Player player = user.getPlayer();
                 if (!player.isSneaking()) {
+                    player.playSound(player.getLocation(), "resort", 1, 1);
                     Vector velocity = player.getVelocity();
                     double v = (-3.7+sqrt(9-8*(-(player.getFallDistance()))))/4;
                     velocity.setY(v);

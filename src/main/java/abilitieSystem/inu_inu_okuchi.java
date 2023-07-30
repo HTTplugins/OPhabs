@@ -111,6 +111,7 @@ public class inu_inu_okuchi extends zoan {
                 cancelTask();
             }
             if(player.getLocation().add(0,-1,0).getBlock().getType() != Material.AIR) {
+                player.getWorld().playSound(player.getLocation(), "icecrack", 1, 1);
                 player.getWorld().getNearbyEntities(player.getLocation(), 5, 2, 5).forEach(entity -> {
                     if(entity instanceof LivingEntity && entity.getName() != player.getName()) {
                         LivingEntity livingEntity = (LivingEntity) entity;
@@ -144,8 +145,8 @@ public class inu_inu_okuchi extends zoan {
     public void namujiHyoga() {
         Player player = user.getPlayer();
 
-
-        OPHLib.iceBreath(user, new Vector(0,0,0), new Vector(0,0,0),0,12, 100,4,0.5,40,1.5,4,"none");
+        player.getWorld().playSound(player.getLocation(), "icebreathnamuji", 1, 1);
+        OPHLib.iceBreath(user, new Vector(0,0,0), new Vector(0,0,0),0,12, 90,4,0.5,40,1.5,4,"none");
     }
 
     public void createIceArmor() {

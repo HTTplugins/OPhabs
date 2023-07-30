@@ -48,6 +48,7 @@ public class zoan extends df{
      * @author Vaelico786.
      */
     public void transformation() {
+        user.getPlayer().getWorld().playSound(user.getPlayer().getLocation(), "zoantrasform", 1, 1);
         Player player = user.getPlayer();
         if(!transformed) {
             skinsChanger.changeSkin(player, skinName);
@@ -116,7 +117,7 @@ public class zoan extends df{
      * @author MiixZ.
      */
     public void roar(LivingEntity entity, int damage, ArrayList<PotionEffect> effects){
-       //Play sound roar 
+       entity.getWorld().playSound(entity.getLocation(),"roar", 1, 1);
 
         entity.getWorld().spawnParticle(Particle.CLOUD, entity.getLocation().add(0,1,0), 100, 1, 1, 1, 1);
         entity.getNearbyEntities(10, 10, 10).forEach(ent -> {

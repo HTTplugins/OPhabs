@@ -273,6 +273,7 @@ public class gura_gura extends paramecia {
                 int i = 1;
                 @Override
                 public void run() {
+                    //player.getWorld().playSound(player.getLocation(), Sound.BLOCK_GRASS_BREAK, 1, 1);
                     for(int j=0; j<(i*2)+1; j++) {
                         ExpansionWaveFallingBlock(loc.clone().add(j-i, 0, -i), deep);
 
