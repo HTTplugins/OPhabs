@@ -361,8 +361,9 @@ public class moku_moku extends logia {
     }
 
     public static void onEntityAirChangeEvent(EntityAirChangeEvent event){
-        Player player = plugin.abilitiesList.get(3).getUser().getPlayer();
-        if(player != null){
+        if(OPhabs.abilitiesList.get(3).getUser() != null && 
+           OPhabs.abilitiesList.get(3).getUser().getPlayer() != null){
+            Player player = plugin.abilitiesList.get(3).getUser().getPlayer();
             if(smokeWorldEntities.contains(event.getEntity()) && event.getAmount()>0){
                 if(smokeWorldON){
                     LivingEntity entity = (LivingEntity) event.getEntity();
