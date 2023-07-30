@@ -42,8 +42,6 @@ public final class OPhabs extends JavaPlugin {
 
        // Plugin ls = Bukkit.getPluginManager().getPlugin("LayeredStructures");
         LayeredStructuresAPI.initialize(Bukkit.getPluginManager().getPlugin("LayeredStructures"));
-    public void onEnable(){
-
 
 
         //--------------

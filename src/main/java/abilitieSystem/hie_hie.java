@@ -1,6 +1,5 @@
 package abilitieSystem;
 import castSystem.castIdentification;
-import fruitSystem.fruitIdentification;
 import htt.layeredstructures.LayeredStructuresAPI;
 import htt.ophabs.OPhabs;
 import org.bukkit.*;
@@ -212,15 +211,18 @@ public class hie_hie extends paramecia {    //fruit_fruit is the fruit whose abi
         ItemStack caster;
         player.getWorld().playSound(player.getLocation(),"icecrack",1,1);
         //check which hand has the caster
-        if (castIdentification.itemIsCaster(user.getPlayer().getInventory().getItemInMainHand(), user.getPlayer()))
+        if (castIdentification.itemIsCaster(user.getPlayer().getInventory().getItemInMainHand(), user))
             caster = user.getPlayer().getInventory().getItemInMainHand();
         else
             caster = user.getPlayer().getInventory().getItemInOffHand();
 
         ItemMeta meta = caster.getItemMeta(), old = caster.getItemMeta().clone();
 
-        old.setCustomModelData(1);
-        meta.setCustomModelData(2);
+
+        old.setCustomModelData(fruit.getCustomModelDataId());
+        meta.setCustomModelData(fruit.getCustomModelDataId()+1000);
+        System.out.println(fruit.getCustomModelDataId());
+        System.out.println(fruit.getCustomModelDataId() + 1000);
 
         /*
         AttributeModifier modifier = new AttributeModifier(UUID.randomUUID(), "generic.attackDamage", 10, AttributeModifier.Operation.ADD_NUMBER, EquipmentSlot.HAND);
@@ -237,7 +239,7 @@ public class hie_hie extends paramecia {    //fruit_fruit is the fruit whose abi
             public void run() {
                 for(ItemStack item : user.getPlayer().getInventory().getContents()){
 
-                    if(item !=null && castIdentification.itemIsCaster(item, user.getPlayer())){
+                    if(item !=null && castIdentification.itemIsCaster(item, user)){
                         item.setItemMeta(old);
                         break;
                     }

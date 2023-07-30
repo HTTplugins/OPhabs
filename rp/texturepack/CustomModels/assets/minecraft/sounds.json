@@ -1,5 +1,5 @@
 {
-        "discharge": {
+	"discharge": {
 		"sounds": [
 			"discharge"
 		]
@@ -58,5 +58,27 @@
 		"sounds": [
 			"vanish"
 		]
+	},
+	"freezing": {
+		"sounds": [
+			"freezing"
+		]
+	},
+	"icepartisan": {
+		"sounds": [
+			"icepartisan"
+		]
+	},
+	"icebreathdrake": {
+		"sounds": [
+			"icebreathdrake"
+		]
+	},
+	"icecrack": {
+		"sounds": [
+			"icecrack"
+		]
 	}
+
+
 }

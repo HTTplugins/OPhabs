@@ -105,6 +105,12 @@
 				"custom_model_data": 17
             },
             "model": "custom/claws"
+        },
+        {
+          "predicate": {
+            "custom_model_data": 1016
+          },
+          "model": "custom/ice_sword"
         }
     ]
 }
