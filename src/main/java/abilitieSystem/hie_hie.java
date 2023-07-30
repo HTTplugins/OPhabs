@@ -3,29 +3,31 @@ import castSystem.castIdentification;
 import htt.layeredstructures.LayeredStructuresAPI;
 import htt.ophabs.OPhabs;
 import org.bukkit.*;
+import org.bukkit.attribute.Attribute;
+import org.bukkit.attribute.AttributeModifier;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
 import org.bukkit.entity.*;
+import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.ProjectileHitEvent;
 import org.bukkit.event.player.PlayerMoveEvent;
+import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
-import org.bukkit.potion.PotionEffect;
-import org.bukkit.potion.PotionEffectType;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.util.Vector;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
-
-
+import java.util.UUID;
 
 
 public class hie_hie extends paramecia {    //fruit_fruit is the fruit whose abilities you are going to program (command name).
     Random rand = new Random();
     boolean usingDrake = false;
+
 
 
     static boolean iceAge = false;
@@ -124,6 +126,7 @@ public class hie_hie extends paramecia {    //fruit_fruit is the fruit whose abi
                             ((LivingEntity) ent).damage(5);
                             cagedEnts.add(ent);
                             createIceBox(ent);
+                            ent.setFreezeTicks(ent.getFreezeTicks() + 600);
                         }
                     }
                 }
@@ -226,15 +229,13 @@ public class hie_hie extends paramecia {    //fruit_fruit is the fruit whose abi
 
         old.setCustomModelData(fruit.getCustomModelDataId());
         meta.setCustomModelData(fruit.getCustomModelDataId()+1000);
-        System.out.println(fruit.getCustomModelDataId());
-        System.out.println(fruit.getCustomModelDataId() + 1000);
 
-        /*
+
         AttributeModifier modifier = new AttributeModifier(UUID.randomUUID(), "generic.attackDamage", 10, AttributeModifier.Operation.ADD_NUMBER, EquipmentSlot.HAND);
         meta.addAttributeModifier(Attribute.GENERIC_ATTACK_DAMAGE, modifier);
-        AttributeModifier modifier2 = new AttributeModifier(UUID.randomUUID(), "generic.attackSpeed", 2, AttributeModifier.Operation.ADD_NUMBER, EquipmentSlot.HAND);
+        AttributeModifier modifier2 = new AttributeModifier(UUID.randomUUID(), "generic.attackDamage", 2, AttributeModifier.Operation.ADD_NUMBER, EquipmentSlot.HAND);
         meta.addAttributeModifier(Attribute.GENERIC_ATTACK_SPEED, modifier2);
-         */
+
 
         caster.setItemMeta(meta);
 
@@ -283,10 +284,12 @@ public class hie_hie extends paramecia {    //fruit_fruit is the fruit whose abi
 
 
 
-        OPHLib.breath(user,new Vector(0,14,0), new Vector(0,-0.9,0),40,18,140,2,0.7,30,2,2,"icebreathdrake" );
+        OPHLib.iceBreath(user,new Vector(0,14,0), new Vector(0,-0.9,0),40,18,140,2,0.7,30,2,2,"icebreathdrake" );
 
     }
 
+
+    // ---------------------------------------------- Listeners ---------------------------------------------------------------------
     public void onPlayerMove(PlayerMoveEvent event) {
         super.onPlayerMove(event);
 
@@ -327,6 +330,7 @@ public class hie_hie extends paramecia {    //fruit_fruit is the fruit whose abi
                     if(hitEnt instanceof LivingEntity){
                         ((LivingEntity) hitEnt).damage(5);
                         hie_hie.createIceBox(hitEnt);
+                        hitEnt.setFreezeTicks(hitEnt.getFreezeTicks() + 250);
                     }
                 } else{
                     event.getHitBlock().setType(Material.BLUE_ICE);
@@ -335,6 +339,25 @@ public class hie_hie extends paramecia {    //fruit_fruit is the fruit whose abi
                 Bukkit.getScheduler().scheduleSyncDelayedTask(plugin, () -> tridente.remove(), 60L);
             }
         }
+    }
+
+    public void onEntityDamageByUser(EntityDamageByEntityEvent event){
+        super.onEntityDamageByUser(event);
+
+        Entity hitEnt = event.getEntity();
+
+        ItemStack sword = user.getPlayer().getInventory().getItemInMainHand();
+
+        if(sword !=null && castIdentification.itemIsCaster(sword, user)){
+            ItemMeta meta = sword.getItemMeta();
+            if(meta.getCustomModelData() == fruit.getCustomModelDataId()+1000){
+                event.getEntity().setFreezeTicks(hitEnt.getFreezeTicks() + 80);
+            }
+
+        }
+
+
+
     }
 
 }

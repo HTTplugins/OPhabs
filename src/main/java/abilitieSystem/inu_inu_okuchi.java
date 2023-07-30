@@ -5,7 +5,6 @@ import castSystem.castIdentification;
 
 import org.bukkit.*;
 import org.bukkit.entity.Player;
-import org.bukkit.entity.Entity;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import org.bukkit.event.entity.EntityDamageEvent;
@@ -18,8 +17,6 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.util.Vector;
 
 import java.util.ArrayList;
-
-import static java.lang.Math.*;
 
 public class inu_inu_okuchi extends zoan {
     private final ItemStack iceBlock = new ItemStack(Material.PACKED_ICE);
@@ -148,7 +145,7 @@ public class inu_inu_okuchi extends zoan {
         Player player = user.getPlayer();
 
 
-        OPHLib.breath(user, new Vector(0,0,0), new Vector(0,0,0),0,12, 100,4,0.5,40,1.5,4,"none");
+        OPHLib.iceBreath(user, new Vector(0,0,0), new Vector(0,0,0),0,12, 100,4,0.5,40,1.5,4,"none");
     }
 
     public void createIceArmor() {

@@ -408,7 +408,7 @@ public class OPHLib {
         }.runTaskTimer(abilities.plugin, 0, 2);
     }
 
-    public static void breath(abilityUser user, Vector pos, Vector dir, int delay, int maxLength, int maxTicks, int dmg, double startAmpl, int startAmountParticles, double maxAmplitude, int period, String sound) {
+    public static void iceBreath(abilityUser user, Vector pos, Vector dir, int delay, int maxLength, int maxTicks, int dmg, double startAmpl, int startAmountParticles, double maxAmplitude, int period, String sound) {
 
 
         int iterations = maxTicks / period;
@@ -457,7 +457,7 @@ public class OPHLib {
                             LivingEntity livingEntity = (LivingEntity) entity;
                             livingEntity.damage(dmg, player);
                             if (livingEntity.getFreezeTicks() <= 0) {
-                                livingEntity.setFreezeTicks(600);
+                                livingEntity.setFreezeTicks(livingEntity.getFreezeTicks() + 300);
 
                             }
                         }
