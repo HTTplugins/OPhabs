@@ -1,8 +1,10 @@
 package abilitieSystem;
 
 import castSystem.castIdentification;
+
 import htt.ophabs.OPhabs;
 import org.bukkit.*;
+import org.bukkit.block.data.type.Bed.Part;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.*;
 import org.bukkit.event.EventHandler;
@@ -43,7 +45,7 @@ public class magu_magu extends logia {
         abilitiesCD.add(0);
         abilitiesNames.add("Lava Ground");
         abilitiesCD.add(0);
-        abilitiesNames.add("Lava Soldiers");
+        abilitiesNames.add("Lava Rise");
         abilitiesCD.add(0);
 
         this.runParticles();
@@ -593,23 +595,11 @@ public class magu_magu extends logia {
 
     /**
      * @brief Ability 3: "".
-     * @author MiixZ.
+     * @author Vaelico786.
      */
     public void ability3() {
         if (abilitiesCD.get(2) == 0) {
-            if (LavaSoldiers.size() < 3) {
-                GenerateSoldier(user.getPlayer());
-            } else {
-                GenerateLavaGhast(user.getPlayer());
-            }
-
-            if (LavaSoldiers.size() < 3) {
-                abilitiesNames.set(2, "Lava Soldiers");
-                abilitiesCD.set(2, 2); // Pon el cooldown en segundos
-            } else {
-                abilitiesNames.set(2, "LAVA GHAST");
-                abilitiesCD.set(2, 2); // Pon el cooldown en segundos
-            }
+            lavaRise();
         }
     }
 
@@ -624,155 +614,60 @@ public class magu_magu extends logia {
         }
     }
 
-    public void GenerateSoldier(Player player) {
-        Location loc = player.getLocation();
+    public void lavaRise(){
+        int nLavaGeyser=8;
+        int area=10;
+        Random random = new Random();
+        Player player = user.getPlayer();
         World world = player.getWorld();
+        Stack<Location> locations = new Stack<>();
+        for(int i=0; i<nLavaGeyser; i++){
+            Location loc = player.getLocation().add(random.nextInt(area + area)-area, 0, random.nextInt(area + area)-area);
+            
+            loc.setY(OPHLib.searchGround(loc.getX(), loc.getZ(), loc.getY(), world));
+            locations.push(loc);
+        }
 
-        Zombie soldado = (Zombie) world.spawnEntity(loc, EntityType.ZOMBIE);
-        soldado.setCustomName("Lava Soldier");
-
-        soldado.setInvisible(true);
-        soldado.setTarget(null);
-        soldado.setVelocity(user.getPlayer().getLocation().getDirection().normalize().multiply(2));
-
-        LavaSoldiers.add(soldado);
 
         new BukkitRunnable() {
+            int ticks = 0;
+            int maxTicks = 250;
+            List<Location> activeGeyser = new ArrayList<>();
+
             @Override
             public void run() {
-                if (soldado.isDead() || !checkSoldiers(player)) {
-                    if (soldado.isDead())
-                        LavaSoldiers.remove(soldado);
 
+                if(ticks >= maxTicks || player == null || player.isDead()){
                     cancel();
                 }
 
-                soldado.setFireTicks(-50);
-
-                for (double i = 0.5; i < 5; i += 0.1) {
-                    soldado.getWorld().spawnParticle(Particle.DRIP_LAVA, soldado.getLocation().add(i / 5,1,i/ 5),
-                            1, 0,1,0,0);
-                    soldado.getWorld().spawnParticle(Particle.DRIP_LAVA, soldado.getLocation().add(i/ 5,1,-i/ 5),
-                            1, 0,1,0,0);
-                    soldado.getWorld().spawnParticle(Particle.DRIP_LAVA, soldado.getLocation().add(-i/ 5,1,i/ 5),
-                            1, 0,1,0,0);
-                    soldado.getWorld().spawnParticle(Particle.DRIP_LAVA, soldado.getLocation().add(-i/ 5,1,-i/ 5),
-                            1, 0,1,0,0);
+                if(ticks % 50 == 0 && !activeGeyser.isEmpty())
+                    activeGeyser.remove(0);
+                if(ticks % 20 == 0 && locations.size() > 0){
+                    activeGeyser.add(locations.pop());
                 }
-
-                for (Entity entity : soldado.getNearbyEntities(5, 5, 5)) {
-                    if (entity instanceof LivingEntity && !entity.getName().equals(user.getPlayer().getName()) &&
-                            !entity.getName().equals("Lava Soldier")) {
-                        soldado.setTarget((LivingEntity) entity);
-                    }
-                }
-            }
-        }.runTaskTimer(plugin,0,0);
-
-        // Desprende partículas alrededor del soldado.
-        Particle.DustOptions dustOptions = new Particle.DustOptions(Color.fromRGB(255, 0, 0), 1);
-        world.spawnParticle(Particle.REDSTONE, loc, 100, 0.5, 0.5, 0.5, dustOptions);
-
-        ItemStack espadaSoldado = new ItemStack(Material.STONE_SWORD);
-        ItemMeta espadaMeta = espadaSoldado.getItemMeta();
-
-        assert espadaMeta != null;
-        espadaMeta.addEnchant(Enchantment.FIRE_ASPECT, 4, true);
-        espadaMeta.addEnchant(Enchantment.DAMAGE_ALL, 4, true);
-        espadaMeta.addEnchant(Enchantment.DURABILITY, 4, true);
-        espadaMeta.addEnchant(Enchantment.KNOCKBACK, 4, true);
-        espadaSoldado.setItemMeta(espadaMeta);
-
-        Objects.requireNonNull(soldado.getEquipment()).setItemInMainHand(espadaSoldado);
-        soldado.getEquipment().setItemInMainHandDropChance(0);
-
-        soldado.setCustomNameVisible(true);
-    }
-
-    public void GenerateLavaGhast(Player player) {
-        Location loc = player.getLocation();
-        World world = player.getWorld();
-
-        Ghast ghast = (Ghast) world.spawnEntity(loc, EntityType.GHAST);
-        ghast.setCustomName("Lava Ghast");
-
-        ghast.setInvisible(true);
-        ghast.setTarget(null);
-        ghast.setVelocity(new Vector(0,3,0));
-
-        new BukkitRunnable() {
-            @Override
-            public void run() {
-                if (ghast.isDead() || !player.isOnline()) {
-                    ghast.remove();
-                    cancel();
-                }
-
-                for (double i = 0.5; i < 10; i += 0.1) {
-                    ghast.getWorld().spawnParticle(Particle.LAVA, ghast.getLocation().add(i / 5,1,i / 5),
-                            1, 0,1,0,0);
-                    ghast.getWorld().spawnParticle(Particle.LAVA, ghast.getLocation().add(i / 5,1,-i/ 5),
-                            1, 0,1,0,0);
-                    ghast.getWorld().spawnParticle(Particle.LAVA, ghast.getLocation().add(-i / 5,1,i / 5),
-                            1, 0,1,0,0);
-                    ghast.getWorld().spawnParticle(Particle.LAVA, ghast.getLocation().add(-i / 5,1,-i / 5),
-                            1, 0,1,0,0);
-                }
-
-                for (Entity entity : ghast.getNearbyEntities(30, 30, 30)) {
-                    if (entity instanceof LivingEntity && !entity.getName().equals(user.getPlayer().getName()) &&
-                            !entity.getName().equals("Lava Soldier") && !entity.getName().equals("Lava Ghast")) {
-                        TargetsGhast.add((LivingEntity) entity);
-                    }
-                }
-            }
-        }.runTaskTimer(plugin,0,0);
-
-        new BukkitRunnable() {
-            @Override
-            public void run() {
-                if (ghast.isDead() || !player.isOnline()) {
-                    TargetsGhast.clear();
-                    TargetGhastActual = null;
-                    cancel();
-                }
-
-                if (TargetsGhast.size() > 0) {
-                    if (TargetGhastActual == null || TargetGhastActual.isDead()) {
-                        if (TargetGhastActual != null && TargetGhastActual.isDead())
-                            TargetsGhast.remove(TargetGhastActual);
-
-                        if (TargetsGhast.size() > 0) {
-                            TargetGhastActual = TargetsGhast.get(0);
+                System.out.println(activeGeyser.size() + " and " + locations.size());
+                activeGeyser.forEach( location -> {
+                    // System.out.println("Location: " + location);
+                    world.spawnParticle(Particle.LAVA, location, 10, 1, 2, 1, 0);
+                    world.spawnParticle(Particle.LAVA, location.clone().add(0, 2, 0), 5, 2, 1, 2,3);
+                    world.getNearbyEntities(location.clone().add(0, 1, 0), 2, 2, 2).forEach(entity -> {
+                        if(entity instanceof LivingEntity && !entity.equals(player)){
+                            ((LivingEntity) entity).damage(4, player);
+                            entity.setFireTicks(100);
                         }
-                    }
+                    });                
+                });
 
-                    if (TargetGhastActual != null)
-                        sendMeteoriteCustom(ghast, TargetGhastActual);
-                } else {
-                    TargetGhastActual = null;
-                }
+                ticks+=5;
+
             }
-        }.runTaskTimer(plugin,40,100);
+
+        }.runTaskTimer(plugin,0,5);
+
     }
 
-    public boolean checkSoldiers(Player player) {
-        if (!player.isOnline()) {
-            for (LivingEntity entity : LavaSoldiers) {
-                entity.setHealth(0);
-            }
 
-            return false;
-        }
-
-        for (LivingEntity entity : LavaSoldiers) {
-            if (entity.getLocation().distance(user.getPlayer().getLocation()) > 50) {
-                entity.setHealth(0);
-            }
-        }
-
-        return true;
-    }
 
     public void onEntityDamage(EntityDamageEvent event){
         super.onEntityDamage(event);
