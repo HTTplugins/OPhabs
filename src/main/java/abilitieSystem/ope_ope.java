@@ -1,6 +1,7 @@
 package abilitieSystem;
 
 import htt.ophabs.OPhabs;
+import castSystem.castIdentification;
 import org.bukkit.*;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.LivingEntity;
@@ -9,6 +10,8 @@ import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
+import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.util.Vector;
 import java.util.ArrayList;
@@ -313,6 +316,19 @@ public class ope_ope extends paramecia {
                     player.getWorld().playSound(currentHearth.getLocation(),"swordcut",1,1);
                     OPHLib.spawnBloodParticles(currentHearth);
                     player.sendMessage("You have stolen " + currentHearth.getName() + "'s ❤.");
+
+                    ItemStack caster;
+                    if (castIdentification.itemIsCaster(user.getPlayer().getInventory().getItemInMainHand(), user)) {
+                        caster = user.getPlayer().getInventory().getItemInMainHand();
+                    }
+                    else {
+                        caster = user.getPlayer().getInventory().getItemInOffHand();
+                    }
+
+                    ItemMeta meta = caster.getItemMeta();
+                    meta.setCustomModelData(fruit.getCustomModelDataId()+1000);
+
+                    caster.setItemMeta(meta);
                 }
             }
         } else {
@@ -329,6 +345,18 @@ public class ope_ope extends paramecia {
                 if(availableSqueezes == 0){
                     availableSqueezes = 5;
                     currentHearth = null;
+                    ItemStack caster;
+                    if (castIdentification.itemIsCaster(user.getPlayer().getInventory().getItemInMainHand(), user)) {
+                        caster = user.getPlayer().getInventory().getItemInMainHand();
+                    }
+                    else {
+                        caster = user.getPlayer().getInventory().getItemInOffHand();
+                    }
+
+                    ItemMeta meta = caster.getItemMeta();
+                    meta.setCustomModelData(fruit.getCustomModelDataId());
+
+                    caster.setItemMeta(meta);
                 }
             }
 
