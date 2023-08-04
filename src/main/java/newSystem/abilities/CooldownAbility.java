@@ -1,6 +1,8 @@
-package newSystem;
+package newSystem.abilities;
 
 import htt.ophabs.OPhabs;
+import newSystem.abilities.Ability;
+import newSystem.abilities.IAbility;
 
 public class CooldownAbility extends Ability
 {
@@ -18,7 +20,6 @@ public class CooldownAbility extends Ability
     @Override
     public void invoke()
     {
-        // TODO: Repensar esto
         if (this.currentCooldown > OPhabs.tmpGlobalCooldown)
             return;
 

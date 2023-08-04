@@ -3,6 +3,7 @@ package htt.ophabs;
 
 import com.google.gson.JsonObject;
 import htt.layeredstructures.LayeredStructuresAPI;
+import newSystem.OPUser;
 import org.bukkit.Material;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -32,6 +33,7 @@ import java.util.concurrent.TimeUnit;
 public final class OPhabs extends JavaPlugin {
     private static OPhabs instance = null;
     public static int tmpGlobalCooldown = 0;
+    public static HashMap<String, OPUser> newUsers = new HashMap<>();
 
     public static OPhabs getInstance()
     {

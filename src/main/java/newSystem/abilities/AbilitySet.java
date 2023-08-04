@@ -1,4 +1,4 @@
-package newSystem;
+package newSystem.abilities;
 
 import java.util.ArrayList;
 
@@ -23,11 +23,16 @@ public class AbilitySet
         this.abilities.add(ability);
     }
 
-    public void useAbility(int abilityID)
+    public void invokeAbility(int abilityID)
     {
         if (abilityID >= abilities.size() || abilityID < 0)
             return;
 
         abilities.get(abilityID).invoke();
+    }
+
+    public ArrayList<Ability> getAbilities()
+    {
+        return this.abilities;
     }
 }

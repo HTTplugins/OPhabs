@@ -1,4 +1,4 @@
-package newSystem;
+package newSystem.abilities;
 
 public interface IAbility
 {

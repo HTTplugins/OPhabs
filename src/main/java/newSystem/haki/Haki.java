@@ -1,4 +1,4 @@
-package newSystem;
+package newSystem.haki;
 
 public class Haki
 {

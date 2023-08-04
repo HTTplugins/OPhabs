@@ -1,7 +1,9 @@
-package newSystem;
+package newSystem.fruits;
 
-import htt.ophabs.OPhabs;
-import org.bukkit.scheduler.BukkitRunnable;
+import newSystem.OPUser;
+import newSystem.abilities.Ability;
+import newSystem.abilities.AbilitySet;
+import newSystem.abilities.CooldownAbility;
 
 public class FrutaX extends DevilFruit
 {

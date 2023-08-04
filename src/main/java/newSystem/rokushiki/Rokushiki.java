@@ -1,4 +1,4 @@
-package newSystem;
+package newSystem.rokushiki;
 
 public class Rokushiki
 {
