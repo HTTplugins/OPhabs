@@ -30,6 +30,14 @@ import java.util.concurrent.TimeUnit;
  * @author RedRiotTank, Vaelico786.
  */
 public final class OPhabs extends JavaPlugin {
+    private static OPhabs instance = null;
+    public static int tmpGlobalCooldown = 0;
+
+    public static OPhabs getInstance()
+    {
+        return instance;
+    }
+
     public static Map<String, abilityUser> users = new HashMap<>();
     public static ArrayList<df> abilitiesList = new ArrayList<>();
     private ScheduledExecutorService scheduler; //Planificador guardar archivo
@@ -38,7 +46,17 @@ public final class OPhabs extends JavaPlugin {
      * @author RedRiotTank, Vaelico786.
      */
     @Override
-    public void onEnable(){
+    public void onEnable()
+    {
+        //
+        // NOVA VERSIÓN
+        //
+        OPhabs.instance = this;
+
+
+        //
+        // VERSIÓN PREVIA
+        //
 
        // Plugin ls = Bukkit.getPluginManager().getPlugin("LayeredStructures");
         LayeredStructuresAPI.initialize(Bukkit.getPluginManager().getPlugin("LayeredStructures"));
