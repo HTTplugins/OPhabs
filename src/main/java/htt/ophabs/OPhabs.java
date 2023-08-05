@@ -4,6 +4,9 @@ package htt.ophabs;
 import com.google.gson.JsonObject;
 import htt.layeredstructures.LayeredStructuresAPI;
 import newSystem.OPUser;
+import newSystem.cast.CastSystem;
+import newSystem.registry.FruitRegistry;
+import newSystem.registry.SystemRegistry;
 import org.bukkit.Material;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -55,6 +58,19 @@ public final class OPhabs extends JavaPlugin {
         //
         OPhabs.instance = this;
 
+        //
+        // Inicializar los registros
+        //
+        SystemRegistry systemRegistry = new SystemRegistry();
+
+        FruitRegistry fruitRegistry = new FruitRegistry();
+
+        //
+        // Inicializar procesadores de eventos
+        //
+
+        CastSystem castSystem = new CastSystem();
+        getServer().getPluginManager().registerEvents(castSystem, this);
 
         //
         // VERSIÓN PREVIA

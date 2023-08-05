@@ -11,15 +11,20 @@ public abstract class DevilFruit
     protected ArrayList<AbilitySet> abilitySets = new ArrayList<>();
     protected OPUser user;
 
-    public DevilFruit(OPUser user)
+    public DevilFruit(String name)
     {
-        this.user = user;
+        this.name = name;
     }
 
     // Permite robar frutas temporalmente
     public void setUser(OPUser user)
     {
         this.user = user;
+    }
+
+    public String getName()
+    {
+        return this.name;
     }
 
     public void invokeAbility(int abilitySetID, int abilityID)

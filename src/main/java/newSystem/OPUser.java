@@ -32,6 +32,11 @@ public class OPUser
         this.activeCasters = new HashMap<>();
     }
 
+    public void setDevilFruit(DevilFruit fruit)
+    {
+        this.devilFruit = fruit;
+    }
+
     //
     // Procesamiento de eventos
     //
