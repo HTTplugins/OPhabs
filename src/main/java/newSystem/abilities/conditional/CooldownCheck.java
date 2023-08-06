@@ -16,12 +16,12 @@ public class CooldownCheck implements IConditionalCheck
     @Override
     public boolean check()
     {
-        return this.currentCooldown <= OPhabs.tmpGlobalCooldown;
+        return this.currentCooldown <= OPhabs.cooldownSystem.getGlobalCooldownTimer();
     }
 
     @Override
     public void onCheckSuccess()
     {
-        this.currentCooldown = OPhabs.tmpGlobalCooldown + this.cooldown;
+        this.currentCooldown = OPhabs.cooldownSystem.getGlobalCooldownTimer() + this.cooldown;
     }
 }

@@ -20,10 +20,12 @@ public class CooldownAbility extends Ability
     @Override
     public void invoke()
     {
-        if (this.currentCooldown > OPhabs.tmpGlobalCooldown)
+        int globalCooldownTimer = OPhabs.cooldownSystem.getGlobalCooldownTimer();
+
+        if (this.currentCooldown > globalCooldownTimer)
             return;
 
-        this.currentCooldown = OPhabs.tmpGlobalCooldown + this.cooldown;
+        this.currentCooldown = globalCooldownTimer + this.cooldown;
 
         abilityLogic.invoke();
     }

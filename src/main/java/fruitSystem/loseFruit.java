@@ -41,7 +41,7 @@ public class loseFruit implements Listener {
      * @author RedRiotTank, Vaelico786.
      */
     @EventHandler(ignoreCancelled = true)
-    public void onPlayerDeath(PlayerDeathEvent event) {
+    public void onPlayerDeath(PlayerDeathEvent event){
         Player player = event.getEntity();
         noDropCaster.onPlayerDeath(event);
         if (dfPlayers.containsKey(player.getName())) {

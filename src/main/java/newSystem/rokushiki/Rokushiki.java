@@ -1,6 +1,8 @@
 package newSystem.rokushiki;
 
-public class Rokushiki
+import newSystem.events.IEventProcessor;
+
+public class Rokushiki implements IEventProcessor
 {
 
 }

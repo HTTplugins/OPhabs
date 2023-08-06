@@ -1,14 +1,13 @@
 package htt.ophabs;
 
 
-import com.google.gson.JsonObject;
 import htt.layeredstructures.LayeredStructuresAPI;
-import newSystem.OPUser;
-import newSystem.cast.CastSystem;
-import newSystem.registry.FruitRegistry;
-import newSystem.registry.SystemRegistry;
-import org.bukkit.Material;
-import org.bukkit.plugin.Plugin;
+import newSystem.UserList;
+import newSystem.display.ScoreboardSystem;
+import newSystem.events.EventSystem;
+import newSystem.cooldown.CooldownSystem;
+import newSystem.events.FruitEvents;
+import newSystem.registry.RegistrySystem;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.Bukkit;
 import commands.*;
@@ -19,7 +18,6 @@ import abilitieSystem.*;
 import castSystem.*;
 import org.bukkit.ChatColor;
 import scoreboardSystem.*;
-import weapons.*;
 
 import java.util.Objects;
 import java.util.ArrayList;
@@ -35,13 +33,19 @@ import java.util.concurrent.TimeUnit;
  */
 public final class OPhabs extends JavaPlugin {
     private static OPhabs instance = null;
-    public static int tmpGlobalCooldown = 0;
-    public static HashMap<String, OPUser> newUsers = new HashMap<>();
-
     public static OPhabs getInstance()
     {
         return instance;
     }
+
+    public static final UserList newUsers = new UserList();
+    public static final RegistrySystem registrySystem = new RegistrySystem();
+    public static CooldownSystem cooldownSystem;
+    public static ScoreboardSystem scoreboardSystem;
+
+
+
+
 
     public static Map<String, abilityUser> users = new HashMap<>();
     public static ArrayList<df> abilitiesList = new ArrayList<>();
@@ -53,32 +57,50 @@ public final class OPhabs extends JavaPlugin {
     @Override
     public void onEnable()
     {
-        //
-        // NOVA VERSIÓN
-        //
         OPhabs.instance = this;
+
+
+        //
+        // Inicializar dependencias
+        //
+
+        LayeredStructuresAPI.initialize(Bukkit.getPluginManager().getPlugin("LayeredStructures"));
+
 
         //
         // Inicializar los registros
         //
-        SystemRegistry systemRegistry = new SystemRegistry();
 
-        FruitRegistry fruitRegistry = new FruitRegistry();
+        registrySystem.initRegistry();
+
 
         //
-        // Inicializar procesadores de eventos
+        // Inicializar sistemas
         //
 
-        CastSystem castSystem = new CastSystem();
-        getServer().getPluginManager().registerEvents(castSystem, this);
+        scoreboardSystem = new ScoreboardSystem();
+        cooldownSystem = new CooldownSystem();
+
+
+        //
+        // Cargar los registros
+        //
+
+        registrySystem.loadRegistry();
+
+        //
+        // Activar eventos
+        //
+
+        EventSystem eventSystem = new EventSystem();
+        getServer().getPluginManager().registerEvents(eventSystem, this);
+
+        FruitEvents fruitEvents = new FruitEvents();
+        getServer().getPluginManager().registerEvents(fruitEvents, this);
 
         //
         // VERSIÓN PREVIA
         //
-
-       // Plugin ls = Bukkit.getPluginManager().getPlugin("LayeredStructures");
-        LayeredStructuresAPI.initialize(Bukkit.getPluginManager().getPlugin("LayeredStructures"));
-
 
         //--------------
         //abilitieSystem
@@ -160,10 +182,16 @@ public final class OPhabs extends JavaPlugin {
      * @author RedRiotTank, Vaelico786.
      */
     @Override
-    public void onDisable() {
+    public void onDisable()
+    {
         scheduler.shutdown();
+
+        //
+        registrySystem.saveRegistry();
+
+        //
         fileSystem.saveConfig(this);
-        Bukkit.getConsoleSender().sendMessage(ChatColor.DARK_RED + "" + ChatColor.BOLD + "HTTrolplay closed correctly.");
+        Bukkit.getConsoleSender().sendMessage(ChatColor.GREEN + "" + ChatColor.BOLD + "OPhabs closed correctly.");
     }
 
     /**

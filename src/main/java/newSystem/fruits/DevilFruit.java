@@ -2,10 +2,11 @@ package newSystem.fruits;
 
 import newSystem.OPUser;
 import newSystem.abilities.AbilitySet;
+import newSystem.events.IEventProcessor;
 
 import java.util.ArrayList;
 
-public abstract class DevilFruit
+public abstract class DevilFruit implements IEventProcessor
 {
     protected String name;
     protected ArrayList<AbilitySet> abilitySets = new ArrayList<>();
@@ -20,6 +21,11 @@ public abstract class DevilFruit
     public void setUser(OPUser user)
     {
         this.user = user;
+    }
+
+    public OPUser getUser()
+    {
+        return this.user;
     }
 
     public String getName()

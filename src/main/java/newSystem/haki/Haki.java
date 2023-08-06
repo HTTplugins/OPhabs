@@ -1,6 +1,8 @@
 package newSystem.haki;
 
-public class Haki
+import newSystem.events.IEventProcessor;
+
+public class Haki implements IEventProcessor
 {
 
 }

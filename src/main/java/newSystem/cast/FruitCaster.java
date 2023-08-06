@@ -1,7 +1,9 @@
-package newSystem.fruits;
+package newSystem.cast;
 
 import newSystem.abilities.AbilitySet;
 import newSystem.cast.Caster;
+import newSystem.display.IFruitCasterDisplay;
+import newSystem.fruits.DevilFruit;
 import org.bukkit.event.player.PlayerDropItemEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerSwapHandItemsEvent;
@@ -15,9 +17,34 @@ public class FruitCaster extends Caster
     protected int selectedAbility = 0;
     protected int selectedAbilitySet = 0;
 
-    public FruitCaster(DevilFruit fruit)
+    protected IFruitCasterDisplay fruitCasterDisplay;
+
+    public FruitCaster(DevilFruit fruit, IFruitCasterDisplay fruitCasterDisplay)
     {
-        super(fruit.name);
+        super(fruit.getName());
+        this.fruit = fruit;
+        fruitCasterDisplay.addFruitCaster(this);
+    }
+
+    public DevilFruit getFruit()
+    {
+        return this.fruit;
+    }
+
+    public AbilitySet getSelectedAbilitySet()
+    {
+        return fruit.getAbilitySets().get(this.selectedAbilitySet);
+    }
+
+    public int getSelectedAbilityNumber()
+    {
+        return this.selectedAbility;
+    }
+
+    @Override
+    public void dispose()
+    {
+        fruitCasterDisplay.removeFruitCaster(this);
     }
 
     @Override

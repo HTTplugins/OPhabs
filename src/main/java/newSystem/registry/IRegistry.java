@@ -2,7 +2,7 @@ package newSystem.registry;
 
 public interface IRegistry
 {
-    void initRegistry();
+    default void initRegistry() {};
     void loadRegistry();
     void saveRegistry();
 }

@@ -2,5 +2,5 @@ package newSystem.abilities;
 
 public interface IAbility
 {
-    public void invoke();
+    void invoke();
 }
