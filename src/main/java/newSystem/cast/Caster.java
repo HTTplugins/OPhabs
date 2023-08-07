@@ -1,5 +1,6 @@
 package newSystem.cast;
 
+import newSystem.OPUser;
 import newSystem.events.IEventProcessor;
 import org.bukkit.Material;
 import org.bukkit.event.player.PlayerDropItemEvent;
@@ -9,7 +10,8 @@ import org.bukkit.inventory.ItemStack;
 
 public abstract class Caster implements IEventProcessor
 {
-    public static final Material casterMaterial = Material.QUARTZ;
+    // Material por defecto
+    public static final Material CASTER_MATERIAL = Material.QUARTZ;
 
     protected String name;
 
@@ -24,6 +26,10 @@ public abstract class Caster implements IEventProcessor
     }
 
     public abstract void dispose();
+
+    public abstract boolean isThisItem(ItemStack item);
+
+    public abstract boolean isOwnedBy(OPUser user);
 
     @Override
     public abstract void onPlayerInteract(PlayerInteractEvent event);

@@ -31,6 +31,11 @@ public class FrutaX extends DevilFruit
 
         set2.addAbility(new CooldownAbility("H1", 25, this::habilidad1_set2));
         set2.addAbility(new Ability("H2", () -> habilidad2_set2(25, 50)));
+        set2.addAbility(new Ability("H3", () -> habilidad2_set2(25, 50)));
+        set2.addAbility(new Ability("H4", () -> habilidad2_set2(25, 50)));
+        set2.addAbility(new Ability("H5", () -> habilidad2_set2(25, 50)));
+        set2.addAbility(new Ability("H6", () -> habilidad2_set2(25, 50)));
+        set2.addAbility(new Ability("H7", () -> habilidad2_set2(25, 50)));
 
         this.abilitySets.add(set1);
         this.abilitySets.add(set2);

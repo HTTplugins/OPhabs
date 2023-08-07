@@ -9,6 +9,7 @@ import newSystem.cast.FruitCaster;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.ItemStack;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.scoreboard.*;
 
@@ -70,7 +71,8 @@ public class ScoreboardSystem implements IFruitCasterDisplay
                         Scoreboard newScoreboard = emptyScoreboard;
 
                         // TODO: Si tiene este caster en alguna mano
-                        if(true || true)
+                        if(caster.isOwnedBy(user) && (caster.isThisItem(player.getInventory().getItemInMainHand())
+                            || caster.isThisItem(player.getInventory().getItemInOffHand())))
                         {
                             String fruitName = fruit.getName();
                             fruitName = fruitName.substring(0,1).toUpperCase() + fruitName.substring(1);
@@ -123,7 +125,7 @@ public class ScoreboardSystem implements IFruitCasterDisplay
                     }
                 }
             }
-        }.runTaskTimer(OPhabs.getInstance(), 0, 100);
+        }.runTaskTimer(OPhabs.getInstance(), 0, 20);
     }
 
     @Override

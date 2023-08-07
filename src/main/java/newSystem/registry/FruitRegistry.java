@@ -6,6 +6,7 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import htt.ophabs.OPhabs;
 import newSystem.OPUser;
+import newSystem.cast.Caster;
 import newSystem.cast.FruitCaster;
 import newSystem.fruits.*;
 
@@ -61,17 +62,17 @@ public class FruitRegistry implements IRegistry
         return this.fruitMap.get(fruitID);
     }
 
-    public void linkFruitUser(String fruitName, OPUser user)
+    public boolean linkFruitUser(String fruitName, OPUser user)
     {
         Integer fruitID = fruitNameIDMap.get(fruitName);
 
         if (fruitID == null)
-            return;
+            return false;
 
-        this.linkFruitUser(fruitID, user);
+        return this.linkFruitUser(fruitID, user);
     }
 
-    public void linkFruitUser(int fruitID, OPUser user)
+    public boolean linkFruitUser(int fruitID, OPUser user)
     {
         DevilFruit fruit = this.fruitMap.get(fruitID);
 
@@ -84,52 +85,61 @@ public class FruitRegistry implements IRegistry
                 if (currentUser.getUUID() != user.getUUID())
                 {
                     System.err.println("ERROR: El usuario " + currentUser.getPlayerName() + " es el poseedor de " + fruit.getName());
-                    return;
+                    return false;
                 }
             }
 
             fruit.setUser(user);
             user.setDevilFruit(fruit);
             user.getActiveCasters().put(fruitID, new FruitCaster(fruit, OPhabs.scoreboardSystem));
+            return true;
         }
+
+        return false;
     }
 
     // PRE: Usuario con la fruta especificada y nada nulo
-    public void unlinkFruitUser(int fruitID, OPUser user)
+    public boolean unlinkFruitUser(int fruitID, OPUser user)
     {
         DevilFruit fruit = this.fruitMap.get(fruitID);
 
-        // Unlink de la fruta y el usuario
-        user.getActiveCasters().remove(fruitID).dispose();
+        // Eliminar el caster
+        Caster caster = user.getActiveCasters().remove(fruitID);
+
+        if (caster != null)
+            caster.dispose();
+
+        // Unlink fruta y usuario
         user.setDevilFruit(null);
         fruit.setUser(null);
 
         System.out.println("El usuario " + user.getPlayerName() + " ha perdido su fruta " + fruit.getName());
+        return true;
     }
 
-    public void unlinkFruitUser(OPUser user)
+    public boolean unlinkFruitUser(OPUser user)
     {
         DevilFruit fruit = user.getDevilFruit();
 
         if (fruit == null)
-            return;
+            return false;
 
-        this.unlinkFruitUser(fruit.getID(), user);
+        return this.unlinkFruitUser(fruit.getID(), user);
     }
 
-    public void unlinkFruitUser(int fruitID)
+    public boolean unlinkFruitUser(int fruitID)
     {
         DevilFruit fruit = this.fruitMap.get(fruitID);
 
         if (fruit == null || fruit.getUser() == null)
-            return;
+            return false;
 
-        this.unlinkFruitUser(fruitID, fruit.getUser());
+        return this.unlinkFruitUser(fruitID, fruit.getUser());
     }
 
-    public void unlinkFruitUser(DevilFruit fruit)
+    public boolean unlinkFruitUser(DevilFruit fruit)
     {
-        this.unlinkFruitUser(fruit.getID());
+        return this.unlinkFruitUser(fruit.getID());
     }
 
 

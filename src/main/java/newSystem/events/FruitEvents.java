@@ -5,7 +5,10 @@ import castSystem.noDropCaster;
 import htt.ophabs.OPhabs;
 import htt.ophabs.fileSystem;
 import newSystem.OPUser;
+import newSystem.cast.Caster;
+import newSystem.cast.FruitCaster;
 import newSystem.consumables.ConsumableDevilFruit;
+import newSystem.fruits.DevilFruit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -13,6 +16,7 @@ import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.event.player.PlayerItemConsumeEvent;
 import org.bukkit.inventory.ItemStack;
 
+import java.util.Map;
 import java.util.UUID;
 
 public class FruitEvents implements Listener
@@ -31,8 +35,13 @@ public class FruitEvents implements Listener
         {
             Player player = event.getPlayer();
             OPUser user = OPhabs.newUsers.getOrSetUser(player.getUniqueId(), player.getName());
+            int fruitID = item.getItemMeta().getCustomModelData();
 
-            OPhabs.registrySystem.fruitRegistry.linkFruitUser(item.getItemMeta().getCustomModelData(), user);
+            if (OPhabs.registrySystem.fruitRegistry.linkFruitUser(fruitID, user))
+            {
+                // Darle el caster
+                player.getInventory().addItem(FruitCaster.getAsItem(fruitID));
+            }
         }
     }
 
@@ -44,10 +53,17 @@ public class FruitEvents implements Listener
 
         if (user.hasDevilFruit())
         {
+            Map<Integer, Caster> casters = user.getActiveCasters();
+
             // Eliminar el caster de los drops
             for (ItemStack drop : event.getDrops())
             {
-                if (true) // TODO: Check si es un caster
+                if (!drop.hasItemMeta() || !drop.getItemMeta().hasCustomModelData())
+                    continue;
+
+                Caster caster = casters.get(drop.getItemMeta().getCustomModelData());
+
+                if (caster != null && caster.isThisItem(drop))
                     drop.setAmount(0);
             }
 

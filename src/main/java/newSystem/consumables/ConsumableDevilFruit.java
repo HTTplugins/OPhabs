@@ -14,7 +14,7 @@ public class ConsumableDevilFruit
 {
     public static final Material FRUIT_MATERIAL = Material.APPLE;
 
-    public static ItemStack get(int fruitID)
+    public static ItemStack getItem(int fruitID)
     {
         ItemStack fruitItem = new ItemStack(FRUIT_MATERIAL);
         DevilFruit fruit = OPhabs.registrySystem.fruitRegistry.getFruit(fruitID);

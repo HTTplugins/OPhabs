@@ -9,6 +9,7 @@ import org.bukkit.event.player.PlayerDropItemEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerSwapHandItemsEvent;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.ItemMeta;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -72,10 +73,15 @@ public class OPUser implements IEventProcessor
         {
             if (eventItem != null)
             {
-                /*Caster caster = activeCasters.get(eventItem.getItemMeta().getDisplayName());
+                if (eventItem.hasItemMeta() && eventItem.getItemMeta().hasCustomModelData())
+                {
+                    Caster caster = activeCasters.get(eventItem.getItemMeta().getCustomModelData());
 
-                if (Caster.IsCaster(caster, eventItem))
-                    caster.onPlayerInteract(event);*/
+                    if (caster != null && caster.isOwnedBy(this) && caster.isThisItem(eventItem))
+                    {
+                        caster.onPlayerInteract(event);
+                    }
+                }
             }
         }
 
@@ -89,7 +95,20 @@ public class OPUser implements IEventProcessor
     @Override
     public void onPlayerDropItem(PlayerDropItemEvent event)
     {
+        ItemStack eventItem = event.getItemDrop().getItemStack();
+
         // Pasar el evento al caster activo
+        {
+            if (eventItem.hasItemMeta() && eventItem.getItemMeta().hasCustomModelData())
+            {
+                Caster caster = activeCasters.get(eventItem.getItemMeta().getCustomModelData());
+
+                if (caster != null && caster.isOwnedBy(this) && caster.isThisItem(eventItem))
+                {
+                    caster.onPlayerDropItem(event);
+                }
+            }
+        }
 
         // Pasar el evento  a todos los casters pasivos
 
@@ -99,7 +118,27 @@ public class OPUser implements IEventProcessor
     @Override
     public void onPlayerSwapHandItems(PlayerSwapHandItemsEvent event)
     {
+        ItemStack mainHandItem = event.getMainHandItem();
+        ItemStack offHandItem = event.getOffHandItem();
+
         // Pasar el evento al caster activo
+        {
+            if (mainHandItem != null && mainHandItem.hasItemMeta() && mainHandItem.getItemMeta().hasCustomModelData())
+            {
+                Caster caster = activeCasters.get(mainHandItem.getItemMeta().getCustomModelData());
+
+                if (caster != null && caster.isOwnedBy(this) && caster.isThisItem(mainHandItem))
+                    caster.onPlayerSwapHandItems(event);
+            }
+
+            if (offHandItem != null && offHandItem.hasItemMeta() && offHandItem.getItemMeta().hasCustomModelData())
+            {
+                Caster caster = activeCasters.get(offHandItem.getItemMeta().getCustomModelData());
+
+                if (caster != null && caster.isOwnedBy(this) && caster.isThisItem(offHandItem))
+                    caster.onPlayerSwapHandItems(event);
+            }
+        }
 
         // Pasar el evento  a todos los casters pasivos
 
@@ -114,5 +153,18 @@ public class OPUser implements IEventProcessor
     public DevilFruit getDevilFruit()
     {
         return this.devilFruit;
+    }
+
+    @Override
+    public boolean equals(Object o)
+    {
+        if (this == o)
+            return true;
+
+        if (o == null || getClass() != o.getClass())
+            return false;
+
+        OPUser otherUser = (OPUser) o;
+        return this.uuid == otherUser.uuid;
     }
 }

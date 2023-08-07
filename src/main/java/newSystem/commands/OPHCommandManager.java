@@ -54,7 +54,7 @@ public class OPHCommandManager implements CommandExecutor, TabCompleter
 
                         if (fruitOwner == null)
                         {
-                            player.getInventory().addItem(ConsumableDevilFruit.get(fruit.getID()));
+                            player.getInventory().addItem(ConsumableDevilFruit.getItem(fruit.getID()));
                             return true;
                         }
                         else
