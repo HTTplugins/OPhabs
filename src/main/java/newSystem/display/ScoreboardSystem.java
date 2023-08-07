@@ -31,9 +31,12 @@ public class ScoreboardSystem implements IFruitCasterDisplay
 
     private ScoreboardManager scoreboardManager = Bukkit.getScoreboardManager();
     private HashMap<String, FruitCasterData> fruitCasters;
+    private Scoreboard emptyScoreboard;
 
     public ScoreboardSystem()
     {
+        this.emptyScoreboard = scoreboardManager.getNewScoreboard();
+
         this.fruitCasters = new HashMap<>();
 
         // Iniciar las actualizaciones
@@ -64,34 +67,37 @@ public class ScoreboardSystem implements IFruitCasterDisplay
                         if (player == null)
                             continue;
 
-                        AbilitySet abilitySet = caster.getSelectedAbilitySet();
-                        ArrayList<String> abilityDisplayList = new ArrayList<>(abilitySet.abilities.size());
-
-                        for (Ability ability : abilitySet.abilities)
-                            abilityDisplayList.add(ability.getDisplayableString());
-
-                        int selectedAbilityIndex = caster.getSelectedAbilityNumber();
-
-                        if (selectedAbilityIndex < abilityDisplayList.size())
-                        {
-                            String activeAbility = ChatColor.RED + "" + ChatColor.BOLD + "" + abilityDisplayList.get(selectedAbilityIndex);
-                            abilityDisplayList.set(selectedAbilityIndex, activeAbility);
-                        }
-
-
-                        Scoreboard newScoreboard = scoreboardManager.getNewScoreboard();
+                        Scoreboard newScoreboard = emptyScoreboard;
 
                         // TODO: Si tiene este caster en alguna mano
                         if(true || true)
                         {
-                            Scoreboard tmpScoreboard = scoreboardManager.getNewScoreboard();
-
-                            Objective objective = tmpScoreboard.registerNewObjective("abilitiesScoreboard","dummy");
-                            objective.setDisplaySlot(DisplaySlot.SIDEBAR);
-
                             String fruitName = fruit.getName();
                             fruitName = fruitName.substring(0,1).toUpperCase() + fruitName.substring(1);
 
+                            AbilitySet abilitySet = caster.getSelectedAbilitySet();
+                            ArrayList<String> abilityDisplayList = new ArrayList<>(abilitySet.abilities.size());
+
+                            for (Ability ability : abilitySet.abilities)
+                                abilityDisplayList.add(ability.getDisplayableString());
+
+                            int selectedAbilityIndex = caster.getSelectedAbilityNumber();
+
+                            if (selectedAbilityIndex < abilityDisplayList.size())
+                            {
+                                String activeAbility = ChatColor.RED + "" + ChatColor.BOLD + "" + abilityDisplayList.get(selectedAbilityIndex);
+                                abilityDisplayList.set(selectedAbilityIndex, activeAbility);
+                            }
+
+                            Objective objective = scoreboard.getObjective("abilitiesScoreboard");
+
+                            if (objective != null)
+                            {
+                                objective.unregister();
+                            }
+
+                            objective = scoreboard.registerNewObjective("abilitiesScoreboard","dummy");
+                            objective.setDisplaySlot(DisplaySlot.SIDEBAR);
                             objective.setDisplayName(ChatColor.BOLD + "" + fruitName);
 
                             for(int i = 0; i < abilityDisplayList.size(); i++)
@@ -100,7 +106,7 @@ public class ScoreboardSystem implements IFruitCasterDisplay
                                 score.setScore(i);
                             }
 
-                            newScoreboard = tmpScoreboard;
+                            newScoreboard = scoreboard;
                         }
 
                         player.setScoreboard(newScoreboard);
@@ -117,7 +123,7 @@ public class ScoreboardSystem implements IFruitCasterDisplay
                     }
                 }
             }
-        }.runTaskTimer(OPhabs.getInstance(), 0, 10);
+        }.runTaskTimer(OPhabs.getInstance(), 0, 100);
     }
 
     @Override
@@ -129,6 +135,7 @@ public class ScoreboardSystem implements IFruitCasterDisplay
     @Override
     public void removeFruitCaster(FruitCaster caster)
     {
-        fruitCasters.remove(caster.getName());
+        FruitCasterData fruitCasterData = fruitCasters.remove(caster.getName());
+        fruitCasterData.scoreboard.clearSlot(DisplaySlot.SIDEBAR);
     }
 }

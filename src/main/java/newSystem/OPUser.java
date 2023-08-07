@@ -14,6 +14,9 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
 
+
+// TODO: Añadir estadísticas de daño, etc
+
 public class OPUser implements IEventProcessor
 {
     private final String playerName;
@@ -23,7 +26,7 @@ public class OPUser implements IEventProcessor
     private Haki haki;
     private Rokushiki rokushiki;
 
-    private HashMap<String, Caster> activeCasters;
+    private final HashMap<Integer, Caster> activeCasters;
 
     public OPUser(UUID uuid, String playerName)
     {
@@ -51,7 +54,7 @@ public class OPUser implements IEventProcessor
         this.devilFruit = fruit;
     }
 
-    public Map<String, Caster> getActiveCasters()
+    public Map<Integer, Caster> getActiveCasters()
     {
         return this.activeCasters;
     }

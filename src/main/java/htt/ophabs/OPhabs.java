@@ -3,6 +3,7 @@ package htt.ophabs;
 
 import htt.layeredstructures.LayeredStructuresAPI;
 import newSystem.UserList;
+import newSystem.commands.OPHCommandManager;
 import newSystem.display.ScoreboardSystem;
 import newSystem.events.EventSystem;
 import newSystem.cooldown.CooldownSystem;
@@ -99,6 +100,19 @@ public final class OPhabs extends JavaPlugin {
         getServer().getPluginManager().registerEvents(fruitEvents, this);
 
         //
+        // Registrar comandos
+        //
+
+        OPHCommandManager ophCommandManager = new OPHCommandManager();
+        Objects.requireNonNull(this.getCommand("oph")).setExecutor(ophCommandManager);
+        Objects.requireNonNull(this.getCommand("oph")).setTabCompleter(ophCommandManager);
+
+        //
+
+        if (true)
+            return;
+
+        //
         // VERSIÓN PREVIA
         //
 
@@ -184,13 +198,13 @@ public final class OPhabs extends JavaPlugin {
     @Override
     public void onDisable()
     {
-        scheduler.shutdown();
+        //scheduler.shutdown();
 
         //
         registrySystem.saveRegistry();
 
         //
-        fileSystem.saveConfig(this);
+        //fileSystem.saveConfig(this);
         Bukkit.getConsoleSender().sendMessage(ChatColor.GREEN + "" + ChatColor.BOLD + "OPhabs closed correctly.");
     }
 

@@ -7,9 +7,9 @@ import newSystem.abilities.CooldownAbility;
 
 public class FrutaX extends DevilFruit
 {
-    public FrutaX()
+    public FrutaX(int id)
     {
-        super("FrutaX");
+        super(id, "FrutaX", "FrutaX", "FrutaX");
 
         //
         // Crear el set de habilidades 1

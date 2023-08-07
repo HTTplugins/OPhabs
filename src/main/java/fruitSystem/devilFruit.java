@@ -38,7 +38,6 @@ public class devilFruit{
         metaDataDevilFruit.setDisplayName(fruitItemName);
         metaDataDevilFruit.setCustomModelData(this.id);
         devilFruit.setItemMeta(metaDataDevilFruit);
-
     }
 
     /**

@@ -8,13 +8,19 @@ import java.util.ArrayList;
 
 public abstract class DevilFruit implements IEventProcessor
 {
+    private final int id;
     protected String name;
+    protected String displayName;
+    protected String commandName;
     protected ArrayList<AbilitySet> abilitySets = new ArrayList<>();
     protected OPUser user;
 
-    public DevilFruit(String name)
+    public DevilFruit(int id, String name, String displayName, String commandName)
     {
+        this.id = id;
         this.name = name;
+        this.displayName = displayName;
+        this.commandName = commandName;
     }
 
     // Permite robar frutas temporalmente
@@ -31,6 +37,21 @@ public abstract class DevilFruit implements IEventProcessor
     public String getName()
     {
         return this.name;
+    }
+
+    public String getDisplayName()
+    {
+        return this.displayName;
+    }
+
+    public String getCommandName()
+    {
+        return this.commandName;
+    }
+
+    public int getID()
+    {
+        return this.id;
     }
 
     public void invokeAbility(int abilitySetID, int abilityID)

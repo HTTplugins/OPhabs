@@ -14,14 +14,23 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.util.Collections;
 import java.util.HashMap;
+import java.util.Map;
 import java.util.UUID;
 
 // TODO: Se utilizará IFruitRegistry para los métodos de linkFruit, etc.
 public class FruitRegistry implements IRegistry
 {
     private static final String FRUIT_REGISTRY_DATA_PATH = "plugins/OPhabs/Data/FruitRegistry.json";
-    private final HashMap<String, FruitData> fruitDataMap = new HashMap<>();
+    private final HashMap<Integer, DevilFruit> fruitMap = new HashMap<>();
+    private final HashMap<String, Integer> fruitNameIDMap = new HashMap<>();
+
+    private int NEXT_FRUIT_ID = 1000; // ID INICIAL
+    private int NEXT_ID()
+    {
+        return NEXT_FRUIT_ID++;
+    }
 
     public FruitRegistry()
     {
@@ -29,48 +38,73 @@ public class FruitRegistry implements IRegistry
         // Crear todas las frutas
         //
 
+
+        // NOTE: NO CAMBIAR EL ORDEN -> ItemStack físico del caster utiliza este ID
         DevilFruit[] fruits = {
-            new FrutaX(),
+            new FrutaX(NEXT_ID()),
         };
 
         for (DevilFruit fruit : fruits)
-            fruitDataMap.put(fruit.getName(), new FruitData(fruit, RegistrySystem.NEXT_ID()));
+        {
+            this.fruitMap.put(fruit.getID(), fruit);
+            this.fruitNameIDMap.put(fruit.getName(), fruit.getID());
+        }
+    }
+
+    public Map<Integer, DevilFruit> getFruitMap()
+    {
+        return Collections.unmodifiableMap(this.fruitMap);
+    }
+
+    public DevilFruit getFruit(int fruitID)
+    {
+        return this.fruitMap.get(fruitID);
     }
 
     public void linkFruitUser(String fruitName, OPUser user)
     {
-        FruitData fruitData = fruitDataMap.get(fruitName);
+        Integer fruitID = fruitNameIDMap.get(fruitName);
 
-        if (fruitData != null)
+        if (fruitID == null)
+            return;
+
+        this.linkFruitUser(fruitID, user);
+    }
+
+    public void linkFruitUser(int fruitID, OPUser user)
+    {
+        DevilFruit fruit = this.fruitMap.get(fruitID);
+
+        if (fruit != null)
         {
-            if (fruitData.fruit.getUser() != null)
+            if (fruit.getUser() != null)
             {
-                OPUser currentUser = fruitData.fruit.getUser();
+                OPUser currentUser = fruit.getUser();
 
                 if (currentUser.getUUID() != user.getUUID())
                 {
-                    System.err.println("ERROR: El usuario " + currentUser.getPlayerName() + " es el poseedor de " + fruitName);
+                    System.err.println("ERROR: El usuario " + currentUser.getPlayerName() + " es el poseedor de " + fruit.getName());
                     return;
                 }
             }
 
-            fruitData.fruit.setUser(user);
-            user.setDevilFruit(fruitData.fruit);
-            user.getActiveCasters().put(fruitName, new FruitCaster(fruitData.fruit, OPhabs.scoreboardSystem));
+            fruit.setUser(user);
+            user.setDevilFruit(fruit);
+            user.getActiveCasters().put(fruitID, new FruitCaster(fruit, OPhabs.scoreboardSystem));
         }
     }
 
     // PRE: Usuario con la fruta especificada y nada nulo
-    public void unlinkFruitUser(String fruitName, OPUser user)
+    public void unlinkFruitUser(int fruitID, OPUser user)
     {
-        FruitData fruitData = fruitDataMap.get(fruitName);
+        DevilFruit fruit = this.fruitMap.get(fruitID);
 
         // Unlink de la fruta y el usuario
-        user.getActiveCasters().remove(fruitName).dispose();
+        user.getActiveCasters().remove(fruitID).dispose();
         user.setDevilFruit(null);
-        fruitData.fruit.setUser(null);
+        fruit.setUser(null);
 
-        System.out.println("El usuario " + user.getPlayerName() + " ha perdido su fruta " + fruitName);
+        System.out.println("El usuario " + user.getPlayerName() + " ha perdido su fruta " + fruit.getName());
     }
 
     public void unlinkFruitUser(OPUser user)
@@ -80,22 +114,22 @@ public class FruitRegistry implements IRegistry
         if (fruit == null)
             return;
 
-        this.unlinkFruitUser(fruit.getName(), user);
+        this.unlinkFruitUser(fruit.getID(), user);
     }
 
-    public void unlinkFruitUser(String fruitName)
+    public void unlinkFruitUser(int fruitID)
     {
-        FruitData fruitData = fruitDataMap.get(fruitName);
+        DevilFruit fruit = this.fruitMap.get(fruitID);
 
-        if (fruitData == null || fruitData.fruit.getUser() == null)
+        if (fruit == null || fruit.getUser() == null)
             return;
 
-        this.unlinkFruitUser(fruitName, fruitData.fruit.getUser());
+        this.unlinkFruitUser(fruitID, fruit.getUser());
     }
 
     public void unlinkFruitUser(DevilFruit fruit)
     {
-        this.unlinkFruitUser(fruit.getName());
+        this.unlinkFruitUser(fruit.getID());
     }
 
 
@@ -148,9 +182,9 @@ public class FruitRegistry implements IRegistry
     {
         JsonObject fruitDataJSON = new JsonObject();
 
-        for (FruitData fruitData : this.fruitDataMap.values())
+        for (DevilFruit fruit : this.fruitMap.values())
         {
-            OPUser user = fruitData.fruit.getUser();
+            OPUser user = fruit.getUser();
             JsonObject userDataJSON = new JsonObject();
 
             if (user != null)
@@ -159,7 +193,7 @@ public class FruitRegistry implements IRegistry
                 userDataJSON.addProperty("name", user.getPlayerName());
             }
 
-            fruitDataJSON.add(fruitData.fruit.getName(), userDataJSON);
+            fruitDataJSON.add(fruit.getName(), userDataJSON);
         }
 
         try (FileWriter fileWriter = new FileWriter(FRUIT_REGISTRY_DATA_PATH))

@@ -1,7 +1,6 @@
 package newSystem.cast;
 
 import newSystem.abilities.AbilitySet;
-import newSystem.cast.Caster;
 import newSystem.display.IFruitCasterDisplay;
 import newSystem.fruits.DevilFruit;
 import org.bukkit.event.player.PlayerDropItemEvent;
@@ -23,6 +22,8 @@ public class FruitCaster extends Caster
     {
         super(fruit.getName());
         this.fruit = fruit;
+        this.fruitCasterDisplay = fruitCasterDisplay;
+
         fruitCasterDisplay.addFruitCaster(this);
     }
 
