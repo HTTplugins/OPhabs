@@ -24,6 +24,18 @@ public class UserList
         return users.get(uuid);
     }
 
+    // TODO: Pensar si hacerla O(1) con otro hashmap.
+    // WARNING: O(n)
+    @Deprecated
+    public OPUser getUserByName(String playerName)
+    {
+        for (OPUser user : users.values())
+            if (user.getPlayerName().equals(playerName))
+                return user;
+
+        return null;
+    }
+
     public boolean userExists(UUID uuid)
     {
         return users.containsKey(uuid);

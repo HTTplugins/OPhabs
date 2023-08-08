@@ -37,6 +37,14 @@ public class FruitEvents implements Listener
             OPUser user = OPhabs.newUsers.getOrSetUser(player.getUniqueId(), player.getName());
             int fruitID = item.getItemMeta().getCustomModelData();
 
+            // Ya tiene una fruta
+            if (user.hasDevilFruit() && user.getDevilFruit().getID() != fruitID)
+            {
+                player.getWorld().strikeLightningEffect(player.getLocation());
+                player.setHealth(0);
+                return;
+            }
+
             if (OPhabs.registrySystem.fruitRegistry.linkFruitUser(fruitID, user))
             {
                 // Darle el caster
@@ -67,6 +75,7 @@ public class FruitEvents implements Listener
                     drop.setAmount(0);
             }
 
+            // TODO: Revisar
             user.onPlayerDeath(event);
             OPhabs.registrySystem.fruitRegistry.unlinkFruitUser(user);
         }

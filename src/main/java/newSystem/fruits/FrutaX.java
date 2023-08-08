@@ -4,6 +4,8 @@ import newSystem.OPUser;
 import newSystem.abilities.Ability;
 import newSystem.abilities.AbilitySet;
 import newSystem.abilities.CooldownAbility;
+import newSystem.abilities.conditional.ConditionalAbility;
+import newSystem.abilities.conditional.CooldownCheck;
 
 public class FrutaX extends DevilFruit
 {
@@ -36,6 +38,7 @@ public class FrutaX extends DevilFruit
         set2.addAbility(new Ability("H5", () -> habilidad2_set2(25, 50)));
         set2.addAbility(new Ability("H6", () -> habilidad2_set2(25, 50)));
         set2.addAbility(new Ability("H7", () -> habilidad2_set2(25, 50)));
+        set2.addAbility(new ConditionalAbility("H8", () -> habilidad2_set2(25, 50), new CooldownCheck(5)));
 
         this.abilitySets.add(set1);
         this.abilitySets.add(set2);

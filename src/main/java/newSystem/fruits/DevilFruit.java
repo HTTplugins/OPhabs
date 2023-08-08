@@ -14,6 +14,7 @@ public abstract class DevilFruit implements IEventProcessor
     protected String commandName;
     protected ArrayList<AbilitySet> abilitySets = new ArrayList<>();
     protected OPUser user;
+    protected boolean isFruitActive = true;
 
     public DevilFruit(int id, String name, String displayName, String commandName)
     {

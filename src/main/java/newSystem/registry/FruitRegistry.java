@@ -9,6 +9,7 @@ import newSystem.OPUser;
 import newSystem.cast.Caster;
 import newSystem.cast.FruitCaster;
 import newSystem.fruits.*;
+import newSystem.fruits.paramecia.Bane_Bane;
 
 import java.io.File;
 import java.io.FileWriter;
@@ -27,7 +28,7 @@ public class FruitRegistry implements IRegistry
     private final HashMap<Integer, DevilFruit> fruitMap = new HashMap<>();
     private final HashMap<String, Integer> fruitNameIDMap = new HashMap<>();
 
-    private int NEXT_FRUIT_ID = 1000; // ID INICIAL
+    private int NEXT_FRUIT_ID = 10000; // ID INICIAL
     private int NEXT_ID()
     {
         return NEXT_FRUIT_ID++;
@@ -43,6 +44,7 @@ public class FruitRegistry implements IRegistry
         // NOTE: NO CAMBIAR EL ORDEN -> ItemStack físico del caster utiliza este ID
         DevilFruit[] fruits = {
             new FrutaX(NEXT_ID()),
+            new Bane_Bane(NEXT_ID())
         };
 
         for (DevilFruit fruit : fruits)
@@ -88,6 +90,9 @@ public class FruitRegistry implements IRegistry
                     return false;
                 }
             }
+
+            if (user.getDevilFruit() != null)
+                return false;
 
             fruit.setUser(user);
             user.setDevilFruit(fruit);

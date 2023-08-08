@@ -1,9 +1,11 @@
 package newSystem.events;
 
+import abilitieSystem.abilityUser;
 import htt.ophabs.OPhabs;
 import newSystem.OPUser;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
+import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.player.PlayerDropItemEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
@@ -61,5 +63,23 @@ public class EventSystem implements Listener
         String name = event.getPlayer().getName();
 
         OPhabs.newUsers.getOrSetUser(uuid, name);
+    }
+
+    @EventHandler
+    public void onEntityDamage(EntityDamageEvent event)
+    {
+        UUID uuid = event.getEntity().getUniqueId();
+
+        if(users.containsKey(uuid))
+        {
+            OPUser user = users.get(uuid);
+            user.onEntityDamage(event);
+
+            if(event.getCause() == EntityDamageEvent.DamageCause.FALL)
+                user.onFall(event);
+        }
+
+        if(event.getDamage() <= 0)
+            event.setCancelled(true);
     }
 }

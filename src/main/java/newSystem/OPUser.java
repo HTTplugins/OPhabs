@@ -5,11 +5,13 @@ import newSystem.events.IEventProcessor;
 import newSystem.fruits.DevilFruit;
 import newSystem.haki.Haki;
 import newSystem.rokushiki.Rokushiki;
+import org.bukkit.Bukkit;
+import org.bukkit.entity.Player;
+import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.player.PlayerDropItemEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerSwapHandItemsEvent;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.meta.ItemMeta;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -39,6 +41,12 @@ public class OPUser implements IEventProcessor
         this.rokushiki = null;
 
         this.activeCasters = new HashMap<>();
+    }
+
+    // TODO: Si en el futuro decidimos optimizar y almacenar players directamente, hacerlo en este método
+    public Player getPlayer()
+    {
+        return Bukkit.getPlayer(this.uuid);
     }
 
     public String getPlayerName()
@@ -84,8 +92,6 @@ public class OPUser implements IEventProcessor
                 }
             }
         }
-
-
 
         // Pasar el evento a todos los casters pasivos
 
@@ -143,6 +149,13 @@ public class OPUser implements IEventProcessor
         // Pasar el evento  a todos los casters pasivos
 
         // Procesar el evento como usuario
+    }
+
+    @Override
+    public void onFall(EntityDamageEvent event)
+    {
+        if (this.devilFruit != null)
+            this.devilFruit.onFall(event);
     }
 
     public boolean hasDevilFruit()
