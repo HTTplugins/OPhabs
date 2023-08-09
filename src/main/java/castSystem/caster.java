@@ -301,6 +301,7 @@ public class caster implements Listener {
      */
     @EventHandler(ignoreCancelled = true)
     public void onEntityToggleGlide(EntityToggleGlideEvent event) {
+        zushi_zushi.onHeavyGravityField(event); //W8ing Jaime refactor. (other glides could bug). 
         if(event.getEntity() instanceof Player) {
             Player player = (Player) event.getEntity();
             if(users.containsKey(player.getName())) {
@@ -308,6 +309,7 @@ public class caster implements Listener {
                 user.onEntityToggleGlide(event);
             }
         }
+        
     }
 
     /**
@@ -321,6 +323,7 @@ public class caster implements Listener {
             abilityUser user = users.get(event.getPlayer().getName());
             user.onPlayerMove(event);
         }
+        zushi_zushi.blockCameraHeavyField(event);
     }
  
     /**
