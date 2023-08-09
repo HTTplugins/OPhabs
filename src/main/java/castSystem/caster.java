@@ -308,6 +308,7 @@ public class caster implements Listener {
                 user.onEntityToggleGlide(event);
             }
         }
+        zushi_zushi.onHeavyGravityField(event);
     }
 
     /**
@@ -321,6 +322,7 @@ public class caster implements Listener {
             abilityUser user = users.get(event.getPlayer().getName());
             user.onPlayerMove(event);
         }
+        zushi_zushi.blockCameraHeavyField(event);
     }
  
     /**
