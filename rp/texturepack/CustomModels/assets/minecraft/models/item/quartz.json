@@ -74,7 +74,7 @@
             "predicate": {
 				"custom_model_data": 12
             },
-            "model": "custom/card2"
+            "model": "custom/katana"
         },
 		{
             "predicate": {
@@ -105,12 +105,6 @@
 				"custom_model_data": 17
             },
             "model": "custom/claws"
-        },
-        {
-          "predicate": {
-            "custom_model_data": 1012
-          },
-          "model": "custom/card"
         },
         {
           "predicate": {

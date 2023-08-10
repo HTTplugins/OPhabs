@@ -191,6 +191,7 @@ public class moku_moku extends logia {
     }
 
     public boolean logiaBody(Player player) {
+        player.getWorld().playSound(player.getLocation(), "vanish", 1, 1);
             if (!logiaBodyON) {
                 logiaBodyON = true;
                 player.addPotionEffect(new PotionEffect(PotionEffectType.SPEED, 9999999, 4, false, false));
@@ -259,8 +260,8 @@ public class moku_moku extends logia {
      * @author Vaelico786.
      */
     public void smokePunch(Location loc) {
-
-            ArmorStand armorStand = OPHLib.generateCustomFloatingItem(user.getPlayer().getLocation().add(0,-0.5,0), fist, false);
+        user.getPlayer().getWorld().playSound(loc, "cloudpunch", 1, 1);
+        ArmorStand armorStand = OPHLib.generateCustomFloatingItem(user.getPlayer().getLocation().add(0,-0.5,0), fist, false);
 
 
         new BukkitRunnable(){
@@ -321,6 +322,7 @@ public class moku_moku extends logia {
         int period = 5;
         smokeWorldON=true;
         Player player = user.getPlayer();
+        player.getWorld().playSound(player.getLocation(), "fog", 1, 1);
         new BukkitRunnable() {
             int tickCount=0;
             @Override
