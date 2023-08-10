@@ -582,7 +582,7 @@ public class OPHLib {
                 Vector direction = player.getEyeLocation().getDirection().add(dir);
                 Location location = player.getEyeLocation().add(pos);
 
-                if (i == 0 && !Objects.equals(sound, "firebreath"))    //Play sound on first iteration
+                if (i == 0 && !Objects.equals(sound, "none"))    //Play sound on first iteration
                     world.playSound(location, sound, 1, 1);
 
 

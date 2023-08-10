@@ -103,6 +103,16 @@
 		"sounds": [
 			"resort"
 		]
+	},
+	"crunch": {
+		"sounds": [
+			"crunch"
+		]
+	},
+	"stomp": {
+		"sounds": [
+			"stomp"
+		]
 	}
 
 

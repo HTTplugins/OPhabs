@@ -75,6 +75,7 @@ public class ryu_ryu_allosaurs extends zoan {
             int i = 0;
             @Override
             public void run() {
+                player.getWorld().playSound(player.getLocation(), "crunch", 1, 1);
                 if(i>5*2)
                     cancelTask();
 
@@ -141,6 +142,7 @@ public class ryu_ryu_allosaurs extends zoan {
     }
 
     public void Splash(Player player) {
+        player.getWorld().playSound(player.getLocation(), "stomp", 1, 1);
         animacionSplash(player.getWorld(), player.getLocation().clone().add(0, 0.25, 0));
         efectoSplash(player.getWorld(), player.getLocation());
     }

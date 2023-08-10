@@ -127,6 +127,7 @@ public class inu_inu_urufu extends zoan {
             int i = 0;
             @Override
             public void run() {
+                if(i % 4 == 0) player.getWorld().playSound(player.getLocation(), "crunch", 1, 1);
                 if(i>5*8)
                     cancelTask();
 
@@ -164,6 +165,7 @@ public class inu_inu_urufu extends zoan {
 
     public void rageMode(){
         raged = true;
+        user.getPlayer().getWorld().playSound(user.getPlayer().getLocation(), "roar", 1, 1);
 
         skinC.changeSkin(user.getPlayer(), rage);
         

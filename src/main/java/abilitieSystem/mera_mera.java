@@ -70,7 +70,7 @@ public class mera_mera extends logia {
         if(abilitiesCD.get(3) == 0) {
             OPHLib.fireBreath(user,new Vector(0,0,0), new Vector(0,0,0),
                               0, 10, 140, 5, 0.1,
-                              3, 1.5, 4,"none");
+                              3, 1.5, 4,"firebreath");
             abilitiesCD.set(3, FIREBREATH_COOLDOWN);
         }
     }

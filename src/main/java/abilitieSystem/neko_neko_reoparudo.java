@@ -84,6 +84,7 @@ public class neko_neko_reoparudo extends zoan {
             int i = 0;
             @Override
             public void run() {
+                if(i % 2 == 0) player.getWorld().playSound(player.getLocation(), "swordcut", 1, 1);
                 if(i>5*2)
                     cancelTask();
 
@@ -111,6 +112,7 @@ public class neko_neko_reoparudo extends zoan {
     public void Tsume(Player player) {
         Location loc = player.getLocation();
 
+        player.getWorld().playSound(loc, "swordcut", 100, 10);
         giroTsume(player);
         animacionPlayerTsume(player.getWorld(), player.getLocation().clone());
 
