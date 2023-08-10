@@ -1,38 +1,39 @@
 package abilitieSystem;
 
 import htt.ophabs.OPhabs;
-
-import org.bukkit.*;
+import java.util.ArrayList;
+import org.bukkit.Bukkit;
+import org.bukkit.Color;
+import org.bukkit.Location;
+import org.bukkit.Material;
+import org.bukkit.Particle;
+import org.bukkit.World;
+import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.Entity;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import org.bukkit.scheduler.BukkitRunnable;
-import org.bukkit.entity.LivingEntity;
 import org.bukkit.util.Vector;
 
-import java.util.ArrayList;
-
-import static java.lang.Math.*;
-
 public class ryu_ryu_allosaurs extends zoan {
-    private ArrayList<LivingEntity> golpeadosHabilidades = new ArrayList<>();
+    private ArrayList<LivingEntity> golpeadosHabilidades = new ArrayList();
+    private ArrayList<LivingEntity> StompedList;
 
     public ryu_ryu_allosaurs(OPhabs plugin) {
-        super(plugin, 6, 9, 11, "ryu_ryu_allosaurs", "Ryu Ryu no Mi Moderu Allosaurs", "Ryu Ryu Allosaurs caster", 7, 2,"http://novask.in/5915273049.png","allosaurs");
-
-        abilitiesNames.add("FrontalCrunch");
-        abilitiesCD.add(0);
-        abilitiesNames.add("TailSpin");
-        abilitiesCD.add(0);
-        abilitiesNames.add("Splash");
-        abilitiesCD.add(0);
+        super(plugin, 6.0, 9.0, 11, "ryu_ryu_allosaurs", "Ryu Ryu no Mi Moderu Allosaurs", "Ryu Ryu Allosaurs caster", 7.0, 2.0, "http://novask.in/5915273049.png", "allosaurs");
+        this.abilitiesNames.add("FrontalCrunch");
+        this.abilitiesCD.add(0);
+        this.abilitiesNames.add("TailSpin");
+        this.abilitiesCD.add(0);
+        this.abilitiesNames.add("Stomp");
+        this.abilitiesCD.add(0);
     }
 
     public void ability2() {
-        if(abilitiesCD.get(1) == 0){
-            frontCrunch();
-            abilitiesCD.set(1, 3);
+        if ((Integer)this.abilitiesCD.get(1) == 0) {
+            this.frontCrunch();
+            this.abilitiesCD.set(1, 3);
         }
     }
 
@@ -45,7 +46,7 @@ public class ryu_ryu_allosaurs extends zoan {
 
     public void ability4() {
         if(abilitiesCD.get(3) == 0) {
-            Splash(user.getPlayer());
+            Stomp(user.getPlayer());
             abilitiesCD.set(3, 5);
         }
     }
@@ -141,37 +142,55 @@ public class ryu_ryu_allosaurs extends zoan {
         }.runTaskTimer(plugin, 0, 1);
     }
 
-    public void Splash(Player player) {
-        player.getWorld().playSound(player.getLocation(), "stomp", 1, 1);
-        animacionSplash(player.getWorld(), player.getLocation().clone().add(0, 0.25, 0));
-        efectoSplash(player.getWorld(), player.getLocation());
+    public void Stomp(final Player player) {
+        final World world = player.getWorld();
+        this.StompedList = new ArrayList();
+        player.setVelocity(new Vector(0, -50, 0));
+        (new BukkitRunnable() {
+            int tickNumber = 0;
+
+            public void run() {
+                Location loc = player.getLocation();
+                ++this.tickNumber;
+                if (!player.getLocation().getBlock().getRelative(0, -1, 0).getType().equals(Material.AIR)) {
+                    ryu_ryu_allosaurs.this.animationStomp(world, player.getLocation());
+                    world.playSound(player.getLocation(), "stomp", 1, 1);
+                    ryu_ryu_allosaurs.this.StompedList.forEach((livingEntity) -> {
+                        livingEntity.damage(15.0, player);
+                    });
+                    this.cancel();
+                }
+
+                player.setFallDistance(0);
+
+                world.getNearbyEntities(loc, 5.0, 1.0, 5.0).forEach((entity) -> {
+                    if (entity instanceof LivingEntity && !ryu_ryu_allosaurs.this.StompedList.contains(entity) && !entity.equals(player)) {
+                        ryu_ryu_allosaurs.this.StompedList.add((LivingEntity)entity);
+                        if (entity instanceof Player) {
+                            ((Player)entity).setFlying(false);
+                        }
+
+                        entity.setVelocity(new Vector(0, -50, 0));
+                    }
+
+                });
+            }
+        }).runTaskTimer(plugin, 0L, 1L);
+        this.StompedList.clear();
     }
 
-    public void animacionSplash(World mundo, Location loc) {
-        for(int j = 0; j < 5; j++)
-            for(int i = 0; i < 10; i++) {
-                mundo.spawnParticle(Particle.CRIT, loc.clone().add(sin(i)*j, 0, cos(i)*j), 0, 0, 0, 0);
-                mundo.spawnParticle(Particle.CRIT, loc.clone().add(sin(-i)*j, 0, cos(i)*j), 0, 0, 0, 0);
-                mundo.spawnParticle(Particle.CRIT, loc.clone().add(sin(i)*j, 0, cos(-i)*j), 0, 0, 0, 0);
-                mundo.spawnParticle(Particle.CRIT, loc.clone().add(sin(-i)*j, 0, cos(-i)*j), 0, 0, 0, 0);
-                mundo.spawnParticle(Particle.CRIT, loc.clone().add(sin(i)*j, 0, cos(i)/2*j), 0, 0, 0, 0);
-                mundo.spawnParticle(Particle.CRIT, loc.clone().add(sin(-i)*j, 0, cos(i)/2*j), 0, 0, 0, 0);
-                mundo.spawnParticle(Particle.CRIT, loc.clone().add(sin(i)*j, 0, cos(-i)/2*j), 0, 0, 0, 0);
-                mundo.spawnParticle(Particle.CRIT, loc.clone().add(sin(-i)*j, 0, cos(-i)/2*j), 0, 0, 0, 0);
+    public void animationStomp(World mundo, Location loc) {
+        for(int j = 0; j < 5; ++j) {
+            for(int i = 0; i < 10; ++i) {
+                mundo.spawnParticle(Particle.CRIT, loc.clone().add(Math.sin((double)i) * (double)j, 1.0, Math.cos((double)i) * (double)j), 0, 0.0, 0.0, 0.0);
+                mundo.spawnParticle(Particle.CRIT, loc.clone().add(Math.sin((double)(-i)) * (double)j, 1.0, Math.cos((double)i) * (double)j), 0, 0.0, 0.0, 0.0);
+                mundo.spawnParticle(Particle.CRIT, loc.clone().add(Math.sin((double)i) * (double)j, 1.0, Math.cos((double)(-i)) * (double)j), 0, 0.0, 0.0, 0.0);
+                mundo.spawnParticle(Particle.CRIT, loc.clone().add(Math.sin((double)(-i)) * (double)j, 1.0, Math.cos((double)(-i)) * (double)j), 0, 0.0, 0.0, 0.0);
+                mundo.spawnParticle(Particle.CRIT, loc.clone().add(Math.sin((double)i) * (double)j, 1.0, Math.cos((double)i) / 2.0 * (double)j), 0, 0.0, 0.0, 0.0);
+                mundo.spawnParticle(Particle.CRIT, loc.clone().add(Math.sin((double)(-i)) * (double)j, 1.0, Math.cos((double)i) / 2.0 * (double)j), 0, 0.0, 0.0, 0.0);
+                mundo.spawnParticle(Particle.CRIT, loc.clone().add(Math.sin((double)i) * (double)j, 1.0, Math.cos((double)(-i)) / 2.0 * (double)j), 0, 0.0, 0.0, 0.0);
+                mundo.spawnParticle(Particle.CRIT, loc.clone().add(Math.sin((double)(-i)) * (double)j, 1.0, Math.cos((double)(-i)) / 2.0 * (double)j), 0, 0.0, 0.0, 0.0);
             }
-    }
-
-    public void efectoSplash(World mundo, Location loc) {
-        mundo.getNearbyEntities(loc, 5, 3, 5).forEach(entity -> {
-            if (!entity.getName().equals(user.getPlayerName()) && entity instanceof LivingEntity) {
-                Vector dir = new Vector(entity.getLocation().getX() - loc.getX(), entity.getLocation().getY() - loc.getY(),
-                                        entity.getLocation().getZ() - loc.getZ()).normalize();
-
-                ((LivingEntity) entity).damage(10, (Entity) user.getPlayer());
-                entity.setVelocity(dir.add(new Vector(0, 2, 0)));
-                ((LivingEntity) entity).addPotionEffect(new PotionEffect(PotionEffectType.SLOW, 100, 3));
-                ((LivingEntity) entity).addPotionEffect(new PotionEffect(PotionEffectType.WEAKNESS, 200, 3));
-            }
-        });
+        }
     }
 }
