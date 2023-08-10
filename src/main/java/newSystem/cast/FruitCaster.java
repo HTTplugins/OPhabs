@@ -5,6 +5,7 @@ import newSystem.OPUser;
 import newSystem.abilities.AbilitySet;
 import newSystem.display.IFruitCasterDisplay;
 import newSystem.fruits.DevilFruit;
+import org.bukkit.event.block.Action;
 import org.bukkit.event.player.PlayerDropItemEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerSwapHandItemsEvent;
@@ -89,12 +90,18 @@ public class FruitCaster extends Caster
         return user.equals(fruit.getUser());
     }
 
-
+    // TODO: Esto hace un trigger de la habilidad por la cara.
+    // Hay que comprobar el tipo de evento para que sea hacer click
     @Override
     public void onPlayerInteract(PlayerInteractEvent event)
     {
-        // Utilizar la habilidad seleccionada
-        this.fruit.invokeAbility(selectedAbilitySet, selectedAbility);
+        Action eventAction = event.getAction();
+
+        if (eventAction == Action.RIGHT_CLICK_AIR || eventAction == Action.RIGHT_CLICK_BLOCK)
+        {
+            // Utilizar la habilidad seleccionada
+            this.fruit.invokeAbility(selectedAbilitySet, selectedAbility);
+        }
     }
 
     @Override

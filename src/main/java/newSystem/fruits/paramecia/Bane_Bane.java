@@ -54,6 +54,18 @@ public class Bane_Bane extends Paramecia
         this.abilitySets.add(basicSet);
     }
 
+    @Override
+    protected void onAddFruit()
+    {
+
+    }
+
+    @Override
+    protected void onRemoveFruit()
+    {
+        this.resort = false;
+    }
+
     private void resort_ability()
     {
         Player player = user.getPlayer();

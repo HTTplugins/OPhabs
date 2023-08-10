@@ -169,15 +169,14 @@ public class OPUser implements IEventProcessor
     }
 
     @Override
-    public boolean equals(Object o)
+    public boolean equals(Object other)
     {
-        if (this == o)
+        if (this == other)
             return true;
 
-        if (o == null || getClass() != o.getClass())
+        if (other == null || getClass() != other.getClass())
             return false;
 
-        OPUser otherUser = (OPUser) o;
-        return this.uuid == otherUser.uuid;
+        return this.uuid == ((OPUser) other).uuid;
     }
 }

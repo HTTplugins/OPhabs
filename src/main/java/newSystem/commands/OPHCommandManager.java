@@ -4,6 +4,7 @@ import htt.ophabs.OPhabs;
 import newSystem.OPUser;
 import newSystem.consumables.ConsumableDevilFruit;
 import newSystem.fruits.DevilFruit;
+import newSystem.registry.FruitRegistry;
 import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -14,6 +15,7 @@ import org.bukkit.entity.Player;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class OPHCommandManager implements CommandExecutor, TabCompleter
 {
@@ -42,30 +44,27 @@ public class OPHCommandManager implements CommandExecutor, TabCompleter
             String fruitCommandName = args[1];
             Player targetPlayer = Bukkit.getServer().getPlayerExact(args[2]);
 
+            if (targetPlayer == null)
+            {
+                player.sendMessage("Unknown player");
+                return false;
+            }
+
             if (order.equalsIgnoreCase("giveFruit"))
             {
                 if (fruitCommandMap.containsKey(fruitCommandName))
                 {
                     DevilFruit fruit = fruitCommandMap.get(fruitCommandName);
+                    OPUser fruitOwner = fruit.getUser();
 
-                    if (targetPlayer != null)
+                    if (fruitOwner == null)
                     {
-                        OPUser fruitOwner = fruit.getUser();
-
-                        if (fruitOwner == null)
-                        {
-                            player.getInventory().addItem(ConsumableDevilFruit.getItem(fruit.getID()));
-                            return true;
-                        }
-                        else
-                        {
-                            player.sendMessage("The fruit has already been consumed by " + fruitOwner.getPlayerName());
-                            return false;
-                        }
+                        player.getInventory().addItem(ConsumableDevilFruit.getItem(fruit.getID()));
+                        return true;
                     }
                     else
                     {
-                        player.sendMessage("Unknown player");
+                        player.sendMessage("The fruit has already been consumed by " + fruitOwner.getPlayerName());
                         return false;
                     }
                 }
@@ -76,12 +75,32 @@ public class OPHCommandManager implements CommandExecutor, TabCompleter
                 }
             }
         }
-        else
+        else if (args.length == 2)
         {
-            player.sendMessage("Unknown command");
+            if (order.equalsIgnoreCase("removeFruit"))
+            {
+                FruitRegistry fruitRegistry = OPhabs.registrySystem.fruitRegistry;
+                OPUser user = OPhabs.newUsers.getUserByName(args[1]);
+
+                if (user == null)
+                {
+                    player.sendMessage("This player doesn't have a fruit");
+                    return false;
+                }
+
+                if (fruitRegistry.unlinkFruitUser(user))
+                    return true;
+                else
+                {
+                    player.sendMessage("Couldn't unlink the fruit");
+                    return false;
+                }
+            }
         }
 
-        return true;
+        player.sendMessage("Unknown command");
+
+        return false;
     }
 
     @Override
@@ -92,11 +111,25 @@ public class OPHCommandManager implements CommandExecutor, TabCompleter
         if (args.length == 1)
         {
             tabOptions.add("giveFruit");
+            tabOptions.add("removeFruit");
         }
 
         if (args.length == 2 && args[0].equalsIgnoreCase("giveFruit"))
         {
             tabOptions.addAll(fruitCommandMap.keySet());
+        }
+
+        if (args.length == 2 && args[0].equalsIgnoreCase("removeFruit"))
+        {
+            Map<Integer, DevilFruit> fruitMap = OPhabs.registrySystem.fruitRegistry.getFruitMap();
+
+            for (DevilFruit fruit : fruitMap.values())
+            {
+                OPUser fruitUser = fruit.getUser();
+
+                if (fruitUser != null)
+                    tabOptions.add(fruitUser.getPlayerName());
+            }
         }
 
         if (args.length == 3)

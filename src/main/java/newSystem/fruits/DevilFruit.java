@@ -14,6 +14,8 @@ public abstract class DevilFruit implements IEventProcessor
     protected String commandName;
     protected ArrayList<AbilitySet> abilitySets = new ArrayList<>();
     protected OPUser user;
+
+    // Determina si los poderes están activos (si está en el agua / es golpeado por k no)
     protected boolean isFruitActive = true;
 
     public DevilFruit(int id, String name, String displayName, String commandName)
@@ -24,9 +26,24 @@ public abstract class DevilFruit implements IEventProcessor
         this.commandName = commandName;
     }
 
-    // Permite robar frutas temporalmente
+    // Invocado tras establecer un usuario nuevo
+    protected abstract void onAddFruit();
+
+    // Invocado antes de eliminar al usuario actual
+    protected abstract void onRemoveFruit();
+
+    // Permite cambiar el usuario de la fruta. Llama automáticamente a los eventos de registro de fruta.
+    // Además, se puede utilizar para robar frutas.
     public void setUser(OPUser user)
     {
+        if (user == null)
+            this.onRemoveFruit();
+        else if (this.user != null && !this.user.equals(user))
+            this.onRemoveFruit();
+
+        if (user != null)
+            this.onAddFruit();
+
         this.user = user;
     }
 

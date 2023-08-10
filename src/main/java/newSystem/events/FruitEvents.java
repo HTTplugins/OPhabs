@@ -75,8 +75,7 @@ public class FruitEvents implements Listener
                     drop.setAmount(0);
             }
 
-            // TODO: Revisar
-            user.onPlayerDeath(event);
+            user.getDevilFruit().onPlayerDeath(event);
             OPhabs.registrySystem.fruitRegistry.unlinkFruitUser(user);
         }
     }

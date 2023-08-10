@@ -44,6 +44,18 @@ public class FrutaX extends DevilFruit
         this.abilitySets.add(set2);
     }
 
+    @Override
+    protected void onAddFruit()
+    {
+
+    }
+
+    @Override
+    protected void onRemoveFruit()
+    {
+
+    }
+
     //
 
     // Implementación habilidades

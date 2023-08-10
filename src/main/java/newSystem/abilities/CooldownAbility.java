@@ -18,6 +18,18 @@ public class CooldownAbility extends Ability
     }
 
     @Override
+    public String getDisplayableString()
+    {
+        int leftCooldown = this.currentCooldown - OPhabs.cooldownSystem.getGlobalCooldownTimer();
+        String cooldownText = "";
+
+        if (leftCooldown > 0)
+            cooldownText = " (" + leftCooldown + ")";
+
+        return super.getDisplayableString() + cooldownText;
+    }
+
+    @Override
     public void invoke()
     {
         int globalCooldownTimer = OPhabs.cooldownSystem.getGlobalCooldownTimer();
