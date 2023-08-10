@@ -154,14 +154,17 @@ public class ryu_ryu_allosaurs extends zoan {
                 ++this.tickNumber;
                 if (!player.getLocation().getBlock().getRelative(0, -1, 0).getType().equals(Material.AIR)) {
                     ryu_ryu_allosaurs.this.animationStomp(world, player.getLocation());
+                    world.playSound(player.getLocation(), "stomp", 1, 1);
                     ryu_ryu_allosaurs.this.StompedList.forEach((livingEntity) -> {
                         livingEntity.damage(15.0, player);
                     });
                     this.cancel();
                 }
 
+                player.setFallDistance(0);
+
                 world.getNearbyEntities(loc, 5.0, 1.0, 5.0).forEach((entity) -> {
-                    if (entity instanceof LivingEntity && !ryu_ryu_allosaurs.this.StompedList.contains(entity)) {
+                    if (entity instanceof LivingEntity && !ryu_ryu_allosaurs.this.StompedList.contains(entity) && !entity.equals(player)) {
                         ryu_ryu_allosaurs.this.StompedList.add((LivingEntity)entity);
                         if (entity instanceof Player) {
                             ((Player)entity).setFlying(false);
