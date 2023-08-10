@@ -78,26 +78,23 @@ public class zushi_zushi extends paramecia {
 
         heavyEntity = player.getNearbyEntities(20,50,20);
 
-        for(Entity ent : heavyEntity){
-            if(ent.getLocation().getBlock().getRelative(0,-1,0).getType().equals(Material.AIR)){
+        for(Entity ent : heavyEntity)
+            if(ent.getLocation().getBlock().getRelative(0,-1,0).getType().equals(Material.AIR))
                 ent.setVelocity(new Vector(0,-50,0));
-            }
-
-        }
 
         new BukkitRunnable(){
             int ticks = 0;
             @Override
             public void run() {
-                for(Entity ent : heavyEntity){
-                    if(ent.getLocation().getY() == world.getHighestBlockAt(ent.getLocation()).getY()+1
-                            && !togglePlayer.contains(ent)
-                            && ent instanceof Player){
 
-                        togglePlayer.add((Player) ent);
+                for(Entity ent : heavyEntity){
+                    if(!togglePlayer.contains(ent) && ent instanceof Player){
+
+
                         Location entiLoc = ent.getLocation();
                         (ent).teleport(new Location(world,entiLoc.getX(),entiLoc.getY(),entiLoc.getZ(),entiLoc.getYaw(),-10));
                         ((Player)ent).setGliding(true);
+                        togglePlayer.add((Player) ent);
 
                     } else if(ent instanceof LivingEntity)
                         ((LivingEntity)ent).addPotionEffect(new PotionEffect(PotionEffectType.SLOW,10,10));
@@ -160,9 +157,12 @@ public class zushi_zushi extends paramecia {
      * @note Called in his correspondent in the caster, as a listener.
      * @author RedRiotTank.
      */
-    public void onEntityToggleGlide(EntityToggleGlideEvent event){
-        if(togglePlayer.contains((Player)(event.getEntity())))
+    public static void onHeavyGravityField(EntityToggleGlideEvent event){
+        if(togglePlayer.contains((Player)(event.getEntity()))){
             event.setCancelled(true);
+
+        }
+
     }
 
     /**
@@ -172,7 +172,7 @@ public class zushi_zushi extends paramecia {
      * @note Called in his correspondent in the caster, as a listener.
      * @author RedRiotTank.
      */
-    public void onPlayerMove(PlayerMoveEvent event){
+    public static void blockCameraHeavyField(PlayerMoveEvent event){
         if(togglePlayer.contains(event.getPlayer())){
             event.setCancelled(true);
         }
@@ -187,7 +187,8 @@ public class zushi_zushi extends paramecia {
      */
     public void ability2(){
         if(abilitiesCD.get(1) == 0){
-            meteor(user.getPlayer());
+            //meteor(user.getPlayer());
+            user.getPlayer().setGliding(false);
             abilitiesCD.set(1, 50); // Pon el cooldown en segundos
         }
     }
