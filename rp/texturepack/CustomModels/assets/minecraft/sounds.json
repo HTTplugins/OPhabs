@@ -113,7 +113,18 @@
 		"sounds": [
 			"stomp"
 		]
+	},
+	"cloudpunch": {
+		"sounds": [
+			"cloudpunch"
+		]
+	},
+	"fog": {
+		"sounds": [
+			"fog"
+		]
 	}
+
 
 
 }
