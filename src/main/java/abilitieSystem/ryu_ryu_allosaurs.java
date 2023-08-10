@@ -1,8 +1,3 @@
-//
-// Source code recreated from a .class file by IntelliJ IDEA
-// (powered by FernFlower decompiler)
-//
-
 package abilitieSystem;
 
 import htt.ophabs.OPhabs;
@@ -15,6 +10,7 @@ import org.bukkit.Particle;
 import org.bukkit.World;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
+import org.bukkit.entity.Entity;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import org.bukkit.scheduler.BukkitRunnable;
@@ -39,111 +35,111 @@ public class ryu_ryu_allosaurs extends zoan {
             this.frontCrunch();
             this.abilitiesCD.set(1, 3);
         }
-
     }
 
     public void ability3() {
-        if ((Integer)this.abilitiesCD.get(2) == 0) {
-            this.tailSpin();
-            this.abilitiesCD.set(2, 5);
+        if(abilitiesCD.get(2) == 0) {
+            tailSpin();
+            abilitiesCD.set(2, 5);
         }
-
     }
 
     public void ability4() {
-        if ((Integer)this.abilitiesCD.get(3) == 0) {
-            this.Stomp(this.user.getPlayer());
-            this.abilitiesCD.set(3, 5);
+        if(abilitiesCD.get(3) == 0) {
+            Stomp(user.getPlayer());
+            abilitiesCD.set(3, 5);
         }
-
     }
 
     public void transformation() {
         super.transformation();
-        (new BukkitRunnable() {
-            public void run() {
-                if (ryu_ryu_allosaurs.this.transformed) {
-                    ryu_ryu_allosaurs.this.user.getPlayer().addPotionEffect(new PotionEffect(PotionEffectType.SLOW, 999999, 1, false, false));
-                } else {
-                    ryu_ryu_allosaurs.this.user.getPlayer().removePotionEffect(PotionEffectType.SLOW);
-                }
 
+        new BukkitRunnable() {
+            @Override
+            public void run() {
+                if(transformed){
+                    user.getPlayer().addPotionEffect(new PotionEffect(PotionEffectType.SLOW, 999999, 1, false, false));
+                }
+                else{
+                    user.getPlayer().removePotionEffect(PotionEffectType.SLOW);
+                }
             }
-        }).runTaskLater(plugin, 20L);
+        }.runTaskLater(plugin, 20);
+        
     }
 
+    //launch player in the looking direction
     public void frontCrunch() {
-        final Player player = this.user.getPlayer();
+        Player player = user.getPlayer();
         player.setVelocity(player.getLocation().getDirection().multiply(2));
-        (new BukkitRunnable() {
+        new BukkitRunnable() {
             int i = 0;
-
+            @Override
             public void run() {
-                if (this.i > 10) {
-                    this.cancelTask();
-                }
+                player.getWorld().playSound(player.getLocation(), "crunch", 1, 1);
+                if(i>5*2)
+                    cancelTask();
 
-                player.getWorld().getNearbyEntities(player.getEyeLocation(), 1.0, 1.0, 1.0).forEach((entity) -> {
-                    if (!entity.getName().equals(player.getName()) && entity instanceof LivingEntity && !ryu_ryu_allosaurs.this.golpeadosHabilidades.contains(entity)) {
-                        ((LivingEntity)entity).damage(15.0, ryu_ryu_allosaurs.this.user.getPlayer());
-                        ((LivingEntity)entity).addPotionEffect(new PotionEffect(PotionEffectType.SLOW, 100, 1));
-                        ryu_ryu_allosaurs.this.golpeadosHabilidades.add((LivingEntity)entity);
+                player.getWorld().getNearbyEntities(player.getEyeLocation(), 1,1,1).forEach(entity -> {
+                    if(!entity.getName().equals(player.getName()) && entity instanceof LivingEntity && !golpeadosHabilidades.contains(entity)) {
+                        ((LivingEntity) entity).damage(15, (Entity) user.getPlayer());
+                        ((LivingEntity) entity).addPotionEffect(new PotionEffect(PotionEffectType.SLOW, 100, 1));
+                        golpeadosHabilidades.add((LivingEntity) entity);
                     }
-
                 });
-                player.getWorld().spawnParticle(Particle.CRIT, player.getEyeLocation(), 10, 0.0, 0.0, 0.0, 0.0);
-                ++this.i;
-            }
 
+                player.getWorld().spawnParticle(Particle.CRIT, player.getEyeLocation(), 10, 0, 0, 0, 0);
+                i++;
+            }
             public void cancelTask() {
                 Bukkit.getScheduler().cancelTask(this.getTaskId());
             }
-        }).runTaskTimer(plugin, 0L, 4L);
+        }.runTaskTimer(plugin, 0, 4);
         Vector direction = player.getLocation().getDirection();
         direction.setY(0);
         player.setVelocity(direction.multiply(1.5));
-        this.golpeadosHabilidades.clear();
+        golpeadosHabilidades.clear();
     }
 
     public void tailSpin() {
-        final Player player = this.user.getPlayer();
+        Player player = user.getPlayer();
         player.setVelocity(player.getLocation().getDirection().multiply(2));
-        player.getWorld().getNearbyEntities(player.getLocation(), 3.0, 1.0, 3.0).forEach((entity) -> {
-            if (!entity.getName().equals(player.getName()) && entity instanceof LivingEntity) {
-                ((LivingEntity)entity).damage(15.0, this.user.getPlayer());
-            }
 
+        player.getWorld().getNearbyEntities(player.getLocation(), 3,1,3).forEach(entity -> {
+            if(!entity.getName().equals(player.getName()) && entity instanceof LivingEntity)
+                ((LivingEntity) entity).damage(15, (Entity) user.getPlayer());
         });
-        int radius = 3;
-        int particleAmount = 3;
-        World world = player.getWorld();
 
-        for(double angle = 0.0; angle < (double)particleAmount; angle += 0.01) {
-            double x = (double)radius * Math.cos(angle);
-            double z = (double)radius * Math.sin(angle);
+        int radius = 3, particleAmount = 3;
+        World world = player.getWorld();
+        for (double angle = 0; angle < particleAmount; angle += 0.01) {
+            double x = radius * Math.cos(angle);
+            double z = radius * Math.sin(angle);
             double y = Math.log(angle);
+                    
             Location particleLoc = player.getLocation().add(x, y, z);
-            world.spawnParticle(Particle.REDSTONE, particleLoc, 1, 0.0, 0.0, 0.0, 0.0, new Particle.DustOptions(Color.GREEN, 1.0F));
+            world.spawnParticle(Particle.REDSTONE, particleLoc, 1, 0, 0, 0, 0, new Particle.DustOptions(Color.GREEN, 1));
         }
 
-        (new BukkitRunnable() {
-            int i = 0;
 
+        new BukkitRunnable() {
+            int i = 0;
+            @Override
             public void run() {
-                if (this.i > 16) {
-                    this.cancelTask();
-                }
+                if(i>16)
+                    cancelTask();
 
                 Location loc = player.getLocation();
-                loc.setYaw(loc.getYaw() - 20.0F);
+                loc.setYaw(loc.getYaw()-20);
+
                 player.teleport(loc);
-                ++this.i;
+                i++;
             }
 
-            public void cancelTask() {
+            public void cancelTask(){
                 Bukkit.getScheduler().cancelTask(this.getTaskId());
             }
-        }).runTaskTimer(plugin, 0L, 1L);
+        }.runTaskTimer(plugin, 0, 1);
     }
 
     public void Stomp(final Player player) {
@@ -193,6 +189,5 @@ public class ryu_ryu_allosaurs extends zoan {
                 mundo.spawnParticle(Particle.CRIT, loc.clone().add(Math.sin((double)(-i)) * (double)j, 1.0, Math.cos((double)(-i)) / 2.0 * (double)j), 0, 0.0, 0.0, 0.0);
             }
         }
-
     }
 }
