@@ -35,7 +35,7 @@ public class moku_moku extends logia {
 
     public int numSmokers=0;
     private ItemStack fist;
-    
+
 
     public moku_moku(OPhabs plugin) {
         super(plugin, 0, 0, Particle.CLOUD, 4, "moku_moku", "Moku Moku no Mi", "Moku Moku caster", 5, 1.9);
@@ -89,7 +89,7 @@ public class moku_moku extends logia {
             player.setFlying(false);
         }
     }
-    
+
     public void runParticles(Player player) {
         new BukkitRunnable() {
             @Override
@@ -147,7 +147,7 @@ public class moku_moku extends logia {
                             player.spawnParticle(Particle.CLOUD,partLoc, 0,0,0,0);
 
                             summonParticle(0.5,player);
-                            
+
                             player.setAllowFlight(true);
 
                         } else {
@@ -182,7 +182,7 @@ public class moku_moku extends logia {
             }
         }.runTaskTimer(plugin,0,1);
     }
-//    @EventHandler(ignoreCancelled = true)
+    //    @EventHandler(ignoreCancelled = true)
     public void onPlayerDeath(PlayerDeathEvent event) {
         super.onPlayerDeath(event);
         Player player = event.getEntity();
@@ -191,31 +191,32 @@ public class moku_moku extends logia {
     }
 
     public boolean logiaBody(Player player) {
-            if (!logiaBodyON) {
-                logiaBodyON = true;
-                player.addPotionEffect(new PotionEffect(PotionEffectType.SPEED, 9999999, 4, false, false));
-                player.addPotionEffect(new PotionEffect(PotionEffectType.REGENERATION, 9999999, 1, false, false));
-                player.addPotionEffect(new PotionEffect(PotionEffectType.INCREASE_DAMAGE, 999999, 3, false, false));
-                runParticles(player);
-            } else {
-                logiaBodyON = false;
-                player.removePotionEffect(PotionEffectType.SPEED);
-                player.removePotionEffect(PotionEffectType.REGENERATION);
-                player.removePotionEffect(PotionEffectType.INCREASE_DAMAGE);
-            }
-            return logiaBodyON;
+        player.getWorld().playSound(player.getLocation(), "vanish", 1, 1);
+        if (!logiaBodyON) {
+            logiaBodyON = true;
+            player.addPotionEffect(new PotionEffect(PotionEffectType.SPEED, 9999999, 4, false, false));
+            player.addPotionEffect(new PotionEffect(PotionEffectType.REGENERATION, 9999999, 1, false, false));
+            player.addPotionEffect(new PotionEffect(PotionEffectType.INCREASE_DAMAGE, 999999, 3, false, false));
+            runParticles(player);
+        } else {
+            logiaBodyON = false;
+            player.removePotionEffect(PotionEffectType.SPEED);
+            player.removePotionEffect(PotionEffectType.REGENERATION);
+            player.removePotionEffect(PotionEffectType.INCREASE_DAMAGE);
+        }
+        return logiaBodyON;
     }
 
     public void setTarget(Vex entity, Player player){
         Location loc = entity.getLocation();
         boolean found = false;
-          for (Entity e : loc.getWorld().getNearbyEntities(loc, 10, 10, 10)){
+        for (Entity e : loc.getWorld().getNearbyEntities(loc, 10, 10, 10)){
             if(e instanceof LivingEntity && e != player && e != entity && !(e instanceof Vex)){
                 entity.setTarget(((LivingEntity)e));
                 found = true;
                 break;
             }
-          }
+        }
         if(!found){
             entity.setTarget(null);
         }
@@ -229,7 +230,7 @@ public class moku_moku extends logia {
             smoker.setHealth(0.5);
             numSmokers++;
             smoker.addPotionEffect(new PotionEffect(PotionEffectType.INVISIBILITY, 9999999, 2, false, false));
-            smoker.getEquipment().setItemInMainHand(null); 
+            smoker.getEquipment().setItemInMainHand(null);
             new BukkitRunnable() {
                 @Override
                 public void run() {
@@ -248,7 +249,7 @@ public class moku_moku extends logia {
                 public void cancelTask() {
                     Bukkit.getScheduler().cancelTask(this.getTaskId());
                 }
-            }.runTaskTimer(plugin, 0, 3); 
+            }.runTaskTimer(plugin, 0, 3);
         }
     }
 
@@ -259,8 +260,8 @@ public class moku_moku extends logia {
      * @author Vaelico786.
      */
     public void smokePunch(Location loc) {
-
-            ArmorStand armorStand = OPHLib.generateCustomFloatingItem(user.getPlayer().getLocation().add(0,-0.5,0), fist, false);
+        user.getPlayer().getWorld().playSound(loc, "cloudpunch", 1, 1);
+        ArmorStand armorStand = OPHLib.generateCustomFloatingItem(user.getPlayer().getLocation().add(0,-0.5,0), fist, false);
 
 
         new BukkitRunnable(){
@@ -275,7 +276,7 @@ public class moku_moku extends logia {
             boolean first = true;
             Vector dir = user.getPlayer().getEyeLocation().getDirection(), aux;
             double distancePerTick = 1.0 / 2.0, distanceFromPlayer = 0;
-            
+
             // Calcula la distancia total que el ArmorStand debe recorrer
             @Override
             public void run() {
@@ -295,7 +296,7 @@ public class moku_moku extends logia {
 
                 for(double i = -2; i<0; i+=0.2)
                     OPHLib.circleEyeVector
-                        (0.4,1,i,null,element,user.getPlayer(), entity.getLocation().add(0,1,0));
+                            (0.4,1,i,null,element,user.getPlayer(), entity.getLocation().add(0,1,0));
 
 
                 if (entity.isDead()) {
@@ -307,7 +308,7 @@ public class moku_moku extends logia {
                     entity.remove();
                     cancelTask();
                 }
-                
+
                 ticks++;
             }
             public void cancelTask() {
@@ -321,6 +322,7 @@ public class moku_moku extends logia {
         int period = 5;
         smokeWorldON=true;
         Player player = user.getPlayer();
+        player.getWorld().playSound(player.getLocation(), "fog", 1, 1);
         new BukkitRunnable() {
             int tickCount=0;
             @Override
@@ -357,12 +359,12 @@ public class moku_moku extends logia {
                 smokeWorldON=false;
                 Bukkit.getScheduler().cancelTask(this.getTaskId());
             }
-        }.runTaskTimer(plugin, 0, period); 
+        }.runTaskTimer(plugin, 0, period);
     }
 
     public static void onEntityAirChangeEvent(EntityAirChangeEvent event){
-        if(OPhabs.abilitiesList.get(3).getUser() != null && 
-           OPhabs.abilitiesList.get(3).getUser().getPlayer() != null){
+        if(OPhabs.abilitiesList.get(3).getUser() != null &&
+                OPhabs.abilitiesList.get(3).getUser().getPlayer() != null){
             Player player = plugin.abilitiesList.get(3).getUser().getPlayer();
             if(smokeWorldEntities.contains(event.getEntity()) && event.getAmount()>0){
                 if(smokeWorldON){
