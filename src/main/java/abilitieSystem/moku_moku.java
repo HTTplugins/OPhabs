@@ -334,10 +334,10 @@ public class moku_moku extends logia {
                 }
 
                 player.getWorld().spawnParticle(element,
-                        player.getLocation(),
-                        400,
-                        smokeWorldAmplitude, smokeWorldAmplitude/2, smokeWorldAmplitude,
-                        0);
+                                                player.getLocation(), 
+                                                400, 
+                                                smokeWorldAmplitude, smokeWorldAmplitude/2, smokeWorldAmplitude, 
+                                                0);
 
                 player.getNearbyEntities(smokeWorldAmplitude, smokeWorldAmplitude/2, smokeWorldAmplitude).forEach(ent -> {
                     if(ent instanceof LivingEntity && ent != player){
