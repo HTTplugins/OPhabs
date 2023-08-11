@@ -40,8 +40,9 @@ public final class OPhabs extends JavaPlugin {
     @Override
     public void onEnable(){
 
-       // Plugin ls = Bukkit.getPluginManager().getPlugin("LayeredStructures");
+
         LayeredStructuresAPI.initialize(Bukkit.getPluginManager().getPlugin("LayeredStructures"));
+        LayeredStructuresAPI.precharge("iceDrake"); //pendiente refactor jaime para limpiar del enable.
 
 
         //--------------

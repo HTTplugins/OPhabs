@@ -261,19 +261,14 @@ public class hie_hie extends paramecia {    //fruit_fruit is the fruit whose abi
 
 
             drake(user.getPlayer());
-
             abilitiesCD.set(3, 0); // Second parameter is cooldown in seconds.
         }
     }
 
     public void drake(Player player){
         usingDrake = true;
-
-        BlockFace facing = player.getFacing();
-
-
         player.getWorld().playSound(player.getLocation(),"icecrack",1,1);
-        LayeredStructuresAPI.generateLayeredStructure("iceDrake", player.getLocation(),facing.toString(),0,2);
+        LayeredStructuresAPI.generatePreChargedLayeredStructure("iceDrake", user.getPlayer().getLocation(), user.getPlayer().getFacing().toString(), 0, 2);
 
         new BukkitRunnable() {
             @Override
