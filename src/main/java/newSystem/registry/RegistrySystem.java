@@ -1,43 +1,46 @@
 package newSystem.registry;
 
 import htt.ophabs.OPhabs;
+import newSystem.registry.fruits.FruitRegistry;
+import newSystem.registry.fruits.IFruitRegistry;
 
 import java.io.File;
-import java.util.ArrayList;
+import java.util.HashMap;
 
-// TODO: Proporcionará una interfaz a modo de service locator a través del tipo de la interfaz solicitada
-// TODO: EJEMPLO: registry.getRegistry<IFruitRegistry>();
 public class RegistrySystem implements IRegistry
 {
     private static final String SYSTEM_REGISTRY_DATA_FOLDER = "Data";
-    private static int ITEM_ID = 0;
-
-    public static int NEXT_ID()
-    {
-        return ITEM_ID++;
-    }
 
     public static final String REGISTRY_DATA_PATH = "plugins/OPhab/Data";
 
-    private final ArrayList<IRegistry> registries;
-
-    public final FruitRegistry fruitRegistry;
+    private final HashMap<Class<?>, IRegistry> registries;
 
     public RegistrySystem()
     {
-        this.registries = new ArrayList<>();
+        this.registries = new HashMap<>();
 
         //
         // Creación registros
         //
 
-        this.fruitRegistry = new FruitRegistry();
+        FruitRegistry fruitRegistry = new FruitRegistry();
 
         //
         // Almacenar los registros
         //
 
-        registries.add(this.fruitRegistry);
+        registries.put(IFruitRegistry.class, fruitRegistry);
+    }
+
+    public <T extends IRegistry> T getRegistry(Class<T> registryType)
+    {
+        IRegistry registry = registries.get(registryType);
+
+        if (registry != null)
+            return registryType.cast(registry);
+
+        System.err.println("Requested registry is null " + registryType.toString());
+        return null;
     }
 
     @Override
@@ -48,21 +51,21 @@ public class RegistrySystem implements IRegistry
         if (!folder.exists())
             folder.mkdir();
 
-        for (IRegistry registry : this.registries)
+        for (IRegistry registry : this.registries.values())
             registry.initRegistry();
     }
 
     @Override
     public void loadRegistry()
     {
-        for (IRegistry registry : this.registries)
+        for (IRegistry registry : this.registries.values())
             registry.loadRegistry();
     }
 
     @Override
     public void saveRegistry()
     {
-        for (IRegistry registry : this.registries)
+        for (IRegistry registry : this.registries.values())
             registry.saveRegistry();
     }
 }

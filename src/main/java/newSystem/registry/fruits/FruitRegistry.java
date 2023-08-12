@@ -1,4 +1,4 @@
-package newSystem.registry;
+package newSystem.registry.fruits;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -22,7 +22,7 @@ import java.util.Map;
 import java.util.UUID;
 
 // TODO: Se utilizará IFruitRegistry para los métodos de linkFruit, etc.
-public class FruitRegistry implements IRegistry
+public class FruitRegistry implements IFruitRegistry
 {
     private static final String FRUIT_REGISTRY_DATA_PATH = "plugins/OPhabs/Data/FruitRegistry.json";
     private final HashMap<Integer, DevilFruit> fruitMap = new HashMap<>();
@@ -54,16 +54,19 @@ public class FruitRegistry implements IRegistry
         }
     }
 
+    @Override
     public Map<Integer, DevilFruit> getFruitMap()
     {
         return Collections.unmodifiableMap(this.fruitMap);
     }
 
+    @Override
     public DevilFruit getFruit(int fruitID)
     {
         return this.fruitMap.get(fruitID);
     }
 
+    @Override
     public boolean linkFruitUser(String fruitName, OPUser user)
     {
         Integer fruitID = fruitNameIDMap.get(fruitName);
@@ -74,6 +77,7 @@ public class FruitRegistry implements IRegistry
         return this.linkFruitUser(fruitID, user);
     }
 
+    @Override
     public boolean linkFruitUser(int fruitID, OPUser user)
     {
         DevilFruit fruit = this.fruitMap.get(fruitID);
@@ -103,7 +107,7 @@ public class FruitRegistry implements IRegistry
         return false;
     }
 
-    // PRE: Usuario con la fruta especificada y nada nulo
+    @Override
     public boolean unlinkFruitUser(int fruitID, OPUser user)
     {
         DevilFruit fruit = this.fruitMap.get(fruitID);
@@ -122,6 +126,7 @@ public class FruitRegistry implements IRegistry
         return true;
     }
 
+    @Override
     public boolean unlinkFruitUser(OPUser user)
     {
         DevilFruit fruit = user.getDevilFruit();
@@ -132,6 +137,7 @@ public class FruitRegistry implements IRegistry
         return this.unlinkFruitUser(fruit.getID(), user);
     }
 
+    @Override
     public boolean unlinkFruitUser(int fruitID)
     {
         DevilFruit fruit = this.fruitMap.get(fruitID);
@@ -142,6 +148,7 @@ public class FruitRegistry implements IRegistry
         return this.unlinkFruitUser(fruitID, fruit.getUser());
     }
 
+    @Override
     public boolean unlinkFruitUser(DevilFruit fruit)
     {
         return this.unlinkFruitUser(fruit.getID());

@@ -5,10 +5,12 @@ import castSystem.noDropCaster;
 import htt.ophabs.OPhabs;
 import htt.ophabs.fileSystem;
 import newSystem.OPUser;
+import newSystem.UserList;
 import newSystem.cast.Caster;
 import newSystem.cast.FruitCaster;
 import newSystem.consumables.ConsumableDevilFruit;
 import newSystem.fruits.DevilFruit;
+import newSystem.registry.fruits.IFruitRegistry;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -21,9 +23,11 @@ import java.util.UUID;
 
 public class FruitEvents implements Listener
 {
+    private IFruitRegistry fruitRegistry;
+
     public FruitEvents()
     {
-
+        this.fruitRegistry = OPhabs.registrySystem.getRegistry(IFruitRegistry.class);
     }
 
     @EventHandler
@@ -45,7 +49,7 @@ public class FruitEvents implements Listener
                 return;
             }
 
-            if (OPhabs.registrySystem.fruitRegistry.linkFruitUser(fruitID, user))
+            if (this.fruitRegistry.linkFruitUser(fruitID, user))
             {
                 // Darle el caster
                 player.getInventory().addItem(FruitCaster.getAsItem(fruitID));
@@ -76,7 +80,7 @@ public class FruitEvents implements Listener
             }
 
             user.getDevilFruit().onPlayerDeath(event);
-            OPhabs.registrySystem.fruitRegistry.unlinkFruitUser(user);
+            this.fruitRegistry.unlinkFruitUser(user);
         }
     }
 }

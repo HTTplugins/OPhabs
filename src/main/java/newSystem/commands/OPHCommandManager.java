@@ -4,7 +4,8 @@ import htt.ophabs.OPhabs;
 import newSystem.OPUser;
 import newSystem.consumables.ConsumableDevilFruit;
 import newSystem.fruits.DevilFruit;
-import newSystem.registry.FruitRegistry;
+import newSystem.registry.fruits.FruitRegistry;
+import newSystem.registry.fruits.IFruitRegistry;
 import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -19,15 +20,18 @@ import java.util.Map;
 
 public class OPHCommandManager implements CommandExecutor, TabCompleter
 {
-    private HashMap<String, DevilFruit> fruitCommandMap = new HashMap<>();
+    private final HashMap<String, DevilFruit> fruitCommandMap = new HashMap<>();
+    private final IFruitRegistry fruitRegistry;
 
     public OPHCommandManager()
     {
+        this.fruitRegistry = OPhabs.registrySystem.getRegistry(IFruitRegistry.class);
+
         //
         // Frutas
         //
 
-        for (DevilFruit fruit : OPhabs.registrySystem.fruitRegistry.getFruitMap().values())
+        for (DevilFruit fruit : this.fruitRegistry.getFruitMap().values())
         {
             fruitCommandMap.put(fruit.getCommandName(), fruit);
         }
@@ -79,7 +83,6 @@ public class OPHCommandManager implements CommandExecutor, TabCompleter
         {
             if (order.equalsIgnoreCase("removeFruit"))
             {
-                FruitRegistry fruitRegistry = OPhabs.registrySystem.fruitRegistry;
                 OPUser user = OPhabs.newUsers.getUserByName(args[1]);
 
                 if (user == null)
@@ -88,7 +91,7 @@ public class OPHCommandManager implements CommandExecutor, TabCompleter
                     return false;
                 }
 
-                if (fruitRegistry.unlinkFruitUser(user))
+                if (this.fruitRegistry.unlinkFruitUser(user))
                     return true;
                 else
                 {
@@ -121,7 +124,7 @@ public class OPHCommandManager implements CommandExecutor, TabCompleter
 
         if (args.length == 2 && args[0].equalsIgnoreCase("removeFruit"))
         {
-            Map<Integer, DevilFruit> fruitMap = OPhabs.registrySystem.fruitRegistry.getFruitMap();
+            Map<Integer, DevilFruit> fruitMap = this.fruitRegistry.getFruitMap();
 
             for (DevilFruit fruit : fruitMap.values())
             {

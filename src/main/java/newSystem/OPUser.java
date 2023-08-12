@@ -5,25 +5,22 @@ import newSystem.events.IEventProcessor;
 import newSystem.fruits.DevilFruit;
 import newSystem.haki.Haki;
 import newSystem.rokushiki.Rokushiki;
+import newSystem.stats.UserStats;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.entity.EntityDamageEvent;
-import org.bukkit.event.player.PlayerDropItemEvent;
-import org.bukkit.event.player.PlayerInteractEvent;
-import org.bukkit.event.player.PlayerSwapHandItemsEvent;
+import org.bukkit.event.player.*;
 import org.bukkit.inventory.ItemStack;
 
 import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
 
-
-// TODO: Añadir estadísticas de daño, etc
-
 public class OPUser implements IEventProcessor
 {
     private final String playerName;
     private final UUID uuid;
+    private final UserStats stats;
 
     private DevilFruit devilFruit;
     private Haki haki;
@@ -35,6 +32,7 @@ public class OPUser implements IEventProcessor
     {
         this.uuid = uuid;
         this.playerName = playerName;
+        this.stats = new UserStats(this);
 
         this.devilFruit = null;
         this.haki = null;
@@ -56,6 +54,10 @@ public class OPUser implements IEventProcessor
     public UUID getUUID()
     {
         return this.uuid;
+    }
+    public UserStats getStats()
+    {
+        return this.stats;
     }
 
     public void setDevilFruit(DevilFruit fruit)
@@ -156,6 +158,16 @@ public class OPUser implements IEventProcessor
     {
         if (this.devilFruit != null)
             this.devilFruit.onFall(event);
+    }
+
+    public void onPlayerJoin(PlayerJoinEvent event)
+    {
+        this.stats.apply();
+    }
+
+    public void onPlayerLogin(PlayerLoginEvent event)
+    {
+        this.stats.apply();
     }
 
     public boolean hasDevilFruit()

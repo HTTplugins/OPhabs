@@ -5,6 +5,7 @@ import newSystem.OPUser;
 import newSystem.abilities.AbilitySet;
 import newSystem.display.IFruitCasterDisplay;
 import newSystem.fruits.DevilFruit;
+import newSystem.registry.fruits.IFruitRegistry;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.player.PlayerDropItemEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
@@ -26,7 +27,7 @@ public class FruitCaster extends Caster
     public static ItemStack getAsItem(int fruitID)
     {
         ItemStack casterItem = new ItemStack(CASTER_MATERIAL);
-        DevilFruit fruit = OPhabs.registrySystem.fruitRegistry.getFruit(fruitID);
+        DevilFruit fruit = OPhabs.registrySystem.getRegistry(IFruitRegistry.class).getFruit(fruitID);
 
         if (fruit != null)
         {

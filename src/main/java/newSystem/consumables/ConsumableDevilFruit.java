@@ -1,6 +1,7 @@
 package newSystem.consumables;
 
 import htt.ophabs.OPhabs;
+import newSystem.registry.fruits.IFruitRegistry;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
@@ -17,7 +18,7 @@ public class ConsumableDevilFruit
     public static ItemStack getItem(int fruitID)
     {
         ItemStack fruitItem = new ItemStack(FRUIT_MATERIAL);
-        DevilFruit fruit = OPhabs.registrySystem.fruitRegistry.getFruit(fruitID);
+        DevilFruit fruit = OPhabs.registrySystem.getRegistry(IFruitRegistry.class).getFruit(fruitID);
 
         if (fruit != null)
         {
@@ -41,7 +42,7 @@ public class ConsumableDevilFruit
         if (itemMeta == null)
             return false;
 
-        DevilFruit fruit = OPhabs.registrySystem.fruitRegistry.getFruit(itemMeta.getCustomModelData());
+        DevilFruit fruit = OPhabs.registrySystem.getRegistry(IFruitRegistry.class).getFruit(itemMeta.getCustomModelData());
 
         if (fruit == null || fruit.getUser() != null)
             return false;
