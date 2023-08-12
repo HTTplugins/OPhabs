@@ -127,6 +127,8 @@ public class caster implements Listener {
      */
     @EventHandler
     public void onEntityDamageByEntityEvent(EntityDamageByEntityEvent event){
+        if(event.getDamager().getCustomName() != null &&  event.getDamager().getCustomName().equals("Smoker"))
+            moku_moku.onEntityDamageBySmoker(event);
         if(event.getDamager() instanceof Player &&  users.containsKey(event.getDamager().getName())) {
             abilityUser user = users.get(event.getDamager().getName());
             user.onEntityDamageByUser(event);
@@ -299,6 +301,7 @@ public class caster implements Listener {
      */
     @EventHandler(ignoreCancelled = true)
     public void onEntityToggleGlide(EntityToggleGlideEvent event) {
+        zushi_zushi.onHeavyGravityField(event); //W8ing Jaime refactor. (other glides could bug). 
         if(event.getEntity() instanceof Player) {
             Player player = (Player) event.getEntity();
             if(users.containsKey(player.getName())) {
@@ -306,6 +309,7 @@ public class caster implements Listener {
                 user.onEntityToggleGlide(event);
             }
         }
+        
     }
 
     /**
@@ -319,6 +323,7 @@ public class caster implements Listener {
             abilityUser user = users.get(event.getPlayer().getName());
             user.onPlayerMove(event);
         }
+        zushi_zushi.blockCameraHeavyField(event);
     }
  
     /**
@@ -376,7 +381,6 @@ public class caster implements Listener {
 
     @EventHandler
     public void onPlayerInteractEntity(PlayerInteractEntityEvent event) {
-
         if(users.containsKey(event.getPlayer().getName())) {
             abilityUser user = users.get(event.getPlayer().getName());
             if (event.getRightClicked() instanceof ArmorStand) {

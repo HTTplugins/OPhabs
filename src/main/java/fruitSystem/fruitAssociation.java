@@ -139,13 +139,14 @@ public class fruitAssociation implements Listener {
             casterItemMeta.addAttributeModifier(Attribute.GENERIC_ATTACK_SPEED, modifier2);
 
             caster.setItemMeta(casterItemMeta);
-            event.getPlayer().getInventory().addItem(caster);
 
 
             if(dfPlayers.containsKey(event.getPlayer().getName())){
                 event.getPlayer().getWorld().strikeLightningEffect(event.getPlayer().getLocation());
                 event.getPlayer().setHealth(0);
             } else{
+
+                event.getPlayer().getInventory().addItem(caster);
                 System.out.println("Player " + event.getPlayer().getName() + " has eaten a " + fruit.getItemMeta().getDisplayName() + " Size: " + abilitiesM.size());
                 df ability = abilitiesM.get(fruit.getItemMeta().getDisplayName());
 

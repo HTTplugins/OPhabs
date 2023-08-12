@@ -103,7 +103,26 @@
 		"sounds": [
 			"resort"
 		]
+	},
+	"crunch": {
+		"sounds": [
+			"crunch"
+		]
+	},
+	"stomp": {
+		"sounds": [
+			"stomp"
+		]
+	},
+	"cloudpunch": {
+		"sounds": [
+			"cloudpunch"
+		]
+	},
+	"fog": {
+		"sounds": [
+			"fog"
+		]
 	}
-
 
 }

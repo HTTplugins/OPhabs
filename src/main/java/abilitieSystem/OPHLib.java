@@ -408,6 +408,80 @@ public class OPHLib {
         }.runTaskTimer(abilities.plugin, 0, 2);
     }
 
+    public static void breath(abilityUser user, Vector pos, Vector dir, int delay, int maxLength, int maxTicks, int dmg, double startAmpl, int startAmountParticles, double maxAmplitude, int period, String sound, Particle particle, double extra) {
+
+
+        int iterations = maxTicks / period;
+
+
+        new BukkitRunnable() {
+            double density = startAmountParticles / startAmpl;
+            double amplitude = startAmpl;
+            double distance = 0;
+            Player player = user.getPlayer();
+            World world = player.getWorld();
+
+
+            double particleAmount;
+            int i = 0;
+
+            @Override
+            public void run() {
+
+                Vector direction = player.getEyeLocation().getDirection().add(dir);
+                Location location = player.getEyeLocation().add(pos);
+
+                if (i == 0 && !Objects.equals(sound, "none"))    //Play sound on first iteration
+                    world.playSound(location, sound, 1, 1);
+
+
+                if (i > iterations || user == null || user.getPlayer() == null || user.getPlayer().isDead()) {
+                    cancelTask();
+                }
+
+
+                for (int j = 1; j <= distance; j++) {
+
+                    if (amplitude < maxAmplitude)
+                        amplitude += maxAmplitude / maxLength;
+
+
+                    location.add(direction);
+                    particleAmount = density * amplitude;
+                    world.spawnParticle(particle, location, (int) particleAmount, 
+                            amplitude, amplitude, amplitude, 0, extra);
+
+
+                    world.getNearbyEntities(location, amplitude, amplitude, amplitude).forEach(entity -> {
+                        if (entity instanceof LivingEntity && !entity.getName().equals(player.getName())) {
+                            LivingEntity livingEntity = (LivingEntity) entity;
+                            livingEntity.damage(dmg, player);
+                        }
+                    });
+
+                }
+
+                amplitude = startAmpl;
+
+                if (distance < maxLength)
+                    distance += ((double) maxLength) / (((double) iterations) / 6.0);
+
+                i++;
+
+            }
+
+            public void cancelTask() {
+                Bukkit.getScheduler().cancelTask(this.getTaskId());
+            }
+        }.runTaskTimer(abilities.plugin, delay, period);
+        /**
+         * @brief Generates an item on an invisible invulnerable stand
+         * @author Vaelico786.
+         */
+
+    }
+
+
     public static void iceBreath(abilityUser user, Vector pos, Vector dir, int delay, int maxLength, int maxTicks, int dmg, double startAmpl, int startAmountParticles, double maxAmplitude, int period, String sound) {
 
 
@@ -435,7 +509,7 @@ public class OPHLib {
                     world.playSound(location, sound, 1, 1);
 
 
-                if (i > iterations || user == null) {
+                if (i > iterations || user == null || user.getPlayer() == null || user.getPlayer().isDead()) {
                     cancelTask();
                 }
 
@@ -484,6 +558,84 @@ public class OPHLib {
          */
 
     }
+
+    public static void fireBreath(abilityUser user, Vector pos, Vector dir, int delay, int maxLength, int maxTicks, int dmg, double startAmpl, int startAmountParticles, double maxAmplitude, int period, String sound) {
+
+
+        int iterations = maxTicks / period;
+
+
+        new BukkitRunnable() {
+            double density = startAmountParticles / startAmpl;
+            double amplitude = startAmpl;
+            double distance = 0;
+            Player player = user.getPlayer();
+            World world = player.getWorld();
+
+
+            double particleAmount;
+            int i = 0;
+
+            @Override
+            public void run() {
+
+                Vector direction = player.getEyeLocation().getDirection().add(dir);
+                Location location = player.getEyeLocation().add(pos);
+
+                if (i == 0 && !Objects.equals(sound, "none"))    //Play sound on first iteration
+                    world.playSound(location, sound, 1, 1);
+
+
+                if (i > iterations || user == null || user.getPlayer() == null || user.getPlayer().isDead()) {
+                    cancelTask();
+                }
+
+
+                for (int j = 1; j <= distance; j++) {
+
+                    if (amplitude < maxAmplitude)
+                        amplitude += maxAmplitude / maxLength;
+
+
+                    location.add(direction);
+                    particleAmount = density * amplitude;
+                    world.spawnParticle(Particle.FLAME, location, (int) particleAmount, 
+                                        amplitude, amplitude, amplitude, 0);
+
+
+                    world.getNearbyEntities(location, amplitude, amplitude, amplitude).forEach(entity -> {
+                        if (entity instanceof LivingEntity && !entity.getName().equals(player.getName())) {
+                            LivingEntity livingEntity = (LivingEntity) entity;
+                            livingEntity.damage(dmg, player);
+                            if (livingEntity.getFireTicks() <= 0) {
+                                livingEntity.setFireTicks(livingEntity.getFireTicks() + 300);
+
+                            }
+                        }
+                    });
+
+                }
+
+                amplitude = startAmpl;
+
+                if (distance < maxLength)
+                    distance += ((double) maxLength) / (((double) iterations) / 6.0);
+
+                i++;
+
+            }
+
+            public void cancelTask() {
+                Bukkit.getScheduler().cancelTask(this.getTaskId());
+            }
+        }.runTaskTimer(abilities.plugin, delay, period);
+        /**
+         * @brief Generates an item on an invisible invulnerable stand
+         * @author Vaelico786.
+         */
+
+    }
+
 
     public static ArmorStand generateCustomFloatingItem(Location loc, ItemStack item, boolean gravity) {
         ArmorStand armorStand = loc.getWorld().spawn(loc, ArmorStand.class);
