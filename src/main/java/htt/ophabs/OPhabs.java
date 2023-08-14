@@ -2,6 +2,7 @@ package htt.ophabs;
 
 
 import htt.layeredstructures.LayeredStructuresAPI;
+import logs.msgSystem;
 import users.UserList;
 import commands.OPHCommandManager;
 import display.ScoreboardSystem;
@@ -91,8 +92,7 @@ public final class OPhabs extends JavaPlugin {
         Objects.requireNonNull(this.getCommand("oph")).setExecutor(ophCommandManager);
         Objects.requireNonNull(this.getCommand("oph")).setTabCompleter(ophCommandManager);
 
-
-        Bukkit.getConsoleSender().sendMessage(ChatColor.GREEN + "" + ChatColor.BOLD +  "OPhabs started correctly.");
+        msgSystem.OphConsoleMsg("Plugin started correctly.");
     }
 
     /**
@@ -108,6 +108,6 @@ public final class OPhabs extends JavaPlugin {
         registrySystem.saveRegistry();
 
         //
-        Bukkit.getConsoleSender().sendMessage(ChatColor.GREEN + "" + ChatColor.BOLD + "OPhabs closed correctly.");
+        msgSystem.OphConsoleMsg("Plugin disabled correctly.");
     }
 }
