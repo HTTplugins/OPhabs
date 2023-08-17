@@ -1,10 +1,10 @@
 package fruits.paramecia;
 
-import oldSystem.abilitieSystem.OPHLib;
 import htt.ophabs.OPhabs;
 import abilities.Ability;
 import abilities.AbilitySet;
 import abilities.CooldownAbility;
+import libs.OPHLib;
 import org.bukkit.*;
 import org.bukkit.entity.ArmorStand;
 import org.bukkit.entity.Entity;

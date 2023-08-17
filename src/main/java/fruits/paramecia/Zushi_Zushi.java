@@ -64,7 +64,7 @@ public class Zushi_Zushi extends Paramecia
         // FlyRock
         basicSet.addAbility(new CooldownAbility("FlyRock", 5, () -> {
             Player player = user.getPlayer();
-            this.flyRock(player);
+            //this.flyRock(player);
         }));
 
         this.abilitySets.add(basicSet);
@@ -194,6 +194,7 @@ public class Zushi_Zushi extends Paramecia
 
 
     //TODO: Pendiente de modificación (modelo de alfonso) mejora eficiencia y código.
+    /*
     public void flyRock(Player player){
         World world = player.getWorld();
         Location playerLoc = player.getLocation();
@@ -335,6 +336,8 @@ public class Zushi_Zushi extends Paramecia
             }
         }.ophRunTaskTimer(0,1);
     }
+
+     */
 
     @Override
     public void onEntityToggleGlide(EntityToggleGlideEvent event){
