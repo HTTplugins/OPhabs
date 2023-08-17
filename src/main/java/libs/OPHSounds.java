@@ -6,5 +6,7 @@ public enum OPHSounds {
     OPENROOM,
     CLOSEROOM,
     FASTSORU,
-    SWORDCUT
+    SWORDCUT,
+    ROCKMOVE,
+    FLYMETEOR
 }

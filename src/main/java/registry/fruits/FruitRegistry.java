@@ -4,6 +4,7 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
+import fruits.logia.Moku_Moku;
 import fruits.paramecia.Ope_Ope;
 import fruits.paramecia.Zushi_Zushi;
 import htt.ophabs.OPhabs;
@@ -48,7 +49,8 @@ public class FruitRegistry implements IFruitRegistry
             new FrutaX(NEXT_ID()),
             new Bane_Bane(NEXT_ID()),
             new Zushi_Zushi(NEXT_ID()),
-            new Ope_Ope(NEXT_ID())
+            new Ope_Ope(NEXT_ID()),
+            new Moku_Moku(NEXT_ID())
         };
 
         for (DevilFruit fruit : fruits)

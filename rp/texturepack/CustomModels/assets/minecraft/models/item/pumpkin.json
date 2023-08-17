@@ -1,0 +1,11 @@
+{
+  "parent": "minecraft:item/generated",
+  "textures": {
+    "layer0": "minecraft:item/pumpkin"
+  },
+    "overrides": [
+        {"predicate": {"custom_model_data": 1},"model": "custom/abilitiecosmetics/flying_rock"},
+        {"predicate": {"custom_model_data": 2},"model": "custom/big-punch"}
+
+    ]
+}

@@ -1,10 +1,13 @@
 package fruits.paramecia;
 
+import cosmetics.cosmeticsArmor;
 import htt.ophabs.OPhabs;
 import abilities.AbilitySet;
 import abilities.CooldownAbility;
 import libs.OPHLib;
 import libs.OPHAnimationLib;
+import libs.OPHSoundLib;
+import libs.OPHSounds;
 import org.bukkit.*;
 import org.bukkit.block.Block;
 import org.bukkit.entity.*;
@@ -64,7 +67,7 @@ public class Zushi_Zushi extends Paramecia
         // FlyRock
         basicSet.addAbility(new CooldownAbility("FlyRock", 5, () -> {
             Player player = user.getPlayer();
-            //this.flyRock(player);
+            this.flyRock(player);
         }));
 
         this.abilitySets.add(basicSet);
@@ -149,7 +152,7 @@ public class Zushi_Zushi extends Paramecia
     public void launchMeteor(Location start, Location end, int radius, int explosionForce) {
         World world = start.getWorld();
         meteorExploded = false;
-        world.playSound(start,"flymeteor",10,1);
+        OPHSoundLib.OphPlaySound(OPHSounds.FLYMETEOR,start,10,1);
 
         for (int x = -radius; x <= radius; x++)
             for (int y = -radius; y <= radius; y++)
@@ -192,152 +195,19 @@ public class Zushi_Zushi extends Paramecia
 
     }
 
-
-    //TODO: Pendiente de modificación (modelo de alfonso) mejora eficiencia y código.
-    /*
     public void flyRock(Player player){
-        World world = player.getWorld();
-        Location playerLoc = player.getLocation();
-
-        double x = playerLoc.getX();
-        double z = playerLoc.getZ();
-        double y = playerLoc.getY();
-
-        world.playSound(playerLoc, "rockmove",1,1);
-
+        cosmeticsArmor.summonCosmeticArmor(1,"flying_rock" ,player,Material.PUMPKIN );
         player.setAllowFlight(true);
-
-        double yCenter = oldSystem.abilitieSystem.OPHLib.searchGround(x, z, y, world) - 1;
-        Location center = new Location(world,x,yCenter, z);
-        Material centerMat = center.getBlock().getType();
-
-        double yDownCenter = oldSystem.abilitieSystem.OPHLib.searchGround(x, z, y-1, world) - 1;
-        Location downcenter = new Location(world,x,yDownCenter-1, z);
-        Material downcenterMat = downcenter.getBlock().getType();
-
-        double yUP = oldSystem.abilitieSystem.OPHLib.searchGround(x+1, z, y, world) - 1;
-        Location up = new Location(world,x+1,yUP, z);
-        Material upMat = up.getBlock().getType();
-
-        double yDown = oldSystem.abilitieSystem.OPHLib.searchGround(x-1, z, y, world) - 1;
-        Location down = new Location(world,x-1,yDown, z);
-        Material downMat = down.getBlock().getType();
-
-        double yLeft = oldSystem.abilitieSystem.OPHLib.searchGround(x, z+1, y, world) - 1;
-        Location left = new Location(world,x,yLeft, z+1);
-        Material leftMat = left.getBlock().getType();
-
-        double yRight = oldSystem.abilitieSystem.OPHLib.searchGround(x, z-1, y, world) - 1;
-        Location right = new Location(world,x,yRight, z-1);
-        Material rightMat = right.getBlock().getType();
+        OPHSoundLib.OphPlaySound(OPHSounds.ROCKMOVE,player.getLocation(),1,1);
 
         new OphRunnable(){
-            Block previusCenterBlock = null, previusup = null, previusdown= null, previusleft = null, previusRight = null, previusDownCenterBlock = null;
-            boolean firstiteration = true;
-
-            int ticks = 0;
             @Override
             public void OphRun() {
-                ticks++;
-
-                Block centerBlock = player.getLocation().getBlock().getRelative(0,-1,0);
-                Block downcenterBlock = player.getLocation().getBlock().getRelative(0,-2,0);
-                Block upBlock = player.getLocation().getBlock().getRelative(1,-1,0);
-                Block downBlock = player.getLocation().getBlock().getRelative(-1,-1,0);
-                Block leftBlock = player.getLocation().getBlock().getRelative(0,-1,1);
-                Block rightBlock = player.getLocation().getBlock().getRelative(0,-1,-1);
-
-                if(!firstiteration){
-
-                    quitBlock(previusCenterBlock,centerBlock);
-                    quitBlock(previusup,upBlock);
-                    quitBlock(previusdown,downBlock);
-                    quitBlock(previusleft,leftBlock);
-                    quitBlock(previusRight,rightBlock);
-                    quitBlock(previusDownCenterBlock,downcenterBlock);
-
-
-                    previusCenterBlock.getRelative(0,-1,0).setType(Material.AIR);
-                    previusup.getRelative(0,-1,0).setType(Material.AIR);
-                    previusdown.getRelative(0,-1,0).setType(Material.AIR);
-                    previusleft.getRelative(0,-1,0).setType(Material.AIR);
-                    previusRight.getRelative(0,-1,0).setType(Material.AIR);
-                    previusDownCenterBlock.getRelative(0,-1,0).setType(Material.AIR);
-
-
-
-                } else
-                    firstiteration = false;
-
-                if(!player.isSneaking()) {
-                    setBlock(centerBlock, centerMat);
-                    setBlock(downcenterBlock, downcenterMat);
-                    setBlock(upBlock, upMat);
-                    setBlock(downBlock, downMat);
-                    setBlock(leftBlock, leftMat);
-                    setBlock(rightBlock, rightMat);
-                } else {
-
-                    centerBlock.setType(Material.AIR);
-                    downcenterBlock.setType(Material.AIR);
-                    upBlock.setType(Material.AIR);
-                    downBlock.setType(Material.AIR);
-                    leftBlock.setType(Material.AIR);
-                    rightBlock.setType(Material.AIR);
-
-                    centerBlock.getRelative(0,-1,0).setType(centerMat);
-                    downcenterBlock.getRelative(0,-1,0).setType(downcenterMat);
-                    upBlock.getRelative(0,-1,0).setType(upMat);
-                    downBlock.getRelative(0,-1,0).setType(downMat);
-                    leftBlock.getRelative(0,-1,0).setType(leftMat);
-                    rightBlock.getRelative(0,-1,0).setType(rightMat);
-
-
-                }
-
-                previusCenterBlock = centerBlock;
-                previusDownCenterBlock = downcenterBlock;
-                previusup = upBlock;
-                previusdown = downBlock;
-                previusleft = leftBlock;
-                previusRight = rightBlock;
-
-
-                if(ticks > 500){
-                    player.setAllowFlight(false);
-                    centerBlock.setType(Material.AIR);
-                    downcenterBlock.setType(Material.AIR);
-                    upBlock.setType(Material.AIR);
-                    downBlock.setType(Material.AIR);
-                    leftBlock.setType(Material.AIR);
-                    rightBlock.setType(Material.AIR);
-
-                    world.spawnFallingBlock(downcenterBlock.getLocation(),downcenterMat.createBlockData()).setVelocity(new Vector(0,-2,0));
-                    world.spawnFallingBlock(centerBlock.getLocation(),centerMat.createBlockData()).setVelocity(new Vector(0,-2,0));
-                    world.spawnFallingBlock(upBlock.getLocation(),upMat.createBlockData()).setVelocity(new Vector(0,-2,0));
-                    world.spawnFallingBlock(downBlock.getLocation(),downMat.createBlockData()).setVelocity(new Vector(0,-2,0));
-                    world.spawnFallingBlock(leftBlock.getLocation(),leftMat.createBlockData()).setVelocity(new Vector(0,-2,0));
-                    world.spawnFallingBlock(rightBlock.getLocation(),rightMat.createBlockData()).setVelocity(new Vector(0,-2,0));
-
-                    this.cancel();
-                }
-
-
+                cosmeticsArmor.killCosmeticArmor(player,"flying_rock");
+                player.setAllowFlight(false);
             }
-
-            public void setBlock(Block block, Material material){
-                if(!block.getType().isSolid())
-                    block.setType(material);
-            }
-
-            public void quitBlock(Block previusBlock, Block block){
-                if(previusBlock != block)
-                    previusBlock.setType(Material.AIR);
-            }
-        }.ophRunTaskTimer(0,1);
+        }.ophRunTaskLater(300);
     }
-
-     */
 
     @Override
     public void onEntityToggleGlide(EntityToggleGlideEvent event){
