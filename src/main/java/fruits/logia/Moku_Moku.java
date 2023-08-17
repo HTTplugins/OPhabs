@@ -16,6 +16,12 @@ import runnables.OphRunnable;
 
 public class Moku_Moku extends Logia{
     private ItemStack fist;
+
+    public static int getFruitID()
+    {
+        return 1004;
+    }
+
     public Moku_Moku(int id) {
         super(id, "Moku_Moku", "Moku Moku no Mi", "Moku_Moku", Particle.CLOUD);
         fist = new ItemStack(Material.QUARTZ);

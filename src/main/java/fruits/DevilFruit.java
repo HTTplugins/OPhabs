@@ -18,6 +18,11 @@ public abstract class DevilFruit implements IEventProcessor
     // Determina si los poderes están activos (si está en el agua / es golpeado por k no)
     protected boolean isFruitActive = true;
 
+    public static int getFruitID()
+    {
+        return 1000;
+    }
+
     public DevilFruit(int id, String name, String displayName, String commandName)
     {
         this.id = id;

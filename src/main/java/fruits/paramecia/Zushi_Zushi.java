@@ -39,7 +39,10 @@ public class Zushi_Zushi extends Paramecia
     private static List<Entity> heavyEntity = null;
     private static List<Player> togglePlayer = new ArrayList<>();
 
-
+    public static int getFruitID()
+    {
+        return 1002;
+    }
 
     public Zushi_Zushi(int id){
         super(id, "Zushi_Zushi", "Zushi zushi no Mi", "Zushi_Zushi");

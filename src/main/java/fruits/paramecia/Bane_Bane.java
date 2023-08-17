@@ -24,6 +24,11 @@ public class Bane_Bane extends Paramecia
     private boolean resort;
     private ItemStack glove;
 
+    public static int getFruitID()
+    {
+        return 1001;
+    }
+
     public Bane_Bane(int id)
     {
         super(id, "Bane_Bane", "Bane Bane no Mi", "Bane_Bane");

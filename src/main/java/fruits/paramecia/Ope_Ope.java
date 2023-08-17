@@ -33,6 +33,11 @@ public class Ope_Ope extends Paramecia {
     private LivingEntity currentHearth;
     private int availableSqueezes;
 
+    public static int getFruitID()
+    {
+        return 1003;
+    }
+
     public Ope_Ope(int id) {
         super(id, "Ope_Ope", "Ope ope no Mi", "Ope_Ope");
 
