@@ -18,7 +18,6 @@ import org.bukkit.Location;
 import org.bukkit.Bukkit;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.entity.PlayerDeathEvent;
-import org.bukkit.event.entity.EntityToggleGlideEvent;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.util.Vector;
 import org.bukkit.block.Block;
@@ -44,7 +43,6 @@ public class goru_goru extends paramecia {
     int storaged, maxStoraged;
     String nameAbility1 = "Absorb Gold";
     boolean opened;
-    boolean glide = false;
 
     // *********************************************** CONSTRUCTORS *******************************************************
 
@@ -72,11 +70,6 @@ public class goru_goru extends paramecia {
         abilitiesCD.add(0);
     }
 
-
-    // public void onEntityToggleGlideEvent(EntityToggleGlideEvent event) {
-    //     if(glide)
-    //         event.setCancelled(true);
-    // }
     // *********************************************** ABILITIES *******************************************************
 
     /**
@@ -603,16 +596,8 @@ public class goru_goru extends paramecia {
                         if(isCaster && Objects.requireNonNull(caster.getItemMeta()).getDisplayName().equals(fruit.getCasterName())){
                             if(!player.isFlying())
                                 player.setAllowFlight(true);
-                            if(player.isFlying()){
-                                if(!glide){
-                                    player.setGliding(true);
-                                    glide=true;
-                                }
+                            if(player.isFlying())
                                 summonParticles(player);
-                            }
-                            else
-                                glide=false;
-                                
                         } else {
                             assert player != null;
                             player.setAllowFlight(false);
@@ -979,5 +964,4 @@ class ReinforcedGoldBoots extends ItemStack {
         meta.addAttributeModifier(Attribute.GENERIC_ARMOR, modifier);
         this.setItemMeta(meta);
     }
-
 }

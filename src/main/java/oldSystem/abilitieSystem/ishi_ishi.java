@@ -9,15 +9,12 @@ import org.bukkit.*;
 import org.bukkit.entity.Entity;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 
 import org.bukkit.event.inventory.InventoryClickEvent;
-import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.scheduler.BukkitRunnable;
-import org.bukkit.util.EulerAngle;
 import org.bukkit.util.Vector;
 import org.bukkit.block.Block;
 import org.bukkit.inventory.Inventory;
@@ -30,7 +27,7 @@ public class ishi_ishi extends paramecia {
     public static Particle.DustOptions piedra = new Particle.DustOptions(Color.GRAY,1.0F);
     int storaged, maxStoraged;
     String nameAbility1 = "Absorb Stone";
-    boolean opened; 
+    boolean opened;
 
     public ishi_ishi(OPhabs plugin) {
         super(plugin, 2, 10, 8, "ishi_ishi", "Ishi Ishi no Mi", "Ishi Ishi caster", 9, 1);

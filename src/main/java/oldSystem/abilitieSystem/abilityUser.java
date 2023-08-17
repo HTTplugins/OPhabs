@@ -1,7 +1,6 @@
 package oldSystem.abilitieSystem;
 
 
-import oldSystem.castSystem.caster;
 import oldSystem.fruitSystem.devilFruit;
 import oldSystem.htt.ophabs.*;
 import org.bukkit.Bukkit;
@@ -19,7 +18,6 @@ import org.bukkit.event.player.PlayerLoginEvent;
 import org.bukkit.event.player.PlayerItemDamageEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
-import org.bukkit.event.entity.EntityToggleGlideEvent;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.scheduler.BukkitRunnable;
 
@@ -33,7 +31,6 @@ import java.util.ArrayList;
 
 public class abilityUser {
     private OPhabs plugin;
-    private boolean casterMode = false;
     private final String playerName;
     public int actual;
     private devilFruit fruit;
@@ -189,33 +186,6 @@ public class abilityUser {
         }
     }
 
-    public void ability(int n) {
-        if (dfAbilities == null)
-            return;
-        if (getDFAbilities().active) {
-            switch (n) {
-                case 0:
-                    dfAbilities.ability1();
-                    break;
-                case 1:
-                    dfAbilities.ability2();
-                    break;
-                case 2:
-                    dfAbilities.ability3();
-                    break;
-                case 3:
-                    dfAbilities.ability4();
-                    break;
-                case 4:
-                    dfAbilities.ability5();
-                    break;
-                case 5:
-                    dfAbilities.ability6();
-                    break;
-            }
-        }
-    }
-
     /**
      * @brief Gets all abilities' CDs of the current devil fruit.
      * @author Vaelico786.
@@ -236,9 +206,6 @@ public class abilityUser {
             return null;
         return dfAbilities.abilitiesNames;
     }
-
-    public void changeCasterMode(){casterMode=!casterMode;}
-    public boolean isCasterMode(){return casterMode;}
 
     // *********************************************** HAKI *******************************************************
 
@@ -600,13 +567,6 @@ public class abilityUser {
 
     public void onProjectileHit(ProjectileHitEvent event){
         if(hasFruit()) getDFAbilities().onProjectileHit(event);
-    }
-
-
-    public void onEntityToggleGlideEvent(EntityToggleGlideEvent event) {
-        System.out.println("Glide");
-
-        if(hasFruit()) getDFAbilities().onEntityToggleGlideEvent(event);
     }
 
     /**
