@@ -9,6 +9,7 @@ import org.bukkit.event.player.PlayerItemConsumeEvent;
 import org.bukkit.event.player.PlayerRespawnEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerItemDamageEvent;
+import org.bukkit.event.entity.EntityToggleGlideEvent;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.block.BlockBreakEvent;
 
@@ -251,5 +252,8 @@ public class abilities {
     public void onBlockBreak(BlockBreakEvent event) {}
 
     public void onProjectileHit(ProjectileHitEvent event) {}
+    
+    public void onEntityToggleGlideEvent(EntityToggleGlideEvent event) {}
+
 
     }
