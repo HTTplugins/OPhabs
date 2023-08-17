@@ -6,6 +6,8 @@
     "overrides": [
         {"predicate": {"custom_model_data": 1},"model": "custom/flying_rock"},
         {"predicate": {"custom_model_data": 2},"model": "custom/gravityRocks"},
+        {"predicate": {"custom_model_data": 3},"model": "custom/GoroBack"},
+
         {"predicate": {"custom_model_data": 20104},"model": "animations/gravity_rocks/gravityRocks_4"},
         {"predicate": {"custom_model_data": 20105},"model": "animations/gravity_rocks/gravityRocks_5"},
         {"predicate": {"custom_model_data": 20106},"model": "animations/gravity_rocks/gravityRocks_6"},
