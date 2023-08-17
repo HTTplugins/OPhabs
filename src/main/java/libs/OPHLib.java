@@ -34,6 +34,29 @@ public class OPHLib {
     }
 
 
+    public static void dash(Player player, double distance ){
+        Location location = player.getLocation();
+        float yaw = location.getYaw();
+        float pitch = location.getPitch();
+        double x = Math.cos(Math.toRadians(yaw + 90)) * Math.cos(Math.toRadians(-pitch));
+        double y = Math.sin(Math.toRadians(-pitch));
+        double z = Math.sin(Math.toRadians(yaw + 90)) * Math.cos(Math.toRadians(-pitch));
+        Vector direction = new Vector(x, y, z);
+        direction.multiply(distance);
+        player.setVelocity(direction);
+        OPHSoundLib.OphPlaySound(OPHSounds.FASTSORU,player.getLocation(),1,1);
+    }
+
+    public static Location getBack(Player player, double yaw,  double height){
+        double x = cos(toRadians(yaw)) / 2;
+        double z = sin(toRadians(yaw)) / 2;
+
+        double xBehind = player.getLocation().getX() + x;
+        double zBehind = player.getLocation().getZ() + z;
+        return new Location(player.getWorld(),xBehind,height,zBehind);
+    }
+
+
     public static void attractEntitie(Entity ent, Player player){
         new OphRunnable(){
             Vector FirstVector;
@@ -500,7 +523,7 @@ public class OPHLib {
 
                     location.add(direction);
                     particleAmount = density * amplitude;
-                    world.spawnParticle(particle, location, (int) particleAmount, 
+                    world.spawnParticle(particle, location, (int) particleAmount,
                             amplitude, amplitude, amplitude, 0, extra);
 
 
@@ -651,8 +674,8 @@ public class OPHLib {
 
                     location.add(direction);
                     particleAmount = density * amplitude;
-                    world.spawnParticle(Particle.FLAME, location, (int) particleAmount, 
-                                        amplitude, amplitude, amplitude, 0);
+                    world.spawnParticle(Particle.FLAME, location, (int) particleAmount,
+                            amplitude, amplitude, amplitude, 0);
 
 
                     world.getNearbyEntities(location, amplitude, amplitude, amplitude).forEach(entity -> {

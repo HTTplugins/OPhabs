@@ -1,0 +1,53 @@
+{
+	"credit": "Made with Blockbench",
+	"textures": {
+		"0": "item/banefruit",
+		"particle": "item/banefruit"
+	},
+	"elements": [
+		{
+			"from": [1, 0, 7],
+			"to": [9, 8, 7],
+			"faces": {
+				"north": {"uv": [16, 0, 0, 16], "texture": "#0"},
+				"east": {"uv": [0, 0, 0, 3], "texture": "#missing"},
+				"south": {"uv": [0, 0, 16, 16], "texture": "#0"},
+				"west": {"uv": [0, 0, 0, 3], "texture": "#missing"},
+				"up": {"uv": [0, 0, 3, 0], "texture": "#missing"},
+				"down": {"uv": [0, 0, 3, 0], "texture": "#missing"}
+			}
+		}
+	],
+	"display": {
+		"thirdperson_righthand": {
+			"translation": [2.25, 5, 0.5]
+		},
+		"thirdperson_lefthand": {
+			"translation": [-0.5, 5.25, 0]
+		},
+		"firstperson_righthand": {
+			"rotation": [-2, -65, 0],
+			"translation": [10, 3.5, -0.25],
+			"scale": [1.5, 1.5, 1]
+		},
+		"firstperson_lefthand": {
+			"rotation": [0, -56, -7],
+			"translation": [0.75, 4.75, -1.25]
+		},
+		"ground": {
+			"rotation": [0, 0, 38],
+			"translation": [2.25, 4.5, 0]
+		},
+		"gui": {
+			"translation": [4.25, 6.5, 0],
+			"scale": [1.5, 1.5, 1]
+		},
+		"head": {
+			"translation": [2.25, 3, -6.75]
+		},
+		"fixed": {
+			"translation": [6, 8, 0],
+			"scale": [2, 2, 1]
+		}
+	}
+}

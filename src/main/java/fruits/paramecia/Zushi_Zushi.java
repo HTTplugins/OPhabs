@@ -1,6 +1,5 @@
 package fruits.paramecia;
 
-
 import htt.ophabs.OPhabs;
 import abilities.AbilitySet;
 import abilities.CooldownAbility;
@@ -39,13 +38,9 @@ public class Zushi_Zushi extends Paramecia
 
 
 
-    public Zushi_Zushi(int id)
-    {
+    public Zushi_Zushi(int id){
         super(id, "Zushi_Zushi", "Zushi zushi no Mi", "Zushi_Zushi");
 
-        //
-        // BasicSet
-        //
         AbilitySet basicSet = new AbilitySet("Base Set");
 
         // Heavy Field
@@ -60,7 +55,7 @@ public class Zushi_Zushi extends Paramecia
             this.meteor(player);
         }));
 
-        // Atracction
+        // Attraction
         basicSet.addAbility(new CooldownAbility("Atracction", 5, () -> {
             Player player = user.getPlayer();
             this.attraction(player);
@@ -72,9 +67,6 @@ public class Zushi_Zushi extends Paramecia
             this.flyRock(player);
         }));
 
-        //
-        // Guardar sets
-        //
         this.abilitySets.add(basicSet);
     }
 
@@ -103,7 +95,6 @@ public class Zushi_Zushi extends Paramecia
                         (ent).teleport(new Location(world,entiLoc.getX(),entiLoc.getY(),entiLoc.getZ(),entiLoc.getYaw(),-10));
                         ((Player)ent).setGliding(true);
                         togglePlayer.add((Player) ent);
-
                     } else if(ent instanceof LivingEntity)
                         ((LivingEntity)ent).addPotionEffect(new PotionEffect(PotionEffectType.SLOW,10,10));
                 }
@@ -111,8 +102,7 @@ public class Zushi_Zushi extends Paramecia
                 if(getCurrentRunIteration() == duration){
                     togglePlayer.clear();
                     heavyEntity.clear();
-
-                    this.cancel();
+                    this.ophCancel();
                 }
             }
         }.ophRunTaskTimer(0,1);
@@ -128,6 +118,7 @@ public class Zushi_Zushi extends Paramecia
             @Override
             public void OphRun() {
                 world.playSound(playerLoc,"magneticfield",1,-1);
+
 
             }
         }.ophRunTaskLater(10);
@@ -351,6 +342,7 @@ public class Zushi_Zushi extends Paramecia
             event.setCancelled(true);
         }
     }
+
 
     @Override
     protected void onAddFruit()

@@ -51,7 +51,7 @@ public final class OPhabs extends JavaPlugin {
 
         LayeredStructuresAPI.initialize(Bukkit.getPluginManager().getPlugin("LayeredStructures"));
         LayeredStructuresAPI.precharge("iceDrake"); //pendiente refactor jaime para limpiar del enable.
-
+        LayeredStructuresAPI.precharge("room");
 
         //
         // Inicializar los registros
