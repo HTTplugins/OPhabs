@@ -341,9 +341,12 @@ public class Zushi_Zushi extends Paramecia
 
     @Override
     public void onEntityToggleGlide(EntityToggleGlideEvent event){
-        if(togglePlayer.contains((Player)(event.getEntity()))){
+        if(this.user == null)
+            return;
+
+        if(togglePlayer.contains((Player)(event.getEntity())))
             event.setCancelled(true);
-        }
+
     }
 
 
