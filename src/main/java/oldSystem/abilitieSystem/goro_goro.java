@@ -1,6 +1,8 @@
 package oldSystem.abilitieSystem;
 
-import oldSystem.htt.ophabs.*;
+import castSystem.castIdentification;
+import cosmetics.cosmeticsArmor;
+import htt.ophabs.OPhabs;
 import org.bukkit.*;
 
 import java.util.List;
@@ -9,6 +11,9 @@ import java.util.Random;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.Damageable;
+import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import org.bukkit.scheduler.BukkitRunnable;
@@ -19,6 +24,7 @@ import org.bukkit.util.Vector;
  * @author RedRiotTank
  */
 public class goro_goro extends logia {
+    Boolean cosmetic = false;
 
     /**
      * @brief goro_goro constructor.
@@ -37,6 +43,8 @@ public class goro_goro extends logia {
         abilitiesNames.add("Discharge");
         abilitiesCD.add(0);
         this.runParticles();
+        // cosmeticsArmor.summonCosmeticArmor(1, "enel", user.getPlayer(), Material.PUMPKIN);
+
     }
 
     /**
@@ -46,7 +54,6 @@ public class goro_goro extends logia {
      */
     @Override
     public void runParticles() {
-        /*
         new BukkitRunnable(){
 
             @Override
@@ -74,32 +81,19 @@ public class goro_goro extends logia {
                             }
                         }
 
-                        if(isCaster && caster.getItemMeta().getDisplayName().equals(castIdentification.castItemNameGoro)){
-                            double angle = toRadians(-player.getLocation().getYaw());
+                        if(isCaster ){
+                            if(!cosmetic){
+                                cosmeticsArmor.summonCosmeticArmor(3, "enel", user.getPlayer(), Material.PUMPKIN);
 
-                            for(double i=0; i < 2*PI; i+=0.05){
-                                double x = cos(i);
-                                double y = sin(i);
-                                double z = 0;
-
-                                double xr = cos(angle)*x + sin(angle)*z;
-                                double yr = y;
-                                double zr = -sin(angle)*x + cos(angle)*z;
-
-                                double xF = player.getLocation().getX() + xr-0.25*sin(angle);
-                                double yF = player.getLocation().getY() + yr + 2;
-                                double zF = player.getLocation().getZ() + zr-0.25*cos(angle);
-
-                                Location loc = new Location(player.getWorld(),xF,yF,zF);
-                                player.getWorld().spawnParticle(Particle.ELECTRIC_SPARK,loc,0,0,0,0);
-
-                                for(Entity ent : player.getWorld().getNearbyEntities(loc,0.5,0.5,0.5))
-                                    if (ent instanceof LivingEntity)
-                                            ((LivingEntity) ent).damage(1,(Entity) user.getPlayer());
-
+                                cosmetic = true;
                             }
                             player.setAllowFlight(true);
                         }else {
+
+                            if(cosmetic){
+                                cosmeticsArmor.killCosmeticArmor(player, "enel");
+                                cosmetic = false;
+                            }
                             player.setAllowFlight(false);
                             player.setFlying(false);
                         }
@@ -108,7 +102,6 @@ public class goro_goro extends logia {
 
 
         }.runTaskTimer(plugin,0,2);
-        */
     }
 
     // ---------------------------------------------- AB 1 ---------------------------------------------------------------------

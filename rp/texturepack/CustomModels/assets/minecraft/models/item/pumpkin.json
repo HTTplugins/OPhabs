@@ -1,0 +1,32 @@
+{
+  "parent": "minecraft:item/generated",
+  "textures": {
+    "layer0": "minecraft:item/pumpkin"
+  },
+    "overrides": [
+        {"predicate": {"custom_model_data": 1},"model": "custom/flying_rock"},
+        {"predicate": {"custom_model_data": 2},"model": "custom/gravityRocks"},
+        {"predicate": {"custom_model_data": 3},"model": "custom/GoroBack"},
+        {"predicate": {"custom_model_data": 20000},"model": "animations/wings/wings_0"},
+        {"predicate": {"custom_model_data": 20001},"model": "animations/wings/wings_1"},
+        {"predicate": {"custom_model_data": 20002},"model": "animations/wings/wings_2"},
+        {"predicate": {"custom_model_data": 20003},"model": "animations/wings/wings_3"},
+        {"predicate": {"custom_model_data": 20004},"model": "animations/wings/wings_4"},
+        {"predicate": {"custom_model_data": 20100},"model": "animations/gravity_rocks/gravityRocks_0"},
+        {"predicate": {"custom_model_data": 20101},"model": "animations/gravity_rocks/gravityRocks_1"},
+        {"predicate": {"custom_model_data": 20102},"model": "animations/gravity_rocks/gravityRocks_2"},
+        {"predicate": {"custom_model_data": 20103},"model": "animations/gravity_rocks/gravityRocks_3"},
+        {"predicate": {"custom_model_data": 20104},"model": "animations/gravity_rocks/gravityRocks_4"},
+        {"predicate": {"custom_model_data": 20105},"model": "animations/gravity_rocks/gravityRocks_5"},
+        {"predicate": {"custom_model_data": 20106},"model": "animations/gravity_rocks/gravityRocks_6"},
+        {"predicate": {"custom_model_data": 20107},"model": "animations/gravity_rocks/gravityRocks_7"},
+        {"predicate": {"custom_model_data": 20108},"model": "animations/gravity_rocks/gravityRocks_8"},
+        {"predicate": {"custom_model_data": 20109},"model": "animations/gravity_rocks/gravityRocks_9"},
+        {"predicate": {"custom_model_data": 20110},"model": "animations/gravity_rocks/gravityRocks_10"},
+        {"predicate": {"custom_model_data": 20111},"model": "animations/gravity_rocks/gravityRocks_11"},
+        {"predicate": {"custom_model_data": 20112},"model": "animations/gravity_rocks/gravityRocks_12"},
+        {"predicate": {"custom_model_data": 20113},"model": "animations/gravity_rocks/gravityRocks_13"},
+        {"predicate": {"custom_model_data": 20114},"model": "animations/gravity_rocks/gravityRocks_14"}
+
+    ]
+}
