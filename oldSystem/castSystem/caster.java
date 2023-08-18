@@ -11,6 +11,7 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
+import org.bukkit.event.player.PlayerItemHeldEvent;
 import org.bukkit.event.entity.*;
 import org.bukkit.event.player.*;
 import org.bukkit.event.entity.EntityDamageEvent.DamageCause;
@@ -56,9 +57,10 @@ public class caster implements Listener {
             Action action = event.getAction();
             if (event.getItem() != null && castIdentification.itemIsCaster(event.getItem(), user) && user.hasFruit()) {
 
-                if ((action == Action.RIGHT_CLICK_AIR || action == Action.RIGHT_CLICK_BLOCK)){
-                    user.abilityActive();
-                }
+                // if ((action == Action.RIGHT_CLICK_AIR || action == Action.RIGHT_CLICK_BLOCK)){
+                //     user.abilityActive();
+                // }
+                user.changeCasterMode();
 
 
                 //else
@@ -405,6 +407,24 @@ public class caster implements Listener {
     @EventHandler
     public void onEntityAirChangeEvent(EntityAirChangeEvent event){
         moku_moku.onEntityAirChangeEvent(event);
+    }
+
+    
+    @EventHandler
+    public void onEntityToggleGlideEvent(EntityToggleGlideEvent event) {
+        if(event.getEntity() instanceof Player && users.containsKey(event.getEntity().getName())) {
+            abilityUser user = users.get(event.getEntity().getName());
+            user.onEntityToggleGlide(event);
+        }
+    }
+
+    @EventHandler
+    public void onPlayerItemHeldEvent(PlayerItemHeldEvent event) {
+        if(users.containsKey(event.getPlayer().getName()) && users.get(event.getPlayer().getName()).isCasterMode()) {
+            abilityUser user = users.get(event.getPlayer().getName());
+            user.ability(event.getNewSlot());
+            event.setCancelled(true);
+        }
     }
     
 }
