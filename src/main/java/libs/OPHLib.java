@@ -34,13 +34,9 @@ public class OPHLib {
 
 
     public static void dash(Player player, double distance ){
-        Location location = player.getLocation();
-        float yaw = location.getYaw();
-        float pitch = location.getPitch();
-        double x = Math.cos(Math.toRadians(yaw + 90)) * Math.cos(Math.toRadians(-pitch));
-        double y = Math.sin(Math.toRadians(-pitch));
-        double z = Math.sin(Math.toRadians(yaw + 90)) * Math.cos(Math.toRadians(-pitch));
-        Vector direction = new Vector(x, y, z);
+        Location location = player.getEyeLocation();
+
+        Vector direction = location.getDirection();
         direction.multiply(distance);
         player.setVelocity(direction);
         OPHSoundLib.OphPlaySound(OPHSounds.FASTSORU,player.getLocation(),1,1);
