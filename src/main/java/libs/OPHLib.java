@@ -1,8 +1,7 @@
 package libs;
 
 import htt.ophabs.OPhabs;
-import oldSystem.abilitieSystem.abilityUser;
-import oldSystem.abilitieSystem.yami_yami;
+
 import org.bukkit.*;
 import org.bukkit.block.Block;
 import org.bukkit.block.Container;
@@ -31,6 +30,25 @@ public class OPHLib {
 
     public static Random getRandom() {
         return random;
+    }
+
+
+    public static void dash(Player player, double distance ){
+        Location location = player.getEyeLocation();
+
+        Vector direction = location.getDirection();
+        direction.multiply(distance);
+        player.setVelocity(direction);
+        OPHSoundLib.OphPlaySound(OPHSounds.FASTSORU,player.getLocation(),1,1);
+    }
+
+    public static Location getBack(Player player, double yaw,  double height){
+        double x = cos(toRadians(yaw)) / 2;
+        double z = sin(toRadians(yaw)) / 2;
+
+        double xBehind = player.getLocation().getX() + x;
+        double zBehind = player.getLocation().getZ() + z;
+        return new Location(player.getWorld(),xBehind,height,zBehind);
     }
 
 
@@ -359,13 +377,7 @@ public class OPHLib {
         return null;
     }
 
-    /**
-     * @param ent    Entity wanted to be repealed.
-     * @param player Fruit's user.
-     * @brief Modified yami-yami's livingVoidForEntity function. ???
-     * @author Vaelico786.
-     * @see yami_yami#livingVoidForEntity(Entity, Player)
-     */
+
     public static void catchEntity(Entity ent, Player player) {
         new BukkitRunnable() {
             Vector FirstVector;
@@ -419,13 +431,7 @@ public class OPHLib {
         }.runTaskTimer(OPhabs.getInstance(), 0, 1);
     }
 
-    /**
-     * @param ent    Entity wanted to be repealed.
-     * @param player Fruit's user.
-     * @brief Modified yami-yami's repealEntity function. ???
-     * @author Vaelico786.
-     * @see yami_yami#repealEntity(Entity, Player)
-     */
+
     public static void repealEntity(Entity ent, Player player) {
         ent.getWorld().playSound(ent.getLocation(), Sound.BLOCK_REDSTONE_TORCH_BURNOUT, 10, 2);
 
@@ -459,8 +465,8 @@ public class OPHLib {
             }
         }.runTaskTimer(OPhabs.getInstance(), 0, 2);
     }
-
-    public static void breath(abilityUser user, Vector pos, Vector dir, int delay, int maxLength, int maxTicks, int dmg, double startAmpl, int startAmountParticles, double maxAmplitude, int period, String sound, Particle particle, double extra) {
+/*
+    public static void breath(Player player, Vector pos, Vector dir, int delay, int maxLength, int maxTicks, int dmg, double startAmpl, int startAmountParticles, double maxAmplitude, int period, String sound, Particle particle, double extra) {
 
 
         int iterations = maxTicks / period;
@@ -470,7 +476,7 @@ public class OPHLib {
             double density = startAmountParticles / startAmpl;
             double amplitude = startAmpl;
             double distance = 0;
-            Player player = user.getPlayer();
+
             World world = player.getWorld();
 
 
@@ -500,7 +506,7 @@ public class OPHLib {
 
                     location.add(direction);
                     particleAmount = density * amplitude;
-                    world.spawnParticle(particle, location, (int) particleAmount, 
+                    world.spawnParticle(particle, location, (int) particleAmount,
                             amplitude, amplitude, amplitude, 0, extra);
 
 
@@ -526,10 +532,6 @@ public class OPHLib {
                 Bukkit.getScheduler().cancelTask(this.getTaskId());
             }
         }.runTaskTimer(OPhabs.getInstance(), delay, period);
-        /**
-         * @brief Generates an item on an invisible invulnerable stand
-         * @author Vaelico786.
-         */
 
     }
 
@@ -604,10 +606,6 @@ public class OPHLib {
                 Bukkit.getScheduler().cancelTask(this.getTaskId());
             }
         }.runTaskTimer(OPhabs.getInstance(), delay, period);
-        /**
-         * @brief Generates an item on an invisible invulnerable stand
-         * @author Vaelico786.
-         */
 
     }
 
@@ -651,8 +649,8 @@ public class OPHLib {
 
                     location.add(direction);
                     particleAmount = density * amplitude;
-                    world.spawnParticle(Particle.FLAME, location, (int) particleAmount, 
-                                        amplitude, amplitude, amplitude, 0);
+                    world.spawnParticle(Particle.FLAME, location, (int) particleAmount,
+                            amplitude, amplitude, amplitude, 0);
 
 
                     world.getNearbyEntities(location, amplitude, amplitude, amplitude).forEach(entity -> {
@@ -681,14 +679,10 @@ public class OPHLib {
                 Bukkit.getScheduler().cancelTask(this.getTaskId());
             }
         }.runTaskTimer(OPhabs.getInstance(), delay, period);
-        /**
-         * @brief Generates an item on an invisible invulnerable stand
-         * @author Vaelico786.
-         */
 
     }
 
-
+*/
     public static ArmorStand generateCustomFloatingItem(Location loc, ItemStack item, boolean gravity) {
         ArmorStand armorStand = loc.getWorld().spawn(loc, ArmorStand.class);
         // Establecer el objeto con Custom Model Data en la mano del armor stand

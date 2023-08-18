@@ -1,8 +1,10 @@
 package libs;
 
+import org.bukkit.Color;
 import org.bukkit.Location;
 import org.bukkit.Particle;
 import org.bukkit.World;
+import org.bukkit.entity.Player;
 import runnables.OphRunnable;
 
 import java.util.Random;
@@ -13,6 +15,15 @@ public class OPHAnimationLib {
 
     private static final Random random = new Random();
 
+
+    public static void spawnYawDependingParticle(Player player, double yaw, double height){
+        Location pBehind = OPHLib.getBack(player,yaw,height);
+        player.getWorld().spawnParticle(Particle.REDSTONE,pBehind,0,0,0,0);
+    }
+    public static void spawnYawDependingParticle(Player player, double yaw, double height, Particle.DustOptions dustOptions){
+        Location pBehind = OPHLib.getBack(player,yaw,height);
+        player.getWorld().spawnParticle(Particle.REDSTONE,pBehind,0,0,0,0,dustOptions);
+    }
     public static void horizontalCircle(Location center, double radius,double particleDistance, Particle particle,Particle.DustOptions dustOptions){
         double x,z;
         World world = center.getWorld();

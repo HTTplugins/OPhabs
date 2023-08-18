@@ -1,6 +1,7 @@
 package cast;
 
 import htt.ophabs.OPhabs;
+import textures.TextureMapper;
 import users.OPUser;
 import abilities.AbilitySet;
 import display.IFruitCasterDisplay;
@@ -47,6 +48,12 @@ public class FruitCaster extends Caster
         this.fruitCasterDisplay = fruitCasterDisplay;
 
         fruitCasterDisplay.addFruitCaster(this);
+
+        // Añadir al usuario los remapeos
+        OPUser user = fruit.getUser();
+
+        for (int remappedID : OPhabs.textureMapper.getRemappedIDs(this.fruit.getID()))
+            user.getActiveCasters().put(remappedID, this);
     }
 
     public DevilFruit getFruit()
@@ -67,6 +74,12 @@ public class FruitCaster extends Caster
     @Override
     public void dispose()
     {
+        // Eliminar los remapeos del usuario
+        OPUser user = fruit.getUser();
+
+        for (int remappedID : OPhabs.textureMapper.getRemappedIDs(this.fruit.getID()))
+            user.getActiveCasters().remove(remappedID);
+
         fruitCasterDisplay.removeFruitCaster(this);
     }
 

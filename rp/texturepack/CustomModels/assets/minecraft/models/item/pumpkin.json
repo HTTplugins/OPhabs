@@ -4,7 +4,7 @@
     "layer0": "minecraft:item/pumpkin"
   },
     "overrides": [
-        {"predicate": {"custom_model_data": 1},"model": "custom/flying_rock"},
+        {"predicate": {"custom_model_data": 1},"model": "custom/abilitiecosmetics/flying_rock"},
         {"predicate": {"custom_model_data": 2},"model": "custom/gravityRocks"},
         {"predicate": {"custom_model_data": 3},"model": "custom/GoroBack"},
 
