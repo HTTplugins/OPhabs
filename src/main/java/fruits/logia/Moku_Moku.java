@@ -34,7 +34,7 @@ public class Moku_Moku extends Logia{
         //
         AbilitySet basicSet = new AbilitySet("Base Set");
 
-        // Resort
+        // Smoke Punch
         basicSet.addAbility(new Ability("Smoke Punch", () -> {
             Location loc = user.getPlayer().getLocation();
             this.smokePunch(loc);
