@@ -20,7 +20,7 @@ public interface IEventProcessor
     default void onPlayerRespawn(PlayerRespawnEvent event) {}
     default void onItemDamage(PlayerItemDamageEvent event) {}
     default void onEntityDamageByUser(EntityDamageByEntityEvent event){}
-    default void onUserDamageByEntity(EntityDamageByEntityEvent event) {}
+    default void onEntityDamageByEntity(EntityDamageByEntityEvent event) {}
     default void onPlayerJoin(PlayerJoinEvent event) {}
     default void onPlayerMove(PlayerMoveEvent event) {}
     default void onEntityToggleGlide(EntityToggleGlideEvent event) {}
@@ -32,4 +32,5 @@ public interface IEventProcessor
     default void onPlayerDropItem(PlayerDropItemEvent event) {}
 
     default void onPlayerSwapHandItems(PlayerSwapHandItemsEvent event) {}
+    default void onEntityDeath(EntityDeathEvent event) {}
 }

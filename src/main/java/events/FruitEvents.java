@@ -1,6 +1,13 @@
 package events;
 
+import fruits.paramecia.Ope_Ope;
+import fruits.paramecia.Zushi_Zushi;
 import htt.ophabs.OPhabs;
+import org.bukkit.event.block.BlockBreakEvent;
+import org.bukkit.event.entity.EntityDamageByEntityEvent;
+import org.bukkit.event.entity.EntityDeathEvent;
+import org.bukkit.event.entity.EntityToggleGlideEvent;
+import org.bukkit.event.player.PlayerJoinEvent;
 import users.OPUser;
 import cast.Caster;
 import cast.FruitCaster;
@@ -76,5 +83,31 @@ public class FruitEvents implements Listener
             user.getDevilFruit().onPlayerDeath(event);
             this.fruitRegistry.unlinkFruitUser(user);
         }
+    }
+
+    @EventHandler(ignoreCancelled = true)
+    public void onEntityToggleGlide(EntityToggleGlideEvent event) {
+        OPhabs.registrySystem.getRegistry(IFruitRegistry.class).getFruit(Zushi_Zushi.getFruitID()).onEntityToggleGlide(event);
+    }
+
+    @EventHandler(ignoreCancelled = true)
+    public void onBlockBreak(BlockBreakEvent event) {
+        OPhabs.registrySystem.getRegistry(IFruitRegistry.class).getFruit(Ope_Ope.getFruitID()).onBlockBreak(event);
+    }
+
+    @EventHandler(ignoreCancelled = true)
+    public void onEntityDeath(EntityDeathEvent event) {
+        OPhabs.registrySystem.getRegistry(IFruitRegistry.class).getFruit(Ope_Ope.getFruitID()).onEntityDeath(event);
+
+    }
+
+    @EventHandler(ignoreCancelled = true)
+    public void onPlayerJoin(PlayerJoinEvent event) {
+        OPhabs.registrySystem.getRegistry(IFruitRegistry.class).getFruit(Ope_Ope.getFruitID()).onPlayerJoin(event);
+    }
+
+    @EventHandler(ignoreCancelled = true)
+    public void onEntityDamageByEntity(EntityDamageByEntityEvent event) {
+        OPhabs.registrySystem.getRegistry(IFruitRegistry.class).getFruit(Ope_Ope.getFruitID()).onEntityDamageByEntity(event);
     }
 }

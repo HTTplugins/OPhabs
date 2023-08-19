@@ -82,7 +82,6 @@ public class OPHAnimationLib {
 
             @Override
             public void OphRun() {
-                System.out.println(incRadius);
                 if (incRadius > maxRadius) this.cancel();
                 groundCircle(incRadius,center,incDensity, particle, overGroundParticleHeight);
                 incRadius += radiusIncrement;

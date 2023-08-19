@@ -8,5 +8,7 @@ public enum OPHSounds {
     FASTSORU,
     SWORDCUT,
     ROCKMOVE,
-    FLYMETEOR
+    FLYMETEOR,
+    MAGNETICFIELD,
+    HEAVYGRAVITY
 }
