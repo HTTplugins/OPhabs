@@ -37,6 +37,11 @@ public class TextureMapper
         }
     }
 
+    public boolean isThisRemapping(int baseID, int remappedID)
+    {
+        return this.remappedTexturesIDs.getOrDefault(baseID, Collections.emptySet()).contains(remappedID);
+    }
+
     public Collection<Integer> getRemappedIDs(int baseID)
     {
         return this.remappedTexturesIDs.getOrDefault(baseID, Collections.emptySet());
