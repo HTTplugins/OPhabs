@@ -99,7 +99,10 @@ public class FruitCaster extends Caster
         if (itemMeta == null || !itemMeta.hasCustomModelData())
             return false;
 
-        return itemMeta.getCustomModelData() == fruit.getID();
+        int fruitID = fruit.getID();
+        int itemID = itemMeta.getCustomModelData();
+
+        return itemID == fruitID || OPhabs.textureMapper.isThisRemapping(fruitID, itemID);
     }
 
     @Override
@@ -108,8 +111,6 @@ public class FruitCaster extends Caster
         return user.equals(fruit.getUser());
     }
 
-    // TODO: Esto hace un trigger de la habilidad por la cara.
-    // Hay que comprobar el tipo de evento para que sea hacer click
     @Override
     public void onPlayerInteract(PlayerInteractEvent event)
     {
