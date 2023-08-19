@@ -130,12 +130,12 @@ public class FruitCaster extends Caster
     @Override
     public void onPlayerItemHeldEvent(PlayerItemHeldEvent event)
     {
-        if (fruit.isFruitActive())
+        if (isCombatMode())
         {
             event.setCancelled(true);
-            // Utilizar la habilidad seleccionada
             selectedAbility = event.getNewSlot();
             if(fruit.getUser().isFastCasting()){
+                // Utilizar la habilidad seleccionada
                 this.fruit.invokeAbility(selectedAbilitySet, selectedAbility);
             }
         }
@@ -156,13 +156,21 @@ public class FruitCaster extends Caster
             player.getInventory().setHeldItemSlot(8);
         }
 
-        this.fruit.switchCombatMode();
+        setCombatMode(!isCombatMode());
 
     }
 
     @Override
     public void onPlayerSwapHandItems(PlayerSwapHandItemsEvent event)
     {
-        selectedAbilitySet+=1;
+        if(isCombatMode()){
+            
+            selectedAbilitySet+=1;
+            if(this.fruit.getAbilitySets().size() <= selectedAbilitySet){
+                selectedAbilitySet = 0;
+            }
+            selectedAbility = selectedAbilitySet%fruit.getAbilitySets().size();
+            event.setCancelled(true);
+        }
     }
 }
