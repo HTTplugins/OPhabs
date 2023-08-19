@@ -30,7 +30,6 @@ public class UserStats
         this.armor = baseArmor;
     }
 
-    // no puede ser un valor que vayamos determinando de forma acumulativa, se tiene que 
     // calcular
     public double changeDamage(double damageChange)
     {
