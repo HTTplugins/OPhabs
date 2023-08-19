@@ -3,6 +3,7 @@ package htt.ophabs;
 
 import htt.layeredstructures.LayeredStructuresAPI;
 import logs.msgSystem;
+import textures.TextureMapper;
 import users.UserList;
 import commands.OPHCommandManager;
 import display.ScoreboardSystem;
@@ -32,6 +33,7 @@ public final class OPhabs extends JavaPlugin {
     public static final RegistrySystem registrySystem = new RegistrySystem();
     public static CooldownSystem cooldownSystem;
     public static ScoreboardSystem scoreboardSystem;
+    public static TextureMapper textureMapper;
 
     private ScheduledExecutorService scheduler; //Planificador guardar archivo
 
@@ -51,7 +53,7 @@ public final class OPhabs extends JavaPlugin {
 
         LayeredStructuresAPI.initialize(Bukkit.getPluginManager().getPlugin("LayeredStructures"));
         LayeredStructuresAPI.precharge("iceDrake"); //pendiente refactor jaime para limpiar del enable.
-
+        LayeredStructuresAPI.precharge("room");
 
         //
         // Inicializar los registros
@@ -64,6 +66,7 @@ public final class OPhabs extends JavaPlugin {
         // Inicializar sistemas
         //
 
+        textureMapper = new TextureMapper();
         scoreboardSystem = new ScoreboardSystem();
         cooldownSystem = new CooldownSystem();
 

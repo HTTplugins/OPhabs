@@ -108,15 +108,27 @@
         },
         {
           "predicate": {
-            "custom_model_data": 1012
+            "custom_model_data": 1001
           },
-          "model": "custom/card"
+          "model": "custom/casters/banecaster"
         },
         {
           "predicate": {
-            "custom_model_data": 1016
+            "custom_model_data": 1002
           },
-          "model": "custom/ice_sword"
+          "model": "custom/casters/opecaster"
+        },
+        {
+          "predicate": {
+            "custom_model_data": 1003
+          },
+          "model": "custom/casters/opecaster"
+        },
+        {
+          "predicate": {
+            "custom_model_data": 1004
+          },
+          "model": "custom/casters/mokucaster"
         }
     ]
 }

@@ -4,6 +4,7 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
+import fruits.logia.Moku_Moku;
 import fruits.paramecia.Ope_Ope;
 import fruits.paramecia.Zushi_Zushi;
 import htt.ophabs.OPhabs;
@@ -30,25 +31,18 @@ public class FruitRegistry implements IFruitRegistry
     private final HashMap<Integer, DevilFruit> fruitMap = new HashMap<>();
     private final HashMap<String, Integer> fruitNameIDMap = new HashMap<>();
 
-    private int NEXT_FRUIT_ID = 1000; // ID INICIAL
-    private int NEXT_ID()
-    {
-        return NEXT_FRUIT_ID++;
-    }
-
     public FruitRegistry()
     {
         //
         // Crear todas las frutas
         //
 
-
-        // NOTE: NO CAMBIAR EL ORDEN -> ItemStack físico del caster utiliza este ID
         DevilFruit[] fruits = {
-            new FrutaX(NEXT_ID()),
-            new Bane_Bane(NEXT_ID()),
-            new Zushi_Zushi(NEXT_ID()),
-            new Ope_Ope(NEXT_ID())
+            new FrutaX(FrutaX.getFruitID()),
+            new Bane_Bane(Bane_Bane.getFruitID()),
+            new Zushi_Zushi(Zushi_Zushi.getFruitID()),
+            new Ope_Ope(Ope_Ope.getFruitID()),
+            new Moku_Moku(Moku_Moku.getFruitID())
         };
 
         for (DevilFruit fruit : fruits)
