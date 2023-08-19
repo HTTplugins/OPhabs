@@ -15,7 +15,7 @@ public abstract class DevilFruit implements IEventProcessor
     protected ArrayList<AbilitySet> abilitySets = new ArrayList<>();
     protected OPUser user;
 
-    // Determina si los poderes están activos (si está en el agua / es golpeado por k no)
+    // Determina si los poderes están activos (si está en el agua / es golpeado por k no / si no ha activado el modo combate)
     protected boolean isFruitActive = true;
 
     public DevilFruit(int id, String name, String displayName, String commandName)
@@ -72,9 +72,17 @@ public abstract class DevilFruit implements IEventProcessor
         return this.id;
     }
 
+    public boolean isFruitActive(){
+        return isFruitActive;
+    }
+
+    public void switchCombatMode(){
+        isFruitActive = !isFruitActive;
+    }
+
     public void invokeAbility(int abilitySetID, int abilityID)
     {
-        if (abilitySetID < 0 || abilitySetID >= this.abilitySets.size())
+        if (abilitySetID < 0 || abilitySetID >= this.abilitySets.size() || !isFruitActive)
             return;
 
         this.abilitySets.get(abilitySetID).invokeAbility(abilityID);

@@ -22,6 +22,8 @@ public class OPUser implements IEventProcessor
     private final UUID uuid;
     private final UserStats stats;
 
+    private Boolean fastCasting=false;
+
     private DevilFruit devilFruit;
     private Haki haki;
     private Rokushiki rokushiki;
@@ -70,6 +72,15 @@ public class OPUser implements IEventProcessor
         return this.activeCasters;
     }
 
+    public Boolean isFastCasting(){
+        return fastCasting;
+    }
+
+
+    public void setFastCasting(Boolean newMode){
+        fastCasting = newMode;
+    }
+
     //
     // Procesamiento de eventos
     //
@@ -79,9 +90,9 @@ public class OPUser implements IEventProcessor
     {
         ItemStack eventItem = event.getItem();
 
-        // Pasar el evento al caster activo
+        // xPasar el evento al caster activo
         {
-            if (eventItem != null)
+            if (eventItem != null && !fastCasting)
             {
                 if (eventItem.hasItemMeta() && eventItem.getItemMeta().hasCustomModelData())
                 {

@@ -1,5 +1,8 @@
 package stats;
 
+import java.util.Map;
+import java.util.HashMap;
+
 import users.OPUser;
 
 // TODO: Se utilizará un Enum para modificar las estadísticas bases
@@ -8,13 +11,15 @@ import users.OPUser;
 public class UserStats
 {
     private final OPUser user;
-    private double health;
-    private double damage;
-    private double armor;
+    private Map<Integer, Stats> statsList;
 
+    private double health = 20;
+    private double damage = 1;
+    private double armor = 1;
     public UserStats(OPUser user)
     {
-        this(user, 20, 1, 0);
+        this(user, 20, 1, 1);
+        statsList = new HashMap<>();
     }
 
     public UserStats(OPUser user, double baseHealth, double baseDamage, double baseArmor)
@@ -25,6 +30,8 @@ public class UserStats
         this.armor = baseArmor;
     }
 
+    // no puede ser un valor que vayamos determinando de forma acumulativa, se tiene que 
+    // calcular
     public double changeDamage(double damageChange)
     {
         this.damage += damageChange;
@@ -52,13 +59,30 @@ public class UserStats
         try
         {
             // Aplicar las estadísticas al jugador
-
+            
+            
             // VIDA
-            // this.user.getPlayer().setHealth(...)
+            this.user.getPlayer().setMaxHealth(this.health);
         }
         catch (Exception ignored)
         {
             //
         }
     }
+    
+    public void addStats(Integer id, Stats stats)
+    {
+        statsList.put(id, stats);
+    }
+
+    public void removeStats(Integer id)
+    {
+        statsList.remove(id);
+    }
+
+    public Stats getStats(Integer id)
+    {
+        return statsList.get(id);
+    }
+
 }

@@ -7,6 +7,7 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.player.PlayerDropItemEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
+import org.bukkit.event.player.PlayerItemHeldEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerSwapHandItemsEvent;
 
@@ -80,5 +81,19 @@ public class EventSystem implements Listener
 
         if(event.getDamage() <= 0)
             event.setCancelled(true);
+    }
+
+
+    @EventHandler
+    public void onPlayerItemHeldEvent(PlayerItemHeldEvent event)
+    {
+        UUID uuid = event.getPlayer().getUniqueId();
+
+        if(users.containsKey(uuid))
+        {
+            OPUser user = users.get(uuid);
+            user.onPlayerItemHeldEvent(event);
+        }
+
     }
 }
