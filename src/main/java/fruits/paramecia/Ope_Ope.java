@@ -30,7 +30,7 @@ import java.util.List;
 import java.util.UUID;
 
 
-public class Ope_Ope extends Paramecia implements Listener {
+public class Ope_Ope extends Paramecia {
 
     private List<Block> roomBlocks;
     private Location roomcenter;
