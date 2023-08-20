@@ -1,5 +1,7 @@
 package textures;
 
+import fruits.paramecia.Ope_Ope;
+
 import java.util.*;
 
 public class TextureMapper
@@ -51,12 +53,17 @@ public class TextureMapper
         return this.textures.get(texture);
     }
 
+    public int getMappedID(OPTexture texture)
+    {
+        return this.textures.get(texture).mappedID;
+    }
+
     // En este método se añaden TODOS LOS REMAPEOS A LA LISTA
     private MappedTexture[] buildRemappings()
     {
 
         return new MappedTexture[]{
-            new MappedTexture(1003,2000, OPTexture.OPE_OPE_STOLEN_HEART)
+            new MappedTexture(Ope_Ope.getFruitID(),2003, OPTexture.OPE_OPE_STOLEN_HEART)
         };
     }
 }

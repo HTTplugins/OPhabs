@@ -9,7 +9,6 @@ import libs.OPHAnimationLib;
 import libs.OPHSoundLib;
 import libs.OPHSounds;
 import org.bukkit.*;
-import org.bukkit.block.Block;
 import org.bukkit.entity.*;
 import org.bukkit.event.entity.EntityToggleGlideEvent;
 import org.bukkit.potion.PotionEffect;
@@ -18,9 +17,7 @@ import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.util.Vector;
 import runnables.OphRunnable;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
+import java.util.*;
 
 
 public class Zushi_Zushi extends Paramecia
@@ -36,8 +33,9 @@ public class Zushi_Zushi extends Paramecia
     private final Particle.DustOptions purple = new Particle.DustOptions(Color.PURPLE,1.0F);
 
     private boolean meteorExploded = false;
-    private static List<Entity> heavyEntity = null;
-    private static List<Player> togglePlayer = new ArrayList<>();
+    private List<Entity> heavyEntity = new ArrayList<>();
+
+    private final Set<Player> togglePlayer = new HashSet<>();
 
     public static int getFruitID()
     {
@@ -81,26 +79,34 @@ public class Zushi_Zushi extends Paramecia
         World world = player.getWorld();
         Location playerLoc = player.getLocation();
 
-        world.playSound(playerLoc,"heavygravity",1,1);
+        OPHSoundLib.OphPlaySound(OPHSounds.HEAVYGRAVITY,playerLoc,1,1);
 
         OPHAnimationLib.groundRandomParticleLayer(playerLoc,Particle.SPELL_WITCH,30,10,1,10,100,2,0,0,0);
         OPHAnimationLib.groundRandomParticleLayer(playerLoc,Particle.CRIT_MAGIC,60,10,1.5,10,100,0,0,-0.3,0);
 
-        heavyEntity = player.getNearbyEntities(20,50,20);
 
-        for(Entity ent : heavyEntity)
-            if(ent.getLocation().getBlock().getRelative(0,-1,0).getType().equals(Material.AIR))
-                ent.setVelocity(new Vector(0,-50,0));
 
         new OphRunnable(){
             @Override
             public void OphRun() {
+                heavyEntity = player.getNearbyEntities(20,50,20);
+
+                for(Entity ent : heavyEntity)
+                    if(ent.getLocation().getBlock().getRelative(0,-1,0).getType().equals(Material.AIR))
+                        ent.setVelocity(new Vector(0,-50,0));
+
                 for(Entity ent : heavyEntity){
-                    if(!togglePlayer.contains(ent) && ent instanceof Player){
+                    if(ent instanceof Player){
                         Location entiLoc = ent.getLocation();
-                        (ent).teleport(new Location(world,entiLoc.getX(),entiLoc.getY(),entiLoc.getZ(),entiLoc.getYaw(),-10));
-                        ((Player)ent).setGliding(true);
-                        togglePlayer.add((Player) ent);
+                        if (!togglePlayer.contains(ent)) {
+                            (ent).teleport(new Location(world,entiLoc.getX(),entiLoc.getY(),entiLoc.getZ(),entiLoc.getYaw(),-10));
+                            //((Player)ent).addPotionEffect(new PotionEffect(PotionEffectType.JUMP,10,-10));
+                            ((Player)ent).setGliding(true);
+                            togglePlayer.add((Player) ent);
+                        } else
+                            (ent).teleport(new Location(world,entiLoc.getX(),entiLoc.getY(),entiLoc.getZ(),entiLoc.getYaw(),-10));
+
+
                     } else if(ent instanceof LivingEntity)
                         ((LivingEntity)ent).addPotionEffect(new PotionEffect(PotionEffectType.SLOW,10,10));
                 }
@@ -185,9 +191,8 @@ public class Zushi_Zushi extends Paramecia
     public void attraction(Player player){
         final int attractionRadius = 30;
         Location playerLoc = player.getLocation();
-        World world = player.getWorld();
 
-        world.playSound(playerLoc,"magneticfield",1,1);
+        OPHSoundLib.OphPlaySound(OPHSounds.MAGNETICFIELD,playerLoc,1,1);
 
         for(Entity ent : player.getNearbyEntities(attractionRadius,attractionRadius,attractionRadius))
             if(ent instanceof LivingEntity && !player.equals(ent)) {
@@ -221,7 +226,6 @@ public class Zushi_Zushi extends Paramecia
             event.setCancelled(true);
 
     }
-
 
     @Override
     protected void onAddFruit()

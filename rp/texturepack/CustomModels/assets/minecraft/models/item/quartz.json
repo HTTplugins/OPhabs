@@ -129,6 +129,12 @@
             "custom_model_data": 1004
           },
           "model": "custom/casters/mokucaster"
-        }
+        },
+      {
+        "predicate": {
+          "custom_model_data": 2003
+        },
+        "model": "custom/casters/opecaster2"
+      }
     ]
 }
