@@ -12,12 +12,13 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.scheduler.BukkitRunnable;
+import org.bukkit.util.Consumer;
 import org.bukkit.util.RayTraceResult;
 import org.bukkit.util.Vector;
 import runnables.OphRunnable;
 import textures.OPTexture;
 
-import java.util.Objects;
+import java.util.ArrayList;
 import java.util.Random;
 
 import static java.lang.Math.*;
@@ -33,6 +34,26 @@ public class OPHLib {
     public static Random getRandom() {
         return random;
     }
+
+    public static void affectAreaLivingEntitiesRunnable(Player player,double duration, long period, double x, double y, double z, Consumer<LivingEntity> entityAction) {
+        new OphRunnable() {
+            @Override
+            public void OphRun() {
+                if (getCurrentRunIteration() >= duration) this.ophCancel();
+
+                for (Entity entity : player.getNearbyEntities(x, y, z)) {
+                    if (entity instanceof LivingEntity) {
+                        LivingEntity livEnt = (LivingEntity) entity;
+                        entityAction.accept(livEnt);
+                    }
+
+                }
+            }
+        }.ophRunTaskTimer(0, period);
+
+
+    }
+
 
     public static void changeCasterTexture(int textureid, ItemStack item){
 

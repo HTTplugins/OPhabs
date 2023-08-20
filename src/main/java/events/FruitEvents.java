@@ -1,12 +1,11 @@
 package events;
 
+import fruits.logia.Moku_Moku;
 import fruits.paramecia.Ope_Ope;
 import fruits.paramecia.Zushi_Zushi;
 import htt.ophabs.OPhabs;
 import org.bukkit.event.block.BlockBreakEvent;
-import org.bukkit.event.entity.EntityDamageByEntityEvent;
-import org.bukkit.event.entity.EntityDeathEvent;
-import org.bukkit.event.entity.EntityToggleGlideEvent;
+import org.bukkit.event.entity.*;
 import org.bukkit.event.player.PlayerJoinEvent;
 import users.OPUser;
 import cast.Caster;
@@ -16,7 +15,6 @@ import registry.fruits.IFruitRegistry;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
-import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.event.player.PlayerItemConsumeEvent;
 import org.bukkit.inventory.ItemStack;
 
@@ -109,5 +107,10 @@ public class FruitEvents implements Listener
     @EventHandler(ignoreCancelled = true)
     public void onEntityDamageByEntity(EntityDamageByEntityEvent event) {
         OPhabs.registrySystem.getRegistry(IFruitRegistry.class).getFruit(Ope_Ope.getFruitID()).onEntityDamageByEntity(event);
+    }
+
+    @EventHandler(ignoreCancelled = true)
+    public void onEntityAirChange(EntityAirChangeEvent event) {
+        OPhabs.registrySystem.getRegistry(IFruitRegistry.class).getFruit(Moku_Moku.getFruitID()).onEntityAirChange(event);
     }
 }

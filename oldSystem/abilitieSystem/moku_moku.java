@@ -338,7 +338,6 @@ public class moku_moku extends logia {
 
                 player.getNearbyEntities(smokeWorldAmplitude, smokeWorldAmplitude/2, smokeWorldAmplitude).forEach(ent -> {
                     if(ent instanceof LivingEntity && ent != player){
-                        // ((LivingEntity)ent).addPotionEffect(new PotionEffect(PotionEffectType.SLOW, period*2, 3, false));
                         ((LivingEntity)ent).addPotionEffect(new PotionEffect(PotionEffectType.WEAKNESS, period+2, 2, false));
                         smokeWorldEntities.add((LivingEntity) ent);
 

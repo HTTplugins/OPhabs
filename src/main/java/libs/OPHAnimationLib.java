@@ -16,6 +16,17 @@ public class OPHAnimationLib {
     private static final Random random = new Random();
 
 
+    public static void fog(Particle particle, Location center, double amplitude,double duration){
+        World world = center.getWorld();
+
+        new OphRunnable() {
+            @Override
+            public void OphRun() {
+                if(getCurrentRunIteration() == duration) ophCancel();
+                world.spawnParticle(particle, center, 400, amplitude, amplitude/2, amplitude, 0);
+            }
+        }.ophRunTaskTimer(0,5);
+    }
     public static void spawnYawDependingParticle(Player player, double yaw, double height){
         Location pBehind = OPHLib.getBack(player,yaw,height);
         player.getWorld().spawnParticle(Particle.REDSTONE,pBehind,0,0,0,0);

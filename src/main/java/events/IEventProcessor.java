@@ -33,4 +33,6 @@ public interface IEventProcessor
 
     default void onPlayerSwapHandItems(PlayerSwapHandItemsEvent event) {}
     default void onEntityDeath(EntityDeathEvent event) {}
+
+    default void onEntityAirChange(EntityAirChangeEvent event) {}
 }

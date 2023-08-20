@@ -2,20 +2,33 @@ package fruits.logia;
 
 import abilities.Ability;
 import abilities.AbilitySet;
-import abilities.CooldownAbility;
+import libs.OPHAnimationLib;
 import libs.OPHLib;
+import libs.OPHSoundLib;
+import libs.OPHSounds;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.Particle;
 import org.bukkit.entity.*;
+import org.bukkit.event.entity.EntityAirChangeEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
+import org.bukkit.potion.PotionEffect;
+import org.bukkit.potion.PotionEffectType;
 import org.bukkit.util.Vector;
 import runnables.OphRunnable;
 
+import java.util.HashSet;
+import java.util.Set;
+
 public class Moku_Moku extends Logia{
     private ItemStack fist;
+
+    private boolean smokeWorldON = false;
+    private final Set<LivingEntity> smokeWorldEntities = new HashSet<>();
+    final double smokeWorldDamage = 1.0;
+
 
     public static int getFruitID()
     {
@@ -39,6 +52,10 @@ public class Moku_Moku extends Logia{
             Location loc = user.getPlayer().getLocation();
             this.smokePunch(loc);
         }));
+
+
+        //Smoke World
+        basicSet.addAbility(new Ability("Smoke World", this::smokeWorld));
 
         //
         // Guardar sets
@@ -103,6 +120,54 @@ public class Moku_Moku extends Logia{
                 Bukkit.getScheduler().cancelTask(this.getTaskId());
             }
         }.ophRunTaskTimer(2, 1);
+    }
+
+    public void smokeWorld(){
+        final double smokeWorldAmplitude=7;
+
+        smokeWorldON = true;
+        Player player = user.getPlayer();
+
+        new OphRunnable(){
+            @Override
+            public void OphRun() {
+                smokeWorldON = false;
+                smokeWorldEntities.clear();
+            }
+        }.ophRunTaskLater(400);
+
+        OPHSoundLib.OphPlaySound(OPHSounds.FOG, player.getLocation(), 1, 1);
+
+        OPHAnimationLib.fog(element, player.getLocation(), smokeWorldAmplitude,80);
+
+        OPHLib.affectAreaLivingEntitiesRunnable(user.getPlayer(),80,5, smokeWorldAmplitude, smokeWorldAmplitude/2, smokeWorldAmplitude,(LivingEntity livEnt) -> {
+            smokeWorldEntities.add(livEnt);
+            livEnt.setRemainingAir(livEnt.getRemainingAir() - 10);
+        });
+    }
+
+
+    @Override
+    public void onEntityAirChange(EntityAirChangeEvent event){
+        if(smokeWorldON) {
+            if (smokeWorldEntities.contains(event.getEntity())) {
+                if (event.getEntity() instanceof LivingEntity) {
+                    LivingEntity livEnt = (LivingEntity) event.getEntity();
+                    int newAir = event.getAmount();
+                    int currentAir = livEnt.getRemainingAir();
+
+                    if (newAir > currentAir)
+                        event.setCancelled(true);
+
+
+                    if (currentAir > newAir && newAir <= 10) {
+                        event.setAmount(10);
+                        livEnt.damage(smokeWorldDamage);
+                    }
+                }
+
+            }
+        }
     }
 
     @Override
