@@ -77,9 +77,13 @@ public abstract class DevilFruit implements IEventProcessor
         return this.id;
     }
 
+    public boolean isFruitActive(){
+        return isFruitActive;
+    }
+
     public void invokeAbility(int abilitySetID, int abilityID)
     {
-        if (abilitySetID < 0 || abilitySetID >= this.abilitySets.size())
+        if (abilitySetID < 0 || abilitySetID >= this.abilitySets.size() || !isFruitActive)
             return;
 
         this.abilitySets.get(abilitySetID).invokeAbility(abilityID);

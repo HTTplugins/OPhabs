@@ -22,6 +22,8 @@ public class OPUser implements IEventProcessor
     private final UUID uuid;
     private final UserStats stats;
 
+    private Boolean fastCasting=false;
+
     private DevilFruit devilFruit;
     private Haki haki;
     private Rokushiki rokushiki;
@@ -70,6 +72,15 @@ public class OPUser implements IEventProcessor
         return this.activeCasters;
     }
 
+    public Boolean isFastCasting(){
+        return fastCasting;
+    }
+
+
+    public void toggleFastCasting(){
+        fastCasting = !fastCasting;
+    }
+
     //
     // Procesamiento de eventos
     //
@@ -79,9 +90,9 @@ public class OPUser implements IEventProcessor
     {
         ItemStack eventItem = event.getItem();
 
-        // Pasar el evento al caster activo
+        // xPasar el evento al caster activo
         {
-            if (eventItem != null)
+            if (eventItem != null && !fastCasting)
             {
                 if (eventItem.hasItemMeta() && eventItem.getItemMeta().hasCustomModelData())
                 {
@@ -145,6 +156,37 @@ public class OPUser implements IEventProcessor
 
                 if (caster != null && caster.isOwnedBy(this) && caster.isThisItem(offHandItem))
                     caster.onPlayerSwapHandItems(event);
+            }
+        }
+
+        // Pasar el evento  a todos los casters pasivos
+
+        // Procesar el evento como usuario
+    }
+
+
+    @Override
+    public void onPlayerItemHeldEvent(PlayerItemHeldEvent event)
+    {
+        ItemStack mainHandItem = event.getPlayer().getInventory().getItem(event.getPreviousSlot());
+        ItemStack offHandItem = event.getPlayer().getInventory().getItemInOffHand();
+
+        // Pasar el evento al caster activo
+        {
+            if (mainHandItem != null && mainHandItem.hasItemMeta() && mainHandItem.getItemMeta().hasCustomModelData())
+            {
+                Caster caster = activeCasters.get(mainHandItem.getItemMeta().getCustomModelData());
+
+                if (caster != null && caster.isOwnedBy(this) && caster.isThisItem(mainHandItem))
+                    caster.onPlayerItemHeldEvent(event);
+            }
+            else
+            if (offHandItem != null && offHandItem.hasItemMeta() && offHandItem.getItemMeta().hasCustomModelData())
+            {
+                Caster caster = activeCasters.get(offHandItem.getItemMeta().getCustomModelData());
+
+                if (caster != null && caster.isOwnedBy(this) && caster.isThisItem(offHandItem))
+                    caster.onPlayerItemHeldEvent(event);
             }
         }
 

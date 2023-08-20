@@ -1,8 +1,8 @@
 package oldSystem.abilitieSystem;
 
-import castSystem.castIdentification;
+import oldSystem.castSystem.castIdentification;
 import cosmetics.cosmeticsArmor;
-import htt.ophabs.OPhabs;
+import oldSystem.htt.ophabs.OPhabs;
 import org.bukkit.*;
 
 import java.util.List;
