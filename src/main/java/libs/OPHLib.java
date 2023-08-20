@@ -10,10 +10,12 @@ import org.bukkit.entity.Entity;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.util.RayTraceResult;
 import org.bukkit.util.Vector;
 import runnables.OphRunnable;
+import textures.OPTexture;
 
 import java.util.Objects;
 import java.util.Random;
@@ -32,6 +34,21 @@ public class OPHLib {
         return random;
     }
 
+    public static void changeCasterTexture(int textureid, ItemStack item){
+
+        ItemMeta meta = item.getItemMeta();
+        assert meta != null;
+        meta.setCustomModelData(textureid);
+        item.setItemMeta(meta);
+    }
+
+    public static void changeCasterTexture(OPTexture texture, ItemStack item){
+
+        ItemMeta meta = item.getItemMeta();
+        assert meta != null;
+        meta.setCustomModelData(OPhabs.textureMapper.getMappedID(texture));
+        item.setItemMeta(meta);
+    }
 
     public static void dash(Player player, double distance ){
         Location location = player.getEyeLocation();

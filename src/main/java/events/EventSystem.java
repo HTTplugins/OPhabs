@@ -2,6 +2,7 @@ package events;
 
 import htt.ophabs.OPhabs;
 import org.bukkit.event.block.BlockBreakEvent;
+import org.bukkit.event.entity.EntityDeathEvent;
 import org.bukkit.event.entity.EntityToggleGlideEvent;
 import registry.fruits.IFruitRegistry;
 import users.OPUser;
@@ -83,16 +84,6 @@ public class EventSystem implements Listener
 
         if(event.getDamage() <= 0)
             event.setCancelled(true);
-    }
-
-    @EventHandler(ignoreCancelled = true)
-    public void onEntityToggleGlide(EntityToggleGlideEvent event) {
-        OPhabs.registrySystem.getRegistry(IFruitRegistry.class).getFruit(1002).onEntityToggleGlide(event);
-    }
-
-    @EventHandler(ignoreCancelled = true)
-    public void onBlockBreak(BlockBreakEvent event) {
-        OPhabs.registrySystem.getRegistry(IFruitRegistry.class).getFruit(1003).onBlockBreak(event);
     }
 
 }
