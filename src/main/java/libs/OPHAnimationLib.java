@@ -1,11 +1,15 @@
 package libs;
 
+import htt.ophabs.OPhabs;
 import org.bukkit.Color;
 import org.bukkit.Location;
 import org.bukkit.Particle;
 import org.bukkit.World;
 import org.bukkit.entity.Player;
+import org.bukkit.scheduler.BukkitRunnable;
+import org.bukkit.scheduler.BukkitTask;
 import runnables.OphRunnable;
+import users.OPUser;
 
 import java.util.Random;
 
@@ -15,7 +19,40 @@ public class OPHAnimationLib {
 
     private static final Random random = new Random();
 
+    //TODO: it can be more parametrized
+    public static BukkitTask swingParticleAroundPlayer(OPUser user, Particle particle){
+        return new BukkitRunnable() {
+            double i = 0;
+            double y = 0;
+            @Override
+            public void run() {
+                try{
+                    Player player = user.getPlayer();
 
+                    double x = sin(i)/2;
+                    double z = cos(i)/2;
+
+                    double xr = player.getLocation().getX() + x;
+                    double yr = player.getLocation().getY() + y;
+                    double zr = player.getLocation().getZ() + z;
+
+                    Location partLoc = new Location(player.getWorld(),xr,yr,zr);
+                    player.spawnParticle(particle,partLoc, 0,0,0,0);
+
+                    player.setAllowFlight(true);
+
+                    i+= 0.5;
+                    y+=0.05;
+
+                    if(y > 2)
+                        y = 0;
+                }catch (Exception e){
+                    this.cancel();
+                }
+            }
+        }.runTaskTimer(OPhabs.getInstance(), 0, 1);
+
+    }
     public static void fog(Particle particle, Location center, double amplitude,double duration){
         World world = center.getWorld();
 

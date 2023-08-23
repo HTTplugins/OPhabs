@@ -1,18 +1,12 @@
 package events;
 
 import htt.ophabs.OPhabs;
-import org.bukkit.event.block.BlockBreakEvent;
-import org.bukkit.event.entity.EntityDeathEvent;
-import org.bukkit.event.entity.EntityToggleGlideEvent;
-import registry.fruits.IFruitRegistry;
+import org.bukkit.event.entity.EntityDamageByEntityEvent;
+import org.bukkit.event.player.*;
 import users.OPUser;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageEvent;
-import org.bukkit.event.player.PlayerDropItemEvent;
-import org.bukkit.event.player.PlayerInteractEvent;
-import org.bukkit.event.player.PlayerJoinEvent;
-import org.bukkit.event.player.PlayerSwapHandItemsEvent;
 
 import java.util.Map;
 import java.util.UUID;
@@ -86,4 +80,7 @@ public class EventSystem implements Listener
             event.setCancelled(true);
     }
 
+    @EventHandler
+    public void onEntityDamageByEntity(EntityDamageByEntityEvent event) {
+    }
 }

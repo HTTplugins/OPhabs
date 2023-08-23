@@ -2,10 +2,8 @@ package fruits.logia;
 
 import abilities.Ability;
 import abilities.AbilitySet;
-import libs.OPHAnimationLib;
-import libs.OPHLib;
-import libs.OPHSoundLib;
-import libs.OPHSounds;
+import libs.*;
+import logs.msgSystem;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -17,18 +15,21 @@ import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import org.bukkit.util.Vector;
+import runnables.OphControlledEntRunnable;
 import runnables.OphRunnable;
 
 import java.util.HashSet;
 import java.util.Set;
 
+
 public class Moku_Moku extends Logia{
-    private ItemStack fist;
-
     private boolean smokeWorldON = false;
-    private final Set<LivingEntity> smokeWorldEntities = new HashSet<>();
     final double smokeWorldDamage = 1.0;
+    private final Set<LivingEntity> smokeWorldEntities = new HashSet<>();
 
+    private boolean logiaBodyON = false;
+
+    private final Set<LivingEntity> smokers = new HashSet<>();
 
     public static int getFruitID()
     {
@@ -37,50 +38,55 @@ public class Moku_Moku extends Logia{
 
     public Moku_Moku(int id) {
         super(id, "Moku_Moku", "Moku Moku no Mi", "Moku_Moku", Particle.CLOUD);
-        fist = new ItemStack(Material.QUARTZ);
-        ItemMeta itemMeta = fist.getItemMeta();
-        itemMeta.setCustomModelData(1004); //
-        fist.setItemMeta(itemMeta);
 
-        //
-        // BasicSet
-        //
+        // ----- BasicSet ----- //
         AbilitySet basicSet = new AbilitySet("Base Set");
 
         // Smoke Punch
-        basicSet.addAbility(new Ability("Smoke Punch", () -> {
-            Location loc = user.getPlayer().getLocation();
-            this.smokePunch(loc);
-        }));
+        basicSet.addAbility(new Ability("Smoke Punch", this::smokePunch));
+
+        // Summon Smokers
+        basicSet.addAbility(new Ability("Summon smokers", this::summonSmoker));
 
 
         //Smoke World
         basicSet.addAbility(new Ability("Smoke World", this::smokeWorld));
 
-        //
-        // Guardar sets
-        //
         this.abilitySets.add(basicSet);
 
     }
 
-    public void smokePunch(Location loc) {
+    // ----- Logia behavior ----- //
+
+    @Override
+    protected void logiaModeON() {
+        super.logiaModeON(OPHAnimationLib.swingParticleAroundPlayer(user,element));
+    }
+
+    // ----- Abilities ----- //
+
+    public void smokePunch() {
+        Location loc = user.getPlayer().getLocation();
+        ItemStack fist = new ItemStack(Material.QUARTZ);
+        ItemMeta itemMeta = fist.getItemMeta();
+
+        itemMeta.setCustomModelData(1004);
+        fist.setItemMeta(itemMeta);
+
         user.getPlayer().getWorld().playSound(loc, "cloudpunch", 1, 1);
         ArmorStand armorStand = OPHLib.generateCustomFloatingItem(user.getPlayer().getLocation().add(0,-0.5,0), fist, false);
-
 
         new OphRunnable(){
 
             // Configurar las propiedades del armor stand
 
-            Entity entity = armorStand;
-            Location origin=entity.getLocation();
+            final Entity entity = armorStand;
+            final Location origin=entity.getLocation();
 
-
-            int ticks = 0;
-            boolean first = true;
-            Vector dir = user.getPlayer().getEyeLocation().getDirection(), aux;
-            double distancePerTick = 1.0 / 2.0, distanceFromPlayer = 0;
+            final Vector dir = user.getPlayer().getEyeLocation().getDirection();
+            Vector aux;
+            final double distancePerTick = 1.0 / 2.0;
+            double distanceFromPlayer = 0;
 
             // Calcula la distancia total que el ArmorStand debe recorrer
             @Override
@@ -90,7 +96,7 @@ public class Moku_Moku extends Logia{
                 entity.teleport(origin.clone().add(movement));
 
                 entity.getWorld().getNearbyEntities(entity.getLocation(), 2,2,2).forEach(ent -> {
-                    if(ent instanceof LivingEntity && ent != user.getPlayer() && entity != ent && !(ent instanceof ArmorStand) && !(ent instanceof Vex && ent.getCustomName().equals("Smoker"))) {
+                    if(ent instanceof LivingEntity && ent != user.getPlayer() && entity != ent && !(ent instanceof ArmorStand) && !(ent instanceof Vex && !smokers.contains(ent))) {
                         ((LivingEntity) ent).damage(14,(Entity) user.getPlayer());
                     }
                 });
@@ -109,17 +115,46 @@ public class Moku_Moku extends Logia{
                     cancelTask();
                 }
 
-                if (aux.length() < 0.5 && ticks>10 || ticks > 20) {
+                if (aux.length() < 0.5 && getCurrentRunIteration()>10 || getCurrentRunIteration() > 20) {
                     entity.remove();
                     cancelTask();
                 }
-
-                ticks++;
             }
             public void cancelTask() {
                 Bukkit.getScheduler().cancelTask(this.getTaskId());
             }
         }.ophRunTaskTimer(2, 1);
+    }
+
+    public void summonSmoker(){
+        Player player = this.user.getPlayer();
+        final int numMaxSmokers = 4;
+
+        if(smokers.size() < numMaxSmokers){
+            Monster smoker = OPHLib.createMonster( EntityType.VEX, player.getLocation(), 0.5,  true, null);
+            OPHLib.setMonsterTarget(smoker, player, 10, smokers);
+            smokers.add(smoker);
+
+            new OphControlledEntRunnable(smoker,400,5){
+                @Override
+                public void OphRun() {
+                    if(smoker.getTarget() == null || smoker.getTarget().isDead() || smoker.getTarget() == player)
+                        OPHLib.setMonsterTarget(smoker, player, 10, smokers);
+                }
+
+                @Override
+                public void particleAnimation() {
+                    smoker.getWorld().spawnParticle(element, smoker.getLocation(), 10, 0.5, 0.5, 0.5, 0);
+                }
+
+                @Override
+                public void onDeath() {
+                    smokers.remove(smoker);
+                }
+            }.ophRunTaskTimer(0,3);
+        } else
+            msgSystem.OphPlayerError(player, "You have reached maximum smokers number (4).");
+
     }
 
     public void smokeWorld(){
@@ -146,11 +181,28 @@ public class Moku_Moku extends Logia{
         });
     }
 
+    public boolean smokeBody(Player player) {
+        player.getWorld().playSound(player.getLocation(), "vanish", 1, 1);
+        if (!logiaBodyON) {
+            logiaBodyON = true;
+            player.addPotionEffect(new PotionEffect(PotionEffectType.SPEED, 9999999, 4, false, false));
+            player.addPotionEffect(new PotionEffect(PotionEffectType.REGENERATION, 9999999, 1, false, false));
+            player.addPotionEffect(new PotionEffect(PotionEffectType.INCREASE_DAMAGE, 999999, 3, false, false));
+            //runParticles(player);
+        } else {
+            logiaBodyON = false;
+            player.removePotionEffect(PotionEffectType.SPEED);
+            player.removePotionEffect(PotionEffectType.REGENERATION);
+            player.removePotionEffect(PotionEffectType.INCREASE_DAMAGE);
+        }
+        return logiaBodyON;
+    }
 
+    // ----- Events ----- //
     @Override
     public void onEntityAirChange(EntityAirChangeEvent event){
         if(smokeWorldON) {
-            if (smokeWorldEntities.contains(event.getEntity())) {
+            if (smokeWorldEntities.contains((LivingEntity) event.getEntity())) {
                 if (event.getEntity() instanceof LivingEntity) {
                     LivingEntity livEnt = (LivingEntity) event.getEntity();
                     int newAir = event.getAmount();
@@ -179,4 +231,6 @@ public class Moku_Moku extends Logia{
     protected void onRemoveFruit() {
 
     }
+
+
 }
