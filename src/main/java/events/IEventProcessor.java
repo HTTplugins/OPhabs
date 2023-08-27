@@ -26,12 +26,13 @@ public interface IEventProcessor
     default void onEntityToggleGlide(EntityToggleGlideEvent event) {}
     default void onBlockBreak(BlockBreakEvent event) {}
     default void onProjectileHit(ProjectileHitEvent event) {}
-
-    default void onPlayerInteract(PlayerInteractEvent event) {}
+    default void onPlayerItemHeldEvent(PlayerItemHeldEvent event) {}
 
     default void onPlayerDropItem(PlayerDropItemEvent event) {}
 
     default void onPlayerSwapHandItems(PlayerSwapHandItemsEvent event) {}
+
+    default void onPlayerInteract(PlayerInteractEvent event) {}
     default void onEntityDeath(EntityDeathEvent event) {}
 
     default void onEntityAirChange(EntityAirChangeEvent event) {}

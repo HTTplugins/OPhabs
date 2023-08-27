@@ -7,10 +7,14 @@ import abilities.AbilitySet;
 import display.IFruitCasterDisplay;
 import fruits.DevilFruit;
 import registry.fruits.IFruitRegistry;
+
+import org.bukkit.entity.Player;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.player.PlayerDropItemEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
+import org.bukkit.event.player.PlayerItemHeldEvent;
 import org.bukkit.event.player.PlayerSwapHandItemsEvent;
+import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
@@ -61,14 +65,14 @@ public class FruitCaster extends Caster
         return this.fruit;
     }
 
-    public AbilitySet getSelectedAbilitySet()
-    {
-        return fruit.getAbilitySets().get(this.selectedAbilitySet);
-    }
-
     public int getSelectedAbilityNumber()
     {
         return this.selectedAbility;
+    }
+
+    public AbilitySet getSelectedAbilitySet()
+    {
+        return fruit.getAbilitySets().get(this.selectedAbilitySet);
     }
 
     @Override
@@ -114,8 +118,27 @@ public class FruitCaster extends Caster
 
         if (eventAction == Action.RIGHT_CLICK_AIR || eventAction == Action.RIGHT_CLICK_BLOCK)
         {
-            // Utilizar la habilidad seleccionada
-            this.fruit.invokeAbility(selectedAbilitySet, selectedAbility);
+            if(isCombatMode()){
+                // Utilizar la habilidad seleccionada
+                if(eventAction == Action.RIGHT_CLICK_AIR && !fruit.getUser().isFastCasting()){
+                    this.fruit.invokeAbility(selectedAbilitySet, selectedAbility);
+                }
+            }
+        }    
+    }
+
+    //Cambia la habilidad seleccionada o lanza la habilidad segun si fastCasting esta activo
+    @Override
+    public void onPlayerItemHeldEvent(PlayerItemHeldEvent event)
+    {
+        if (isCombatMode())
+        {
+            event.setCancelled(true);
+            selectedAbility = event.getNewSlot();
+            if(fruit.getUser().isFastCasting()){
+                // Utilizar la habilidad seleccionada
+                this.fruit.invokeAbility(selectedAbilitySet, selectedAbility);
+            }
         }
     }
 
@@ -123,28 +146,32 @@ public class FruitCaster extends Caster
     public void onPlayerDropItem(PlayerDropItemEvent event)
     {
         event.setCancelled(true);
+        if(!isCombatMode()){
+            Player player = event.getPlayer();
 
-        // Rotar las habilidades
-        ArrayList<AbilitySet> abilitySets = this.fruit.getAbilitySets();
+            ItemStack itemInHand = player.getItemInHand();
+            ItemStack itemInSlot9 = player.getInventory().getItem(8); // Posición 9 (se cuentan desde 0)
 
-        if (!abilitySets.isEmpty())
-        {
-            this.selectedAbility++;
-
-            if (this.selectedAbility >= abilitySets.get(selectedAbilitySet).getAbilities().size())
-                this.selectedAbility = 0;
+            player.getInventory().setItemInMainHand(itemInSlot9); // Coloca el objeto en la mano
+            player.getInventory().setItem(8, itemInHand); // Coloca el objeto en la posición 9
+            player.getInventory().setHeldItemSlot(8);
         }
+
+        setCombatMode(!isCombatMode());
+
     }
 
     @Override
     public void onPlayerSwapHandItems(PlayerSwapHandItemsEvent event)
     {
-        event.setCancelled(true);
-
-        // Rotar el set
-        this.selectedAbilitySet++;
-
-        if (this.selectedAbilitySet >= this.fruit.getAbilitySets().size())
-            this.selectedAbilitySet = 0;
+        if(isCombatMode()){
+            
+            selectedAbilitySet+=1;
+            if(this.fruit.getAbilitySets().size() <= selectedAbilitySet){
+                selectedAbilitySet = 0;
+            }
+            selectedAbility = selectedAbilitySet%fruit.getAbilitySets().size();
+            event.setCancelled(true);
+        }
     }
 }

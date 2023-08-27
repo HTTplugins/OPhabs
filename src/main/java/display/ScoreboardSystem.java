@@ -95,12 +95,14 @@ public class ScoreboardSystem implements IFruitCasterDisplay
                     for (Ability ability : abilitySet.abilities)
                         abilityDisplayList.add(ability.getDisplayableString());
 
-                    int selectedAbilityIndex = caster.getSelectedAbilityNumber();
+                    if(!user.isFastCasting()){
+                        int selectedAbilityIndex = caster.getSelectedAbilityNumber();
 
-                    if (selectedAbilityIndex < abilityDisplayList.size())
-                    {
-                        String activeAbility = ChatColor.RED + "" + ChatColor.BOLD + "" + abilityDisplayList.get(selectedAbilityIndex);
-                        abilityDisplayList.set(selectedAbilityIndex, activeAbility);
+                        if (selectedAbilityIndex < abilityDisplayList.size())
+                        {
+                            String activeAbility = ChatColor.RED + "" + ChatColor.BOLD + "" + abilityDisplayList.get(selectedAbilityIndex);
+                            abilityDisplayList.set(selectedAbilityIndex, activeAbility);
+                        }
                     }
 
                     objective = scoreboard.registerNewObjective("abilitiesScoreboard","dummy");

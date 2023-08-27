@@ -99,6 +99,22 @@ public class OPHCommandManager implements CommandExecutor, TabCompleter
                 }
             }
         }
+        else if (args.length == 1)
+        {
+            if (order.equalsIgnoreCase("toggleFastCasting"))
+            {
+                OPUser user = OPhabs.newUsers.getUserByName(sender.getName());
+
+                if (user == null)
+                {
+                    player.sendMessage("This player doesn't have a fruit");
+                    return false;
+                }
+
+                user.toggleFastCasting();
+                return true;
+            }
+        }
 
         player.sendMessage("Unknown command");
 
@@ -114,6 +130,7 @@ public class OPHCommandManager implements CommandExecutor, TabCompleter
         {
             tabOptions.add("giveFruit");
             tabOptions.add("removeFruit");
+            tabOptions.add("toggleFastCasting");
         }
 
         if (args.length == 2 && args[0].equalsIgnoreCase("giveFruit"))
