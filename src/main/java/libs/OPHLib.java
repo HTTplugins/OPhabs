@@ -14,11 +14,11 @@ import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.util.Consumer;
 import org.bukkit.util.RayTraceResult;
 import org.bukkit.util.Vector;
+import runnables.OphAnimTextureRunnable;
 import runnables.OphRunnable;
 import textures.OPTexture;
 
 import java.util.*;
-import java.util.stream.Stream;
 
 import static java.lang.Math.*;
 
@@ -33,7 +33,6 @@ public class OPHLib {
     public static Random getRandom() {
         return random;
     }
-
 
     public static Monster createMonster(EntityType entType, Location loc, double health, boolean invisible, ItemStack mainhandItem ){
         World world = loc.getWorld();
@@ -85,7 +84,7 @@ public class OPHLib {
         new OphRunnable() {
             @Override
             public void OphRun() {
-                if (getCurrentRunIteration() >= duration) this.ophCancel();
+                if (getCurrentRunIteration() >= duration) {this.ophCancel();}
 
                 for (Entity entity : player.getNearbyEntities(x, y, z)) {
                     if (entity instanceof LivingEntity) {
@@ -95,6 +94,8 @@ public class OPHLib {
 
                 }
             }
+
+
         }.ophRunTaskTimer(0, period);
 
 

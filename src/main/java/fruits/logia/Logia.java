@@ -17,6 +17,7 @@ public abstract class Logia extends DevilFruit {
     private static BukkitTask logiaBodyTask = null;
 
     private BukkitTask logiaModeTask = null;
+    public boolean ignoreLogiaOff = false;
 
     public Logia(int id, String name, String displayName, String commandName, Particle element) {
         super(id, name, displayName, commandName);
@@ -38,9 +39,8 @@ public abstract class Logia extends DevilFruit {
                                 if(fruit.logiaModeTask == null)
                                     fruit.logiaModeON();
 
-                            } else if(fruit.logiaModeTask != null)
+                            } else if(fruit.logiaModeTask != null & !fruit.ignoreLogiaOff)
                                 fruit.logiaModeOFF();
-
                         }
                     }
                 }

@@ -37,7 +37,7 @@ public class OPHAnimationLib {
                     double zr = player.getLocation().getZ() + z;
 
                     Location partLoc = new Location(player.getWorld(),xr,yr,zr);
-                    player.spawnParticle(particle,partLoc, 0,0,0,0);
+                    player.getWorld().spawnParticle(particle,partLoc, 0,0,0,0);
 
                     player.setAllowFlight(true);
 

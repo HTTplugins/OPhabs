@@ -2,19 +2,17 @@ package fruits.logia;
 
 import abilities.Ability;
 import abilities.AbilitySet;
+import htt.ophabs.OPhabs;
 import libs.*;
 import logs.msgSystem;
-import org.bukkit.Bukkit;
-import org.bukkit.Location;
-import org.bukkit.Material;
-import org.bukkit.Particle;
+import org.bukkit.*;
 import org.bukkit.entity.*;
 import org.bukkit.event.entity.EntityAirChangeEvent;
-import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
-import org.bukkit.util.Vector;
+import org.bukkit.scheduler.BukkitRunnable;
+import org.bukkit.scheduler.BukkitTask;
+import runnables.OphAnimTextureRunnable;
 import runnables.OphControlledEntRunnable;
 import runnables.OphRunnable;
 
@@ -30,6 +28,8 @@ public class Moku_Moku extends Logia{
     private boolean logiaBodyON = false;
 
     private final Set<LivingEntity> smokers = new HashSet<>();
+
+    private BukkitTask smokeBodyParticlesTask;
 
     public static int getFruitID()
     {
@@ -52,6 +52,9 @@ public class Moku_Moku extends Logia{
         //Smoke World
         basicSet.addAbility(new Ability("Smoke World", this::smokeWorld));
 
+        //Smoke Body
+        basicSet.addAbility(new Ability("Smoke Body", this::smokeBody));
+
         this.abilitySets.add(basicSet);
 
     }
@@ -65,65 +68,29 @@ public class Moku_Moku extends Logia{
 
     // ----- Abilities ----- //
 
+
     public void smokePunch() {
-        Location loc = user.getPlayer().getLocation();
-        ItemStack fist = new ItemStack(Material.QUARTZ);
-        ItemMeta itemMeta = fist.getItemMeta();
-
-        itemMeta.setCustomModelData(1004);
-        fist.setItemMeta(itemMeta);
-
-        user.getPlayer().getWorld().playSound(loc, "cloudpunch", 1, 1);
-        ArmorStand armorStand = OPHLib.generateCustomFloatingItem(user.getPlayer().getLocation().add(0,-0.5,0), fist, false);
-
-        new OphRunnable(){
-
-            // Configurar las propiedades del armor stand
-
-            final Entity entity = armorStand;
-            final Location origin=entity.getLocation();
-
-            final Vector dir = user.getPlayer().getEyeLocation().getDirection();
-            Vector aux;
-            final double distancePerTick = 1.0 / 2.0;
-            double distanceFromPlayer = 0;
-
-            // Calcula la distancia total que el ArmorStand debe recorrer
+        int damage = 14;
+        Player player = this.user.getPlayer();
+        new OphAnimTextureRunnable(Material.QUARTZ, 1004, player.getLocation(), player.getLocation().getDirection(),0.5 ){
             @Override
             public void OphRun() {
-                distanceFromPlayer+=distancePerTick;
-                Vector movement = dir.clone().multiply(distanceFromPlayer);
-                entity.teleport(origin.clone().add(movement));
-
-                entity.getWorld().getNearbyEntities(entity.getLocation(), 2,2,2).forEach(ent -> {
-                    if(ent instanceof LivingEntity && ent != user.getPlayer() && entity != ent && !(ent instanceof ArmorStand) && !(ent instanceof Vex && !smokers.contains(ent))) {
-                        ((LivingEntity) ent).damage(14,(Entity) user.getPlayer());
+                this.getArmorStand().getWorld().getNearbyEntities(this.getArmorStand().getLocation(), 2,2,2).forEach(ent -> {
+                    if(ent instanceof LivingEntity && ent != player && this.getArmorStand() != ent && !(ent instanceof ArmorStand) && !(ent instanceof Vex)) {
+                        ((LivingEntity) ent).damage(damage,player);
                     }
                 });
+            }
 
-                aux = new Vector((entity.getLocation().getX()-origin.getX()), (entity.getLocation().getY()-origin.getY()), (entity.getLocation().getZ()-origin.getZ()));
-
-
-
+            @Override
+            public void particleAnimation() {
                 for(double i = -2; i<0; i+=0.2)
                     OPHLib.circleEyeVector
-                            (0.4,1,i,null,element,user.getPlayer(), entity.getLocation().add(0,1,0));
+                            (0.4,1,i,null,Particle.CLOUD,player, this.getArmorStand().getLocation().add(0,1,0));
 
-
-                if (entity.isDead()) {
-                    entity.getLocation().getBlock().setType(Material.AIR);
-                    cancelTask();
-                }
-
-                if (aux.length() < 0.5 && getCurrentRunIteration()>10 || getCurrentRunIteration() > 20) {
-                    entity.remove();
-                    cancelTask();
-                }
             }
-            public void cancelTask() {
-                Bukkit.getScheduler().cancelTask(this.getTaskId());
-            }
-        }.ophRunTaskTimer(2, 1);
+        }.ophRunTaskTimer(0,1);
+
     }
 
     public void summonSmoker(){
@@ -175,27 +142,54 @@ public class Moku_Moku extends Logia{
 
         OPHAnimationLib.fog(element, player.getLocation(), smokeWorldAmplitude,80);
 
-        OPHLib.affectAreaLivingEntitiesRunnable(user.getPlayer(),80,5, smokeWorldAmplitude, smokeWorldAmplitude/2, smokeWorldAmplitude,(LivingEntity livEnt) -> {
-            smokeWorldEntities.add(livEnt);
-            livEnt.setRemainingAir(livEnt.getRemainingAir() - 10);
-        });
+        OPHLib.affectAreaLivingEntitiesRunnable(user.getPlayer(),80,5, smokeWorldAmplitude, smokeWorldAmplitude/2, smokeWorldAmplitude,
+            (LivingEntity livEnt) -> {
+                smokeWorldEntities.add(livEnt);
+                livEnt.setRemainingAir(livEnt.getRemainingAir() - 10);
+            });
     }
 
-    public boolean smokeBody(Player player) {
+    public void smokeBody() {
+        Player player = user.getPlayer();
+
         player.getWorld().playSound(player.getLocation(), "vanish", 1, 1);
+
         if (!logiaBodyON) {
             logiaBodyON = true;
+            ignoreLogiaOff = true;
+            user.getPlayer().setAllowFlight(true);
+
             player.addPotionEffect(new PotionEffect(PotionEffectType.SPEED, 9999999, 4, false, false));
             player.addPotionEffect(new PotionEffect(PotionEffectType.REGENERATION, 9999999, 1, false, false));
             player.addPotionEffect(new PotionEffect(PotionEffectType.INCREASE_DAMAGE, 999999, 3, false, false));
-            //runParticles(player);
+
+            smokeBodyParticlesTask = smokeBodyParticles();
         } else {
+            ignoreLogiaOff = false;
             logiaBodyON = false;
+
             player.removePotionEffect(PotionEffectType.SPEED);
             player.removePotionEffect(PotionEffectType.REGENERATION);
             player.removePotionEffect(PotionEffectType.INCREASE_DAMAGE);
+
+            smokeBodyParticlesTask.cancel();
         }
-        return logiaBodyON;
+    }
+
+    public BukkitTask smokeBodyParticles() {
+        Player player = user.getPlayer();
+        return new BukkitRunnable() {
+            @Override
+            public void run() {
+                if (!(logiaBodyON || user.getPlayer().isDead()))
+                    cancelTask();
+                player.getWorld().spawnParticle(element, player.getLocation(), 10, 0.5, 0.5, 0.5, 0);
+            }
+
+            public void cancelTask() {
+                Bukkit.getScheduler().cancelTask(this.getTaskId());
+            }
+        }.runTaskTimer(OPhabs.getInstance(), 5, 3);
     }
 
     // ----- Events ----- //
@@ -231,6 +225,5 @@ public class Moku_Moku extends Logia{
     protected void onRemoveFruit() {
 
     }
-
 
 }
