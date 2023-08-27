@@ -87,4 +87,17 @@ public class EventSystem implements Listener
             event.setCancelled(true);
     }
 
+    @EventHandler
+    public void onPlayerItemHeldEvent(PlayerItemHeldEvent event)
+    {
+        UUID uuid = event.getPlayer().getUniqueId();
+
+        if(users.containsKey(uuid))
+        {
+            OPUser user = users.get(uuid);
+            user.onPlayerItemHeldEvent(event);
+        }
+
+    }
+
 }
