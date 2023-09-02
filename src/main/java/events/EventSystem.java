@@ -84,6 +84,19 @@ public class EventSystem implements Listener
     }
 
     @EventHandler
+    public void onPlayerItemHeldEvent(PlayerItemHeldEvent event)
+    {
+        UUID uuid = event.getPlayer().getUniqueId();
+
+        if(users.containsKey(uuid))
+        {
+            OPUser user = users.get(uuid);
+            user.onPlayerItemHeldEvent(event);
+        }
+
+    }
+
     public void onEntityDamageByEntity(EntityDamageByEntityEvent event) {
     }
+
 }
