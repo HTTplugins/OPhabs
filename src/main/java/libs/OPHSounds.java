@@ -10,5 +10,7 @@ public enum OPHSounds {
     ROCKMOVE,
     FLYMETEOR,
     MAGNETICFIELD,
-    HEAVYGRAVITY
+    HEAVYGRAVITY,
+    FOG,
+    CLOUDPUNCH,
 }

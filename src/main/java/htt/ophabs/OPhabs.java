@@ -13,7 +13,7 @@ import events.FruitEvents;
 import registry.RegistrySystem;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
+
 
 import java.util.Objects;
 import java.util.concurrent.ScheduledExecutorService;
@@ -30,7 +30,7 @@ public final class OPhabs extends JavaPlugin {
     }
 
     public static final UserList newUsers = new UserList();
-    public static final RegistrySystem registrySystem = new RegistrySystem();
+    public static RegistrySystem registrySystem;
     public static CooldownSystem cooldownSystem;
     public static ScoreboardSystem scoreboardSystem;
     public static TextureMapper textureMapper;
@@ -47,6 +47,7 @@ public final class OPhabs extends JavaPlugin {
         OPhabs.instance = this;
 
 
+        registrySystem = new RegistrySystem();
         //
         // Inicializar dependencias
         //

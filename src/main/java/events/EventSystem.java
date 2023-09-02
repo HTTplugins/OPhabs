@@ -1,17 +1,13 @@
 package events;
 
 import htt.ophabs.OPhabs;
-import org.bukkit.event.block.BlockBreakEvent;
-import org.bukkit.event.entity.EntityDeathEvent;
-import org.bukkit.event.entity.EntityToggleGlideEvent;
-import registry.fruits.IFruitRegistry;
+import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import users.OPUser;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.player.PlayerDropItemEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
-import org.bukkit.event.player.PlayerItemHeldEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerSwapHandItemsEvent;
 
@@ -98,6 +94,9 @@ public class EventSystem implements Listener
             user.onPlayerItemHeldEvent(event);
         }
 
+    }
+
+    public void onEntityDamageByEntity(EntityDamageByEntityEvent event) {
     }
 
 }
