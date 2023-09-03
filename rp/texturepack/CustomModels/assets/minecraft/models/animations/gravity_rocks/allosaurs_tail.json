@@ -10,6 +10,7 @@
 			"name": "head",
 			"from": [4, 24, 4],
 			"to": [12, 32, 12],
+			"color": 2,
 			"faces": {
 				"north": {"uv": [1, 1, 2, 2], "texture": "#missing"},
 				"east": {"uv": [1.25, 4.75, 2.25, 5.75], "texture": "#missing"},
@@ -23,6 +24,7 @@
 			"name": "body",
 			"from": [4, 12, 6],
 			"to": [12, 24, 10],
+			"color": 6,
 			"faces": {
 				"north": {"uv": [2.5, 2.5, 3.5, 3.99], "texture": "#missing"},
 				"east": {"uv": [3.25, 6.25, 3.75, 7.75], "texture": "#missing"},
@@ -36,6 +38,7 @@
 			"name": "right_arm",
 			"from": [12, 12, 6],
 			"to": [16, 24, 10],
+			"color": 7,
 			"faces": {
 				"north": {"uv": [5.5, 2.5, 6, 4], "texture": "#missing"},
 				"east": {"uv": [6.25, 6.25, 6.75, 7.75], "texture": "#missing"},
@@ -49,6 +52,7 @@
 			"name": "left_arm",
 			"from": [0, 12, 6],
 			"to": [4, 24, 10],
+			"color": 8,
 			"faces": {
 				"north": {"uv": [4.5, 6.5, 5, 8], "texture": "#missing"},
 				"east": {"uv": [5.25, 10.25, 5.75, 11.75], "texture": "#missing"},
@@ -62,6 +66,7 @@
 			"name": "right_leg",
 			"from": [8, 0, 6],
 			"to": [12, 12, 10],
+			"color": 3,
 			"faces": {
 				"north": {"uv": [0.5, 2.5, 1, 4], "texture": "#missing"},
 				"east": {"uv": [1.25, 6.25, 1.75, 7.75], "texture": "#missing"},
@@ -75,6 +80,7 @@
 			"name": "left_leg",
 			"from": [4, 0, 6],
 			"to": [8, 12, 10],
+			"color": 2,
 			"faces": {
 				"north": {"uv": [2.5, 6.5, 3, 8], "texture": "#missing"},
 				"east": {"uv": [3.25, 10.25, 3.75, 11.75], "texture": "#missing"},

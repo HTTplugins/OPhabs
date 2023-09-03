@@ -4,6 +4,8 @@ import abilities.Ability;
 import abilities.AbilitySet;
 import abilities.CooldownAbility;
 import libs.OPHLib;
+import libs.OPHSoundLib;
+import libs.OPHSounds;
 
 import java.util.ArrayList;
 
@@ -14,6 +16,7 @@ import org.bukkit.Particle;
 import org.bukkit.World;
 import org.bukkit.entity.*;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
+import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.EntityDamageEvent.DamageCause;
 import org.bukkit.event.player.PlayerItemConsumeEvent;
 import org.bukkit.inventory.ItemStack;
@@ -48,15 +51,15 @@ public class Inu_Urufu extends Zoan{
         basicSet.addAbility(transform);
         
         // Crunch
-        basicSet.addAbility(new Ability("Crunch", () -> {
+        basicSet.addAbility(new CooldownAbility("Crunch", 10, () -> {
             this.frontCrunch(3);
         }));
         // Multiple Crunches
-        basicSet.addAbility(new Ability("Multiple Crunches", () -> {
+        basicSet.addAbility(new CooldownAbility("Multiple Crunches", 100, () -> {
             this.multipleCrunch(2);
         }));
         //Angry Roar
-        basicSet.addAbility(new Ability("Angry Roar", () -> {
+        basicSet.addAbility(new CooldownAbility("Angry Roar", 10, () -> {
             this.angryRoar(5);
         }));
 
@@ -82,10 +85,12 @@ public class Inu_Urufu extends Zoan{
     public void frontCrunch(double dmg) {
         Player player = user.getPlayer();
         OPHLib.dash(player, 3);
-        new OphRunnable(20) {
+        new OphRunnable(25) {
             @Override
             public void OphRun() {
-                if(getCurrentRunIteration() % 4 == 0) player.getWorld().playSound(player.getLocation(), "crunch", 1, 1);
+                if(getCurrentRunIteration() >= 20) ophCancel();
+                if(getCurrentRunIteration() % 4 == 0) OPHSoundLib.OphPlaySound(OPHSounds.CRUNCH, player.getLocation(), 1, 1);
+
                 player.getWorld().getNearbyEntities(player.getEyeLocation(), 1,1,1).forEach(entity -> {
                     if(!entity.getName().equals(player.getName()) && entity instanceof LivingEntity) {
                         ((LivingEntity) entity).damage(dmg,(Entity) user.getPlayer());
@@ -100,33 +105,35 @@ public class Inu_Urufu extends Zoan{
 
     public void multipleCrunch(double damage) {
         int nAttacks = 5, ticksPerAttack = 21;
-        new OphRunnable(nAttacks*ticksPerAttack){
+        new OphRunnable(nAttacks*ticksPerAttack + 10){
             @Override
             public void OphRun() {
+                if(getCurrentRunIteration() >= nAttacks*ticksPerAttack) ophCancel();
                 if(getCurrentRunIteration()%ticksPerAttack == 0) frontCrunch(damage);
             }
         }.ophRunTaskTimer(5, 1);
     }
 
     public void rageMode(){
+        Player player = user.getPlayer();
         raged = true;
-        user.getPlayer().getWorld().playSound(user.getPlayer().getLocation(), "roar", 1, 1);
+        OPHSoundLib.OphPlaySound(OPHSounds.ROAR, player.getLocation(), 1, 1);
 
         skinsChanger.changeSkin(user.getPlayer(), rage);
         
         new OphRunnable() {
             @Override
             public void OphRun() {
-            user.getPlayer().addPotionEffect(new PotionEffect(PotionEffectType.SPEED, 999999, 2, false, false));
-            user.getPlayer().addPotionEffect(new PotionEffect(PotionEffectType.REGENERATION, 999999, 1, false, false));
-            user.getPlayer().addPotionEffect(new PotionEffect(PotionEffectType.JUMP, 999999, 3, false, false));
-            user.getPlayer().addPotionEffect(new PotionEffect(PotionEffectType.NIGHT_VISION, 999999, 2, false, false));
+            player.addPotionEffect(new PotionEffect(PotionEffectType.SPEED, 999999, 2, false, false));
+            player.addPotionEffect(new PotionEffect(PotionEffectType.REGENERATION, 999999, 1, false, false));
+            player.addPotionEffect(new PotionEffect(PotionEffectType.JUMP, 999999, 3, false, false));
+            player.addPotionEffect(new PotionEffect(PotionEffectType.NIGHT_VISION, 999999, 2, false, false));
             }
         }.ophRunTaskLater(20);
 
         //Turn off on 60 seconds
 
-        new OphRunnable() {
+        new OphRunnable(rageTime*20+10) {
             @Override
             public void OphRun() {
                 if(raged){
@@ -155,7 +162,7 @@ public class Inu_Urufu extends Zoan{
     }
 
     @Override
-    public void onEntityDamageByEntity(EntityDamageByEntityEvent event){
+    public void onEntityDamage(EntityDamageEvent event){
         if(user.getPlayer().getHealth() < user.getPlayer().getMaxHealth()/2 && !raged)
             rageMode();
     }

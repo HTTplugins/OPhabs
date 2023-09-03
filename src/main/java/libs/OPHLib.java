@@ -550,10 +550,10 @@ public class OPHLib {
         }.runTaskTimer(OPhabs.getInstance(), 0, 2);
     }
 
-    public static void breath(Player player, Vector pos, Vector dir, int delay, int maxLength, int maxTicks, double startAmpl, int startAmountParticles, double maxAmplitude, int period, String sound, Particle particle, Object extra, IAreaEffect effect) {
+    public static void breath(Player player, Vector pos, Vector dir, int delay, int maxLength, int maxTicks, double startAmpl, int startAmountParticles, double maxAmplitude, int period, OPHSounds sound, Particle particle, Object extra, IAreaEffect effect) {
         int iterations = maxTicks / period;
 
-        new OphRunnable(iterations) {
+        new OphRunnable(iterations+10) {
             double density = startAmountParticles / startAmpl;
             double amplitude = startAmpl;
             double distance = 0;
@@ -565,11 +565,13 @@ public class OPHLib {
 
             @Override
             public void OphRun() {
+                if(getCurrentRunIteration() > iterations) ophCancel();
                 Vector direction = player.getEyeLocation().getDirection().add(dir);
                 Location location = player.getEyeLocation().add(pos);
 
                 if (getCurrentRunIteration() == 0 && !Objects.equals(sound, "none"))    //Play sound on first iteration
-                    world.playSound(location, sound, 1, 1);
+                    OPHSoundLib.OphPlaySound(sound, location, 1, 1);
+
 
                 for (int j = 1; j <= distance; j++) {
                     if (amplitude < maxAmplitude)
@@ -629,7 +631,8 @@ public class OPHLib {
         new OphRunnable(ticks) {
             @Override
             public void OphRun() {
-                if(entity.isDead()) ophCancel();
+                if(entity.isDead() || entity.getUniqueId().equals(user.getUniqueId()) || 
+                  (entity.getCustomName() != null && entity.getCustomName().contains("cosmeticArmor_"))) ophCancel();
                 entity.damage(2, user);
                 entity.getWorld().spawnParticle(Particle.DRIP_LAVA, entity.getEyeLocation().add(0.2, 0, 0.2),
                         4, 0, 0, 0);

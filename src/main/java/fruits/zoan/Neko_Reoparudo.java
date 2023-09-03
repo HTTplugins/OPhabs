@@ -5,6 +5,8 @@ import abilities.AbilitySet;
 import abilities.CooldownAbility;
 import libs.OPHAnimationLib;
 import libs.OPHLib;
+import libs.OPHSoundLib;
+import libs.OPHSounds;
 
 import java.util.ArrayList;
 
@@ -95,7 +97,7 @@ public class Neko_Reoparudo extends Zoan{
         new OphRunnable(10) {
             @Override
             public void OphRun() {
-                player.getWorld().playSound(player.getLocation(), "swordcut", 1, 1);
+                OPHSoundLib.OphPlaySound(OPHSounds.SWORDCUT, player.getLocation(), 1, 1);
 
                 player.getWorld().getNearbyEntities(player.getEyeLocation(), 1,2,1).forEach(entity -> {
                     if(!entity.getName().equals(player.getName()) && entity instanceof LivingEntity) {
@@ -111,7 +113,7 @@ public class Neko_Reoparudo extends Zoan{
 
     public void tsumeAnimation() {
         Player player = user.getPlayer();
-        double height = 2;
+        double height = 4;
         OPHAnimationLib.horizontalCylinder(player.getLocation(), 0.5, 2, 0.2, Particle.CRIT, null);
         
         new OphRunnable(10) {
@@ -127,7 +129,7 @@ public class Neko_Reoparudo extends Zoan{
         Player player = user.getPlayer();
         Location loc = player.getLocation();
 
-        player.getWorld().playSound(loc, "swordcut", 100, 10);
+        OPHSoundLib.OphPlaySound(OPHSounds.SWORDCUT, loc, 100, 10);
         tsumeAnimation();
 
         player.getWorld().getNearbyEntities(loc, 4, 2, 4).forEach(entity -> {
@@ -148,14 +150,14 @@ public class Neko_Reoparudo extends Zoan{
     public void nekoFearsome() {
         Player player = user.getPlayer();
         Location loc = player.getEyeLocation();
-        double radio = 10;
+        double radio = 2;
         player.getWorld().getNearbyEntities(loc, radio, radio/2, radio).forEach(entity -> {
             if(entity instanceof LivingEntity && !entity.getName().equals(player.getName())) {
                 ((LivingEntity) entity).addPotionEffect(new PotionEffect(PotionEffectType.CONFUSION, 200, 3));
                 ((LivingEntity) entity).addPotionEffect(new PotionEffect(PotionEffectType.WEAKNESS, 200, 3));
             }
         });
-        OPHAnimationLib.circularWave(loc, 0.5, radio, 1, 0.1, 1, Particle.CRIT_MAGIC);
+        OPHAnimationLib.circularWave(loc, 1,2,0.5,0.35,10, Particle.CRIT_MAGIC);
     }
 
     public void climbWall() {

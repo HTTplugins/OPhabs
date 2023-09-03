@@ -11,8 +11,11 @@ public enum OPHSounds {
     FLYMETEOR,
     MAGNETICFIELD,
     HEAVYGRAVITY,
-    ICEBREATHNAMUJI
-}
+    ICEBREATHNAMUJI,
+    ICECRACK,
     FOG,
     CLOUDPUNCH,
+    CRUNCH,
+    ROAR,
+    STOMP
 }

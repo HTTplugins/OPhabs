@@ -25,6 +25,7 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
+import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.util.Vector;
 import runnables.OphRunnable;
 
@@ -51,15 +52,15 @@ public class Inu_Okuchi extends Zoan{
         basicSet.addAbility(transform);
         
         // Himorogiri
-        basicSet.addAbility(new Ability("Himorogiri", () -> {
+        basicSet.addAbility(new CooldownAbility("Himorogiri", 30, () -> {
             this.himorogiri(15);
         }));
         //Namuji Hyoga
-        basicSet.addAbility(new Ability("Namuji Hyoga", () -> {
+        basicSet.addAbility(new CooldownAbility("Namuji Hyoga", 20, () -> {
             this.namujiHyoga(4);
         }));
         //Angry Roar
-        basicSet.addAbility(new Ability("Angry Roar", () -> {
+        basicSet.addAbility(new CooldownAbility("Angry Roar", 10, () -> {
             this.angryRoar(10);
         }));
 
@@ -74,6 +75,19 @@ public class Inu_Okuchi extends Zoan{
         // }, 0, 20L);
 
     }
+    @Override
+    public void transformation(){
+        super.transformation();
+
+        if(transformed){
+            new BukkitRunnable() {
+                public void run(){
+                    if(!transformed) cancel();
+                    if(iceArmor<maxIceArmor) iceArmor+=0.5;
+                }
+            }.runTaskTimer(OPhabs.getInstance(), 0, 5);
+        }
+    }
 
     public void himorogiri(double damage) {
         Player player = user.getPlayer();
@@ -82,12 +96,15 @@ public class Inu_Okuchi extends Zoan{
         new OphRunnable(25){
             @Override
             public void OphRun() {
-                if(getCurrentRunIteration()>20) ophCancel();
+                if(getCurrentRunIteration()>=20) ophCancel();
                 Vector sideWayOffset = player.getLocation().getDirection().crossProduct(new Vector(0,1,0)).normalize().multiply(0.4);
                 Vector downOffset = player.getLocation().getDirection().crossProduct(sideWayOffset).normalize().multiply(0.2);
                 player.getWorld().spawnParticle(Particle.BLOCK_CRACK, player.getEyeLocation().add(player.getLocation().getDirection()).add(sideWayOffset).add(downOffset), 10, 0, 0.2, 0, 0, iceBlock);
                 player.setVelocity(new Vector(0,0.1,0));
                 player.setFallDistance(0);
+            }
+            public void ophCancel(){
+                super.ophCancel();
             }
         }.ophRunTaskTimer(15, 2);
         
@@ -96,9 +113,9 @@ public class Inu_Okuchi extends Zoan{
             @Override
             public void OphRun() {
                 if(player.getLocation().add(0,-1,0).getBlock().getType() != Material.AIR) {
-                    player.getWorld().playSound(player.getLocation(), "icecrack", 1, 1);
+                    OPHSoundLib.OphPlaySound(OPHSounds.ICECRACK, player.getLocation(), 1, 1);
                     player.getWorld().getNearbyEntities(player.getLocation(), 5, 2, 5).forEach(entity -> {
-                        if(entity instanceof LivingEntity && entity.getName() != player.getName()) {
+                        if(entity instanceof LivingEntity && entity.getUniqueId() != player.getUniqueId()) {
                             LivingEntity livingEntity = (LivingEntity) entity;
                             livingEntity.damage(damage, player);
                         }
@@ -109,7 +126,8 @@ public class Inu_Okuchi extends Zoan{
                     ophCancel();
                 }
                 if(first) {
-                    player.setVelocity(player.getLocation().getDirection().multiply(2));
+                    // player.setVelocity(player.getLocation().getDirection().multiply(2));
+                    OPHLib.dash(player, 2);
                     first = false;
                     himo = true;
                 }
@@ -127,9 +145,7 @@ public class Inu_Okuchi extends Zoan{
         Player player = user.getPlayer();
         World world = player.getWorld();
 
-        OPHSoundLib.OphPlaySound(OPHSounds.ICEBREATHNAMUJI, player.getLocation(), 1, 1);
-
-        OPHLib.breath(player, new Vector(0,0,0), new Vector(0,0,0),0,12, 90,0.5,40,1.5,4,"none", Particle.BLOCK_CRACK, iceBlock, (amplitudeX, amplitudeY, amplitudeZ, location) -> {
+        OPHLib.breath(player, new Vector(0,0,0), new Vector(0,0,0),0,12, 90,0.5,40,1.5,4,OPHSounds.ICEBREATHNAMUJI, Particle.BLOCK_CRACK, iceBlock, (amplitudeX, amplitudeY, amplitudeZ, location) -> {
 
             world.getNearbyEntities(location, amplitudeX, amplitudeY, amplitudeZ).forEach(entity -> {
                 if (entity instanceof LivingEntity && !entity.getName().equals(player.getName())) {
@@ -151,39 +167,25 @@ public class Inu_Okuchi extends Zoan{
         OPHLib.roar(user.getPlayer(), dmg, 10, effects);
     }
 
+    @Override
     public void onFall(EntityDamageEvent event) {
         if(himo) event.setCancelled(true);
     }
 
     @Override
-    public void onEntityDamageByEntity(EntityDamageByEntityEvent event){
+    public void onEntityDamage(EntityDamageEvent event){
         if(isFruitActive() && iceArmor > 0 && event.getDamage() > 0) {
             double damage = event.getDamage();
-            iceArmor -= damage;
-            if(iceArmor < 0) {
+            if(iceArmor < damage) {
                 iceArmor = 0;
                 event.setDamage(damage - iceArmor);
             } else {
+                iceArmor -= damage;
                 event.setDamage(0);
             }
         }
     }
     
-    @Override
-    public void onPlayerCasterHeldEvent(PlayerItemHeldEvent event) {
-        event.getPlayer().sendMessage("Held");
-        new OphRunnable(999999) {
-            Player player = event.getPlayer();
-            ItemStack caster = event.getPlayer().getInventory().getItem(event.getNewSlot());
-            @Override
-            public void OphRun() {
-                if(player.getInventory().getItem(event.getNewSlot()) != caster) {ophCancel();}
-                if(iceArmor<maxIceArmor) iceArmor+=0.1;
-            }
-        }.ophRunTaskTimer(0, 0);;
-
-    }
-
     @Override
     protected void onAddFruit() {
 

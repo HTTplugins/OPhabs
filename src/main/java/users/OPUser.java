@@ -9,6 +9,7 @@ import stats.UserStats;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.entity.EntityDamageEvent;
+import org.bukkit.event.entity.EntityDamageEvent.DamageCause;
 import org.bukkit.event.player.*;
 import org.bukkit.inventory.ItemStack;
 
@@ -141,23 +142,22 @@ public class OPUser implements IEventProcessor
         ItemStack offHandItem = event.getOffHandItem();
 
         // Pasar el evento al caster activo
+        if (mainHandItem != null && mainHandItem.hasItemMeta() && mainHandItem.getItemMeta().hasCustomModelData())
         {
-            if (mainHandItem != null && mainHandItem.hasItemMeta() && mainHandItem.getItemMeta().hasCustomModelData())
-            {
-                Caster caster = activeCasters.get(mainHandItem.getItemMeta().getCustomModelData());
+            Caster caster = activeCasters.get(mainHandItem.getItemMeta().getCustomModelData());
 
-                if (caster != null && caster.isOwnedBy(this) && caster.isThisItem(mainHandItem))
-                    caster.onPlayerSwapHandItems(event);
-            }
-
-            if (offHandItem != null && offHandItem.hasItemMeta() && offHandItem.getItemMeta().hasCustomModelData())
-            {
-                Caster caster = activeCasters.get(offHandItem.getItemMeta().getCustomModelData());
-
-                if (caster != null && caster.isOwnedBy(this) && caster.isThisItem(offHandItem))
-                    caster.onPlayerSwapHandItems(event);
-            }
+            if (caster != null && caster.isOwnedBy(this) && caster.isThisItem(mainHandItem))
+                caster.onPlayerSwapHandItems(event);
         }
+
+        if (offHandItem != null && offHandItem.hasItemMeta() && offHandItem.getItemMeta().hasCustomModelData())
+        {
+            Caster caster = activeCasters.get(offHandItem.getItemMeta().getCustomModelData());
+
+            if (caster != null && caster.isOwnedBy(this) && caster.isThisItem(offHandItem))
+                caster.onPlayerSwapHandItems(event);
+        }
+
 
         // Pasar el evento  a todos los casters pasivos
 
@@ -172,26 +172,22 @@ public class OPUser implements IEventProcessor
         ItemStack offHandItem = event.getPlayer().getInventory().getItemInOffHand();
 
         // Pasar el evento al caster activo
+        if (mainHandItem != null && mainHandItem.hasItemMeta() && mainHandItem.getItemMeta().hasCustomModelData())
         {
-            if (mainHandItem != null && mainHandItem.hasItemMeta() && mainHandItem.getItemMeta().hasCustomModelData())
-            {
-                Caster caster = activeCasters.get(mainHandItem.getItemMeta().getCustomModelData());
+            Caster caster = activeCasters.get(mainHandItem.getItemMeta().getCustomModelData());
 
-                if (caster != null && caster.isOwnedBy(this) && caster.isThisItem(mainHandItem)) {
-                    caster.onPlayerItemHeldEvent(event);
-                    if (this.devilFruit != null) devilFruit.onPlayerCasterHeldEvent(event);
-                }
-
+            if (caster != null && caster.isOwnedBy(this) && caster.isThisItem(mainHandItem)) {
+                caster.onPlayerItemHeldEvent(event);
             }
-            else
-            if (offHandItem != null && offHandItem.hasItemMeta() && offHandItem.getItemMeta().hasCustomModelData())
-            {
-                Caster caster = activeCasters.get(offHandItem.getItemMeta().getCustomModelData());
 
-                if (caster != null && caster.isOwnedBy(this) && caster.isThisItem(offHandItem)) {
-                    caster.onPlayerItemHeldEvent(event);
-                    if (this.devilFruit != null) devilFruit.onPlayerCasterHeldEvent(event);
-                }
+        }
+        else
+        if (offHandItem != null && offHandItem.hasItemMeta() && offHandItem.getItemMeta().hasCustomModelData())
+        {
+            Caster caster = activeCasters.get(offHandItem.getItemMeta().getCustomModelData());
+
+            if (caster != null && caster.isOwnedBy(this) && caster.isThisItem(offHandItem)) {
+                caster.onPlayerItemHeldEvent(event);
             }
         }
 
@@ -201,10 +197,13 @@ public class OPUser implements IEventProcessor
     }
 
     @Override
-    public void onFall(EntityDamageEvent event)
+    public void onEntityDamage(EntityDamageEvent event)
     {
-        if (this.devilFruit != null)
-            this.devilFruit.onFall(event);
+        if(event.getCause().equals(DamageCause.FALL)){
+            if (this.devilFruit != null)this.devilFruit.onFall(event);
+        }
+
+        if (this.devilFruit != null)this.devilFruit.onEntityDamage(event);
     }
 
     @Override
@@ -213,7 +212,15 @@ public class OPUser implements IEventProcessor
         if (this.devilFruit != null)
             this.devilFruit.onPlayerToggleSneakEvent(event);
     }
+    
+    @Override
+    public void onPlayerItemConsume(PlayerItemConsumeEvent event)
+    {
+        if (this.devilFruit != null)
+            this.devilFruit.onPlayerItemConsume(event);
+    }
 
+    @Override
     public void onPlayerJoin(PlayerJoinEvent event)
     {
         this.stats.apply();

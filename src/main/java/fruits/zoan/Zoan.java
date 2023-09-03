@@ -1,10 +1,13 @@
 package fruits.zoan;
 
 import fruits.DevilFruit;
+import runnables.OphRunnable;
+
 import org.bukkit.Particle;
 import org.bukkit.entity.Player;
 
 import abilities.Ability;
+import cosmetics.cosmeticsArmor;
 import skin.skinsChanger;
 
 public abstract class Zoan extends DevilFruit {
@@ -43,6 +46,12 @@ public abstract class Zoan extends DevilFruit {
             // setDamage(damageBonus/2);
             // setArmor(armorBonus/2);
         }
+        new OphRunnable(player.getUniqueId()) {
+            @Override
+            public void OphRun() {
+                cosmeticsArmor.reloadCosmeticArmor(player);
+            }
+        }.ophRunTaskLater(5);
         // user.reloadStats();
     }
 }

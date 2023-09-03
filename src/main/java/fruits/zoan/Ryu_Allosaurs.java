@@ -6,6 +6,8 @@ import abilities.CooldownAbility;
 import cosmetics.cosmeticsArmor;
 import libs.OPHAnimationLib;
 import libs.OPHLib;
+import libs.OPHSoundLib;
+import libs.OPHSounds;
 
 import java.util.ArrayList;
 
@@ -19,6 +21,7 @@ import org.bukkit.entity.*;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.EntityDamageEvent.DamageCause;
 import org.bukkit.event.player.PlayerItemConsumeEvent;
+import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.potion.PotionEffect;
@@ -49,15 +52,15 @@ public class Ryu_Allosaurs extends Zoan{
         basicSet.addAbility(transform);
         
         // Crunch
-        basicSet.addAbility(new Ability("Crunch", () -> {
+        basicSet.addAbility(new CooldownAbility("Crunch", 15, () -> {
             this.frontCrunch(3);
         }));
         // Multiple Crunches
-        basicSet.addAbility(new Ability("Tail Spin", () -> {
+        basicSet.addAbility(new CooldownAbility("Tail Spin", 20, () -> {
             this.tailSpin(5);
         }));
         //Angry Roar
-        basicSet.addAbility(new Ability("Stomp", () -> {
+        basicSet.addAbility(new CooldownAbility("Stomp", 20, () -> {
             this.stomp(5);
         }));
 
@@ -92,9 +95,10 @@ public class Ryu_Allosaurs extends Zoan{
             @Override
             public void OphRun() {
                 if(getCurrentRunIteration() > 20) ophCancel();
-                if(getCurrentRunIteration() % 4 == 0) player.getWorld().playSound(player.getLocation(), "crunch", 1, 1);
+                if(getCurrentRunIteration() % 4 == 0) OPHSoundLib.OphPlaySound(OPHSounds.CRUNCH, player.getLocation(), 1, 1); 
                 player.getWorld().getNearbyEntities(player.getEyeLocation(), 1,1,1).forEach(entity -> {
-                    if(!entity.getName().equals(player.getName()) && entity instanceof LivingEntity && !(entity instanceof Marker)) {
+                    if(!entity.getUniqueId().equals(player.getUniqueId()) && entity instanceof LivingEntity 
+                       && !entity.getName().contains("cosmeticArmor")) {
                         ((LivingEntity) entity).damage(dmg,(Entity) user.getPlayer());
                         OPHLib.bleeding(((LivingEntity) entity), 200, player);
                     }
@@ -117,10 +121,14 @@ public class Ryu_Allosaurs extends Zoan{
         });
 
         new OphRunnable() {
+            Location loc = player.getLocation();
             @Override
             public void OphRun() {
-                if(getCurrentRunIteration()>10) ophCancel();
-                Location loc = player.getLocation().clone().setDirection(player.getLocation().getDirection().rotateAroundY(36));
+                if(getCurrentRunIteration()>8) ophCancel();
+                
+                loc.setYaw(loc.getYaw()-36);
+
+                player.eject();
                 player.teleport(loc);
             }
             @Override
@@ -130,7 +138,7 @@ public class Ryu_Allosaurs extends Zoan{
                 cosmeticsArmor.killCosmeticArmor(player, "allosaurs_tail");
                 cosmeticsArmor.summonCosmeticArmor(3, "allosaurs_tail", player, Material.PUMPKIN);
             }
-        }.ophRunTaskTimer(0, 0);
+        }.ophRunTaskTimer(0, 2);
     }
 
     public void stomp(double dmg) {
@@ -144,7 +152,7 @@ public class Ryu_Allosaurs extends Zoan{
                 Location loc = player.getLocation();
                 if (!player.getLocation().getBlock().getRelative(0, -1, 0).getType().equals(Material.AIR)) {
                     animationStomp(world, player.getLocation());
-                    world.playSound(player.getLocation(), "stomp", 1, 1);
+                    OPHSoundLib.OphPlaySound(OPHSounds.STOMP, player.getLocation(), 1, 1);
                     StompedList.forEach((livingEntity) -> {
                         livingEntity.damage(dmg, player);
                     });
@@ -202,16 +210,30 @@ public class Ryu_Allosaurs extends Zoan{
     }
 
     @Override
+    public void onPlayerJoin(PlayerJoinEvent event){
+        //
+        //GIVE TAIL
+        new OphRunnable(){
+            @Override
+            public void OphRun() {
+                if(user.getPlayer() != null && user.getPlayer().isOnline()){
+                    cosmeticsArmor.summonCosmeticArmor(3, "allosaurs_tail", user.getPlayer(), Material.PUMPKIN);
+                }
+            }
+        }.ophRunTaskLater(10);
+    }
+    @Override
     protected void onAddFruit() {
         //
         //GIVE TAIL
         new OphRunnable(){
             @Override
             public void OphRun() {
-                cosmeticsArmor.summonCosmeticArmor(3, "allosaurs_tail", user.getPlayer(), Material.PUMPKIN);
+                if(user != null && user.getPlayer() != null){
+                    cosmeticsArmor.summonCosmeticArmor(3, "allosaurs_tail", user.getPlayer(), Material.PUMPKIN);
+                }
             }
         }.ophRunTaskLater(10);
-
     }
 
     @Override

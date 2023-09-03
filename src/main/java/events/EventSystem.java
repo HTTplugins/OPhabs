@@ -8,6 +8,8 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.player.PlayerDropItemEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
+import org.bukkit.event.player.PlayerItemConsumeEvent;
+import org.bukkit.event.player.PlayerItemHeldEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerSwapHandItemsEvent;
 import org.bukkit.event.player.PlayerToggleSneakEvent;
@@ -106,6 +108,19 @@ public class EventSystem implements Listener
         {
             OPUser user = users.get(uuid);
             user.onPlayerToggleSneakEvent(event);
+        }
+
+    }
+    
+    @EventHandler
+    public void onPlayerItemConsume(PlayerItemConsumeEvent event)
+    {
+        UUID uuid = event.getPlayer().getUniqueId();
+
+        if(users.containsKey(uuid))
+        {
+            OPUser user = users.get(uuid);
+            user.onPlayerItemConsume(event);
         }
 
     }

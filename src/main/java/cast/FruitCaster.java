@@ -143,6 +143,11 @@ public class FruitCaster extends Caster
     }
 
     @Override
+    public void onPlayerCasterHeldEvent(PlayerItemHeldEvent event){
+        fruit.onPlayerCasterHeldEvent(event);
+    }
+
+    @Override
     public void onPlayerDropItem(PlayerDropItemEvent event)
     {
         event.setCancelled(true);
@@ -158,7 +163,6 @@ public class FruitCaster extends Caster
         }
 
         setCombatMode(!isCombatMode());
-
     }
 
     @Override
