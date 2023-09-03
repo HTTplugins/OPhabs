@@ -5,22 +5,20 @@ import htt.ophabs.OPhabs;
 import org.bukkit.*;
 import org.bukkit.block.Block;
 import org.bukkit.block.Container;
-import org.bukkit.entity.ArmorStand;
-import org.bukkit.entity.Entity;
-import org.bukkit.entity.LivingEntity;
-import org.bukkit.entity.Player;
+import org.bukkit.entity.*;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.potion.PotionEffect;
+import org.bukkit.potion.PotionEffectType;
 import org.bukkit.scheduler.BukkitRunnable;
+import org.bukkit.util.Consumer;
 import org.bukkit.util.RayTraceResult;
 import org.bukkit.util.Vector;
+import runnables.OphAnimTextureRunnable;
 import runnables.OphRunnable;
 import textures.OPTexture;
 
-import java.util.ArrayList;
-import java.util.Objects;
-import java.util.Random;
+import java.util.*;
 
 import static java.lang.Math.*;
 
@@ -34,6 +32,74 @@ public class OPHLib {
     public static Random getRandom() {
         return random;
     }
+
+    public static Monster createMonster(EntityType entType, Location loc, double health, boolean invisible, ItemStack mainhandItem ){
+        World world = loc.getWorld();
+
+        Monster monster =  (Monster) world.spawnEntity(loc,entType);
+        monster.setHealth(health);
+        monster.getEquipment().setItemInMainHand(mainhandItem);
+
+
+        if(invisible)
+            monster.addPotionEffect(new PotionEffect(PotionEffectType.INVISIBILITY, 999999, 1, false, false));
+
+        return monster;
+    }
+    public static boolean setMonsterTarget(Mob mob, Player mobOwner, double targetRange, Set<LivingEntity> ignoredEntities) {
+        LivingEntity playerTarget = null;
+        LivingEntity monsterTarget = null;
+        LivingEntity livEnt = null;
+
+        for (Entity e : mob.getNearbyEntities(targetRange, targetRange, targetRange)) {
+            if (!e.equals(mobOwner)  && !ignoredEntities.contains(e)) {
+                if (e instanceof Player) {
+                    playerTarget = (LivingEntity) e;
+                    break;
+                } else if (e instanceof Monster) {
+                    monsterTarget = (LivingEntity) e;
+                } else if (e instanceof LivingEntity) {
+                    livEnt = (LivingEntity) e;
+                }
+            }
+        }
+
+        if(playerTarget != null){
+            mob.setTarget(playerTarget);
+            return true;
+        } else if(monsterTarget != null){
+            mob.setTarget(monsterTarget);
+            return true;
+        } else if(livEnt != null){
+            mob.setTarget(livEnt);
+            return true;
+        }
+
+        mob.setTarget(null);
+        return false;
+    }
+
+    public static void affectAreaLivingEntitiesRunnable(Player player,double duration, long period, double x, double y, double z, Consumer<LivingEntity> entityAction) {
+        new OphRunnable() {
+            @Override
+            public void OphRun() {
+                if (getCurrentRunIteration() >= duration) {this.ophCancel();}
+
+                for (Entity entity : player.getNearbyEntities(x, y, z)) {
+                    if (entity instanceof LivingEntity) {
+                        LivingEntity livEnt = (LivingEntity) entity;
+                        entityAction.accept(livEnt);
+                    }
+
+                }
+            }
+
+
+        }.ophRunTaskTimer(0, period);
+
+
+    }
+
 
     public static void changeCasterTexture(int textureid, ItemStack item){
 

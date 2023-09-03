@@ -33,7 +33,6 @@ public class Zushi_Zushi extends Paramecia
     private final Particle.DustOptions purple = new Particle.DustOptions(Color.PURPLE,1.0F);
 
     private boolean meteorExploded = false;
-    private List<Entity> heavyEntity = new ArrayList<>();
 
     private final Set<Player> togglePlayer = new HashSet<>();
 
@@ -48,10 +47,7 @@ public class Zushi_Zushi extends Paramecia
         AbilitySet basicSet = new AbilitySet("Base Set");
 
         // Heavy Field
-        basicSet.addAbility(new CooldownAbility("Heavy Field", 5, () -> {
-            Player player = user.getPlayer();
-            this.heavyGravityField(player);
-        }));
+        basicSet.addAbility(new CooldownAbility("Heavy Field", 5, this::heavyGravityField));
 
         // Meteor
         basicSet.addAbility(new CooldownAbility("Meteor", 5, () -> {
@@ -74,50 +70,47 @@ public class Zushi_Zushi extends Paramecia
         this.abilitySets.add(basicSet);
     }
 
-    public void heavyGravityField(Player player){
+    // ----- Abilities ----- //
+
+    public void heavyGravityField(){
+        Player player = user.getPlayer();
         int duration = 100;
         World world = player.getWorld();
         Location playerLoc = player.getLocation();
 
         OPHSoundLib.OphPlaySound(OPHSounds.HEAVYGRAVITY,playerLoc,1,1);
 
-        OPHAnimationLib.groundRandomParticleLayer(playerLoc,Particle.SPELL_WITCH,30,10,1,10,100,2,0,0,0);
-        OPHAnimationLib.groundRandomParticleLayer(playerLoc,Particle.CRIT_MAGIC,60,10,1.5,10,100,0,0,-0.3,0);
-
-
+        OPHAnimationLib.groundRandomParticleLayer(playerLoc,Particle.SPELL_WITCH,30,10,1,10,duration,2,0,0,0);
+        OPHAnimationLib.groundRandomParticleLayer(playerLoc,Particle.CRIT_MAGIC,60,10,1.5,10,duration,0,0,-0.3,0);
 
         new OphRunnable(){
             @Override
             public void OphRun() {
-                heavyEntity = player.getNearbyEntities(20,50,20);
+                togglePlayer.clear();
+            }
+        }.ophRunTaskLater(duration+5);
 
-                for(Entity ent : heavyEntity)
+        OPHLib.affectAreaLivingEntitiesRunnable(player,duration,1,20,50,20,
+                (LivingEntity ent) -> {
+
                     if(ent.getLocation().getBlock().getRelative(0,-1,0).getType().equals(Material.AIR))
                         ent.setVelocity(new Vector(0,-50,0));
 
-                for(Entity ent : heavyEntity){
                     if(ent instanceof Player){
                         Location entiLoc = ent.getLocation();
                         if (!togglePlayer.contains(ent)) {
                             (ent).teleport(new Location(world,entiLoc.getX(),entiLoc.getY(),entiLoc.getZ(),entiLoc.getYaw(),-10));
-                            //((Player)ent).addPotionEffect(new PotionEffect(PotionEffectType.JUMP,10,-10));
-                            ((Player)ent).setGliding(true);
+                            (ent).setGliding(true);
+                            ((Player) ent).setAllowFlight(false);
                             togglePlayer.add((Player) ent);
                         } else
                             (ent).teleport(new Location(world,entiLoc.getX(),entiLoc.getY(),entiLoc.getZ(),entiLoc.getYaw(),-10));
+                    } else
+                        (ent).addPotionEffect(new PotionEffect(PotionEffectType.SLOW,10,10));
+                });
 
 
-                    } else if(ent instanceof LivingEntity)
-                        ((LivingEntity)ent).addPotionEffect(new PotionEffect(PotionEffectType.SLOW,10,10));
-                }
 
-                if(getCurrentRunIteration() == duration){
-                    togglePlayer.clear();
-                    heavyEntity.clear();
-                    this.ophCancel();
-                }
-            }
-        }.ophRunTaskTimer(0,1);
     }
 
     public void meteor(Player player){
@@ -158,6 +151,7 @@ public class Zushi_Zushi extends Paramecia
         }.ophRunTaskTimer(0,1);
     }
 
+    //TODO: Optimization, precharge meteor blocks.
     public void launchMeteor(Location start, Location end, int radius, int explosionForce) {
         World world = start.getWorld();
         meteorExploded = false;
@@ -219,6 +213,7 @@ public class Zushi_Zushi extends Paramecia
 
     @Override
     public void onEntityToggleGlide(EntityToggleGlideEvent event){
+
         if(this.user == null)
             return;
 

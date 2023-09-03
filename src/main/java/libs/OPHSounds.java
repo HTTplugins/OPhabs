@@ -13,3 +13,6 @@ public enum OPHSounds {
     HEAVYGRAVITY,
     ICEBREATHNAMUJI
 }
+    FOG,
+    CLOUDPUNCH,
+}

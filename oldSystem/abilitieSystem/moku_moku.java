@@ -179,7 +179,7 @@ public class moku_moku extends logia {
             }
         }.runTaskTimer(plugin,0,1);
     }
-    //    @EventHandler(ignoreCancelled = true)
+
     public void onPlayerDeath(PlayerDeathEvent event) {
         super.onPlayerDeath(event);
         Player player = event.getEntity();
@@ -338,7 +338,6 @@ public class moku_moku extends logia {
 
                 player.getNearbyEntities(smokeWorldAmplitude, smokeWorldAmplitude/2, smokeWorldAmplitude).forEach(ent -> {
                     if(ent instanceof LivingEntity && ent != player){
-                        // ((LivingEntity)ent).addPotionEffect(new PotionEffect(PotionEffectType.SLOW, period*2, 3, false));
                         ((LivingEntity)ent).addPotionEffect(new PotionEffect(PotionEffectType.WEAKNESS, period+2, 2, false));
                         smokeWorldEntities.add((LivingEntity) ent);
 
