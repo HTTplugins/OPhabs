@@ -6,6 +6,8 @@
     "overrides": [
         {"predicate": {"custom_model_data": 1},"model": "custom/abilitiecosmetics/flying_rock"},
         {"predicate": {"custom_model_data": 2},"model": "custom/goroback"},
+        {"predicate": {"custom_model_data": 3},"model": "custom/allosaurs_tail"},
+        {"predicate": {"custom_model_data": 4},"model": "custom/allosaurs_tail_attacking"},
         {"predicate": {"custom_model_data": 20104},"model": "animations/gravity_rocks/gravityrocks_4"},
         {"predicate": {"custom_model_data": 20105},"model": "animations/gravity_rocks/gravityrocks_5"},
         {"predicate": {"custom_model_data": 20106},"model": "animations/gravity_rocks/gravityrocks_6"},

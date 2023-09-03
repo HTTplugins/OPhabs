@@ -177,16 +177,21 @@ public class OPUser implements IEventProcessor
             {
                 Caster caster = activeCasters.get(mainHandItem.getItemMeta().getCustomModelData());
 
-                if (caster != null && caster.isOwnedBy(this) && caster.isThisItem(mainHandItem))
+                if (caster != null && caster.isOwnedBy(this) && caster.isThisItem(mainHandItem)) {
                     caster.onPlayerItemHeldEvent(event);
+                    if (this.devilFruit != null) devilFruit.onPlayerCasterHeldEvent(event);
+                }
+
             }
             else
             if (offHandItem != null && offHandItem.hasItemMeta() && offHandItem.getItemMeta().hasCustomModelData())
             {
                 Caster caster = activeCasters.get(offHandItem.getItemMeta().getCustomModelData());
 
-                if (caster != null && caster.isOwnedBy(this) && caster.isThisItem(offHandItem))
+                if (caster != null && caster.isOwnedBy(this) && caster.isThisItem(offHandItem)) {
                     caster.onPlayerItemHeldEvent(event);
+                    if (this.devilFruit != null) devilFruit.onPlayerCasterHeldEvent(event);
+                }
             }
         }
 
@@ -200,6 +205,13 @@ public class OPUser implements IEventProcessor
     {
         if (this.devilFruit != null)
             this.devilFruit.onFall(event);
+    }
+
+    @Override
+    public void onPlayerToggleSneakEvent(PlayerToggleSneakEvent event)
+    {
+        if (this.devilFruit != null)
+            this.devilFruit.onPlayerToggleSneakEvent(event);
     }
 
     public void onPlayerJoin(PlayerJoinEvent event)

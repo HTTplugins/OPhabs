@@ -7,6 +7,10 @@ import com.google.gson.JsonParser;
 import fruits.logia.Moku_Moku;
 import fruits.paramecia.Ope_Ope;
 import fruits.paramecia.Zushi_Zushi;
+import fruits.zoan.Inu_Okuchi;
+import fruits.zoan.Inu_Urufu;
+import fruits.zoan.Neko_Reoparudo;
+import fruits.zoan.Ryu_Allosaurs;
 import htt.ophabs.OPhabs;
 import users.OPUser;
 import cast.Caster;
@@ -42,7 +46,11 @@ public class FruitRegistry implements IFruitRegistry
             new Bane_Bane(Bane_Bane.getFruitID()),
             new Zushi_Zushi(Zushi_Zushi.getFruitID()),
             new Ope_Ope(Ope_Ope.getFruitID()),
-            new Moku_Moku(Moku_Moku.getFruitID())
+            new Moku_Moku(Moku_Moku.getFruitID()),
+            new Inu_Okuchi(Inu_Okuchi.getFruitID()),
+            new Inu_Urufu(Inu_Urufu.getFruitID()),
+            new Neko_Reoparudo(Neko_Reoparudo.getFruitID()),
+            new Ryu_Allosaurs(Ryu_Allosaurs.getFruitID())
         };
 
         for (DevilFruit fruit : fruits)

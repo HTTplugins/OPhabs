@@ -27,6 +27,8 @@ public interface IEventProcessor
     default void onBlockBreak(BlockBreakEvent event) {}
     default void onProjectileHit(ProjectileHitEvent event) {}
     default void onPlayerItemHeldEvent(PlayerItemHeldEvent event) {}
+    default void onPlayerCasterHeldEvent(PlayerItemHeldEvent event) {}
+    default void onPlayerToggleSneakEvent(PlayerToggleSneakEvent event) {}
 
     default void onPlayerDropItem(PlayerDropItemEvent event) {}
 

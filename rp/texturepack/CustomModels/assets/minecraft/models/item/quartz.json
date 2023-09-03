@@ -130,7 +130,31 @@
           },
           "model": "custom/casters/mokucaster"
         },
-      {
+        {
+          "predicate": {
+            "custom_model_data": 1006
+          },
+          "model": "custom/casters/claws"
+        },
+        {
+          "predicate": {
+            "custom_model_data": 1007
+          },
+          "model": "custom/casters/claws"
+        },
+        {
+          "predicate": {
+            "custom_model_data": 1008
+          },
+          "model": "custom/casters/claws"
+        },
+        {
+          "predicate": {
+            "custom_model_data": 1009
+          },
+          "model": "custom/casters/claws"
+        },
+        {
         "predicate": {
           "custom_model_data": 2003
         },

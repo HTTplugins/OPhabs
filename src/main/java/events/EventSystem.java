@@ -14,6 +14,7 @@ import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerItemHeldEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerSwapHandItemsEvent;
+import org.bukkit.event.player.PlayerToggleSneakEvent;
 
 import java.util.Map;
 import java.util.UUID;
@@ -100,4 +101,16 @@ public class EventSystem implements Listener
 
     }
 
+    @EventHandler
+    public void onPlayerToggleSneakEvent(PlayerToggleSneakEvent event)
+    {
+        UUID uuid = event.getPlayer().getUniqueId();
+
+        if(users.containsKey(uuid))
+        {
+            OPUser user = users.get(uuid);
+            user.onPlayerToggleSneakEvent(event);
+        }
+
+    }
 }

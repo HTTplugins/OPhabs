@@ -120,7 +120,7 @@ public class FruitCaster extends Caster
         {
             if(isCombatMode()){
                 // Utilizar la habilidad seleccionada
-                if(eventAction == Action.RIGHT_CLICK_AIR && !fruit.getUser().isFastCasting()){
+                if(!fruit.getUser().isFastCasting()){
                     this.fruit.invokeAbility(selectedAbilitySet, selectedAbility);
                 }
             }

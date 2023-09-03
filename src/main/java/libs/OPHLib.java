@@ -11,17 +11,18 @@ import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
+import org.bukkit.potion.PotionEffect;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.util.RayTraceResult;
 import org.bukkit.util.Vector;
 import runnables.OphRunnable;
 import textures.OPTexture;
 
+import java.util.ArrayList;
 import java.util.Objects;
 import java.util.Random;
 
 import static java.lang.Math.*;
-
 
 /**
  * Common class created to make easier the development of abilities.
@@ -482,41 +483,29 @@ public class OPHLib {
             }
         }.runTaskTimer(OPhabs.getInstance(), 0, 2);
     }
-/*
-    public static void breath(Player player, Vector pos, Vector dir, int delay, int maxLength, int maxTicks, int dmg, double startAmpl, int startAmountParticles, double maxAmplitude, int period, String sound, Particle particle, double extra) {
 
-
+    public static void breath(Player player, Vector pos, Vector dir, int delay, int maxLength, int maxTicks, double startAmpl, int startAmountParticles, double maxAmplitude, int period, String sound, Particle particle, Object extra, IAreaEffect effect) {
         int iterations = maxTicks / period;
 
-
-        new BukkitRunnable() {
+        new OphRunnable(iterations) {
             double density = startAmountParticles / startAmpl;
             double amplitude = startAmpl;
             double distance = 0;
 
             World world = player.getWorld();
 
-
             double particleAmount;
             int i = 0;
 
             @Override
-            public void run() {
-
+            public void OphRun() {
                 Vector direction = player.getEyeLocation().getDirection().add(dir);
                 Location location = player.getEyeLocation().add(pos);
 
-                if (i == 0 && !Objects.equals(sound, "none"))    //Play sound on first iteration
+                if (getCurrentRunIteration() == 0 && !Objects.equals(sound, "none"))    //Play sound on first iteration
                     world.playSound(location, sound, 1, 1);
 
-
-                if (i > iterations || user == null || user.getPlayer() == null || user.getPlayer().isDead()) {
-                    cancelTask();
-                }
-
-
                 for (int j = 1; j <= distance; j++) {
-
                     if (amplitude < maxAmplitude)
                         amplitude += maxAmplitude / maxLength;
 
@@ -524,182 +513,39 @@ public class OPHLib {
                     location.add(direction);
                     particleAmount = density * amplitude;
                     world.spawnParticle(particle, location, (int) particleAmount,
-                            amplitude, amplitude, amplitude, 0, extra);
+                                        amplitude, amplitude, amplitude, 0, extra);
 
-
-                    world.getNearbyEntities(location, amplitude, amplitude, amplitude).forEach(entity -> {
-                        if (entity instanceof LivingEntity && !entity.getName().equals(player.getName())) {
-                            LivingEntity livingEntity = (LivingEntity) entity;
-                            livingEntity.damage(dmg, player);
-                        }
-                    });
-
+                    effect.run(amplitude, amplitude, amplitude, location);
                 }
 
                 amplitude = startAmpl;
 
                 if (distance < maxLength)
                     distance += ((double) maxLength) / (((double) iterations) / 6.0);
-
-                i++;
-
             }
-
-            public void cancelTask() {
-                Bukkit.getScheduler().cancelTask(this.getTaskId());
-            }
-        }.runTaskTimer(OPhabs.getInstance(), delay, period);
-
+        }.ophRunTaskTimer(delay, period);
     }
 
+    /**
+     * @brief General roar function for zoans type.
+     * @param entity entity that's going to roar.
+     * @param effects array list of effects to be applied on targets
+     * @author MiixZ, Vaelico786.
+     */
+    public static void roar(LivingEntity entity, double damage, int area, ArrayList<PotionEffect> effects){
+       entity.getWorld().playSound(entity.getLocation(),"roar", 1, 1);
 
-    public static void iceBreath(abilityUser user, Vector pos, Vector dir, int delay, int maxLength, int maxTicks, int dmg, double startAmpl, int startAmountParticles, double maxAmplitude, int period, String sound) {
-
-
-        int iterations = maxTicks / period;
-
-
-        new BukkitRunnable() {
-            double density = startAmountParticles / startAmpl;
-            double amplitude = startAmpl;
-            double distance = 0;
-            Player player = user.getPlayer();
-            World world = player.getWorld();
-
-
-            double particleAmount;
-            int i = 0;
-
-            @Override
-            public void run() {
-
-                Vector direction = player.getEyeLocation().getDirection().add(dir);
-                Location location = player.getEyeLocation().add(pos);
-
-                if (i == 0 && !Objects.equals(sound, "none"))    //Play sound on first iteration
-                    world.playSound(location, sound, 1, 1);
-
-
-                if (i > iterations || user == null || user.getPlayer() == null || user.getPlayer().isDead()) {
-                    cancelTask();
-                }
-
-
-                for (int j = 1; j <= distance; j++) {
-
-                    if (amplitude < maxAmplitude)
-                        amplitude += maxAmplitude / maxLength;
-
-
-                    location.add(direction);
-                    particleAmount = density * amplitude;
-                    world.spawnParticle(Particle.BLOCK_CRACK, location, (int) particleAmount, amplitude, amplitude, amplitude,
-                            0, Material.PACKED_ICE.createBlockData());
-
-
-                    world.getNearbyEntities(location, amplitude, amplitude, amplitude).forEach(entity -> {
-                        if (entity instanceof LivingEntity && !entity.getName().equals(player.getName())) {
-                            LivingEntity livingEntity = (LivingEntity) entity;
-                            livingEntity.damage(dmg, player);
-                            if (livingEntity.getFreezeTicks() <= 0) {
-                                livingEntity.setFreezeTicks(livingEntity.getFreezeTicks() + 300);
-
-                            }
-                        }
-                    });
-
-                }
-
-                amplitude = startAmpl;
-
-                if (distance < maxLength)
-                    distance += ((double) maxLength) / (((double) iterations) / 6.0);
-
-                i++;
-
+        entity.getWorld().spawnParticle(Particle.CLOUD, entity.getLocation().add(0,1,0), 100, 1, 1, 1, 1);
+        entity.getNearbyEntities(area, area, area).forEach(ent -> {
+            if(ent instanceof LivingEntity && ent!=entity) {
+                ((LivingEntity) ent).damage(damage,entity);
+                effects.forEach(effect -> ((LivingEntity) ent).addPotionEffect(effect));
             }
+        });
 
-            public void cancelTask() {
-                Bukkit.getScheduler().cancelTask(this.getTaskId());
-            }
-        }.runTaskTimer(OPhabs.getInstance(), delay, period);
-
+        entity.getWorld().spawnParticle(Particle.CRIT, entity.getLocation(),  10, 0, 0, 0, 0);
     }
 
-    public static void fireBreath(abilityUser user, Vector pos, Vector dir, int delay, int maxLength, int maxTicks, int dmg, double startAmpl, int startAmountParticles, double maxAmplitude, int period, String sound) {
-
-
-        int iterations = maxTicks / period;
-
-
-        new BukkitRunnable() {
-            double density = startAmountParticles / startAmpl;
-            double amplitude = startAmpl;
-            double distance = 0;
-            Player player = user.getPlayer();
-            World world = player.getWorld();
-
-
-            double particleAmount;
-            int i = 0;
-
-            @Override
-            public void run() {
-
-                Vector direction = player.getEyeLocation().getDirection().add(dir);
-                Location location = player.getEyeLocation().add(pos);
-
-                if (i == 0 && !Objects.equals(sound, "none"))    //Play sound on first iteration
-                    world.playSound(location, sound, 1, 1);
-
-
-                if (i > iterations || user == null || user.getPlayer() == null || user.getPlayer().isDead()) {
-                    cancelTask();
-                }
-
-
-                for (int j = 1; j <= distance; j++) {
-
-                    if (amplitude < maxAmplitude)
-                        amplitude += maxAmplitude / maxLength;
-
-
-                    location.add(direction);
-                    particleAmount = density * amplitude;
-                    world.spawnParticle(Particle.FLAME, location, (int) particleAmount,
-                            amplitude, amplitude, amplitude, 0);
-
-
-                    world.getNearbyEntities(location, amplitude, amplitude, amplitude).forEach(entity -> {
-                        if (entity instanceof LivingEntity && !entity.getName().equals(player.getName())) {
-                            LivingEntity livingEntity = (LivingEntity) entity;
-                            livingEntity.damage(dmg, player);
-                            if (livingEntity.getFireTicks() <= 0) {
-                                livingEntity.setFireTicks(livingEntity.getFireTicks() + 300);
-
-                            }
-                        }
-                    });
-
-                }
-
-                amplitude = startAmpl;
-
-                if (distance < maxLength)
-                    distance += ((double) maxLength) / (((double) iterations) / 6.0);
-
-                i++;
-
-            }
-
-            public void cancelTask() {
-                Bukkit.getScheduler().cancelTask(this.getTaskId());
-            }
-        }.runTaskTimer(OPhabs.getInstance(), delay, period);
-
-    }
-
-*/
     public static ArmorStand generateCustomFloatingItem(Location loc, ItemStack item, boolean gravity) {
         ArmorStand armorStand = loc.getWorld().spawn(loc, ArmorStand.class);
         // Establecer el objeto con Custom Model Data en la mano del armor stand
@@ -711,5 +557,22 @@ public class OPHLib {
         armorStand.setInvulnerable(true);
 
         return armorStand;
+    }
+
+    public static void bleeding(LivingEntity entity, int ticks, Player user) {
+        new OphRunnable(ticks) {
+            @Override
+            public void OphRun() {
+                if(entity.isDead()) ophCancel();
+                entity.damage(2, user);
+                entity.getWorld().spawnParticle(Particle.DRIP_LAVA, entity.getEyeLocation().add(0.2, 0, 0.2),
+                        4, 0, 0, 0);
+                entity.getWorld().spawnParticle(Particle.DRIP_LAVA, entity.getEyeLocation().add(0.2, 0, -0.2),
+                        4, 0, 0, 0);
+                entity.getWorld().spawnParticle(Particle.DRIP_LAVA, entity.getEyeLocation().add(-0.2, 0, -0.2),
+                        4, 0, 0, 0);
+            }
+ 
+        }.ophRunTaskTimer(0, 20);
     }
 }
