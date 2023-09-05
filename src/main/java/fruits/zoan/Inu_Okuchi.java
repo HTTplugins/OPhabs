@@ -3,6 +3,7 @@ package fruits.zoan;
 import abilities.Ability;
 import abilities.AbilitySet;
 import abilities.CooldownAbility;
+import cosmetics.cosmeticsArmor;
 import htt.ophabs.OPhabs;
 import libs.OPHLib;
 import libs.OPHSoundLib;
@@ -21,6 +22,7 @@ import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.EntityDamageEvent.DamageCause;
 import org.bukkit.event.player.PlayerItemHeldEvent;
+import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.potion.PotionEffect;
@@ -145,9 +147,9 @@ public class Inu_Okuchi extends Zoan{
         Player player = user.getPlayer();
         World world = player.getWorld();
 
-        OPHLib.breath(player, new Vector(0,0,0), new Vector(0,0,0),0,12, 90,0.5,40,1.5,4,OPHSounds.ICEBREATHNAMUJI, Particle.BLOCK_CRACK, iceBlock, (amplitudeX, amplitudeY, amplitudeZ, location) -> {
+        OPHLib.breath(player, new Vector(0,0,0), new Vector(0,0,0),0,12, 90,0.5,40,1.5,4,OPHSounds.ICEBREATHNAMUJI, Particle.BLOCK_CRACK, iceBlock, (location, amplitude) -> {
 
-            world.getNearbyEntities(location, amplitudeX, amplitudeY, amplitudeZ).forEach(entity -> {
+            world.getNearbyEntities(location, amplitude.getX(), amplitude.getY(), amplitude.getZ()).forEach(entity -> {
                 if (entity instanceof LivingEntity && !entity.getName().equals(player.getName())) {
                     ((LivingEntity) entity).damage(dmg, player);
                     if (((LivingEntity) entity).getFreezeTicks() <= 0) {
@@ -187,7 +189,30 @@ public class Inu_Okuchi extends Zoan{
     }
     
     @Override
-    protected void onAddFruit() {
+    public void onPlayerJoin(PlayerJoinEvent event){
+        //
+        //GIVE TAIL
+        new OphRunnable(){
+            @Override
+            public void OphRun() {
+                if(user.getPlayer() != null && user.getPlayer().isOnline()){
+                    cosmeticsArmor.summonCosmeticArmor(8, "okuchi_tail", user.getPlayer(), Material.PUMPKIN);
+                }
+            }
+        }.ophRunTaskLater(10);
+    }
 
+    @Override
+    protected void onAddFruit() {
+        //
+        //GIVE TAIL
+        new OphRunnable(){
+            @Override
+            public void OphRun() {
+                if(user != null && user.getPlayer() != null){
+                    cosmeticsArmor.summonCosmeticArmor(8, "okuchi_tail", user.getPlayer(), Material.PUMPKIN);
+                }
+            }
+        }.ophRunTaskLater(10);
     }
 }

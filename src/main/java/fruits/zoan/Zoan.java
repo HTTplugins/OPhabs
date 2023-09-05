@@ -25,10 +25,6 @@ public abstract class Zoan extends DevilFruit {
 
     @Override
     protected void onRemoveFruit() {
-        if(transformed){
-            transformed = false;
-            skinsChanger.resetSkin(user.getPlayer());
-        }
     }
 
     public void transformation() {
@@ -46,12 +42,6 @@ public abstract class Zoan extends DevilFruit {
             // setDamage(damageBonus/2);
             // setArmor(armorBonus/2);
         }
-        new OphRunnable(player.getUniqueId()) {
-            @Override
-            public void OphRun() {
-                cosmeticsArmor.reloadCosmeticArmor(player);
-            }
-        }.ophRunTaskLater(5);
         // user.reloadStats();
     }
 }

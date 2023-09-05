@@ -3,6 +3,7 @@ package fruits.zoan;
 import abilities.Ability;
 import abilities.AbilitySet;
 import abilities.CooldownAbility;
+import cosmetics.cosmeticsArmor;
 import libs.OPHAnimationLib;
 import libs.OPHLib;
 import libs.OPHSoundLib;
@@ -20,6 +21,7 @@ import org.bukkit.entity.*;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.EntityDamageEvent.DamageCause;
 import org.bukkit.event.player.PlayerItemConsumeEvent;
+import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerToggleSneakEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
@@ -162,9 +164,11 @@ public class Neko_Reoparudo extends Zoan{
 
     public void climbWall() {
         Player player = user.getPlayer();
-        Location loc = player.getEyeLocation().add(player.getLocation().getDirection()); 
-        if(transformed && loc.getBlock().getType()!= Material.AIR){
-            player.setVelocity(player.getEyeLocation().getDirection());
+        Location loc = player.getLocation().add(player.getLocation().getDirection()), lowloc = loc;
+        lowloc.setY(lowloc.getY()/1);
+
+        if(transformed && (loc.getBlock().getType()!= Material.AIR || lowloc.getBlock().getType()!= Material.AIR)){
+            player.setVelocity(new Vector(0, player.getEyeLocation().getDirection().getY(), 0));
         }
     }
 
@@ -202,7 +206,30 @@ public class Neko_Reoparudo extends Zoan{
     }
 
     @Override
-    protected void onAddFruit() {
+    public void onPlayerJoin(PlayerJoinEvent event){
+        //
+        //GIVE TAIL
+        new OphRunnable(){
+            @Override
+            public void OphRun() {
+                if(user.getPlayer() != null && user.getPlayer().isOnline()){
+                    cosmeticsArmor.summonCosmeticArmor(7, "reoparudo_tail", user.getPlayer(), Material.PUMPKIN);
+                }
+            }
+        }.ophRunTaskLater(10);
+    }
 
+    @Override
+    protected void onAddFruit() {
+        //
+        //GIVE TAIL
+        new OphRunnable(){
+            @Override
+            public void OphRun() {
+                if(user != null && user.getPlayer() != null){
+                    cosmeticsArmor.summonCosmeticArmor(7, "reoparudo_tail", user.getPlayer(), Material.PUMPKIN);
+                }
+            }
+        }.ophRunTaskLater(10);
     }
 }

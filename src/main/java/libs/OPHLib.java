@@ -19,6 +19,7 @@ import runnables.OphRunnable;
 import textures.OPTexture;
 
 import java.util.*;
+import java.util.function.BiConsumer;
 
 import static java.lang.Math.*;
 
@@ -550,7 +551,7 @@ public class OPHLib {
         }.runTaskTimer(OPhabs.getInstance(), 0, 2);
     }
 
-    public static void breath(Player player, Vector pos, Vector dir, int delay, int maxLength, int maxTicks, double startAmpl, int startAmountParticles, double maxAmplitude, int period, OPHSounds sound, Particle particle, Object extra, IAreaEffect effect) {
+    public static void breath(Player player, Vector pos, Vector dir, int delay, int maxLength, int maxTicks, double startAmpl, int startAmountParticles, double maxAmplitude, int period, OPHSounds sound, Particle particle, Object extra, BiConsumer<Location, Vector> areaEffect) {
         int iterations = maxTicks / period;
 
         new OphRunnable(iterations+10) {
@@ -583,7 +584,7 @@ public class OPHLib {
                     world.spawnParticle(particle, location, (int) particleAmount,
                                         amplitude, amplitude, amplitude, 0, extra);
 
-                    effect.run(amplitude, amplitude, amplitude, location);
+                    areaEffect.accept(location, new Vector(amplitude, amplitude, amplitude));
                 }
 
                 amplitude = startAmpl;

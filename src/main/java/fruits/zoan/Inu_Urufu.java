@@ -3,6 +3,7 @@ package fruits.zoan;
 import abilities.Ability;
 import abilities.AbilitySet;
 import abilities.CooldownAbility;
+import cosmetics.cosmeticsArmor;
 import libs.OPHLib;
 import libs.OPHSoundLib;
 import libs.OPHSounds;
@@ -19,6 +20,7 @@ import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.EntityDamageEvent.DamageCause;
 import org.bukkit.event.player.PlayerItemConsumeEvent;
+import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.potion.PotionEffect;
@@ -29,6 +31,7 @@ import skin.skinsChanger;
 
 public class Inu_Urufu extends Zoan{
     final String regular = "regular_wolf", rage = "rage_wolf";
+    String tail = "urufu_base_tail";
     Boolean raged;
     final int rageTime = 60; // Seconds
     
@@ -128,8 +131,11 @@ public class Inu_Urufu extends Zoan{
             player.addPotionEffect(new PotionEffect(PotionEffectType.REGENERATION, 999999, 1, false, false));
             player.addPotionEffect(new PotionEffect(PotionEffectType.JUMP, 999999, 3, false, false));
             player.addPotionEffect(new PotionEffect(PotionEffectType.NIGHT_VISION, 999999, 2, false, false));
+            tail = "urufu_rage_tail";
+            cosmeticsArmor.killCosmeticArmor(user.getPlayer(), "urufu");
+            cosmeticsArmor.summonCosmeticArmor(6, tail, user.getPlayer(), Material.PUMPKIN);
             }
-        }.ophRunTaskLater(20);
+        }.ophRunTaskLater(10);
 
         //Turn off on 60 seconds
 
@@ -142,12 +148,15 @@ public class Inu_Urufu extends Zoan{
                     user.getPlayer().removePotionEffect(PotionEffectType.REGENERATION);
                     user.getPlayer().removePotionEffect(PotionEffectType.JUMP);
                     user.getPlayer().removePotionEffect(PotionEffectType.NIGHT_VISION);
+                    tail = "urufu_base_tail";
+                    cosmeticsArmor.killCosmeticArmor(user.getPlayer(), "urufu");
+                    cosmeticsArmor.summonCosmeticArmor(5, tail, user.getPlayer(), Material.PUMPKIN);
 
                     transformed =false;
                     transformation();
                 }
             }
-        }.ophRunTaskLater(rageTime*20);
+        }.ophRunTaskLater(rageTime*10);
     }
 
 
@@ -168,7 +177,30 @@ public class Inu_Urufu extends Zoan{
     }
 
     @Override
-    protected void onAddFruit() {
+    public void onPlayerJoin(PlayerJoinEvent event){
+        //
+        //GIVE TAIL
+        new OphRunnable(){
+            @Override
+            public void OphRun() {
+                if(user.getPlayer() != null && user.getPlayer().isOnline()){
+                    cosmeticsArmor.summonCosmeticArmor(5, tail, user.getPlayer(), Material.PUMPKIN);
+                }
+            }
+        }.ophRunTaskLater(10);
+    }
 
+    @Override
+    protected void onAddFruit() {
+        //
+        //GIVE TAIL
+        new OphRunnable(){
+            @Override
+            public void OphRun() {
+                if(user != null && user.getPlayer() != null){
+                    cosmeticsArmor.summonCosmeticArmor(5, tail, user.getPlayer(), Material.PUMPKIN);
+                }
+            }
+        }.ophRunTaskLater(10);
     }
 }

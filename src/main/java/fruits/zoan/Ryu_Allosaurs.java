@@ -236,9 +236,4 @@ public class Ryu_Allosaurs extends Zoan{
         }.ophRunTaskLater(10);
     }
 
-    @Override
-    protected void onRemoveFruit() {
-        super.onRemoveFruit();
-        cosmeticsArmor.killCosmeticArmor(user.getPlayer(), "allosaurs_tail");
-    }
 }

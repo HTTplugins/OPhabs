@@ -1,6 +1,8 @@
 package events;
 
 import htt.ophabs.OPhabs;
+import skin.skinsChanger;
+
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import users.OPUser;
 import org.bukkit.event.EventHandler;
@@ -11,6 +13,7 @@ import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerItemConsumeEvent;
 import org.bukkit.event.player.PlayerItemHeldEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
+import org.bukkit.event.player.PlayerRespawnEvent;
 import org.bukkit.event.player.PlayerSwapHandItemsEvent;
 import org.bukkit.event.player.PlayerToggleSneakEvent;
 
@@ -26,6 +29,15 @@ public class EventSystem implements Listener
         this.users = OPhabs.newUsers.getReadonlyContainer();
     }
 
+    @EventHandler
+    public void onPlayerRespawn(PlayerRespawnEvent event)
+    {
+        UUID uuid = event.getPlayer().getUniqueId();
+        if (!users.containsKey(uuid))
+            return;
+
+        skinsChanger.resetSkin(users.get(uuid).getPlayer());
+    }
     @EventHandler
     public void onPlayerInteract(PlayerInteractEvent event)
     {
