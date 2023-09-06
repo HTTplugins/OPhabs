@@ -1,5 +1,6 @@
 package events;
 
+import fruits.logia.Hie_Hie;
 import fruits.logia.Moku_Moku;
 import fruits.paramecia.Ope_Ope;
 import fruits.paramecia.Zushi_Zushi;
@@ -7,6 +8,7 @@ import htt.ophabs.OPhabs;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.entity.*;
 import org.bukkit.event.player.PlayerJoinEvent;
+import org.bukkit.event.player.PlayerMoveEvent;
 import users.OPUser;
 import cast.Caster;
 import cast.FruitCaster;
@@ -107,10 +109,27 @@ public class FruitEvents implements Listener
     @EventHandler(ignoreCancelled = true)
     public void onEntityDamageByEntity(EntityDamageByEntityEvent event) {
         OPhabs.registrySystem.getRegistry(IFruitRegistry.class).getFruit(Ope_Ope.getFruitID()).onEntityDamageByEntity(event);
+        OPhabs.registrySystem.getRegistry(IFruitRegistry.class).getFruit(Hie_Hie.getFruitID()).onEntityDamageByEntity(event);
     }
+
 
     @EventHandler(ignoreCancelled = true)
     public void onEntityAirChange(EntityAirChangeEvent event) {
         OPhabs.registrySystem.getRegistry(IFruitRegistry.class).getFruit(Moku_Moku.getFruitID()).onEntityAirChange(event);
+    }
+
+    @EventHandler(ignoreCancelled = true)
+    public void onProjectileHit(ProjectileHitEvent event) {
+        OPhabs.registrySystem.getRegistry(IFruitRegistry.class).getFruit(Hie_Hie.getFruitID()).onProjectileHit(event);
+    }
+
+    @EventHandler(ignoreCancelled = true)
+    public void onPlayerMove(PlayerMoveEvent event){
+        OPhabs.registrySystem.getRegistry(IFruitRegistry.class).getFruit(Hie_Hie.getFruitID()).onPlayerMove(event);
+    }
+
+    @EventHandler(ignoreCancelled = true)
+    public void onEntityDamage(EntityDamageEvent event) {
+        //OPhabs.registrySystem.getRegistry(IFruitRegistry.class).getFruit(Hie_Hie.getFruitID()).onEntityDamage(event);
     }
 }

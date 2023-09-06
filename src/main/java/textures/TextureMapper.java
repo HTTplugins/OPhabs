@@ -1,5 +1,6 @@
 package textures;
 
+import fruits.logia.Hie_Hie;
 import fruits.paramecia.Ope_Ope;
 
 import java.util.*;
@@ -63,7 +64,8 @@ public class TextureMapper
     {
 
         return new MappedTexture[]{
-            new MappedTexture(Ope_Ope.getFruitID(),2003, OPTexture.OPE_OPE_STOLEN_HEART)
+            new MappedTexture(Ope_Ope.getFruitID(),2003, OPTexture.OPE_OPE_STOLEN_HEART),
+            new MappedTexture(Hie_Hie.getFruitID(),2011, OPTexture.HIE_HIE_ICE_SWORD)
         };
     }
 }

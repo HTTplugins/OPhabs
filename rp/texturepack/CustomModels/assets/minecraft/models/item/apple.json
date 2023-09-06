@@ -22,7 +22,8 @@
         {"predicate": {"custom_model_data": 1001},"model": "custom/fruits/banefruit"},
         {"predicate": {"custom_model_data": 1002},"model": "custom/fruits/zushifruit"},
         {"predicate": {"custom_model_data": 1003},"model": "custom/fruits/opefruit"},
-        {"predicate": {"custom_model_data": 1004},"model": "custom/fruits/mokufruit"}
+        {"predicate": {"custom_model_data": 1004},"model": "custom/fruits/mokufruit"},
+      {"predicate": {"custom_model_data": 1011},"model": "custom/fruits/hiefruit"}
 
     ]
 }

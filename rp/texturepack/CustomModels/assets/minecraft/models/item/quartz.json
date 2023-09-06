@@ -130,11 +130,23 @@
           },
           "model": "custom/casters/mokucaster"
         },
+        {
+          "predicate": {
+            "custom_model_data": 1011
+          },
+          "model": "custom/casters/hiecaster"
+        },
+        {
+          "predicate": {
+            "custom_model_data": 2003
+          },
+          "model": "custom/casters/opecaster2"
+        },
       {
         "predicate": {
-          "custom_model_data": 2003
+          "custom_model_data": 2011
         },
-        "model": "custom/casters/opecaster2"
+        "model": "custom/casters/hiecaster2"
       }
     ]
 }

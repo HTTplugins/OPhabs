@@ -7,6 +7,10 @@ import org.bukkit.Particle;
 
 public class Goro_Goro extends Logia{
 
+    public static int getFruitID(){
+        return 1005;
+    }
+
     public Goro_Goro(int id){
         super(id, "Goro_Goro", "Goro Goro no Mi", "Goro_Goro", Particle.CLOUD);
         //
@@ -22,13 +26,15 @@ public class Goro_Goro extends Logia{
         this.abilitySets.add(basicSet);
     }
 
+    // ----- Logia behavior ----- //
+
+    // ----- Abilities ----- //
+
     public void tell(){
         System.out.println("Goro Goro");
     }
 
-    public static int getFruitID(){
-        return 1005;
-    }
+
 
     @Override
     protected void onAddFruit() {

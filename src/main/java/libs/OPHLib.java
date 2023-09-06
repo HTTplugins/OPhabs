@@ -34,6 +34,102 @@ public class OPHLib {
         return random;
     }
 
+    /**
+     * @brief Create a cage of blocks around an entity.
+     * @param entity Entity to cage.
+     * @param material Material of the cage.
+     * @author RedRiotTank
+     */
+    public static void cageEntity(Entity entity, Material material) {
+        Block entBlock = entity.getLocation().getBlock();
+
+        entBlock.getRelative(1,0,0).setType(material);
+        entBlock.getRelative(-1,0,0).setType(material);
+        entBlock.getRelative(0,0,1).setType(material);
+        entBlock.getRelative(0,0,-1).setType(material);
+
+        entBlock.getRelative(1,1,0).setType(material);
+        entBlock.getRelative(-1,1,0).setType(material);
+        entBlock.getRelative(0,1,1).setType(material);
+        entBlock.getRelative(0,1,-1).setType(material);
+
+        entBlock.getRelative(0,2,0).setType(material);
+    }
+
+    /**
+     * @brief Gradually change the material of a layer of blocks.
+     * @param player sender player
+     * @param radius effective radius
+     * @param maxRunIterations maximum ticks of the effect
+     * @note It only works if under the LivingEntity there is a block of the desidned material
+     * @author RedRiotTank
+     */
+    public static void cageEntities(Player player, Material cageMaterial, int radius, int maxRunIterations) {
+        List<Entity> cagedEnts = new ArrayList<>();
+        new OphRunnable(){
+            @Override
+            public void OphRun() {
+
+                if(this.getCurrentRunIteration() >= maxRunIterations) this.cancel();
+
+                for(Entity ent : player.getNearbyEntities(radius,radius,radius)){
+                    if(ent instanceof LivingEntity && !cagedEnts.contains(ent)){
+                        if(ent.getLocation().getBlock().getRelative(0,-1,0).getType().equals(cageMaterial)){
+                            ((LivingEntity) ent).damage(5);
+                            cagedEnts.add(ent);
+                            cageEntity(ent, cageMaterial);
+                            ent.setFreezeTicks(ent.getFreezeTicks() + 600);
+                        }
+                    }
+                }
+            }
+        }.ophRunTaskTimer(0,2);
+    }
+    /**
+     * @brief Gradually change the material of a layer of blocks.
+     * @param newMaterial Material to change to.
+     * @param center Center of the layer.
+     * @param applyBockRate Change rate of the blocks. between 0.0 and 1.0, You can set it to 10 if you cant it to always change.
+     * @param rateReduction Rate of reduction of the change rate.
+     * @param maxExtension Maximum extension of the layer.
+     * @note Each extension is 2 ticks.
+     * @author RedRiotTank
+     */
+    public static void graduallyChangeLayerMaterials(Material newMaterial, Location center, double applyBockRate,double rateReduction, int maxExtension){
+        World world = center.getWorld();
+
+        new OphRunnable(){
+            double convRate = applyBockRate;
+            double convertProb;
+            double extension = 1;
+
+            final double xCenter = center.getX(),
+                    zCenter = center.getZ(),
+                    yCenter = center.getY();
+            @Override
+            public void OphRun() {
+                if(extension>=maxExtension) this.cancel();
+
+                for(double i=xCenter-extension; i < xCenter+extension; i++){
+                    for (double j=zCenter-extension; j < zCenter+extension; j++){
+                        convertProb = random.nextDouble();
+                        if(convertProb < convRate){
+                            Location blockLoc = new Location(world,i,OPHLib.searchGround(i,j,yCenter,world),j);
+                            blockLoc.getBlock().setType(newMaterial);
+                        }
+                    }
+                }
+
+                extension++;
+                convRate-=rateReduction;
+
+            }
+        }.ophRunTaskTimer(0,2);
+
+
+
+    }
+
     public static Monster createMonster(EntityType entType, Location loc, double health, boolean invisible, ItemStack mainhandItem ){
         World world = loc.getWorld();
 

@@ -13,4 +13,6 @@ public enum OPHSounds {
     HEAVYGRAVITY,
     FOG,
     CLOUDPUNCH,
+    ICEPARTISAN,
+    ICECRACK
 }
