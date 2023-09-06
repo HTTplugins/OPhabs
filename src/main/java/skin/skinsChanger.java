@@ -23,7 +23,7 @@ public final class skinsChanger {
             public void OphRun(){
                 cosmeticsArmor.reloadCosmeticArmor(player);
             }
-        }.ophRunTaskLater(5);
+        }.ophRunTaskLater(20);
     }
 
     public static void changeSkinSoldiers(Zombie zombie, String skinName) {
@@ -46,6 +46,6 @@ public final class skinsChanger {
             public void OphRun(){
                 cosmeticsArmor.reloadCosmeticArmor(player);
             }
-        }.ophRunTaskLater(5);
+        }.ophRunTaskLater(20);
     }
 }

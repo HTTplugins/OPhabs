@@ -3,180 +3,20 @@
   "textures": {
     "layer0": "minecraft:item/quartz"
   },
-    "overrides": [
-		{
-            "predicate": {
-				"custom_model_data": 1
-            },
-            "model": "custom/dark_hand"
-        },
-		{
-            "predicate": {
-				"custom_model_data": 2
-            },
-            "model": "custom/magma_hand"
-        },
-		{
-            "predicate": {
-				"custom_model_data": 3
-            },
-            "model": "custom/vibe_hand"
-        },
-		{
-            "predicate": {
-				"custom_model_data": 4 
-            },
-            "model": "custom/smoke_hand"
-        },
-		{
-            "predicate": {
-				"custom_model_data": 5
-            },
-            "model": "custom/claws"
-        },
-		{
-            "predicate": {
-				"custom_model_data": 6
-            },
-            "model": "custom/magma_hand"
-        },
-		{
-            "predicate": {
-				"custom_model_data": 7
-            },
-            "model": "custom/lighting"
-        },
-        {
-            "predicate": {
-				"custom_model_data": 8
-            },
-            "model": "custom/stone_arm"
-        },
-		{
-            "predicate": {
-				"custom_model_data": 9
-            },
-            "model": "custom/staff"
-        },
-		{
-            "predicate": {
-				"custom_model_data": 10
-            },
-            "model": "custom/claws"
-        },
-		{
-            "predicate": {
-				"custom_model_data": 11
-            },
-            "model": "custom/claws"
-        },
-		{
-            "predicate": {
-				"custom_model_data": 12
-            },
-            "model": "custom/card2"
-        },
-		{
-            "predicate": {
-				"custom_model_data": 13
-            },
-            "model": "custom/katana"
-        },
-		{
-            "predicate": {
-				"custom_model_data": 14
-            },
-            "model": "custom/vibe_hand"
-        },
-		{
-            "predicate": {
-				"custom_model_data": 15
-            },
-            "model": "custom/boxing_glove"
-        },
-		{
-            "predicate": {
-				"custom_model_data": 16
-            },
-            "model": "custom/ice_arm"
-        },
-		{
-            "predicate": {
-				"custom_model_data": 17
-            },
-            "model": "custom/claws"
-        },
-        {
-          "predicate": {
-            "custom_model_data": 1001
-          },
-          "model": "custom/casters/banecaster"
-        },
-        {
-          "predicate": {
-            "custom_model_data": 1002
-          },
-          "model": "custom/casters/opecaster"
-        },
-        {
-          "predicate": {
-            "custom_model_data": 1003
-          },
-          "model": "custom/casters/opecaster"
-        },
-        {
-          "predicate": {
-            "custom_model_data": 1004
-          },
-          "model": "custom/casters/mokucaster"
-        },
-        {
-          "predicate": {
-            "custom_model_data": 1006
-          },
-          "model": "custom/casters/claws"
-        },
-        {
-          "predicate": {
-            "custom_model_data": 1007
-          },
-          "model": "custom/casters/claws"
-        },
-        {
-          "predicate": {
-            "custom_model_data": 1008
-          },
-          "model": "custom/casters/claws"
-        },
-        {
-          "predicate": {
-            "custom_model_data": 1009
-          },
-          "model": "custom/casters/claws"
-        },
-        {
-        "predicate": {
-          "custom_model_data": 2003
-        },
-        "model": "custom/casters/opecaster2"
-        },
-        {
-          "predicate": {
-            "custom_model_data": 1011
-          },
-          "model": "custom/casters/hiecaster"
-        },
-        {
-          "predicate": {
-            "custom_model_data": 2003
-          },
-          "model": "custom/casters/opecaster2"
-        },
-      {
-        "predicate": {
-          "custom_model_data": 2011
-        },
-        "model": "custom/casters/hiecaster2"
-      }
-    ]
+  "overrides": [
+    {"predicate": {"custom_model_data": 1001}, "model": "custom/casters/banecaster"},
+    {"predicate": {"custom_model_data": 1002}, "model": "custom/casters/opecaster"},
+    {"predicate": {"custom_model_data": 1003}, "model": "custom/casters/opecaster"},
+    {"predicate": {"custom_model_data": 1004}, "model": "custom/casters/mokucaster"},
+    {"predicate": {"custom_model_data": 1005}, "model": "custom/casters/gorocaster"},
+    {"predicate": {"custom_model_data": 1006}, "model": "custom/casters/zoancaster"},
+    {"predicate": {"custom_model_data": 1007}, "model": "custom/casters/zoancaster"},
+    {"predicate": {"custom_model_data": 1008}, "model": "custom/casters/zoancaster"},
+    {"predicate": {"custom_model_data": 1009}, "model": "custom/casters/zoancaster"},
+    {"predicate": {"custom_model_data": 1010}, "model": "custom/casters/gasucaster"},
+    {"predicate": {"custom_model_data": 1011}, "model": "custom/casters/hiecaster"},
+    {"predicate": {"custom_model_data": 2003}, "model": "custom/casters/opecaster2"},
+    {"predicate": {"custom_model_data": 2011}, "model": "custom/casters/hiecaster2"}
+
+  ]
 }

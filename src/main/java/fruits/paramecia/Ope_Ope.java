@@ -55,6 +55,7 @@ public class Ope_Ope extends Paramecia {
         currentHeart = null;
         availableSqueezes = 0;
 
+        // ----- BasicSet ----- //
         AbilitySet basicSet = new AbilitySet("Base Set");
 
         // Room
@@ -199,6 +200,8 @@ public class Ope_Ope extends Paramecia {
             }
         });
     }
+
+    // ----- Events ----- //
 
     @Override
     public void onBlockBreak(BlockBreakEvent event) {

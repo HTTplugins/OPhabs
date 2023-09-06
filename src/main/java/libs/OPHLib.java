@@ -647,11 +647,29 @@ public class OPHLib {
         }.runTaskTimer(OPhabs.getInstance(), 0, 2);
     }
 
+    /**
+     * @brief General roar function for zoans type.
+     * @param player player who is using the breath
+     * @param pos added to the player's location.
+     * @param dir added to the player's eye direction.
+     * @param delay delay until the breath starts.
+     * @param maxLength max length of the breath.
+     * @param maxTicks max ticks of the breath.
+     * @param startAmpl start amplitude of the breath.
+     * @param startAmountParticles start amount of particles of the breath.
+     * @param maxAmplitude max amplitude of the breath.
+     * @param period period between each iteration of the breath.
+     * @param sound sound of the breath.
+     * @param particle particle of the breath.
+     * @param extra extra object for the particle.
+     * @param areaEffect Lambda function, effects on the area of the breath.
+     * @author MiixZ, Vaelico786.
+     */
     public static void breath(Player player, Vector pos, Vector dir, int delay, int maxLength, int maxTicks, double startAmpl, int startAmountParticles, double maxAmplitude, int period, OPHSounds sound, Particle particle, Object extra, BiConsumer<Location, Vector> areaEffect) {
         int iterations = maxTicks / period;
 
         new OphRunnable(iterations+10) {
-            double density = startAmountParticles / startAmpl;
+            final double density = startAmountParticles / startAmpl;
             double amplitude = startAmpl;
             double distance = 0;
 

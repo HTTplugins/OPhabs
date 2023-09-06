@@ -53,7 +53,7 @@ public class FruitRegistry implements IFruitRegistry
             new Inu_Okuchi(Inu_Okuchi.getFruitID()),
             new Inu_Urufu(Inu_Urufu.getFruitID()),
             new Neko_Reoparudo(Neko_Reoparudo.getFruitID()),
-            new Ryu_Allosaurs(Ryu_Allosaurs.getFruitID())
+            new Ryu_Allosaurs(Ryu_Allosaurs.getFruitID()),
             new Goro_Goro(Goro_Goro.getFruitID()),
             new Hie_Hie(Hie_Hie.getFruitID())
         };

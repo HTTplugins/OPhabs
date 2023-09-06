@@ -44,6 +44,7 @@ public class Zushi_Zushi extends Paramecia
     public Zushi_Zushi(int id){
         super(id, "Zushi_Zushi", "Zushi zushi no Mi", "Zushi_Zushi");
 
+        // ----- BasicSet ----- //
         AbilitySet basicSet = new AbilitySet("Base Set");
 
         // Heavy Field
@@ -210,6 +211,8 @@ public class Zushi_Zushi extends Paramecia
             }
         }.ophRunTaskLater(300);
     }
+
+    // ----- Events ----- //
 
     @Override
     public void onEntityToggleGlide(EntityToggleGlideEvent event){

@@ -109,8 +109,12 @@ public class Hie_Hie extends Logia{
 
     public void iceDrake(){
         Player player = user.getPlayer();
+        World world = player.getWorld();
+        int dmg = 2;
         usingDrake = true;
-        player.getWorld().playSound(player.getLocation(),"icecrack",1,1);
+
+        OPHSoundLib.OphPlaySound(OPHSounds.ICECRACK,player.getLocation(),1,1);
+
         LayeredStructuresAPI.generatePreChargedLayeredStructure("iceDrake", user.getPlayer().getLocation(), player.getFacing().toString(), 0, 2, false);
 
         new OphRunnable() {
@@ -118,10 +122,17 @@ public class Hie_Hie extends Logia{
             public void OphRun() {
                 usingDrake = false;
             }
-        }.ophRunTaskLater(180); //180 = 40 + 140 (breath duration + blocks construction)
+        }.ophRunTaskLater(180);
 
-        //OPHLib.iceBreath(user,new Vector(0,14,0), new Vector(0,-0.9,0),40,18,140,2,0.7,30,2,2,"icebreathdrake" );
-
+        OPHLib.breath(player, new Vector(0,14,0), new Vector(0,-0.9,0),40,18,140,0.7,30,2,2,OPHSounds.ICEBREATHDRAKE,Particle.BLOCK_CRACK,Material.PACKED_ICE.createBlockData(),(location, amplitude) -> {
+            world.getNearbyEntities(location, amplitude.getX(), amplitude.getY(), amplitude.getZ()).forEach(entity -> {
+                if (entity instanceof LivingEntity && !entity.getName().equals(player.getName())) {
+                    ((LivingEntity) entity).damage(dmg, player);
+                    if (((LivingEntity) entity).getFreezeTicks() <= 0)
+                        ((LivingEntity) entity).setFreezeTicks(((LivingEntity) entity).getFreezeTicks() + 300);
+                }
+            });
+        });
     }
 
     private void resetCaster(){
@@ -165,6 +176,8 @@ public class Hie_Hie extends Logia{
         }.ophRunTaskLater( 400);
     }
 
+    // ----- Events ----- //
+
     @Override
     public void onProjectileHit(ProjectileHitEvent event) {
         Projectile tridente = event.getEntity();
@@ -188,7 +201,7 @@ public class Hie_Hie extends Logia{
 
     @Override
     public void onPlayerMove(PlayerMoveEvent event) {
-        if(usingDrake){
+        if(usingDrake && event.getPlayer().equals(user.getPlayer())){
             World world = event.getPlayer().getWorld();
             double x = event.getFrom().getX();
             double y = event.getFrom().getY();
