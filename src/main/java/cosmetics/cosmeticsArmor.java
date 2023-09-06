@@ -6,7 +6,7 @@ import org.bukkit.entity.Player;
 
 public final class cosmeticsArmor {
     public static void summonCosmeticArmor(int id, String name, Player player, Material material){
-        System.out.println("summonent " +  player.getName() + " " + id + " " + name  + " " + material.toString());
+        // System.out.println("summonent " +  player.getName() + " " + id + " " + name  + " " + material.toString());
         Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "summonent " +  player.getName() + " " + id + " " + name  + " " + material.toString());
     }
 

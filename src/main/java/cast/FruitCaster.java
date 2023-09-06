@@ -120,7 +120,7 @@ public class FruitCaster extends Caster
         {
             if(isCombatMode()){
                 // Utilizar la habilidad seleccionada
-                if(eventAction == Action.RIGHT_CLICK_AIR && !fruit.getUser().isFastCasting()){
+                if(!fruit.getUser().isFastCasting()){
                     this.fruit.invokeAbility(selectedAbilitySet, selectedAbility);
                 }
             }
@@ -143,6 +143,11 @@ public class FruitCaster extends Caster
     }
 
     @Override
+    public void onPlayerCasterHeldEvent(PlayerItemHeldEvent event){
+        fruit.onPlayerCasterHeldEvent(event);
+    }
+
+    @Override
     public void onPlayerDropItem(PlayerDropItemEvent event)
     {
         event.setCancelled(true);
@@ -158,7 +163,6 @@ public class FruitCaster extends Caster
         }
 
         setCombatMode(!isCombatMode());
-
     }
 
     @Override

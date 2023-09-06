@@ -72,7 +72,7 @@ public class OPHAnimationLib {
         Location pBehind = OPHLib.getBack(player,yaw,height);
         player.getWorld().spawnParticle(Particle.REDSTONE,pBehind,0,0,0,0,dustOptions);
     }
-    public static void horizontalCircle(Location center, double radius,double particleDistance, Particle particle,Particle.DustOptions dustOptions){
+    public static void horizontalCircle(Location center, double radius, double particleDistance, Particle particle,Particle.DustOptions dustOptions){
         double x,z;
         World world = center.getWorld();
         for(double i=0; i<2*PI; i+=particleDistance){
@@ -81,6 +81,19 @@ public class OPHAnimationLib {
 
             center.add(x,0,z);
             world.spawnParticle(particle,center,0,0,0,0,dustOptions);
+            center.subtract(x,0,z);
+        }
+    }
+
+    public static void horizontalCylinder(Location center, double radius, double height, double particleDistance, Particle particle,Particle.DustOptions dustOptions){
+        double x,z;
+        World world = center.getWorld();
+        for(double i=0; i<2*PI; i+=particleDistance){
+            x = radius * cos(i);
+            z = radius * sin(i);
+
+            center.add(x,0,z);
+            world.spawnParticle(particle,center,0,0,height/2,0,dustOptions);
             center.subtract(x,0,z);
         }
     }
@@ -121,7 +134,24 @@ public class OPHAnimationLib {
         }.ophRunTaskTimer(0, 1);
     }
 
-    public static void groundCircularWave(Location center, double initialRadius, double maxRadius, double radiusIncrement, double density,double densityIncrement , Particle particle, double overGroundParticleHeight){
+    public static void circularWave(Location center, double initialRadius, double maxRadius, double radiusIncrement, double density, double densityIncrement, Particle particle){
+        final double radius = initialRadius;
+
+        new OphRunnable(){
+            double incRadius = radius;
+            double incDensity = density;
+
+            @Override
+            public void OphRun() {
+                if (incRadius > maxRadius) ophCancel();;
+                horizontalCircle(center,incRadius,incDensity, particle, null);
+                incRadius += radiusIncrement;
+                incDensity =  density - incRadius/densityIncrement;
+            }
+        }.ophRunTaskTimer(0,1);
+    }
+
+    public static void groundCircularWave(Location center, double initialRadius, double maxRadius, double radiusIncrement, double density,double densityIncrement, Particle particle, double overGroundParticleHeight){
         final double radius = initialRadius;
 
         new OphRunnable(){

@@ -1,12 +1,21 @@
 package events;
 
 import htt.ophabs.OPhabs;
+import skin.skinsChanger;
+
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
-import org.bukkit.event.player.*;
 import users.OPUser;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageEvent;
+import org.bukkit.event.player.PlayerDropItemEvent;
+import org.bukkit.event.player.PlayerInteractEvent;
+import org.bukkit.event.player.PlayerItemConsumeEvent;
+import org.bukkit.event.player.PlayerItemHeldEvent;
+import org.bukkit.event.player.PlayerJoinEvent;
+import org.bukkit.event.player.PlayerRespawnEvent;
+import org.bukkit.event.player.PlayerSwapHandItemsEvent;
+import org.bukkit.event.player.PlayerToggleSneakEvent;
 
 import java.util.Map;
 import java.util.UUID;
@@ -20,6 +29,15 @@ public class EventSystem implements Listener
         this.users = OPhabs.newUsers.getReadonlyContainer();
     }
 
+    @EventHandler
+    public void onPlayerRespawn(PlayerRespawnEvent event)
+    {
+        UUID uuid = event.getPlayer().getUniqueId();
+        if (!users.containsKey(uuid))
+            return;
+
+        skinsChanger.resetSkin(users.get(uuid).getPlayer());
+    }
     @EventHandler
     public void onPlayerInteract(PlayerInteractEvent event)
     {
@@ -93,6 +111,33 @@ public class EventSystem implements Listener
 
     }
 
+    @EventHandler
+    public void onPlayerToggleSneakEvent(PlayerToggleSneakEvent event)
+    {
+        UUID uuid = event.getPlayer().getUniqueId();
+
+        if(users.containsKey(uuid))
+        {
+            OPUser user = users.get(uuid);
+            user.onPlayerToggleSneakEvent(event);
+        }
+
+    }
+
+    @EventHandler
+    public void onPlayerItemConsume(PlayerItemConsumeEvent event)
+    {
+        UUID uuid = event.getPlayer().getUniqueId();
+
+        if(users.containsKey(uuid))
+        {
+            OPUser user = users.get(uuid);
+            user.onPlayerItemConsume(event);
+        }
+
+    }
+
+    @EventHandler
     public void onEntityDamageByEntity(EntityDamageByEntityEvent event) {
     }
 

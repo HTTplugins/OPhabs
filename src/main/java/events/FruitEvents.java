@@ -103,6 +103,10 @@ public class FruitEvents implements Listener
 
     @EventHandler(ignoreCancelled = true)
     public void onPlayerJoin(PlayerJoinEvent event) {
+        Player player = event.getPlayer();
+        OPUser user = OPhabs.newUsers.getOrSetUser(player.getUniqueId(), player.getName());
+
+        if (user.hasDevilFruit()) user.getDevilFruit().onPlayerJoin(event);
         OPhabs.registrySystem.getRegistry(IFruitRegistry.class).getFruit(Ope_Ope.getFruitID()).onPlayerJoin(event);
     }
 
