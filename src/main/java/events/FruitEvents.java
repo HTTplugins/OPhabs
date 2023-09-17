@@ -1,5 +1,6 @@
 package events;
 
+import fruits.logia.Gasu_Gasu;
 import fruits.logia.Moku_Moku;
 import fruits.paramecia.Ope_Ope;
 import fruits.paramecia.Zushi_Zushi;
@@ -107,6 +108,7 @@ public class FruitEvents implements Listener
     @EventHandler(ignoreCancelled = true)
     public void onEntityDamageByEntity(EntityDamageByEntityEvent event) {
         OPhabs.registrySystem.getRegistry(IFruitRegistry.class).getFruit(Ope_Ope.getFruitID()).onEntityDamageByEntity(event);
+        OPhabs.registrySystem.getRegistry(IFruitRegistry.class).getFruit(Gasu_Gasu.getFruitID()).onEntityDamageByEntity(event);
     }
 
     @EventHandler(ignoreCancelled = true)
