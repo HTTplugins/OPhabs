@@ -51,9 +51,9 @@ Rokushiki is a set of combat abilities that players can learn and improve over t
 - `/weaponShop` - Opens the custom weapon shop.
 
 ## Images
-![](images/image1.png)
-![](images/image2.png)
-![](images/image3.png)
-![](images/image4.png)
-![](images/image5.png)
-![](images/image6.png)
+![](images/image1.jpeg)
+![](images/image2.jpeg)
+![](images/image3.jpeg)
+![](images/image4.jpeg)
+![](images/image5.jpeg)
+![](images/image6.jpeg)
