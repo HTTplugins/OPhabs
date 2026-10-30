@@ -3,6 +3,12 @@ package fruits;
 import users.OPUser;
 import abilities.AbilitySet;
 import events.IEventProcessor;
+import org.bukkit.Location;
+import org.bukkit.Material;
+import org.bukkit.block.Block;
+import org.bukkit.entity.Player;
+import org.bukkit.event.inventory.InventoryClickEvent;
+import org.bukkit.event.inventory.InventoryDragEvent;
 
 import java.util.ArrayList;
 
@@ -32,10 +38,10 @@ public abstract class DevilFruit implements IEventProcessor
     }
 
     // Invocado tras establecer un usuario nuevo
-    protected abstract void onAddFruit();
+    public abstract void onAddFruit();
 
     // Invocado antes de eliminar al usuario actual
-    protected abstract void onRemoveFruit();
+    public abstract void onRemoveFruit();
 
     // Permite cambiar el usuario de la fruta. Llama automáticamente a los eventos de registro de fruta.
     // Además, se puede utilizar para robar frutas.
@@ -77,7 +83,8 @@ public abstract class DevilFruit implements IEventProcessor
         return this.id;
     }
 
-    public boolean isFruitActive(){
+    public boolean isFruitActive()
+    {
         return isFruitActive;
     }
 
@@ -93,4 +100,63 @@ public abstract class DevilFruit implements IEventProcessor
     {
         return this.abilitySets;
     }
+
+    // Llamado cuando el jugador se mueve - verificar agua
+    public void onPlayerMove(org.bukkit.event.player.PlayerMoveEvent event)
+    {
+        Player player = event.getPlayer();
+        Location from = event.getFrom();
+        Location to = event.getTo();
+
+        if (to == null) return;
+
+        // Verificar si el jugador está en agua (nadando o sumergido)
+        boolean inWater = isInWater(player);
+
+        if (inWater && isFruitActive) {
+            // Desactivar poderes en el agua
+            setFruitActive(false);
+            applyWaterDebuff(player);
+        } else if (!inWater && !isFruitActive) {
+            // Reactivar poderes fuera del agua
+            setFruitActive(true);
+            removeWaterDebuff(player);
+        }
+    }
+
+    // Inventory event handlers
+    public void onInventoryClick(InventoryClickEvent event) {}
+
+    public void onInventoryDrag(InventoryDragEvent event) {}
+
+    protected boolean isInWater(Player player) {
+        Location loc = player.getLocation();
+        Block block = loc.getBlock();
+        Block headBlock = loc.clone().add(0, player.getEyeHeight(), 0).getBlock();
+
+        return block.getType() == Material.WATER || 
+               headBlock.getType() == Material.WATER ||
+               player.isSwimming();
+    }
+
+    protected void setFruitActive(boolean active) {
+        this.isFruitActive = active;
+    }
+
+    protected void applyWaterDebuff(Player player) {
+        // Efectos de debuff en el agua: lentitud, debilidad, no puede usar habilidades
+        player.addPotionEffect(new org.bukkit.potion.PotionEffect(
+            org.bukkit.potion.PotionEffectType.SLOWNESS, Integer.MAX_VALUE, 2, false, false));
+        player.addPotionEffect(new org.bukkit.potion.PotionEffect(
+            org.bukkit.potion.PotionEffectType.WEAKNESS, Integer.MAX_VALUE, 2, false, false));
+        player.addPotionEffect(new org.bukkit.potion.PotionEffect(
+            org.bukkit.potion.PotionEffectType.MINING_FATIGUE, Integer.MAX_VALUE, 2, false, false));
+    }
+
+    protected void removeWaterDebuff(Player player) {
+        player.removePotionEffect(org.bukkit.potion.PotionEffectType.SLOWNESS);
+        player.removePotionEffect(org.bukkit.potion.PotionEffectType.WEAKNESS);
+        player.removePotionEffect(org.bukkit.potion.PotionEffectType.MINING_FATIGUE);
+    }
+
 }

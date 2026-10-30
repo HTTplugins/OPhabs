@@ -66,11 +66,11 @@ public class OPHAnimationLib {
     }
     public static void spawnYawDependingParticle(Player player, double yaw, double height){
         Location pBehind = OPHLib.getBack(player,yaw,height);
-        player.getWorld().spawnParticle(Particle.REDSTONE,pBehind,0,0,0,0);
+        player.getWorld().spawnParticle(Particle.DUST,pBehind,0,0,0,0);
     }
     public static void spawnYawDependingParticle(Player player, double yaw, double height, Particle.DustOptions dustOptions){
         Location pBehind = OPHLib.getBack(player,yaw,height);
-        player.getWorld().spawnParticle(Particle.REDSTONE,pBehind,0,0,0,0,dustOptions);
+        player.getWorld().spawnParticle(Particle.DUST,pBehind,0,0,0,0,dustOptions);
     }
     public static void horizontalCircle(Location center, double radius,double particleDistance, Particle particle,Particle.DustOptions dustOptions){
         double x,z;

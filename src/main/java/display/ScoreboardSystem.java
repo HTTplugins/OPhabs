@@ -59,20 +59,34 @@ public class ScoreboardSystem implements IFruitCasterDisplay
 
     private void updateFruitScoreboard()
     {
-        for (FruitCasterData casterData : fruitCasters.values())
+        // Iterate over a copy to avoid concurrent modification
+        for (FruitCasterData casterData : new ArrayList<>(fruitCasters.values()))
         {
             try
             {
+                if (casterData == null || casterData.caster == null) {
+                    continue;
+                }
+                
                 Scoreboard scoreboard = casterData.scoreboard;
                 FruitCaster caster = casterData.caster;
                 DevilFruit fruit = caster.getFruit();
+                
+                if (fruit == null) {
+                    continue;
+                }
+                
                 OPUser user = fruit.getUser();
+                if (user == null) {
+                    continue;
+                }
 
                 Player player = Bukkit.getPlayer(user.getUUID());
 
                 // Offline probablemente
-                if (player == null)
+                if (player == null || !player.isOnline()) {
                     continue;
+                }
 
                 // Limpiar la scoreboard
                 Objective objective = scoreboard.getObjective("abilitiesScoreboard");
@@ -90,6 +104,10 @@ public class ScoreboardSystem implements IFruitCasterDisplay
                     fruitName = fruitName.substring(0,1).toUpperCase() + fruitName.substring(1);
 
                     AbilitySet abilitySet = caster.getSelectedAbilitySet();
+                    if (abilitySet == null || abilitySet.abilities == null) {
+                        continue;
+                    }
+                    
                     ArrayList<String> abilityDisplayList = new ArrayList<>(abilitySet.abilities.size());
 
                     for (Ability ability : abilitySet.abilities)
@@ -120,7 +138,6 @@ public class ScoreboardSystem implements IFruitCasterDisplay
             }
             catch (NullPointerException ignored)
             {
-                System.out.println("Null PExcept");
                 // Se resetea la scoreboard
                 casterData.scoreboard = scoreboardManager.getNewScoreboard();
             }
@@ -141,6 +158,8 @@ public class ScoreboardSystem implements IFruitCasterDisplay
     public void removeFruitCaster(FruitCaster caster)
     {
         FruitCasterData fruitCasterData = fruitCasters.remove(caster.getName());
-        fruitCasterData.scoreboard.clearSlot(DisplaySlot.SIDEBAR);
+        if (fruitCasterData != null && fruitCasterData.scoreboard != null) {
+            fruitCasterData.scoreboard.clearSlot(DisplaySlot.SIDEBAR);
+        }
     }
 }

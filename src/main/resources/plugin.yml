@@ -6,7 +6,7 @@ commands:
     description: Main command
   weaponShop:
     description: Easy access to all created weapons
-api-version: 1.19
+api-version: 1.21
 authors: [ RedRiotTank, MiixZ, Vaelico786 ]
 website: https://github.com/RedRiotTank/OPhabs
-
+depend: [LayeredStructures, CustomEnt]

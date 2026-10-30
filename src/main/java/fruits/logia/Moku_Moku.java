@@ -152,7 +152,7 @@ public class Moku_Moku extends Logia{
     public void smokeBody() {
         Player player = user.getPlayer();
 
-        player.getWorld().playSound(player.getLocation(), "vanish", 1, 1);
+        OPHSoundLib.OphPlaySound(OPHSounds.VANISH, player.getLocation(), 1, 1);
 
         if (!logiaBodyON) {
             logiaBodyON = true;
@@ -161,7 +161,7 @@ public class Moku_Moku extends Logia{
 
             player.addPotionEffect(new PotionEffect(PotionEffectType.SPEED, 9999999, 4, false, false));
             player.addPotionEffect(new PotionEffect(PotionEffectType.REGENERATION, 9999999, 1, false, false));
-            player.addPotionEffect(new PotionEffect(PotionEffectType.INCREASE_DAMAGE, 999999, 3, false, false));
+            player.addPotionEffect(new PotionEffect(PotionEffectType.STRENGTH, 999999, 3, false, false));
 
             smokeBodyParticlesTask = smokeBodyParticles();
         } else {
@@ -170,7 +170,7 @@ public class Moku_Moku extends Logia{
 
             player.removePotionEffect(PotionEffectType.SPEED);
             player.removePotionEffect(PotionEffectType.REGENERATION);
-            player.removePotionEffect(PotionEffectType.INCREASE_DAMAGE);
+            player.removePotionEffect(PotionEffectType.STRENGTH);
 
             smokeBodyParticlesTask.cancel();
         }
@@ -217,12 +217,12 @@ public class Moku_Moku extends Logia{
     }
 
     @Override
-    protected void onAddFruit() {
+    public void onAddFruit() {
 
     }
 
     @Override
-    protected void onRemoveFruit() {
+    public void onRemoveFruit() {
 
     }
 

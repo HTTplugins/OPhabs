@@ -1,6 +1,8 @@
 package htt.ophabs;
 
 
+import htt.customent.api.CustomEntAPI;
+import htt.customent.CustomEnt;
 import htt.layeredstructures.LayeredStructuresAPI;
 import logs.msgSystem;
 import textures.TextureMapper;
@@ -56,6 +58,14 @@ public final class OPhabs extends JavaPlugin {
         LayeredStructuresAPI.precharge("iceDrake");
         LayeredStructuresAPI.precharge("room");
 
+        // Initialize CustomEnt API
+        if (Bukkit.getPluginManager().getPlugin("CustomEnt") != null) {
+            CustomEnt customEnt = (CustomEnt) Bukkit.getPluginManager().getPlugin("CustomEnt");
+            CustomEntAPI.initialize(customEnt, customEnt.getAnimationManager());
+        } else {
+            getLogger().warning("CustomEnt plugin not found! Item animations will not work.");
+        }
+
         //
         // Inicializar los registros
         //
@@ -64,7 +74,7 @@ public final class OPhabs extends JavaPlugin {
 
 
         //
-        // Inicializar sistemas
+        // Inicializar los sistemas
         //
 
         textureMapper = new TextureMapper();

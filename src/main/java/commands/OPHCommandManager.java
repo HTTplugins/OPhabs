@@ -39,13 +39,17 @@ public class OPHCommandManager implements CommandExecutor, TabCompleter
     @Override
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args)
     {
+        if (args.length == 0) {
+            sender.sendMessage("Usage: /oph <giveFruit|removeFruit|toggleFastCasting>");
+            return false;
+        }
         Player player = (Player) sender;
         String order = args[0];
 
         if (args.length == 3)
         {
             String fruitCommandName = args[1];
-            Player targetPlayer = Bukkit.getServer().getPlayerExact(args[2]);
+            Player targetPlayer = Bukkit.getPlayerExact(args[2]);
 
             if (targetPlayer == null)
             {
@@ -153,7 +157,7 @@ public class OPHCommandManager implements CommandExecutor, TabCompleter
 
         if (args.length == 3)
         {
-            for (Player player : Bukkit.getServer().getOnlinePlayers())
+            for (Player player : Bukkit.getOnlinePlayers())
             {
                 tabOptions.add(player.getName());
             }

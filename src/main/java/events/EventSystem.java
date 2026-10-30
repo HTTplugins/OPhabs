@@ -6,10 +6,14 @@ import users.OPUser;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageEvent;
+import org.bukkit.event.inventory.InventoryClickEvent;
+import org.bukkit.event.inventory.InventoryDragEvent;
 import org.bukkit.event.player.PlayerDropItemEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
+import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.event.player.PlayerSwapHandItemsEvent;
+import org.bukkit.event.player.PlayerItemHeldEvent;
 
 import java.util.Map;
 import java.util.UUID;
@@ -94,6 +98,42 @@ public class EventSystem implements Listener
             user.onPlayerItemHeldEvent(event);
         }
 
+    }
+
+    @EventHandler
+    public void onPlayerMove(PlayerMoveEvent event)
+    {
+        UUID uuid = event.getPlayer().getUniqueId();
+
+        if (!users.containsKey(uuid))
+            return;
+
+        OPUser user = users.get(uuid);
+        if (user.hasDevilFruit()) {
+            user.getDevilFruit().onPlayerMove(event);
+        }
+    }
+
+    @EventHandler
+    public void onInventoryClick(InventoryClickEvent event)
+    {
+        UUID uuid = event.getWhoClicked().getUniqueId();
+
+        if (!users.containsKey(uuid))
+            return;
+
+        users.get(uuid).onInventoryClick(event);
+    }
+
+    @EventHandler
+    public void onInventoryDrag(InventoryDragEvent event)
+    {
+        UUID uuid = event.getWhoClicked().getUniqueId();
+
+        if (!users.containsKey(uuid))
+            return;
+
+        users.get(uuid).onInventoryDrag(event);
     }
 
     public void onEntityDamageByEntity(EntityDamageByEntityEvent event) {

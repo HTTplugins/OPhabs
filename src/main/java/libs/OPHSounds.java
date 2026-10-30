@@ -1,16 +1,31 @@
 package libs;
 
-import org.bukkit.Material;
+import org.bukkit.Sound;
 
 public enum OPHSounds {
-    OPENROOM,
-    CLOSEROOM,
-    FASTSORU,
-    SWORDCUT,
-    ROCKMOVE,
-    FLYMETEOR,
-    MAGNETICFIELD,
-    HEAVYGRAVITY,
-    FOG,
-    CLOUDPUNCH,
+    OPENROOM(Sound.BLOCK_BEACON_POWER_SELECT),
+    CLOSEROOM(Sound.BLOCK_BEACON_DEACTIVATE),
+    FASTSORU(Sound.ENTITY_ENDERMAN_TELEPORT),
+    SWORDCUT(Sound.ENTITY_PLAYER_ATTACK_SWEEP),
+    ROCKMOVE(Sound.BLOCK_STONE_BREAK),
+    FLYMETEOR(Sound.ENTITY_FIREWORK_ROCKET_BLAST),
+    MAGNETICFIELD(Sound.BLOCK_BEACON_AMBIENT),
+    HEAVYGRAVITY(Sound.ENTITY_GENERIC_EXPLODE),
+    FOG(Sound.BLOCK_BUBBLE_COLUMN_BUBBLE_POP),
+    CLOUDPUNCH(Sound.ENTITY_IRON_GOLEM_ATTACK),
+    SHAMBLESS(Sound.ENTITY_ENDERMAN_TELEPORT),
+    RESORT(Sound.ENTITY_RABBIT_JUMP),
+    MAGNETIC_FIELD(Sound.BLOCK_BEACON_AMBIENT),
+    VANISH(Sound.ENTITY_ENDERMAN_TELEPORT),
+    THUNDER(Sound.ENTITY_LIGHTNING_BOLT_THUNDER);
+
+    private final Sound sound;
+
+    OPHSounds(Sound sound) {
+        this.sound = sound;
+    }
+
+    public Sound getSound() {
+        return sound;
+    }
 }

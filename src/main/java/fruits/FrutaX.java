@@ -44,13 +44,13 @@ public class FrutaX extends DevilFruit
     }
 
     @Override
-    protected void onAddFruit()
+    public void onAddFruit()
     {
 
     }
 
     @Override
-    protected void onRemoveFruit()
+    public void onRemoveFruit()
     {
 
     }

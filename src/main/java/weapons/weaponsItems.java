@@ -20,9 +20,9 @@ public class weaponsItems {
         ItemMeta meta = item.getItemMeta();
         meta.setDisplayName("Reinforced Stone Sword");
         AttributeModifier modifier = new AttributeModifier(UUID.randomUUID(), "generic.attackDamage", 9, AttributeModifier.Operation.ADD_NUMBER, EquipmentSlot.HAND);
-        meta.addAttributeModifier(Attribute.GENERIC_ATTACK_DAMAGE, modifier);
+        meta.addAttributeModifier(Attribute.ATTACK_DAMAGE, modifier);
         AttributeModifier modifier2 = new AttributeModifier(UUID.randomUUID(), "generic.attackSpeed", 1.8, AttributeModifier.Operation.ADD_NUMBER, EquipmentSlot.HAND);
-        meta.addAttributeModifier(Attribute.GENERIC_ATTACK_SPEED, modifier2);
+        meta.addAttributeModifier(Attribute.ATTACK_SPEED, modifier2);
 
         item.setItemMeta(meta);
         return item;
@@ -33,9 +33,9 @@ public class weaponsItems {
         ItemMeta meta = item.getItemMeta();
         meta.setDisplayName("Reinforced Stone Axe");
         AttributeModifier modifier = new AttributeModifier(UUID.randomUUID(), "generic.attackDamage", 11, AttributeModifier.Operation.ADD_NUMBER, EquipmentSlot.HAND);
-        meta.addAttributeModifier(Attribute.GENERIC_ATTACK_DAMAGE, modifier);
+        meta.addAttributeModifier(Attribute.ATTACK_DAMAGE, modifier);
         AttributeModifier modifier2 = new AttributeModifier(UUID.randomUUID(), "generic.attackSpeed", 1.4, AttributeModifier.Operation.ADD_NUMBER, EquipmentSlot.HAND);
-        meta.addAttributeModifier(Attribute.GENERIC_ATTACK_SPEED, modifier2);
+        meta.addAttributeModifier(Attribute.ATTACK_SPEED, modifier2);
         
         item.setItemMeta(meta);
         return item;
@@ -48,9 +48,9 @@ public class weaponsItems {
         ItemMeta meta = item.getItemMeta();
         meta.setDisplayName("Reinforced Gold Sword");
         AttributeModifier modifier = new AttributeModifier(UUID.randomUUID(), "generic.attackDamage", 9, AttributeModifier.Operation.ADD_NUMBER, EquipmentSlot.HAND);
-        meta.addAttributeModifier(Attribute.GENERIC_ATTACK_DAMAGE, modifier);
+        meta.addAttributeModifier(Attribute.ATTACK_DAMAGE, modifier);
         AttributeModifier modifier2 = new AttributeModifier(UUID.randomUUID(), "generic.attackSpeed", 1.8, AttributeModifier.Operation.ADD_NUMBER, EquipmentSlot.HAND);
-        meta.addAttributeModifier(Attribute.GENERIC_ATTACK_SPEED, modifier2);
+        meta.addAttributeModifier(Attribute.ATTACK_SPEED, modifier2);
         item.setItemMeta(meta);
         return item;
     }
@@ -61,9 +61,9 @@ public class weaponsItems {
         ItemMeta meta = item.getItemMeta();
         meta.setDisplayName("Reinforced Gold Axe");
         AttributeModifier modifier = new AttributeModifier(UUID.randomUUID(), "generic.attackDamage", 11, AttributeModifier.Operation.ADD_NUMBER, EquipmentSlot.HAND);
-        meta.addAttributeModifier(Attribute.GENERIC_ATTACK_DAMAGE, modifier);
+        meta.addAttributeModifier(Attribute.ATTACK_DAMAGE, modifier);
         AttributeModifier modifier2 = new AttributeModifier(UUID.randomUUID(), "generic.attackSpeed", 1.4, AttributeModifier.Operation.ADD_NUMBER, EquipmentSlot.HAND);
-        meta.addAttributeModifier(Attribute.GENERIC_ATTACK_SPEED, modifier2);
+        meta.addAttributeModifier(Attribute.ATTACK_SPEED, modifier2);
         item.setItemMeta(meta);
         return item;
     }
@@ -75,9 +75,9 @@ public class weaponsItems {
         ItemMeta meta = item.getItemMeta();
         meta.setDisplayName("Reinforced Gold Pickaxe");
         AttributeModifier modifier = new AttributeModifier(UUID.randomUUID(), "generic.attackDamage", 5, AttributeModifier.Operation.ADD_NUMBER, EquipmentSlot.HAND);
-        meta.addAttributeModifier(Attribute.GENERIC_ATTACK_DAMAGE, modifier);
+        meta.addAttributeModifier(Attribute.ATTACK_DAMAGE, modifier);
         AttributeModifier modifier2 = new AttributeModifier(UUID.randomUUID(), "generic.attackSpeed", 1.2, AttributeModifier.Operation.ADD_NUMBER, EquipmentSlot.HAND);
-        meta.addAttributeModifier(Attribute.GENERIC_ATTACK_SPEED, modifier2);
+        meta.addAttributeModifier(Attribute.ATTACK_SPEED, modifier2);
         meta.setUnbreakable(true);
         item.setItemMeta(meta);
 
@@ -89,9 +89,9 @@ public class weaponsItems {
         ItemMeta meta = item.getItemMeta();
         meta.setDisplayName("Katana");
         AttributeModifier modifier = new AttributeModifier(UUID.randomUUID(), "generic.attackDamage", 10, AttributeModifier.Operation.ADD_NUMBER, EquipmentSlot.HAND);
-        meta.addAttributeModifier(Attribute.GENERIC_ATTACK_DAMAGE, modifier);
+        meta.addAttributeModifier(Attribute.ATTACK_DAMAGE, modifier);
         AttributeModifier modifier2 = new AttributeModifier(UUID.randomUUID(), "generic.attackSpeed", 2, AttributeModifier.Operation.ADD_NUMBER, EquipmentSlot.HAND);
-        meta.addAttributeModifier(Attribute.GENERIC_ATTACK_SPEED, modifier2);
+        meta.addAttributeModifier(Attribute.ATTACK_SPEED, modifier2);
         meta.setCustomModelData(1);
         item.setItemMeta(meta);
 
@@ -103,9 +103,9 @@ public class weaponsItems {
         ItemMeta meta = item.getItemMeta();
         meta.setDisplayName("Smoker Sword");
         AttributeModifier modifier = new AttributeModifier(UUID.randomUUID(), "generic.attackDamage", 9, AttributeModifier.Operation.ADD_NUMBER, EquipmentSlot.HAND);
-        meta.addAttributeModifier(Attribute.GENERIC_ATTACK_DAMAGE, modifier);
+        meta.addAttributeModifier(Attribute.ATTACK_DAMAGE, modifier);
         AttributeModifier modifier2 = new AttributeModifier(UUID.randomUUID(), "generic.attackSpeed", 2, AttributeModifier.Operation.ADD_NUMBER, EquipmentSlot.HAND);
-        meta.addAttributeModifier(Attribute.GENERIC_ATTACK_SPEED, modifier2);
+        meta.addAttributeModifier(Attribute.ATTACK_SPEED, modifier2);
         meta.setLore(Arrays.asList("Material:Kairōseki"));
         meta.setCustomModelData(786);
         item.setItemMeta(meta);

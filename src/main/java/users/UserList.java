@@ -22,6 +22,11 @@ public class UserList
         return users.get(uuid);
     }
 
+    public OPUser getUser(UUID uuid)
+    {
+        return users.get(uuid);
+    }
+
     // TODO: Pensar si hacerla O(1) con otro hashmap.
     // WARNING: O(n)
     @Deprecated

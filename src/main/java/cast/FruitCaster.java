@@ -1,7 +1,9 @@
 package cast;
 
+import htt.customent.api.CustomEntAPI;
 import htt.ophabs.OPhabs;
 import textures.TextureMapper;
+import textures.OPTexture;
 import users.OPUser;
 import abilities.AbilitySet;
 import display.IFruitCasterDisplay;
@@ -28,6 +30,7 @@ public class FruitCaster extends Caster
     protected int selectedAbilitySet = 0;
 
     protected IFruitCasterDisplay fruitCasterDisplay;
+    private boolean animationPlaying = false;
 
     public static ItemStack getAsItem(int fruitID)
     {
@@ -78,6 +81,9 @@ public class FruitCaster extends Caster
     @Override
     public void dispose()
     {
+        // Stop any running animation
+        stopAnimation();
+
         // Eliminar los remapeos del usuario
         OPUser user = fruit.getUser();
 
@@ -149,7 +155,7 @@ public class FruitCaster extends Caster
         if(!isCombatMode()){
             Player player = event.getPlayer();
 
-            ItemStack itemInHand = player.getItemInHand();
+            ItemStack itemInHand = player.getInventory().getItemInMainHand();
             ItemStack itemInSlot9 = player.getInventory().getItem(8); // Posición 9 (se cuentan desde 0)
 
             player.getInventory().setItemInMainHand(itemInSlot9); // Coloca el objeto en la mano
@@ -159,6 +165,12 @@ public class FruitCaster extends Caster
 
         setCombatMode(!isCombatMode());
 
+        // Toggle animation on combat mode change
+        if (isCombatMode()) {
+            startAnimation();
+        } else {
+            stopAnimation();
+        }
     }
 
     @Override
@@ -173,5 +185,66 @@ public class FruitCaster extends Caster
             selectedAbility = selectedAbilitySet%fruit.getAbilitySets().size();
             event.setCancelled(true);
         }
+    }
+
+    /**
+     * Start the item animation for this fruit caster
+     */
+    public void startAnimation() {
+        if (animationPlaying || fruit.getUser() == null) return;
+        
+        Player player = fruit.getUser().getPlayer();
+        if (player == null || !player.isOnline()) return;
+
+        // Get the caster item in hand
+        ItemStack itemInHand = player.getInventory().getItemInMainHand();
+        if (!isThisItem(itemInHand)) {
+            // Check offhand
+            itemInHand = player.getInventory().getItemInOffHand();
+            if (!isThisItem(itemInHand)) return;
+        }
+
+        // Get animation frames from texture mapper
+        int[] frames = getAnimationFrames();
+        if (frames == null || frames.length == 0) return;
+
+        // Start animation via CustomEntAPI
+        if (CustomEntAPI.isInitialized()) {
+            CustomEntAPI.animateItem(player, itemInHand, frames, 5, true); // 5 ticks per frame, looping
+            animationPlaying = true;
+        }
+    }
+
+    /**
+     * Stop the item animation
+     */
+    public void stopAnimation() {
+        if (!animationPlaying) return;
+        
+        Player player = fruit.getUser() != null ? fruit.getUser().getPlayer() : null;
+        if (player != null && CustomEntAPI.isInitialized()) {
+            CustomEntAPI.stopAnimation(player);
+        }
+        animationPlaying = false;
+    }
+
+    /**
+     * Get animation frames for this fruit from texture mapper
+     * Returns array of CustomModelData values for each frame
+     */
+    private int[] getAnimationFrames() {
+        // For now, use the remapped IDs as animation frames
+        // This can be extended to support custom frame sequences per fruit
+        var remappedIds = OPhabs.textureMapper.getRemappedIDs(fruit.getID());
+        if (remappedIds.isEmpty()) return new int[0];
+        
+        // Include base ID as first frame
+        int[] frames = new int[remappedIds.size() + 1];
+        frames[0] = fruit.getID();
+        int i = 1;
+        for (int id : remappedIds) {
+            frames[i++] = id;
+        }
+        return frames;
     }
 }

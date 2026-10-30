@@ -29,7 +29,7 @@ public class Zushi_Zushi extends Paramecia
             Material.NETHERRACK
     );
 
-    private final Particle gravityParticle = Particle.REDSTONE;
+    private final Particle gravityParticle = Particle.DUST;
     private final Particle.DustOptions purple = new Particle.DustOptions(Color.PURPLE,1.0F);
 
     private boolean meteorExploded = false;
@@ -80,8 +80,8 @@ public class Zushi_Zushi extends Paramecia
 
         OPHSoundLib.OphPlaySound(OPHSounds.HEAVYGRAVITY,playerLoc,1,1);
 
-        OPHAnimationLib.groundRandomParticleLayer(playerLoc,Particle.SPELL_WITCH,30,10,1,10,duration,2,0,0,0);
-        OPHAnimationLib.groundRandomParticleLayer(playerLoc,Particle.CRIT_MAGIC,60,10,1.5,10,duration,0,0,-0.3,0);
+        OPHAnimationLib.groundRandomParticleLayer(playerLoc,Particle.WITCH,30,10,1,10,duration,2,0,0,0);
+        OPHAnimationLib.groundRandomParticleLayer(playerLoc,Particle.ENCHANT,60,10,1.5,10,duration,0,0,-0.3,0);
 
         new OphRunnable(){
             @Override
@@ -106,7 +106,7 @@ public class Zushi_Zushi extends Paramecia
                         } else
                             (ent).teleport(new Location(world,entiLoc.getX(),entiLoc.getY(),entiLoc.getZ(),entiLoc.getYaw(),-10));
                     } else
-                        (ent).addPotionEffect(new PotionEffect(PotionEffectType.SLOW,10,10));
+                        (ent).addPotionEffect(new PotionEffect(PotionEffectType.SLOWNESS,10,10));
                 });
 
 
@@ -122,7 +122,7 @@ public class Zushi_Zushi extends Paramecia
         new OphRunnable(){
             @Override
             public void OphRun() {
-                world.playSound(playerLoc,"magneticfield",1,-1);
+                OPHSoundLib.OphPlaySound(OPHSounds.MAGNETIC_FIELD, playerLoc, 1, -1);
 
 
             }
@@ -191,7 +191,7 @@ public class Zushi_Zushi extends Paramecia
         for(Entity ent : player.getNearbyEntities(attractionRadius,attractionRadius,attractionRadius))
             if(ent instanceof LivingEntity && !player.equals(ent)) {
                 OPHLib.attractEntitie(ent, player);
-                OPHAnimationLib.groundCircularWave(ent.getLocation(),1,2,0.5,0.35,10,Particle.SPELL_WITCH, 0.4);
+                OPHAnimationLib.groundCircularWave(ent.getLocation(),1,2,0.5,0.35,10,Particle.WITCH, 0.4);
             }
 
 
@@ -223,13 +223,13 @@ public class Zushi_Zushi extends Paramecia
     }
 
     @Override
-    protected void onAddFruit()
+    public void onAddFruit()
     {
 
     }
 
     @Override
-    protected void onRemoveFruit()
+    public void onRemoveFruit()
     {
 
     }

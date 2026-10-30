@@ -9,6 +9,8 @@ import stats.UserStats;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.entity.EntityDamageEvent;
+import org.bukkit.event.inventory.InventoryClickEvent;
+import org.bukkit.event.inventory.InventoryDragEvent;
 import org.bukkit.event.player.*;
 import org.bukkit.inventory.ItemStack;
 
@@ -25,8 +27,8 @@ public class OPUser implements IEventProcessor
     private Boolean fastCasting=false;
 
     private DevilFruit devilFruit;
-    private Haki haki;
-    private Rokushiki rokushiki;
+    public Haki haki;
+    public Rokushiki rokushiki;
 
     private final HashMap<Integer, Caster> activeCasters;
 
@@ -196,10 +198,43 @@ public class OPUser implements IEventProcessor
     }
 
     @Override
+    public void onInventoryClick(InventoryClickEvent event)
+    {
+        ItemStack eventItem = event.getCurrentItem();
+
+        if (eventItem != null && eventItem.hasItemMeta() && eventItem.getItemMeta().hasCustomModelData())
+        {
+            Caster caster = activeCasters.get(eventItem.getItemMeta().getCustomModelData());
+
+            if (caster != null && caster.isOwnedBy(this) && caster.isThisItem(eventItem))
+            {
+                caster.onInventoryClick(event);
+            }
+        }
+
+        if (this.devilFruit != null)
+            this.devilFruit.onInventoryClick(event);
+    }
+
+    @Override
+    public void onInventoryDrag(InventoryDragEvent event)
+    {
+        if (this.devilFruit != null)
+            this.devilFruit.onInventoryDrag(event);
+    }
+
+    @Override
     public void onFall(EntityDamageEvent event)
     {
         if (this.devilFruit != null)
             this.devilFruit.onFall(event);
+    }
+
+    @Override
+    public void onEntityDamage(EntityDamageEvent event)
+    {
+        if (this.devilFruit != null)
+            this.devilFruit.onEntityDamage(event);
     }
 
     public void onPlayerJoin(PlayerJoinEvent event)
@@ -210,6 +245,15 @@ public class OPUser implements IEventProcessor
     public void onPlayerLogin(PlayerLoginEvent event)
     {
         this.stats.apply();
+    }
+
+    public void reloadStats() {
+        if (this.haki != null) {
+            this.haki.reloadPlayer();
+        }
+        if (this.rokushiki != null) {
+            this.rokushiki.reloadPlayer();
+        }
     }
 
     public boolean hasDevilFruit()

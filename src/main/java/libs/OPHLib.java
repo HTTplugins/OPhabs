@@ -232,7 +232,7 @@ public class OPHLib {
     public static void spawnBloodParticles(Entity entity) {
         Location loc = entity.getLocation();
         World world = entity.getWorld();
-        world.spawnParticle(Particle.REDSTONE, loc.add(0, entity.getHeight(), 0), 20, 0.5, 0.5, 0.5,
+        world.spawnParticle(Particle.DUST, loc.add(0, entity.getHeight(), 0), 20, 0.5, 0.5, 0.5,
                 0.1, new Particle.DustOptions(Color.RED, 1.0f));
     }
 

@@ -3,6 +3,7 @@ package events;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.entity.*;
 import org.bukkit.event.inventory.InventoryClickEvent;
+import org.bukkit.event.inventory.InventoryDragEvent;
 import org.bukkit.event.player.*;
 
 public interface IEventProcessor
@@ -16,6 +17,7 @@ public interface IEventProcessor
     default void onPlayerEggThrow(PlayerEggThrowEvent event) {}
     default void onEntityShootBow(EntityShootBowEvent event) {}
     default void onInventoryClick(InventoryClickEvent event) {}
+    default void onInventoryDrag(InventoryDragEvent event) {}
     default void onEntityDamage(EntityDamageEvent event) {}
     default void onPlayerRespawn(PlayerRespawnEvent event) {}
     default void onItemDamage(PlayerItemDamageEvent event) {}

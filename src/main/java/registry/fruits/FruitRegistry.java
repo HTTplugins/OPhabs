@@ -5,15 +5,28 @@ import com.google.gson.GsonBuilder;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import fruits.logia.Goro_Goro;
+import fruits.logia.Mera_Mera;
 import fruits.logia.Moku_Moku;
+import fruits.logia.Magu_Magu;
+import fruits.logia.Yami_Yami;
 import fruits.paramecia.Ope_Ope;
 import fruits.paramecia.Zushi_Zushi;
+import fruits.paramecia.Hie_Hie;
+import fruits.paramecia.Gura_Gura;
+import fruits.paramecia.Suke_Suke;
+import fruits.paramecia.Ishi_Ishi;
+import fruits.paramecia.Goru_Goru;
+import fruits.paramecia.Bane_Bane;
+import fruits.zoan.Neko_Neko_Reoparudo;
+import fruits.zoan.Inu_Inu_Okuchi;
+import fruits.zoan.Inu_Inu_Urufu;
+import fruits.zoan.Ryu_Ryu_Allosaurs;
 import htt.ophabs.OPhabs;
 import users.OPUser;
 import cast.Caster;
 import cast.FruitCaster;
-import fruits.*;
-import fruits.paramecia.Bane_Bane;
+import fruits.DevilFruit;
+import registry.fruits.IFruitRegistry;
 
 import java.io.File;
 import java.io.FileWriter;
@@ -25,7 +38,6 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
 
-// TODO: Se utilizará IFruitRegistry para los métodos de linkFruit, etc.
 public class FruitRegistry implements IFruitRegistry
 {
     private static final String FRUIT_REGISTRY_DATA_PATH = "plugins/OPhabs/Data/FruitRegistry.json";
@@ -39,12 +51,23 @@ public class FruitRegistry implements IFruitRegistry
         //
 
         DevilFruit[] fruits = {
-            new FrutaX(FrutaX.getFruitID()),
             new Bane_Bane(Bane_Bane.getFruitID()),
             new Zushi_Zushi(Zushi_Zushi.getFruitID()),
             new Ope_Ope(Ope_Ope.getFruitID()),
             new Moku_Moku(Moku_Moku.getFruitID()),
-            new Goro_Goro(Goro_Goro.getFruitID())
+            new Goro_Goro(Goro_Goro.getFruitID()),
+            new Mera_Mera(Mera_Mera.getFruitID()),
+            new Hie_Hie(Hie_Hie.getFruitID()),
+            new Gura_Gura(Gura_Gura.getFruitID()),
+            new Magu_Magu(Magu_Magu.getFruitID()),
+            new Yami_Yami(Yami_Yami.getFruitID()),
+            new Suke_Suke(Suke_Suke.getFruitID()),
+            new Ishi_Ishi(Ishi_Ishi.getFruitID()),
+            new Goru_Goru(Goru_Goru.getFruitID()),
+            new Inu_Inu_Urufu(Inu_Inu_Urufu.getFruitID()),
+            new Inu_Inu_Okuchi(Inu_Inu_Okuchi.getFruitID()),
+            new Neko_Neko_Reoparudo(Neko_Neko_Reoparudo.getFruitID()),
+            new Ryu_Ryu_Allosaurs(Ryu_Ryu_Allosaurs.getFruitID())
         };
 
         for (DevilFruit fruit : fruits)
@@ -54,19 +77,16 @@ public class FruitRegistry implements IFruitRegistry
         }
     }
 
-    @Override
     public Map<Integer, DevilFruit> getFruitMap()
     {
         return Collections.unmodifiableMap(this.fruitMap);
     }
 
-    @Override
     public DevilFruit getFruit(int fruitID)
     {
         return this.fruitMap.get(fruitID);
     }
 
-    @Override
     public boolean linkFruitUser(String fruitName, OPUser user)
     {
         Integer fruitID = fruitNameIDMap.get(fruitName);
@@ -77,7 +97,6 @@ public class FruitRegistry implements IFruitRegistry
         return this.linkFruitUser(fruitID, user);
     }
 
-    @Override
     public boolean linkFruitUser(int fruitID, OPUser user)
     {
         DevilFruit fruit = this.fruitMap.get(fruitID);
@@ -107,26 +126,21 @@ public class FruitRegistry implements IFruitRegistry
         return false;
     }
 
-    @Override
     public boolean unlinkFruitUser(int fruitID, OPUser user)
     {
         DevilFruit fruit = this.fruitMap.get(fruitID);
 
-        // Eliminar el caster
-        Caster caster = user.getActiveCasters().remove(fruitID);
+        if (fruit == null || fruit.getUser() == null)
+            return false;
 
-        if (caster != null)
-            caster.dispose();
-
-        // Unlink fruta y usuario
-        user.setDevilFruit(null);
+        // Actually perform the unlink
         fruit.setUser(null);
-
-        System.out.println("El usuario " + user.getPlayerName() + " ha perdido su fruta " + fruit.getName());
+        user.setDevilFruit(null);
+        user.getActiveCasters().remove(fruitID);
+        fruit.onRemoveFruit();
         return true;
     }
 
-    @Override
     public boolean unlinkFruitUser(OPUser user)
     {
         DevilFruit fruit = user.getDevilFruit();
@@ -137,7 +151,6 @@ public class FruitRegistry implements IFruitRegistry
         return this.unlinkFruitUser(fruit.getID(), user);
     }
 
-    @Override
     public boolean unlinkFruitUser(int fruitID)
     {
         DevilFruit fruit = this.fruitMap.get(fruitID);
@@ -148,14 +161,11 @@ public class FruitRegistry implements IFruitRegistry
         return this.unlinkFruitUser(fruitID, fruit.getUser());
     }
 
-    @Override
     public boolean unlinkFruitUser(DevilFruit fruit)
     {
         return this.unlinkFruitUser(fruit.getID());
     }
 
-
-    @Override
     public void loadRegistry()
     {
         File fruitDataFile = new File(FRUIT_REGISTRY_DATA_PATH);
@@ -199,7 +209,6 @@ public class FruitRegistry implements IFruitRegistry
         }
     }
 
-    @Override
     public void saveRegistry()
     {
         JsonObject fruitDataJSON = new JsonObject();
